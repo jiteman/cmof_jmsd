@@ -59,6 +59,7 @@ set( JMSD_THIS_PROJECT_FILES_TO_REMOVE
 	"googletest-param-test-test.h"
 	"googletest-param-test-test.cc"
 	"googletest-param-test2-test.cc"
+	"googletest-test2_test.cc"
 	"googletest-shuffle-test_.cc"
 	"googletest-throw-on-failure-test_.cc"
 	"googletest-uninitialized-test_.cc"
