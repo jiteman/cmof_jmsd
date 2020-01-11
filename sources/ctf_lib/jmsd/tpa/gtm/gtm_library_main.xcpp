@@ -13,18 +13,18 @@ int JMSD_TPA_GTM_LIBRARY_SHARED_INTERFACE ctf_main( int const argc, char const *
 	{ // base and flags initialization
 		::jmsd::tpa::gtm::modification::Writable_command_line_arguments writable_command_line_arguments( argc, argv );
 
-		::testing::InitGoogleTest(
+		::testing::InitGoogleMock(
 			writable_command_line_arguments.take_argument_counter(),
 			writable_command_line_arguments.take_argument_string_array() );
 
 		// Ensures that the tests pass no matter what value of --gmock_catch_leaked_mocks and --gmock_verbose the user specifies.
-//		testing::GMOCK_FLAG( catch_leaked_mocks ) = true;
+		testing::GMOCK_FLAG( catch_leaked_mocks ) = true;
 //		testing::GTEST_FLAG( list_tests ) = true;
 
-//		testing::GMOCK_FLAG( verbose ) =
-//			do_warn_about_mocks ?
-//				testing::internal::kWarningVerbosity :
-//				testing::internal::kErrorVerbosity;
+		testing::GMOCK_FLAG( verbose ) =
+			do_warn_about_mocks ?
+				testing::internal::kWarningVerbosity :
+				testing::internal::kErrorVerbosity;
 	}
 
 	{ // will only print errors, not successes

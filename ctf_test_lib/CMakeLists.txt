@@ -71,7 +71,32 @@ set( JMSD_THIS_PROJECT_FILES_TO_REMOVE
 	"gmock_link2_test.cc"
 	"gmock-spec-builders_test.cc"
 	"gmock_output_test_.cc"
-	"gmock_stress_test.cc" )
+	"gmock_stress_test.cc"
+	
+	"gmock-actions_test.cc"
+	"gmock_all_test.cc"
+	"gmock-cardinalities_test.cc"
+	"gmock_ex_test.cc"
+	"gmock-function-mocker_nc.cc"
+	"gmock-function-mocker_test.cc"
+	"gmock-generated-actions_test.cc"
+	"gmock-generated-function-mockers_test.cc"
+	"gmock-generated-matchers_test.cc"
+	"gmock-internal-utils_test.cc"
+	"gmock_leak_test_.cc"
+	"gmock_link2_test.cc"
+	"gmock_link_test.cc"
+	"gmock_link_test.h"
+	"gmock-matchers_test.cc"
+	"gmock-more-actions_test.cc"
+	"gmock-nice-strict_test.cc"
+	"gmock_output_test_.cc"
+	"gmock-port_test.cc"
+	"gmock-pp-string_test.cc"
+	"gmock-pp_test.cc"
+	"gmock-spec-builders_test.cc"
+	"gmock_stress_test.cc"
+	"gmock_test.cc" )
 JMSD_REMOVE_FILES_FROM_THE_LIST( header_and_source_files JMSD_THIS_PROJECT_FILES_TO_REMOVE )
 
 add_library( ${PROJECT_NAME} SHARED ${header_and_source_files} )

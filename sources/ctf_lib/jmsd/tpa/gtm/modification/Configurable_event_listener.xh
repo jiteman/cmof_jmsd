@@ -2,7 +2,7 @@
 
 #include "Configurable_event_listener.hxx"
 
-#include "gtest/gtest.h"
+#include "gmock/gmock.h"
 
 
 namespace jmsd {

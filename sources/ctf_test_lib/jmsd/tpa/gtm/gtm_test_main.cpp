@@ -9,7 +9,7 @@ namespace gtm {
 
 
 int run_all_gtm_tests( int argc, char const *const argv[] ) {
-	return gmock_main( argc, argv, false );
+	return ctf_main( argc, argv, false );
 }
 
 
