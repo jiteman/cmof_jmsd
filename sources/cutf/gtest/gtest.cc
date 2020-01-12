@@ -2867,7 +2867,7 @@ void TestSuite::Run() {
   // Call both legacy and the new API
   repeater->OnTestSuiteStart(*this);
 //  Legacy API is deprecated but still available
-#ifndef GTEST_REMOVE_LEGACY_TEST_CASEAPI
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI
   repeater->OnTestCaseStart(*this);
 #endif  //  GTEST_REMOVE_LEGACY_TEST_CASEAPI
 
@@ -2888,7 +2888,7 @@ void TestSuite::Run() {
   // Call both legacy and the new API
   repeater->OnTestSuiteEnd(*this);
 //  Legacy API is deprecated but still available
-#ifndef GTEST_REMOVE_LEGACY_TEST_CASEAPI
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI
   repeater->OnTestCaseEnd(*this);
 #endif  //  GTEST_REMOVE_LEGACY_TEST_CASEAPI
 
@@ -3175,7 +3175,7 @@ class PrettyUnitTestResultPrinter : public TestEventListener {
   void OnTestIterationStart(const UnitTest& unit_test, int iteration) override;
   void OnEnvironmentsSetUpStart(const UnitTest& unit_test) override;
   void OnEnvironmentsSetUpEnd(const UnitTest& /*unit_test*/) override {}
-#ifndef GTEST_REMOVE_LEGACY_TEST_CASEAPI_
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
   void OnTestCaseStart(const TestCase& test_case) override;
 #else
   void OnTestSuiteStart(const TestSuite& test_suite) override;
@@ -3185,7 +3185,7 @@ class PrettyUnitTestResultPrinter : public TestEventListener {
 
   void OnTestPartResult(const TestPartResult& result) override;
   void OnTestEnd(const TestInfo& test_info) override;
-#ifndef GTEST_REMOVE_LEGACY_TEST_CASEAPI_
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
   void OnTestCaseEnd(const TestCase& test_case) override;
 #else
   void OnTestSuiteEnd(const TestSuite& test_suite) override;
@@ -3245,7 +3245,7 @@ void PrettyUnitTestResultPrinter::OnEnvironmentsSetUpStart(
   fflush(stdout);
 }
 
-#ifndef GTEST_REMOVE_LEGACY_TEST_CASEAPI_
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
 void PrettyUnitTestResultPrinter::OnTestCaseStart(const TestCase& test_case) {
   const std::string counts =
 	  FormatCountableNoun(test_case.test_to_run_count(), "test", "tests");
@@ -3317,7 +3317,7 @@ void PrettyUnitTestResultPrinter::OnTestEnd(const TestInfo& test_info) {
   fflush(stdout);
 }
 
-#ifndef GTEST_REMOVE_LEGACY_TEST_CASEAPI_
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
 void PrettyUnitTestResultPrinter::OnTestCaseEnd(const TestCase& test_case) {
   if (!GTEST_FLAG(print_time)) return;
 
@@ -3482,7 +3482,7 @@ class TestEventRepeater : public TestEventListener {
   void OnEnvironmentsSetUpStart(const UnitTest& unit_test) override;
   void OnEnvironmentsSetUpEnd(const UnitTest& unit_test) override;
 //  Legacy API is deprecated but still available
-#ifndef GTEST_REMOVE_LEGACY_TEST_CASEAPI_
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
   void OnTestCaseStart(const TestSuite& parameter) override;
 #endif  //  GTEST_REMOVE_LEGACY_TEST_CASEAPI_
   void OnTestSuiteStart(const TestSuite& parameter) override;
@@ -3490,7 +3490,7 @@ class TestEventRepeater : public TestEventListener {
   void OnTestPartResult(const TestPartResult& result) override;
   void OnTestEnd(const TestInfo& test_info) override;
 //  Legacy API is deprecated but still available
-#ifndef GTEST_REMOVE_LEGACY_TEST_CASEAPI_
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
   void OnTestCaseEnd(const TestCase& parameter) override;
 #endif  //  GTEST_REMOVE_LEGACY_TEST_CASEAPI_
   void OnTestSuiteEnd(const TestSuite& parameter) override;
@@ -3552,7 +3552,7 @@ void TestEventRepeater::Name(const Type& parameter) { \
 GTEST_REPEATER_METHOD_(OnTestProgramStart, UnitTest)
 GTEST_REPEATER_METHOD_(OnEnvironmentsSetUpStart, UnitTest)
 //  Legacy API is deprecated but still available
-#ifndef GTEST_REMOVE_LEGACY_TEST_CASEAPI_
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
 GTEST_REPEATER_METHOD_(OnTestCaseStart, TestSuite)
 #endif  //  GTEST_REMOVE_LEGACY_TEST_CASEAPI_
 GTEST_REPEATER_METHOD_(OnTestSuiteStart, TestSuite)
@@ -3563,7 +3563,7 @@ GTEST_REVERSE_REPEATER_METHOD_(OnEnvironmentsSetUpEnd, UnitTest)
 GTEST_REVERSE_REPEATER_METHOD_(OnEnvironmentsTearDownEnd, UnitTest)
 GTEST_REVERSE_REPEATER_METHOD_(OnTestEnd, TestInfo)
 //  Legacy API is deprecated but still available
-#ifndef GTEST_REMOVE_LEGACY_TEST_CASEAPI_
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
 GTEST_REVERSE_REPEATER_METHOD_(OnTestCaseEnd, TestSuite)
 #endif  //  GTEST_REMOVE_LEGACY_TEST_CASEAPI_
 GTEST_REVERSE_REPEATER_METHOD_(OnTestSuiteEnd, TestSuite)
@@ -4726,7 +4726,7 @@ int UnitTest::test_suite_to_run_count() const {
 }
 
 //  Legacy API is deprecated but still available
-#ifndef GTEST_REMOVE_LEGACY_TEST_CASEAPI_
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
 int UnitTest::successful_test_case_count() const {
   return impl()->successful_test_suite_count();
 }
@@ -4801,7 +4801,7 @@ const TestSuite* UnitTest::GetTestSuite(int i) const {
 }
 
 //  Legacy API is deprecated but still available
-#ifndef GTEST_REMOVE_LEGACY_TEST_CASEAPI_
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
 const TestCase* UnitTest::GetTestCase(int i) const {
   return impl()->GetTestCase(i);
 }
@@ -5026,7 +5026,7 @@ const TestSuite* UnitTest::current_test_suite() const
 }
 
 // Legacy API is still available but deprecated
-#ifndef GTEST_REMOVE_LEGACY_TEST_CASEAPI_
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
 const TestCase* UnitTest::current_test_case() const
 	GTEST_LOCK_EXCLUDED_(mutex_) {
   internal::MutexLock lock(&mutex_);

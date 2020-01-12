@@ -51,12 +51,12 @@ class CommonTest : public Test {
   // must be public.
  public:
   static void SetUpTestSuite() {
-    shared_ = new T(5);
+	shared_ = new T(5);
   }
 
   static void TearDownTestSuite() {
-    delete shared_;
-    shared_ = nullptr;
+	delete shared_;
+	shared_ = nullptr;
   }
 
   // This 'protected:' is optional.  There's no harm in making all
@@ -72,13 +72,13 @@ class CommonTest : public Test {
   ~CommonTest() override { EXPECT_EQ(3, value_); }
 
   void SetUp() override {
-    EXPECT_EQ(1, value_);
-    value_++;
+	EXPECT_EQ(1, value_);
+	value_++;
   }
 
   void TearDown() override {
-    EXPECT_EQ(2, value_);
-    value_++;
+	EXPECT_EQ(2, value_);
+	value_++;
   }
 
   T value_;
@@ -178,12 +178,12 @@ class TypedTestNames {
  public:
   template <typename T>
   static std::string GetName(int i) {
-    if (std::is_same<T, char>::value) {
-      return std::string("char") + ::testing::PrintToString(i);
-    }
-    if (std::is_same<T, int>::value) {
-      return std::string("int") + ::testing::PrintToString(i);
-    }
+	if (std::is_same<T, char>::value) {
+	  return std::string("char") + ::testing::PrintToString(i);
+	}
+	if (std::is_same<T, int>::value) {
+	  return std::string("int") + ::testing::PrintToString(i);
+	}
   }
 };
 
@@ -191,16 +191,16 @@ TYPED_TEST_SUITE(TypedTestWithNames, TwoTypes, TypedTestNames);
 
 TYPED_TEST(TypedTestWithNames, TestSuiteName) {
   if (std::is_same<TypeParam, char>::value) {
-    EXPECT_STREQ(::testing::UnitTest::GetInstance()
-                     ->current_test_info()
-                     ->test_case_name(),
-                 "TypedTestWithNames/char0");
+	EXPECT_STREQ(::testing::UnitTest::GetInstance()
+					 ->current_test_info()
+					 ->test_suite_name(),
+				 "TypedTestWithNames/char0");
   }
   if (std::is_same<TypeParam, int>::value) {
-    EXPECT_STREQ(::testing::UnitTest::GetInstance()
-                     ->current_test_info()
-                     ->test_case_name(),
-                 "TypedTestWithNames/int1");
+	EXPECT_STREQ(::testing::UnitTest::GetInstance()
+					 ->current_test_info()
+					 ->test_suite_name(),
+				 "TypedTestWithNames/int1");
   }
 }
 
@@ -217,9 +217,9 @@ using testing::internal::TypedTestSuitePState;
 class TypedTestSuitePStateTest : public Test {
  protected:
   void SetUp() override {
-    state_.AddTestName("foo.cc", 0, "FooTest", "A");
-    state_.AddTestName("foo.cc", 0, "FooTest", "B");
-    state_.AddTestName("foo.cc", 0, "FooTest", "C");
+	state_.AddTestName("foo.cc", 0, "FooTest", "A");
+	state_.AddTestName("foo.cc", 0, "FooTest", "B");
+	state_.AddTestName("foo.cc", 0, "FooTest", "C");
   }
 
   TypedTestSuitePState state_;
@@ -228,7 +228,7 @@ class TypedTestSuitePStateTest : public Test {
 TEST_F(TypedTestSuitePStateTest, SucceedsForMatchingList) {
   const char* tests = "A, B, C";
   EXPECT_EQ(tests,
-            state_.VerifyRegisteredTestNames("foo.cc", 1, tests));
+			state_.VerifyRegisteredTestNames("foo.cc", 1, tests));
 }
 
 // Makes sure that the order of the tests and spaces around the names
@@ -236,27 +236,27 @@ TEST_F(TypedTestSuitePStateTest, SucceedsForMatchingList) {
 TEST_F(TypedTestSuitePStateTest, IgnoresOrderAndSpaces) {
   const char* tests = "A,C,   B";
   EXPECT_EQ(tests,
-            state_.VerifyRegisteredTestNames("foo.cc", 1, tests));
+			state_.VerifyRegisteredTestNames("foo.cc", 1, tests));
 }
 
 using TypedTestSuitePStateDeathTest = TypedTestSuitePStateTest;
 
 TEST_F(TypedTestSuitePStateDeathTest, DetectsDuplicates) {
   EXPECT_DEATH_IF_SUPPORTED(
-      state_.VerifyRegisteredTestNames("foo.cc", 1, "A, B, A, C"),
-      "foo\\.cc.1.?: Test A is listed more than once\\.");
+	  state_.VerifyRegisteredTestNames("foo.cc", 1, "A, B, A, C"),
+	  "foo\\.cc.1.?: Test A is listed more than once\\.");
 }
 
 TEST_F(TypedTestSuitePStateDeathTest, DetectsExtraTest) {
   EXPECT_DEATH_IF_SUPPORTED(
-      state_.VerifyRegisteredTestNames("foo.cc", 1, "A, B, C, D"),
-      "foo\\.cc.1.?: No test named D can be found in this test suite\\.");
+	  state_.VerifyRegisteredTestNames("foo.cc", 1, "A, B, C, D"),
+	  "foo\\.cc.1.?: No test named D can be found in this test suite\\.");
 }
 
 TEST_F(TypedTestSuitePStateDeathTest, DetectsMissedTest) {
   EXPECT_DEATH_IF_SUPPORTED(
-      state_.VerifyRegisteredTestNames("foo.cc", 1, "A, C"),
-      "foo\\.cc.1.?: You forgot to list test B\\.");
+	  state_.VerifyRegisteredTestNames("foo.cc", 1, "A, C"),
+	  "foo\\.cc.1.?: You forgot to list test B\\.");
 }
 
 // Tests that defining a test for a parameterized test case generates
@@ -264,9 +264,9 @@ TEST_F(TypedTestSuitePStateDeathTest, DetectsMissedTest) {
 TEST_F(TypedTestSuitePStateDeathTest, DetectsTestAfterRegistration) {
   state_.VerifyRegisteredTestNames("foo.cc", 1, "A, B, C");
   EXPECT_DEATH_IF_SUPPORTED(
-      state_.AddTestName("foo.cc", 2, "FooTest", "D"),
-      "foo\\.cc.2.?: Test D must be defined before REGISTER_TYPED_TEST_SUITE_P"
-      "\\(FooTest, \\.\\.\\.\\)\\.");
+	  state_.AddTestName("foo.cc", 2, "FooTest", "D"),
+	  "foo\\.cc.2.?: Test D must be defined before REGISTER_TYPED_TEST_SUITE_P"
+	  "\\(FooTest, \\.\\.\\.\\)\\.");
 }
 
 // Tests that SetUpTestSuite()/TearDownTestSuite(), fixture ctor/dtor,
@@ -299,7 +299,7 @@ TYPED_TEST_P(DerivedTest, ValuesAreStillCorrect) {
 }
 
 REGISTER_TYPED_TEST_SUITE_P(DerivedTest,
-                           ValuesAreCorrect, ValuesAreStillCorrect);
+						   ValuesAreCorrect, ValuesAreStillCorrect);
 
 typedef Types<short, long> MyTwoTypes;
 INSTANTIATE_TYPED_TEST_SUITE_P(My, DerivedTest, MyTwoTypes);
@@ -313,16 +313,16 @@ TYPED_TEST_SUITE_P(TypeParametrizedTestWithNames);
 
 TYPED_TEST_P(TypeParametrizedTestWithNames, TestSuiteName) {
   if (std::is_same<TypeParam, char>::value) {
-    EXPECT_STREQ(::testing::UnitTest::GetInstance()
-                     ->current_test_info()
-                     ->test_case_name(),
-                 "CustomName/TypeParametrizedTestWithNames/parChar0");
+	EXPECT_STREQ(::testing::UnitTest::GetInstance()
+					 ->current_test_info()
+					 ->test_suite_name(),
+				 "CustomName/TypeParametrizedTestWithNames/parChar0");
   }
   if (std::is_same<TypeParam, int>::value) {
-    EXPECT_STREQ(::testing::UnitTest::GetInstance()
-                     ->current_test_info()
-                     ->test_case_name(),
-                 "CustomName/TypeParametrizedTestWithNames/parInt1");
+	EXPECT_STREQ(::testing::UnitTest::GetInstance()
+					 ->current_test_info()
+					 ->test_suite_name(),
+				 "CustomName/TypeParametrizedTestWithNames/parInt1");
   }
 }
 
@@ -332,17 +332,17 @@ class TypeParametrizedTestNames {
  public:
   template <typename T>
   static std::string GetName(int i) {
-    if (std::is_same<T, char>::value) {
-      return std::string("parChar") + ::testing::PrintToString(i);
-    }
-    if (std::is_same<T, int>::value) {
-      return std::string("parInt") + ::testing::PrintToString(i);
-    }
+	if (std::is_same<T, char>::value) {
+	  return std::string("parChar") + ::testing::PrintToString(i);
+	}
+	if (std::is_same<T, int>::value) {
+	  return std::string("parInt") + ::testing::PrintToString(i);
+	}
   }
 };
 
 INSTANTIATE_TYPED_TEST_SUITE_P(CustomName, TypeParametrizedTestWithNames,
-                              TwoTypes, TypeParametrizedTestNames);
+							  TwoTypes, TypeParametrizedTestNames);
 
 // Tests that multiple TYPED_TEST_SUITE_P's can be defined in the same
 // translation unit.
@@ -418,7 +418,7 @@ TYPED_TEST_P(NumericTest, ZeroIsLessThanOne) {
 }
 
 REGISTER_TYPED_TEST_SUITE_P(NumericTest,
-                           DefaultIsZero, ZeroIsLessThanOne);
+						   DefaultIsZero, ZeroIsLessThanOne);
 typedef Types<int, double> NumericTypes;
 INSTANTIATE_TYPED_TEST_SUITE_P(My, NumericTest, NumericTypes);
 
@@ -434,8 +434,8 @@ TYPED_TEST_P(TrimmedTest, Test3) { EXPECT_STREQ("Test3", GetTestName()); }
 TYPED_TEST_P(TrimmedTest, Test4) { EXPECT_STREQ("Test4", GetTestName()); }
 TYPED_TEST_P(TrimmedTest, Test5) { EXPECT_STREQ("Test5", GetTestName()); }
 REGISTER_TYPED_TEST_SUITE_P(
-    TrimmedTest,
-    Test1, Test2,Test3 , Test4 ,Test5 );  // NOLINT
+	TrimmedTest,
+	Test1, Test2,Test3 , Test4 ,Test5 );  // NOLINT
 template <typename T1, typename T2> struct MyPair {};
 // Be sure to try a type with a comma in its name just in case it matters.
 typedef Types<int, double, MyPair<int, int> > TrimTypes;

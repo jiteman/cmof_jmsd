@@ -37,12 +37,16 @@ public:
 	void OnTestIterationStart( ::testing::UnitTest const &unit_test, int iteration ) override final;
 	void OnEnvironmentsSetUpStart( ::testing::UnitTest const &unit_test ) override final;
 	void OnEnvironmentsSetUpEnd( ::testing::UnitTest const &unit_test ) override final;
+
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI
 	void OnTestCaseStart( ::testing::TestCase const &test_case ) override final;
+	void OnTestCaseEnd( ::testing::TestCase const &test_case ) override final;
+#endif // #ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI
+
 	void OnTestStart( ::testing::TestInfo const &test_info ) override final;
 	void OnTestPartResult( ::testing::TestPartResult const &result ) override final;
 	void OnTestEnd( ::testing::TestInfo const &test_info ) override final;
-	void OnTestCaseEnd( ::testing::TestCase const &test_case ) override final;
-	void OnEnvironmentsTearDownStart( ::testing::UnitTest const &unit_test ) override final;
+		void OnEnvironmentsTearDownStart( ::testing::UnitTest const &unit_test ) override final;
 	void OnEnvironmentsTearDownEnd( ::testing::UnitTest const &unit_test ) override final;
 	void OnTestIterationEnd( ::testing::UnitTest const &unit_test, int iteration ) override final;
 	void OnTestProgramEnd( ::testing::UnitTest const &unit_test ) override final;

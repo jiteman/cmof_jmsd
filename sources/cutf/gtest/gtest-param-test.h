@@ -502,7 +502,7 @@ internal::CartesianProductHolder<Generator...> Combine(const Generator&... g) {
                   __FILE__, __LINE__)
 
 // Legacy API is deprecated but still available
-#ifndef GTEST_REMOVE_LEGACY_TEST_CASEAPI_
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
 #define INSTANTIATE_TEST_CASE_P                                            \
   static_assert(::testing::internal::InstantiateTestCase_P_IsDeprecated(), \
                 "");                                                       \

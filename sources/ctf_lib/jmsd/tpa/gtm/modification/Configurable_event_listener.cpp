@@ -62,11 +62,19 @@ void Configurable_event_listener::OnEnvironmentsSetUpEnd( ::testing::UnitTest co
 	_event_listener->OnEnvironmentsSetUpEnd( unit_test );
 }
 
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI
 void Configurable_event_listener::OnTestCaseStart( ::testing::TestCase const &test_case ) {
 	if ( !_showTestCases ) return;
 
 	_event_listener->OnTestCaseStart( test_case );
 }
+
+void Configurable_event_listener::OnTestCaseEnd( ::testing::TestCase const &test_case ) {
+	if ( !_showTestCases ) return;
+
+	_event_listener->OnTestCaseEnd( test_case );
+}
+#endif // #ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI
 
 void Configurable_event_listener::OnTestStart( ::testing::TestInfo const &test_info ) {
 	if ( !_showTestNames ) return;
@@ -88,12 +96,6 @@ void Configurable_event_listener::OnTestEnd( ::testing::TestInfo const &test_inf
 	}
 
 	 _event_listener->OnTestEnd( test_info );
-}
-
-void Configurable_event_listener::OnTestCaseEnd( ::testing::TestCase const &test_case ) {
-	if ( !_showTestCases ) return;
-
-	_event_listener->OnTestCaseEnd( test_case );
 }
 
 void Configurable_event_listener::OnEnvironmentsTearDownStart( ::testing::UnitTest const &unit_test ) {

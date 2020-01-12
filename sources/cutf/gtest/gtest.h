@@ -156,7 +156,7 @@ class Test;
 class TestSuite;
 
 // Old API is still available but deprecated
-#ifndef GTEST_REMOVE_LEGACY_TEST_CASEAPI_
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
 using TestCase = TestSuite;
 #endif
 class TestInfo;
@@ -392,7 +392,7 @@ class GTEST_API_ Test {
   static void TearDownTestSuite() {}
 
   // Legacy API is deprecated but still available
-#ifndef GTEST_REMOVE_LEGACY_TEST_CASEAPI_
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
   static void TearDownTestCase() {}
   static void SetUpTestCase() {}
 #endif  // GTEST_REMOVE_LEGACY_TEST_CASEAPI_
@@ -667,7 +667,7 @@ class GTEST_API_ TestInfo {
   const char* test_suite_name() const { return test_suite_name_.c_str(); }
 
 // Legacy API is deprecated but still available
-#ifndef GTEST_REMOVE_LEGACY_TEST_CASEAPI_
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
   const char* test_case_name() const { return test_suite_name(); }
 #endif  // GTEST_REMOVE_LEGACY_TEST_CASEAPI_
 
@@ -1063,7 +1063,7 @@ class TestEventListener {
   virtual void OnTestSuiteStart(const TestSuite& /*test_suite*/) {}
 
   //  Legacy API is deprecated but still available
-#ifndef GTEST_REMOVE_LEGACY_TEST_CASEAPI_
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
   virtual void OnTestCaseStart(const TestCase& /*test_case*/) {}
 #endif  //  GTEST_REMOVE_LEGACY_TEST_CASEAPI_
 
@@ -1082,7 +1082,7 @@ class TestEventListener {
   virtual void OnTestSuiteEnd(const TestSuite& /*test_suite*/) {}
 
 //  Legacy API is deprecated but still available
-#ifndef GTEST_REMOVE_LEGACY_TEST_CASEAPI_
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
   virtual void OnTestCaseEnd(const TestCase& /*test_case*/) {}
 #endif  //  GTEST_REMOVE_LEGACY_TEST_CASEAPI_
 
@@ -1114,7 +1114,7 @@ class EmptyTestEventListener : public TestEventListener {
   void OnEnvironmentsSetUpEnd(const UnitTest& /*unit_test*/) override {}
   void OnTestSuiteStart(const TestSuite& /*test_suite*/) override {}
 //  Legacy API is deprecated but still available
-#ifndef GTEST_REMOVE_LEGACY_TEST_CASEAPI_
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
   void OnTestCaseStart(const TestCase& /*test_case*/) override {}
 #endif  //  GTEST_REMOVE_LEGACY_TEST_CASEAPI_
 
@@ -1122,7 +1122,7 @@ class EmptyTestEventListener : public TestEventListener {
   void OnTestPartResult(const TestPartResult& /*test_part_result*/) override {}
   void OnTestEnd(const TestInfo& /*test_info*/) override {}
   void OnTestSuiteEnd(const TestSuite& /*test_suite*/) override {}
-#ifndef GTEST_REMOVE_LEGACY_TEST_CASEAPI_
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
   void OnTestCaseEnd(const TestCase& /*test_case*/) override {}
 #endif  //  GTEST_REMOVE_LEGACY_TEST_CASEAPI_
 
@@ -1245,7 +1245,7 @@ class GTEST_API_ UnitTest {
   const TestSuite* current_test_suite() const GTEST_LOCK_EXCLUDED_(mutex_);
 
 // Legacy API is still available but deprecated
-#ifndef GTEST_REMOVE_LEGACY_TEST_CASEAPI_
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
   const TestCase* current_test_case() const GTEST_LOCK_EXCLUDED_(mutex_);
 #endif
 
@@ -1278,7 +1278,7 @@ class GTEST_API_ UnitTest {
   int test_suite_to_run_count() const;
 
   //  Legacy API is deprecated but still available
-#ifndef GTEST_REMOVE_LEGACY_TEST_CASEAPI_
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
   int successful_test_case_count() const;
   int failed_test_case_count() const;
   int total_test_case_count() const;
@@ -1329,7 +1329,7 @@ class GTEST_API_ UnitTest {
   const TestSuite* GetTestSuite(int i) const;
 
 //  Legacy API is deprecated but still available
-#ifndef GTEST_REMOVE_LEGACY_TEST_CASEAPI_
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
   const TestCase* GetTestCase(int i) const;
 #endif  //  GTEST_REMOVE_LEGACY_TEST_CASEAPI_
 

@@ -654,7 +654,7 @@ class ParameterizedTestSuiteInfo : public ParameterizedTestSuiteInfoBase {
 };  // class ParameterizedTestSuiteInfo
 
 //  Legacy API is deprecated but still available
-#ifndef GTEST_REMOVE_LEGACY_TEST_CASEAPI_
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
 template <class TestCase>
 using ParameterizedTestCaseInfo = ParameterizedTestSuiteInfo<TestCase>;
 #endif  //  GTEST_REMOVE_LEGACY_TEST_CASEAPI_
@@ -711,7 +711,7 @@ class ParameterizedTestSuiteRegistry {
     }
   }
 //  Legacy API is deprecated but still available
-#ifndef GTEST_REMOVE_LEGACY_TEST_CASEAPI_
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
   template <class TestCase>
   ParameterizedTestCaseInfo<TestCase>* GetTestCasePatternHolder(
       const char* test_case_name, CodeLocation code_location) {

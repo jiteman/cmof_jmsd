@@ -224,7 +224,7 @@ INSTANTIATE_TYPED_TEST_SUITE_P(My, FooTest, MyTypes);
                               TestName)<gtest_TypeParam_>::TestBody()
 
 // Legacy API is deprecated but still available
-#ifndef GTEST_REMOVE_LEGACY_TEST_CASEAPI_
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
 #define TYPED_TEST_CASE                                                \
   static_assert(::testing::internal::TypedTestCaseIsDeprecated(), ""); \
   TYPED_TEST_SUITE
@@ -265,7 +265,7 @@ INSTANTIATE_TYPED_TEST_SUITE_P(My, FooTest, MyTypes);
       GTEST_TYPED_TEST_SUITE_P_STATE_(SuiteName)
 
 // Legacy API is deprecated but still available
-#ifndef GTEST_REMOVE_LEGACY_TEST_CASEAPI_
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
 #define TYPED_TEST_CASE_P                                                 \
   static_assert(::testing::internal::TypedTestCase_P_IsDeprecated(), ""); \
   TYPED_TEST_SUITE_P
@@ -300,7 +300,7 @@ INSTANTIATE_TYPED_TEST_SUITE_P(My, FooTest, MyTypes);
           __FILE__, __LINE__, #__VA_ARGS__)
 
 // Legacy API is deprecated but still available
-#ifndef GTEST_REMOVE_LEGACY_TEST_CASEAPI_
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
 #define REGISTER_TYPED_TEST_CASE_P                                           \
   static_assert(::testing::internal::RegisterTypedTestCase_P_IsDeprecated(), \
                 "");                                                         \
@@ -325,7 +325,7 @@ INSTANTIATE_TYPED_TEST_SUITE_P(My, FooTest, MyTypes);
                        ::testing::internal::GenerateTypeList<Types>::type>())
 
 // Legacy API is deprecated but still available
-#ifndef GTEST_REMOVE_LEGACY_TEST_CASEAPI_
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
 #define INSTANTIATE_TYPED_TEST_CASE_P                                      \
   static_assert(                                                           \
       ::testing::internal::InstantiateTypedTestCase_P_IsDeprecated(), ""); \
