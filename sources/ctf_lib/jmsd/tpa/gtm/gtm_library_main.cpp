@@ -9,7 +9,7 @@ namespace tpa {
 namespace gtm {
 
 
-int JMSD_TPA_GTM_LIBRARY_SHARED_INTERFACE ctf_main( int const argc, char const *const argv[], bool const do_warn_about_mocks ) {
+int JMSD_TPA_GTM_LIBRARY_SHARED_INTERFACE ctf_main( int const argc, char const *const argv[], bool const /*do_warn_about_mocks*/ ) {
 	{ // base and flags initialization
 		::jmsd::tpa::gtm::modification::Writable_command_line_arguments writable_command_line_arguments( argc, argv );
 

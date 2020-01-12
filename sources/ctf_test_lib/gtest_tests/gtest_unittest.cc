@@ -5367,7 +5367,7 @@ INSTANTIATE_TYPED_TEST_SUITE_P(My, CodeLocationForTYPEDTESTP, int);
 
 // Tests setting up and tearing down a test case.
 // Legacy API is deprecated but still available
-#ifndef REMOVE_LEGACY_TEST_CASEAPI
+#ifdef REMOVE_KEEP_TEST_CASEAPI
 class SetUpTestCaseTest : public Test {
  protected:
   // This will be called once before the first test in this test case
@@ -5426,7 +5426,7 @@ TEST_F(SetUpTestCaseTest, Test1) { EXPECT_STRNE(nullptr, shared_resource_); }
 TEST_F(SetUpTestCaseTest, Test2) {
   EXPECT_STREQ("123", shared_resource_);
 }
-#endif  //  REMOVE_LEGACY_TEST_CASEAPI
+#endif //#ifdef REMOVE_KEEP_TEST_CASEAPI
 
 // Tests SetupTestSuite/TearDown TestSuite
 class SetUpTestSuiteTest : public Test {
