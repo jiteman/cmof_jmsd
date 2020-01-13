@@ -510,7 +510,7 @@ class DefaultPerThreadTestPartResultReporter
 // proper locking.
 class GTEST_API_ UnitTestImpl {
  public:
-  explicit UnitTestImpl(UnitTest* parent);
+  explicit UnitTestImpl(::jmsd::cutf::UnitTest* parent);
   virtual ~UnitTestImpl();
 
   // There are two different ways to register your own TestPartResultReporter.
@@ -829,7 +829,7 @@ class GTEST_API_ UnitTestImpl {
   bool catch_exceptions() const { return catch_exceptions_; }
 
  private:
-  friend class ::testing::UnitTest;
+  friend ::jmsd::cutf::UnitTest;
 
   // Used by UnitTest::Run() to capture the state of
   // GTEST_FLAG(catch_exceptions) at the moment it starts.
@@ -946,11 +946,11 @@ class GTEST_API_ UnitTestImpl {
   GTEST_DISALLOW_COPY_AND_ASSIGN_(UnitTestImpl);
 };  // class UnitTestImpl
 
-// Convenience function for accessing the global UnitTest
-// implementation object.
-inline UnitTestImpl* GetUnitTestImpl() {
-  return UnitTest::GetInstance()->impl();
-}
+//// Convenience function for accessing the global UnitTest
+//// implementation object.
+//inline UnitTestImpl* GetUnitTestImpl() {
+//  return UnitTest::GetInstance()->impl();
+//}
 
 #if GTEST_USES_SIMPLE_RE
 

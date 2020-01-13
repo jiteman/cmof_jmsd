@@ -21,6 +21,9 @@
 
 // GOOGLETEST_CM0001 DO NOT DELETE
 
+#include "Unit_test.h"
+
+
 #include <cstddef>
 #include <limits>
 #include <memory>
@@ -38,6 +41,10 @@
 #include "gtest/gtest_prod.h"
 #include "gtest/gtest-test-part.h"
 #include "gtest/gtest-typed-test.h"
+
+
+#include "Unit_test.hxx"
+
 
 GTEST_DISABLE_MSC_WARNINGS_PUSH_(4251 \
 /* class A needs to have dll-interface to be used by clients of class B */)
@@ -144,8 +151,8 @@ class UnitTestRecordPropertyTestHelper;
 class WindowsDeathTest;
 class FuchsiaDeathTest;
 class UnitTestImpl* GetUnitTestImpl();
-void ReportFailureInUnknownLocation(TestPartResult::Type result_type,
-									const std::string& message);
+//void ReportFailureInUnknownLocation(TestPartResult::Type result_type,
+//									const std::string& message);
 
 }  // namespace internal
 
@@ -160,7 +167,7 @@ class TestSuite;
 using TestCase = TestSuite;
 #endif
 class TestInfo;
-class UnitTest;
+
 
 // A class for indicating whether an assertion was successful.  When
 // the assertion wasn't successful, the AssertionResult object
@@ -573,7 +580,7 @@ class GTEST_API_ TestResult {
  private:
   friend class TestInfo;
   friend class TestSuite;
-  friend class UnitTest;
+  friend class ::jmsd::cutf::UnitTest;
   friend class internal::DefaultGlobalTestPartResultReporter;
   friend class internal::ExecDeathTest;
   friend class internal::TestResultAccessor;
@@ -1045,19 +1052,19 @@ class TestEventListener {
   virtual ~TestEventListener() {}
 
   // Fired before any test activity starts.
-  virtual void OnTestProgramStart(const UnitTest& unit_test) = 0;
+  virtual void OnTestProgramStart(const ::jmsd::cutf::UnitTest& unit_test) = 0;
 
   // Fired before each iteration of tests starts.  There may be more than
   // one iteration if GTEST_FLAG(repeat) is set. iteration is the iteration
   // index, starting from 0.
-  virtual void OnTestIterationStart(const UnitTest& unit_test,
+  virtual void OnTestIterationStart(const ::jmsd::cutf::UnitTest& unit_test,
 									int iteration) = 0;
 
   // Fired before environment set-up for each iteration of tests starts.
-  virtual void OnEnvironmentsSetUpStart(const UnitTest& unit_test) = 0;
+  virtual void OnEnvironmentsSetUpStart(const ::jmsd::cutf::UnitTest& unit_test) = 0;
 
   // Fired after environment set-up for each iteration of tests ends.
-  virtual void OnEnvironmentsSetUpEnd(const UnitTest& unit_test) = 0;
+  virtual void OnEnvironmentsSetUpEnd(const ::jmsd::cutf::UnitTest& unit_test) = 0;
 
   // Fired before the test suite starts.
   virtual void OnTestSuiteStart(const TestSuite& /*test_suite*/) {}
@@ -1087,17 +1094,17 @@ class TestEventListener {
 #endif  //  GTEST_REMOVE_LEGACY_TEST_CASEAPI_
 
   // Fired before environment tear-down for each iteration of tests starts.
-  virtual void OnEnvironmentsTearDownStart(const UnitTest& unit_test) = 0;
+  virtual void OnEnvironmentsTearDownStart(const ::jmsd::cutf::UnitTest& unit_test) = 0;
 
   // Fired after environment tear-down for each iteration of tests ends.
-  virtual void OnEnvironmentsTearDownEnd(const UnitTest& unit_test) = 0;
+  virtual void OnEnvironmentsTearDownEnd(const ::jmsd::cutf::UnitTest& unit_test) = 0;
 
   // Fired after each iteration of tests finishes.
-  virtual void OnTestIterationEnd(const UnitTest& unit_test,
+  virtual void OnTestIterationEnd(const ::jmsd::cutf::UnitTest& unit_test,
 								  int iteration) = 0;
 
   // Fired after all test activities have ended.
-  virtual void OnTestProgramEnd(const UnitTest& unit_test) = 0;
+  virtual void OnTestProgramEnd(const ::jmsd::cutf::UnitTest& unit_test) = 0;
 };
 
 // The convenience class for users who need to override just one or two
@@ -1107,11 +1114,11 @@ class TestEventListener {
 // above.
 class EmptyTestEventListener : public TestEventListener {
  public:
-  void OnTestProgramStart(const UnitTest& /*unit_test*/) override {}
-  void OnTestIterationStart(const UnitTest& /*unit_test*/,
+  void OnTestProgramStart(const ::jmsd::cutf::UnitTest& /*unit_test*/) override {}
+  void OnTestIterationStart(const ::jmsd::cutf::UnitTest& /*unit_test*/,
 							int /*iteration*/) override {}
-  void OnEnvironmentsSetUpStart(const UnitTest& /*unit_test*/) override {}
-  void OnEnvironmentsSetUpEnd(const UnitTest& /*unit_test*/) override {}
+  void OnEnvironmentsSetUpStart(const ::jmsd::cutf::UnitTest& /*unit_test*/) override {}
+  void OnEnvironmentsSetUpEnd(const::jmsd::cutf::UnitTest& /*unit_test*/) override {}
   void OnTestSuiteStart(const TestSuite& /*test_suite*/) override {}
 //  Legacy API is deprecated but still available
 #ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
@@ -1126,11 +1133,11 @@ class EmptyTestEventListener : public TestEventListener {
   void OnTestCaseEnd(const TestCase& /*test_case*/) override {}
 #endif  //  GTEST_REMOVE_LEGACY_TEST_CASEAPI_
 
-  void OnEnvironmentsTearDownStart(const UnitTest& /*unit_test*/) override {}
-  void OnEnvironmentsTearDownEnd(const UnitTest& /*unit_test*/) override {}
-  void OnTestIterationEnd(const UnitTest& /*unit_test*/,
+  void OnEnvironmentsTearDownStart(const ::jmsd::cutf::UnitTest& /*unit_test*/) override {}
+  void OnEnvironmentsTearDownEnd(const ::jmsd::cutf::UnitTest& /*unit_test*/) override {}
+  void OnTestIterationEnd(const ::jmsd::cutf::UnitTest& /*unit_test*/,
 						  int /*iteration*/) override {}
-  void OnTestProgramEnd(const UnitTest& /*unit_test*/) override {}
+  void OnTestProgramEnd(const ::jmsd::cutf::UnitTest& /*unit_test*/) override {}
 };
 
 // TestEventListeners lets users add listeners to track events in Google Test.
@@ -1211,237 +1218,238 @@ class GTEST_API_ TestEventListeners {
   GTEST_DISALLOW_COPY_AND_ASSIGN_(TestEventListeners);
 };
 
-// A UnitTest consists of a vector of TestSuites.
-//
-// This is a singleton class.  The only instance of UnitTest is
-// created when UnitTest::GetInstance() is first called.  This
-// instance is never deleted.
-//
-// UnitTest is not copyable.
-//
-// This class is thread-safe as long as the methods are called
-// according to their specification.
-class GTEST_API_ UnitTest {
- public:
-  // Gets the singleton UnitTest object.  The first time this method
-  // is called, a UnitTest object is constructed and returned.
-  // Consecutive calls will return the same object.
-  static UnitTest* GetInstance();
 
-  // Runs all tests in this UnitTest object and prints the result.
-  // Returns 0 if successful, or 1 otherwise.
-  //
-  // This method can only be called from the main thread.
-  //
-  // INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
-  int Run() GTEST_MUST_USE_RESULT_;
+//// A UnitTest consists of a vector of TestSuites.
+////
+//// This is a singleton class.  The only instance of UnitTest is
+//// created when UnitTest::GetInstance() is first called.  This
+//// instance is never deleted.
+////
+//// UnitTest is not copyable.
+////
+//// This class is thread-safe as long as the methods are called
+//// according to their specification.
+//class GTEST_API_ UnitTest {
+// public:
+//  // Gets the singleton UnitTest object.  The first time this method
+//  // is called, a UnitTest object is constructed and returned.
+//  // Consecutive calls will return the same object.
+//  static UnitTest* GetInstance();
 
-  // Returns the working directory when the first TEST() or TEST_F()
-  // was executed.  The UnitTest object owns the string.
-  const char* original_working_dir() const;
+//  // Runs all tests in this UnitTest object and prints the result.
+//  // Returns 0 if successful, or 1 otherwise.
+//  //
+//  // This method can only be called from the main thread.
+//  //
+//  // INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
+//  int Run() GTEST_MUST_USE_RESULT_;
 
-  // Returns the TestSuite object for the test that's currently running,
-  // or NULL if no test is running.
-  const TestSuite* current_test_suite() const GTEST_LOCK_EXCLUDED_(mutex_);
+//  // Returns the working directory when the first TEST() or TEST_F()
+//  // was executed.  The UnitTest object owns the string.
+//  const char* original_working_dir() const;
 
-// Legacy API is still available but deprecated
-#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
-  const TestCase* current_test_case() const GTEST_LOCK_EXCLUDED_(mutex_);
-#endif
+//  // Returns the TestSuite object for the test that's currently running,
+//  // or NULL if no test is running.
+//  const TestSuite* current_test_suite() const GTEST_LOCK_EXCLUDED_(mutex_);
 
-  // Returns the TestInfo object for the test that's currently running,
-  // or NULL if no test is running.
-  const TestInfo* current_test_info() const
-	  GTEST_LOCK_EXCLUDED_(mutex_);
+//// Legacy API is still available but deprecated
+//#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
+//  const TestCase* current_test_case() const GTEST_LOCK_EXCLUDED_(mutex_);
+//#endif
 
-  // Returns the random seed used at the start of the current test run.
-  int random_seed() const;
+//  // Returns the TestInfo object for the test that's currently running,
+//  // or NULL if no test is running.
+//  const TestInfo* current_test_info() const
+//	  GTEST_LOCK_EXCLUDED_(mutex_);
 
-  // Returns the ParameterizedTestSuiteRegistry object used to keep track of
-  // value-parameterized tests and instantiate and register them.
-  //
-  // INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
-  internal::ParameterizedTestSuiteRegistry& parameterized_test_registry()
-	  GTEST_LOCK_EXCLUDED_(mutex_);
+//  // Returns the random seed used at the start of the current test run.
+//  int random_seed() const;
 
-  // Gets the number of successful test suites.
-  int successful_test_suite_count() const;
+//  // Returns the ParameterizedTestSuiteRegistry object used to keep track of
+//  // value-parameterized tests and instantiate and register them.
+//  //
+//  // INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
+//  internal::ParameterizedTestSuiteRegistry& parameterized_test_registry()
+//	  GTEST_LOCK_EXCLUDED_(mutex_);
 
-  // Gets the number of failed test suites.
-  int failed_test_suite_count() const;
+//  // Gets the number of successful test suites.
+//  int successful_test_suite_count() const;
 
-  // Gets the number of all test suites.
-  int total_test_suite_count() const;
+//  // Gets the number of failed test suites.
+//  int failed_test_suite_count() const;
 
-  // Gets the number of all test suites that contain at least one test
-  // that should run.
-  int test_suite_to_run_count() const;
+//  // Gets the number of all test suites.
+//  int total_test_suite_count() const;
 
-  //  Legacy API is deprecated but still available
-#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
-  int successful_test_case_count() const;
-  int failed_test_case_count() const;
-  int total_test_case_count() const;
-  int test_case_to_run_count() const;
-#endif  //  GTEST_REMOVE_LEGACY_TEST_CASEAPI_
+//  // Gets the number of all test suites that contain at least one test
+//  // that should run.
+//  int test_suite_to_run_count() const;
 
-  // Gets the number of successful tests.
-  int successful_test_count() const;
+//  //  Legacy API is deprecated but still available
+//#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
+//  int successful_test_case_count() const;
+//  int failed_test_case_count() const;
+//  int total_test_case_count() const;
+//  int test_case_to_run_count() const;
+//#endif  //  GTEST_REMOVE_LEGACY_TEST_CASEAPI_
 
-  // Gets the number of skipped tests.
-  int skipped_test_count() const;
+//  // Gets the number of successful tests.
+//  int successful_test_count() const;
 
-  // Gets the number of failed tests.
-  int failed_test_count() const;
+//  // Gets the number of skipped tests.
+//  int skipped_test_count() const;
 
-  // Gets the number of disabled tests that will be reported in the XML report.
-  int reportable_disabled_test_count() const;
+//  // Gets the number of failed tests.
+//  int failed_test_count() const;
 
-  // Gets the number of disabled tests.
-  int disabled_test_count() const;
+//  // Gets the number of disabled tests that will be reported in the XML report.
+//  int reportable_disabled_test_count() const;
 
-  // Gets the number of tests to be printed in the XML report.
-  int reportable_test_count() const;
+//  // Gets the number of disabled tests.
+//  int disabled_test_count() const;
 
-  // Gets the number of all tests.
-  int total_test_count() const;
+//  // Gets the number of tests to be printed in the XML report.
+//  int reportable_test_count() const;
 
-  // Gets the number of tests that should run.
-  int test_to_run_count() const;
+//  // Gets the number of all tests.
+//  int total_test_count() const;
 
-  // Gets the time of the test program start, in ms from the start of the
-  // UNIX epoch.
-  TimeInMillis start_timestamp() const;
+//  // Gets the number of tests that should run.
+//  int test_to_run_count() const;
 
-  // Gets the elapsed time, in milliseconds.
-  TimeInMillis elapsed_time() const;
+//  // Gets the time of the test program start, in ms from the start of the
+//  // UNIX epoch.
+//  TimeInMillis start_timestamp() const;
 
-  // Returns true if and only if the unit test passed (i.e. all test suites
-  // passed).
-  bool Passed() const;
+//  // Gets the elapsed time, in milliseconds.
+//  TimeInMillis elapsed_time() const;
 
-  // Returns true if and only if the unit test failed (i.e. some test suite
-  // failed or something outside of all tests failed).
-  bool Failed() const;
+//  // Returns true if and only if the unit test passed (i.e. all test suites
+//  // passed).
+//  bool Passed() const;
 
-  // Gets the i-th test suite among all the test suites. i can range from 0 to
-  // total_test_suite_count() - 1. If i is not in that range, returns NULL.
-  const TestSuite* GetTestSuite(int i) const;
+//  // Returns true if and only if the unit test failed (i.e. some test suite
+//  // failed or something outside of all tests failed).
+//  bool Failed() const;
 
-//  Legacy API is deprecated but still available
-#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
-  const TestCase* GetTestCase(int i) const;
-#endif  //  GTEST_REMOVE_LEGACY_TEST_CASEAPI_
+//  // Gets the i-th test suite among all the test suites. i can range from 0 to
+//  // total_test_suite_count() - 1. If i is not in that range, returns NULL.
+//  const TestSuite* GetTestSuite(int i) const;
 
-  // Returns the TestResult containing information on test failures and
-  // properties logged outside of individual test suites.
-  const TestResult& ad_hoc_test_result() const;
+////  Legacy API is deprecated but still available
+//#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
+//  const TestCase* GetTestCase(int i) const;
+//#endif  //  GTEST_REMOVE_LEGACY_TEST_CASEAPI_
 
-  // Returns the list of event listeners that can be used to track events
-  // inside Google Test.
-  TestEventListeners& listeners();
+//  // Returns the TestResult containing information on test failures and
+//  // properties logged outside of individual test suites.
+//  const TestResult& ad_hoc_test_result() const;
 
- private:
-  // Registers and returns a global test environment.  When a test
-  // program is run, all global test environments will be set-up in
-  // the order they were registered.  After all tests in the program
-  // have finished, all global test environments will be torn-down in
-  // the *reverse* order they were registered.
-  //
-  // The UnitTest object takes ownership of the given environment.
-  //
-  // This method can only be called from the main thread.
-  Environment* AddEnvironment(Environment* env);
+//  // Returns the list of event listeners that can be used to track events
+//  // inside Google Test.
+//  TestEventListeners& listeners();
 
-  // Adds a TestPartResult to the current TestResult object.  All
-  // Google Test assertion macros (e.g. ASSERT_TRUE, EXPECT_EQ, etc)
-  // eventually call this to report their results.  The user code
-  // should use the assertion macros instead of calling this directly.
-  void AddTestPartResult(TestPartResult::Type result_type,
-						 const char* file_name,
-						 int line_number,
-						 const std::string& message,
-						 const std::string& os_stack_trace)
-	  GTEST_LOCK_EXCLUDED_(mutex_);
+// private:
+//  // Registers and returns a global test environment.  When a test
+//  // program is run, all global test environments will be set-up in
+//  // the order they were registered.  After all tests in the program
+//  // have finished, all global test environments will be torn-down in
+//  // the *reverse* order they were registered.
+//  //
+//  // The UnitTest object takes ownership of the given environment.
+//  //
+//  // This method can only be called from the main thread.
+//  Environment* AddEnvironment(Environment* env);
 
-  // Adds a TestProperty to the current TestResult object when invoked from
-  // inside a test, to current TestSuite's ad_hoc_test_result_ when invoked
-  // from SetUpTestSuite or TearDownTestSuite, or to the global property set
-  // when invoked elsewhere.  If the result already contains a property with
-  // the same key, the value will be updated.
-  void RecordProperty(const std::string& key, const std::string& value);
+//  // Adds a TestPartResult to the current TestResult object.  All
+//  // Google Test assertion macros (e.g. ASSERT_TRUE, EXPECT_EQ, etc)
+//  // eventually call this to report their results.  The user code
+//  // should use the assertion macros instead of calling this directly.
+//  void AddTestPartResult(TestPartResult::Type result_type,
+//						 const char* file_name,
+//						 int line_number,
+//						 const std::string& message,
+//						 const std::string& os_stack_trace)
+//	  GTEST_LOCK_EXCLUDED_(mutex_);
 
-  // Gets the i-th test suite among all the test suites. i can range from 0 to
-  // total_test_suite_count() - 1. If i is not in that range, returns NULL.
-  TestSuite* GetMutableTestSuite(int i);
+//  // Adds a TestProperty to the current TestResult object when invoked from
+//  // inside a test, to current TestSuite's ad_hoc_test_result_ when invoked
+//  // from SetUpTestSuite or TearDownTestSuite, or to the global property set
+//  // when invoked elsewhere.  If the result already contains a property with
+//  // the same key, the value will be updated.
+//  void RecordProperty(const std::string& key, const std::string& value);
 
-  // Accessors for the implementation object.
-  internal::UnitTestImpl* impl() { return impl_; }
-  const internal::UnitTestImpl* impl() const { return impl_; }
+//  // Gets the i-th test suite among all the test suites. i can range from 0 to
+//  // total_test_suite_count() - 1. If i is not in that range, returns NULL.
+//  TestSuite* GetMutableTestSuite(int i);
 
-  // These classes and functions are friends as they need to access private
-  // members of UnitTest.
-  friend class ScopedTrace;
-  friend class Test;
-  friend class internal::AssertHelper;
-  friend class internal::StreamingListenerTest;
-  friend class internal::UnitTestRecordPropertyTestHelper;
-  friend Environment* AddGlobalTestEnvironment(Environment* env);
-  friend internal::UnitTestImpl* internal::GetUnitTestImpl();
-  friend void internal::ReportFailureInUnknownLocation(
-	  TestPartResult::Type result_type,
-	  const std::string& message);
+//  // Accessors for the implementation object.
+//  internal::UnitTestImpl* impl() { return impl_; }
+//  const internal::UnitTestImpl* impl() const { return impl_; }
 
-  // Creates an empty UnitTest.
-  UnitTest();
+//  // These classes and functions are friends as they need to access private
+//  // members of UnitTest.
+//  friend class ScopedTrace;
+//  friend class Test;
+//  friend class internal::AssertHelper;
+//  friend class internal::StreamingListenerTest;
+//  friend class internal::UnitTestRecordPropertyTestHelper;
+//  friend Environment* AddGlobalTestEnvironment(Environment* env);
+//  friend internal::UnitTestImpl* internal::GetUnitTestImpl();
+//  friend void internal::ReportFailureInUnknownLocation(
+//	  TestPartResult::Type result_type,
+//	  const std::string& message);
 
-  // D'tor
-  virtual ~UnitTest();
+//  // Creates an empty UnitTest.
+//  UnitTest();
 
-  // Pushes a trace defined by SCOPED_TRACE() on to the per-thread
-  // Google Test trace stack.
-  void PushGTestTrace(const internal::TraceInfo& trace)
-	  GTEST_LOCK_EXCLUDED_(mutex_);
+//  // D'tor
+//  virtual ~UnitTest();
 
-  // Pops a trace from the per-thread Google Test trace stack.
-  void PopGTestTrace()
-	  GTEST_LOCK_EXCLUDED_(mutex_);
+//  // Pushes a trace defined by SCOPED_TRACE() on to the per-thread
+//  // Google Test trace stack.
+//  void PushGTestTrace(const internal::TraceInfo& trace)
+//	  GTEST_LOCK_EXCLUDED_(mutex_);
 
-  // Protects mutable state in *impl_.  This is mutable as some const
-  // methods need to lock it too.
-  mutable internal::Mutex mutex_;
+//  // Pops a trace from the per-thread Google Test trace stack.
+//  void PopGTestTrace()
+//	  GTEST_LOCK_EXCLUDED_(mutex_);
 
-  // Opaque implementation object.  This field is never changed once
-  // the object is constructed.  We don't mark it as const here, as
-  // doing so will cause a warning in the constructor of UnitTest.
-  // Mutable state in *impl_ is protected by mutex_.
-  internal::UnitTestImpl* impl_;
+//  // Protects mutable state in *impl_.  This is mutable as some const
+//  // methods need to lock it too.
+//  mutable internal::Mutex mutex_;
 
-  // We disallow copying UnitTest.
-  GTEST_DISALLOW_COPY_AND_ASSIGN_(UnitTest);
-};
+//  // Opaque implementation object.  This field is never changed once
+//  // the object is constructed.  We don't mark it as const here, as
+//  // doing so will cause a warning in the constructor of UnitTest.
+//  // Mutable state in *impl_ is protected by mutex_.
+//  internal::UnitTestImpl* impl_;
 
-// A convenient wrapper for adding an environment for the test
-// program.
-//
-// You should call this before RUN_ALL_TESTS() is called, probably in
-// main().  If you use gtest_main, you need to call this before main()
-// starts for it to take effect.  For example, you can define a global
-// variable like this:
-//
-//   testing::Environment* const foo_env =
-//       testing::AddGlobalTestEnvironment(new FooEnvironment);
-//
-// However, we strongly recommend you to write your own main() and
-// call AddGlobalTestEnvironment() there, as relying on initialization
-// of global variables makes the code harder to read and may cause
-// problems when you register multiple environments from different
-// translation units and the environments have dependencies among them
-// (remember that the compiler doesn't guarantee the order in which
-// global variables from different translation units are initialized).
-inline Environment* AddGlobalTestEnvironment(Environment* env) {
-  return UnitTest::GetInstance()->AddEnvironment(env);
-}
+//  // We disallow copying UnitTest.
+//  GTEST_DISALLOW_COPY_AND_ASSIGN_(UnitTest);
+//};
+
+//// A convenient wrapper for adding an environment for the test
+//// program.
+////
+//// You should call this before RUN_ALL_TESTS() is called, probably in
+//// main().  If you use gtest_main, you need to call this before main()
+//// starts for it to take effect.  For example, you can define a global
+//// variable like this:
+////
+////   testing::Environment* const foo_env =
+////       testing::AddGlobalTestEnvironment(new FooEnvironment);
+////
+//// However, we strongly recommend you to write your own main() and
+//// call AddGlobalTestEnvironment() there, as relying on initialization
+//// of global variables makes the code harder to read and may cause
+//// problems when you register multiple environments from different
+//// translation units and the environments have dependencies among them
+//// (remember that the compiler doesn't guarantee the order in which
+//// global variables from different translation units are initialized).
+//inline ::testing::Environment* AddGlobalTestEnvironment( ::testing::Environment* env) {
+//  return ::jmsd::cutf::UnitTest::GetInstance()->AddEnvironment(env);
+//}
 
 // Initializes Google Test.  This must be called before calling
 // RUN_ALL_TESTS().  In particular, it parses a command line for the
@@ -2169,50 +2177,50 @@ GTEST_API_ AssertionResult DoubleLE(const char* expr1, const char* expr2,
 #define EXPECT_NO_FATAL_FAILURE(statement) \
 	GTEST_TEST_NO_FATAL_FAILURE_(statement, GTEST_NONFATAL_FAILURE_)
 
-// Causes a trace (including the given source file path and line number,
-// and the given message) to be included in every test failure message generated
-// by code in the scope of the lifetime of an instance of this class. The effect
-// is undone with the destruction of the instance.
-//
-// The message argument can be anything streamable to std::ostream.
-//
-// Example:
-//   testing::ScopedTrace trace("file.cc", 123, "message");
-//
-class GTEST_API_ ScopedTrace {
- public:
-  // The c'tor pushes the given source file location and message onto
-  // a trace stack maintained by Google Test.
+//// Causes a trace (including the given source file path and line number,
+//// and the given message) to be included in every test failure message generated
+//// by code in the scope of the lifetime of an instance of this class. The effect
+//// is undone with the destruction of the instance.
+////
+//// The message argument can be anything streamable to std::ostream.
+////
+//// Example:
+////   testing::ScopedTrace trace("file.cc", 123, "message");
+////
+//class GTEST_API_ ScopedTrace {
+// public:
+//  // The c'tor pushes the given source file location and message onto
+//  // a trace stack maintained by Google Test.
 
-  // Template version. Uses Message() to convert the values into strings.
-  // Slow, but flexible.
-  template <typename T>
-  ScopedTrace(const char* file, int line, const T& message) {
-	PushTrace(file, line, (Message() << message).GetString());
-  }
+//  // Template version. Uses Message() to convert the values into strings.
+//  // Slow, but flexible.
+//  template <typename T>
+//  ScopedTrace(const char* file, int line, const T& message) {
+//	PushTrace(file, line, (Message() << message).GetString());
+//  }
 
-  // Optimize for some known types.
-  ScopedTrace(const char* file, int line, const char* message) {
-	PushTrace(file, line, message ? message : "(null)");
-  }
+//  // Optimize for some known types.
+//  ScopedTrace(const char* file, int line, const char* message) {
+//	PushTrace(file, line, message ? message : "(null)");
+//  }
 
-  ScopedTrace(const char* file, int line, const std::string& message) {
-	PushTrace(file, line, message);
-  }
+//  ScopedTrace(const char* file, int line, const std::string& message) {
+//	PushTrace(file, line, message);
+//  }
 
-  // The d'tor pops the info pushed by the c'tor.
-  //
-  // Note that the d'tor is not virtual in order to be efficient.
-  // Don't inherit from ScopedTrace!
-  ~ScopedTrace();
+//  // The d'tor pops the info pushed by the c'tor.
+//  //
+//  // Note that the d'tor is not virtual in order to be efficient.
+//  // Don't inherit from ScopedTrace!
+//  ~ScopedTrace();
 
- private:
-  void PushTrace(const char* file, int line, std::string message);
+// private:
+//  void PushTrace(const char* file, int line, std::string message);
 
-  GTEST_DISALLOW_COPY_AND_ASSIGN_(ScopedTrace);
-} GTEST_ATTRIBUTE_UNUSED_;  // A ScopedTrace object does its job in its
-							// c'tor and d'tor.  Therefore it doesn't
-							// need to be used otherwise.
+//  GTEST_DISALLOW_COPY_AND_ASSIGN_(ScopedTrace);
+//} GTEST_ATTRIBUTE_UNUSED_;  // A ScopedTrace object does its job in its
+//							// c'tor and d'tor.  Therefore it doesn't
+//							// need to be used otherwise.
 
 // Causes a trace (including the source file path, the current line
 // number, and the given message) to be included in every test failure
@@ -2425,18 +2433,5 @@ TestInfo* RegisterTest(const char* test_suite_name, const char* test_name,
 
 }  // namespace testing
 
-//// Use this function in main() to run all tests.  It returns 0 if all
-//// tests are successful, or 1 otherwise.
-////
-//// RUN_ALL_TESTS() should be invoked after the command line has been
-//// parsed by InitGoogleTest().
-////
-//// This function was formerly a macro; thus, it is in the global
-//// namespace and has an all-caps name.
-//int RUN_ALL_TESTS() GTEST_MUST_USE_RESULT_;
-
-//inline int RUN_ALL_TESTS() {
-//  return ::testing::UnitTest::GetInstance()->Run();
-//}
 
 GTEST_DISABLE_MSC_WARNINGS_POP_()  //  4251

@@ -50,6 +50,10 @@
 # include <stdexcept>
 #endif
 
+
+#include "gtest/Unit_test.hxx"
+
+
 #include <ctype.h>
 #include <float.h>
 #include <string.h>
@@ -92,7 +96,7 @@ class Message;                         // Represents a failure message.
 class Test;                            // Represents a test.
 class TestInfo;                        // Information about a test.
 class TestPartResult;                  // Result of a test part.
-class UnitTest;                        // A collection of test suites.
+//class UnitTest;                        // A collection of test suites.
 
 template <typename T>
 ::std::string PrintToString(const T& value);
@@ -816,7 +820,7 @@ class TypeParameterizedTestSuite<Fixture, internal::None, Types> {
 // GetCurrentOsStackTraceExceptTop(..., 1), Foo() will be included in
 // the trace but Bar() and GetCurrentOsStackTraceExceptTop() won't.
 GTEST_API_ std::string GetCurrentOsStackTraceExceptTop(
-	UnitTest* unit_test, int skip_count);
+	::jmsd::cutf::UnitTest* unit_test, int skip_count);
 
 // Helpers for suppressing warnings on unreachable code or constant
 // condition.
