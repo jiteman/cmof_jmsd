@@ -1,15 +1,15 @@
 #pragma once
 
 
-namespace gtest {
-namespace testing {
+namespace jmsd {
+namespace cutf {
 
 
 
 
 
-} // namespace testing
-} // namespace gtest
+} // namespace cutf
+} // namespace jmsd
 
 
 namespace testing {
