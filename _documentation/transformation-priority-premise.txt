@@ -1,0 +1,25 @@
+===============================================================================================
+-----------------------------------------------------------------------------------------------
+Transformation Priority Premise:
+
+00. ({} –> nil): no code at all -> code that employs nil
+01. (nil -> constant): nil -> code that employs a constant value
+02. (constant -> constant+): a simple constant to a more complex constant
+03. (constant -> scalar): replacing a constant with a variable or an argument
+04. (statement -> statements): adding more unconditional statements.
+05. (unconditional -> if): splitting the execution path
+06. (scalar -> array): replace a scalar value with an array
+07. (array -> container): replace an array with a container
+08. (statement -> recursion): replace a statement with a recursion
+09. (if -> while): replace an if statement with a while loop
+10. (expression -> function): replacing an expression with a function or algorithm
+11. (variable -> assignment): replacing the value of a variable.
+
+or
+
+00. constant: a value
+01. scalar: a local binding, or variable
+02. invocation: calling a function/method
+03. conditional: if/switch/case/cond
+04. while loop: applies to for loops as well
+05. assignment: replacing the value of a variable
