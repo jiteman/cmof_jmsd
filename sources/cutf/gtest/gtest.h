@@ -2425,18 +2425,18 @@ TestInfo* RegisterTest(const char* test_suite_name, const char* test_name,
 
 }  // namespace testing
 
-// Use this function in main() to run all tests.  It returns 0 if all
-// tests are successful, or 1 otherwise.
-//
-// RUN_ALL_TESTS() should be invoked after the command line has been
-// parsed by InitGoogleTest().
-//
-// This function was formerly a macro; thus, it is in the global
-// namespace and has an all-caps name.
-int RUN_ALL_TESTS() GTEST_MUST_USE_RESULT_;
+//// Use this function in main() to run all tests.  It returns 0 if all
+//// tests are successful, or 1 otherwise.
+////
+//// RUN_ALL_TESTS() should be invoked after the command line has been
+//// parsed by InitGoogleTest().
+////
+//// This function was formerly a macro; thus, it is in the global
+//// namespace and has an all-caps name.
+//int RUN_ALL_TESTS() GTEST_MUST_USE_RESULT_;
 
-inline int RUN_ALL_TESTS() {
-  return ::testing::UnitTest::GetInstance()->Run();
-}
+//inline int RUN_ALL_TESTS() {
+//  return ::testing::UnitTest::GetInstance()->Run();
+//}
 
 GTEST_DISABLE_MSC_WARNINGS_POP_()  //  4251

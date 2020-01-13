@@ -3,6 +3,8 @@
 #include "jmsd/tpa/gtm/modification/Writable_command_line_arguments.h"
 #include "jmsd/tpa/gtm/modification/Configurable_event_listener.h"
 
+#include "gtest/run_all_tests.h"
+
 
 namespace jmsd {
 namespace tpa {
@@ -34,7 +36,7 @@ int JMSD_TPA_GTM_LIBRARY_SHARED_INTERFACE ctf_main( int const argc, char const *
 		listeners.Append( the_listener );
 	}
 
-	return RUN_ALL_TESTS();
+	return ::jmsd::cutf::RUN_ALL_TESTS();
 }
 
 
