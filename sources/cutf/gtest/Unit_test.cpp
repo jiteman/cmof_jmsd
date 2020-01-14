@@ -1,6 +1,12 @@
 #include "Unit_test.h"
 
 
+#include "internal/Unit_test_impl.h"
+
+#include "gtest-test-part.h"
+#include "gtest-message.h"
+
+
 namespace jmsd {
 namespace cutf {
 
@@ -101,12 +107,12 @@ int UnitTest::test_to_run_count() const { return impl()->test_to_run_count(); }
 
 // Gets the time of the test program start, in ms from the start of the
 // UNIX epoch.
-internal::TimeInMillis UnitTest::start_timestamp() const {
+::testing::internal::TimeInMillis UnitTest::start_timestamp() const {
 	return impl()->start_timestamp();
 }
 
 // Gets the elapsed time, in milliseconds.
-internal::TimeInMillis UnitTest::elapsed_time() const {
+::testing::internal::TimeInMillis UnitTest::elapsed_time() const {
   return impl()->elapsed_time();
 }
 
@@ -120,32 +126,32 @@ bool UnitTest::Failed() const { return impl()->Failed(); }
 
 // Gets the i-th test suite among all the test suites. i can range from 0 to
 // total_test_suite_count() - 1. If i is not in that range, returns NULL.
-const TestSuite* UnitTest::GetTestSuite(int i) const {
+const ::testing::TestSuite* UnitTest::GetTestSuite(int i) const {
   return impl()->GetTestSuite(i);
 }
 
 //  Legacy API is deprecated but still available
 #ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
-const TestCase* UnitTest::GetTestCase(int i) const {
+const ::testing::TestCase* UnitTest::GetTestCase(int i) const {
   return impl()->GetTestCase(i);
 }
 #endif  //  GTEST_REMOVE_LEGACY_TEST_CASEAPI_
 
 // Returns the TestResult containing information on test failures and
 // properties logged outside of individual test suites.
-const TestResult& UnitTest::ad_hoc_test_result() const {
+const ::testing::TestResult& UnitTest::ad_hoc_test_result() const {
   return *impl()->ad_hoc_test_result();
 }
 
 // Gets the i-th test suite among all the test suites. i can range from 0 to
 // total_test_suite_count() - 1. If i is not in that range, returns NULL.
-TestSuite* UnitTest::GetMutableTestSuite(int i) {
+::testing::TestSuite* UnitTest::GetMutableTestSuite(int i) {
   return impl()->GetMutableSuiteCase(i);
 }
 
 // Returns the list of event listeners that can be used to track events
 // inside Google Test.
-TestEventListeners& UnitTest::listeners() {
+::testing::TestEventListeners& UnitTest::listeners() {
   return *impl()->listeners();
 }
 
@@ -159,7 +165,7 @@ TestEventListeners& UnitTest::listeners() {
 //
 // We don't protect this under mutex_, as we only support calling it
 // from the main thread.
-Environment* UnitTest::AddEnvironment(Environment* env) {
+::testing::Environment* UnitTest::AddEnvironment(::testing::Environment* env) {
   if (env == nullptr) {
 	return nullptr;
   }
@@ -173,12 +179,12 @@ Environment* UnitTest::AddEnvironment(Environment* env) {
 // this to report their results.  The user code should use the
 // assertion macros instead of calling this directly.
 void UnitTest::AddTestPartResult(
-	TestPartResult::Type result_type,
+	::testing::TestPartResult::Type result_type,
 	const char* file_name,
 	int line_number,
 	const std::string& message,
 	const std::string& os_stack_trace) GTEST_LOCK_EXCLUDED_(mutex_) {
-  Message msg;
+  ::testing::Message msg;
   msg << message;
 
   internal::MutexLock lock(&mutex_);

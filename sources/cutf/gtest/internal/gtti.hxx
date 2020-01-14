@@ -6,7 +6,7 @@ namespace cutf {
 namespace internal {
 
 
-class UnitTestImpl;
+
 
 
 } // namespace internal

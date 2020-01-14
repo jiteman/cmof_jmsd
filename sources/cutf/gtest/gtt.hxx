@@ -15,7 +15,4 @@ namespace cutf {
 namespace testing {
 
 
-class gtt;
-
-
 } // namespace testing

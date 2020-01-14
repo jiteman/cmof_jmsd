@@ -3,18 +3,19 @@
 
 namespace jmsd {
 namespace cutf {
-namespace internal {
 
 
-class UnitTestImpl;
+char const *GetDefaultFilter();
 
 
-} // namespace internal
 } // namespace cutf
 } // namespace jmsd
 
 
 namespace testing {
+
+
+
 
 
 } // namespace testing

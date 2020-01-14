@@ -1,15 +1,15 @@
 #pragma once
 
+#include "get_default_filter.hxx"
+
 
 namespace jmsd {
 namespace cutf {
-namespace internal {
 
 
-class UnitTestImpl;
 
 
-} // namespace internal
+
 } // namespace cutf
 } // namespace jmsd
 

@@ -2,5 +2,7 @@
 -----------------------------------------------------------------------------------------------
 Separating cutf (ex google test)
 	Separating gtest.h and gtest.cpp:
-		* Separate UnitTest class
-		Separate UnitTestImpl class
+		+ Separate UnitTest class
+		% Separate UnitTestImpl class
+		Remove forward declarations from gtest.h
+		

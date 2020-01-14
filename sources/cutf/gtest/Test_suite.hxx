@@ -3,13 +3,11 @@
 
 namespace jmsd {
 namespace cutf {
-namespace internal {
 
 
-class UnitTestImpl;
+class TestSuite;
 
 
-} // namespace internal
 } // namespace cutf
 } // namespace jmsd
 
