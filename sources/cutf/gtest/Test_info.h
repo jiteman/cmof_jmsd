@@ -8,6 +8,18 @@
 #include "internal/gtest-port.h"
 
 
+namespace testing {
+namespace internal {
+
+
+class DefaultDeathTestFactory;
+class StreamingListenerTest;
+
+
+} // namespace internal
+} // namespace testing
+
+
 namespace jmsd {
 namespace cutf {
 
@@ -93,27 +105,32 @@ class GTEST_API_ TestInfo {
 
  private:
 #if GTEST_HAS_DEATH_TEST
-  friend class internal::DefaultDeathTestFactory;
+  friend ::testing::internal::DefaultDeathTestFactory;
 #endif  // GTEST_HAS_DEATH_TEST
   friend class Test;
   friend class TestSuite;
   friend class internal::UnitTestImpl;
-  friend class internal::StreamingListenerTest;
-  friend TestInfo* internal::MakeAndRegisterTestInfo(
-	  const char* test_suite_name, const char* name, const char* type_param,
-	  const char* value_param, internal::CodeLocation code_location,
-	  internal::TypeId fixture_class_id, internal::SetUpTestSuiteFunc set_up_tc,
-	  internal::TearDownTestSuiteFunc tear_down_tc,
-	  internal::TestFactoryBase* factory);
+  friend ::testing::internal::StreamingListenerTest;
+
+  friend TestInfo* ::testing::internal::MakeAndRegisterTestInfo(
+	  const char *test_suite_name,
+	  const char *name,
+	  const char *type_param,
+	  const char *value_param,
+	  ::testing::internal::CodeLocation code_location,
+	  ::testing::internal::TypeId fixture_class_id,
+	  ::testing::internal::SetUpTestSuiteFunc set_up_tc,
+	  ::testing::internal::TearDownTestSuiteFunc tear_down_tc,
+	  ::testing::internal::TestFactoryBase *factory );
 
   // Constructs a TestInfo object. The newly constructed instance assumes
   // ownership of the factory object.
   TestInfo(const std::string& test_suite_name, const std::string& name,
 		   const char* a_type_param,   // NULL if not a type-parameterized test
 		   const char* a_value_param,  // NULL if not a value-parameterized test
-		   internal::CodeLocation a_code_location,
-		   internal::TypeId fixture_class_id,
-		   internal::TestFactoryBase* factory);
+		   ::testing::internal::CodeLocation a_code_location,
+		   ::testing::internal::TypeId fixture_class_id,
+		   ::testing::internal::TestFactoryBase* factory);
 
   // Increments the number of death tests encountered in this test so
   // far.
@@ -138,14 +155,14 @@ class GTEST_API_ TestInfo {
   // Text representation of the value parameter, or NULL if this is not a
   // value-parameterized test.
   const std::unique_ptr<const ::std::string> value_param_;
-  internal::CodeLocation location_;
-  const internal::TypeId fixture_class_id_;  // ID of the test fixture class
+  ::testing::internal::CodeLocation location_;
+  const ::testing::internal::TypeId fixture_class_id_;  // ID of the test fixture class
   bool should_run_;           // True if and only if this test should run
   bool is_disabled_;          // True if and only if this test is disabled
   bool matches_filter_;       // True if this test matches the
 							  // user-specified filter.
   bool is_in_another_shard_;  // Will be run in another shard.
-  internal::TestFactoryBase* const factory_;  // The factory that creates
+  ::testing::internal::TestFactoryBase* const factory_;  // The factory that creates
 											  // the test object
 
   // This field is mutable and needs to be reset before running the

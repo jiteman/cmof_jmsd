@@ -4,6 +4,7 @@
 
 
 #include "Test_result.h"
+#include "Test_info.h"
 
 #include "internal/gtest-internal.h"
 
@@ -51,17 +52,14 @@ class GTEST_API_ TestSuite {
   virtual ~TestSuite();
 
   // Gets the name of the TestSuite.
-  const char* name() const { return name_.c_str(); }
+  const char* name() const;
 
   // Returns the name of the parameter type, or NULL if this is not a
   // type-parameterized test suite.
-  const char* type_param() const {
-	if (type_param_.get() != nullptr) return type_param_->c_str();
-	return nullptr;
-  }
+  const char* type_param() const;
 
   // Returns true if any test in this test suite should run.
-  bool should_run() const { return should_run_; }
+  bool should_run() const;
 
   // Gets the number of successful tests in this test suite.
   int successful_test_count() const;
@@ -88,19 +86,17 @@ class GTEST_API_ TestSuite {
   int total_test_count() const;
 
   // Returns true if and only if the test suite passed.
-  bool Passed() const { return !Failed(); }
+  bool Passed() const;
 
   // Returns true if and only if the test suite failed.
-  bool Failed() const {
-	return failed_test_count() > 0 || ad_hoc_test_result().Failed();
-  }
+  bool Failed() const;
 
   // Returns the elapsed time, in milliseconds.
-  ::testing::internal::TimeInMillis elapsed_time() const { return elapsed_time_; }
+  ::testing::internal::TimeInMillis elapsed_time() const;
 
   // Gets the time of the test suite start, in ms from the start of the
   // UNIX epoch.
-  ::testing::internal::TimeInMillis start_timestamp() const { return start_timestamp_; }
+  ::testing::internal::TimeInMillis start_timestamp() const;
 
   // Returns the i-th test among all the tests. i can range from 0 to
   // total_test_count() - 1. If i is not in that range, returns NULL.
@@ -108,26 +104,24 @@ class GTEST_API_ TestSuite {
 
   // Returns the TestResult that holds test properties recorded during
   // execution of SetUpTestSuite and TearDownTestSuite.
-  const TestResult& ad_hoc_test_result() const { return ad_hoc_test_result_; }
+  const TestResult& ad_hoc_test_result() const;
 
  private:
   friend ::testing::Test;
   friend internal::UnitTestImpl;
 
   // Gets the (mutable) vector of TestInfos in this TestSuite.
-  std::vector<::testing::TestInfo*>& test_info_list() { return test_info_list_; }
+  std::vector<::testing::TestInfo*>& test_info_list();
 
   // Gets the (immutable) vector of TestInfos in this TestSuite.
-  const std::vector<::testing::TestInfo*>& test_info_list() const {
-	return test_info_list_;
-  }
+  const std::vector<::testing::TestInfo*>& test_info_list() const;
 
   // Returns the i-th test among all the tests. i can range from 0 to
   // total_test_count() - 1. If i is not in that range, returns NULL.
   ::testing::TestInfo* GetMutableTestInfo(int i);
 
   // Sets the should_run member.
-  void set_should_run(bool should) { should_run_ = should; }
+  void set_should_run(bool should);
 
   // Adds a TestInfo to this test suite.  Will delete the TestInfo upon
   // destruction of the TestSuite object.
@@ -137,64 +131,40 @@ class GTEST_API_ TestSuite {
   void ClearResult();
 
   // Clears the results of all tests in the given test suite.
-  static void ClearTestSuiteResult(TestSuite* test_suite) {
-	test_suite->ClearResult();
-  }
+  static void ClearTestSuiteResult(TestSuite* test_suite);
 
   // Runs every test in this TestSuite.
   void Run();
 
   // Runs SetUpTestSuite() for this TestSuite.  This wrapper is needed
   // for catching exceptions thrown from SetUpTestSuite().
-  void RunSetUpTestSuite() {
-	if (set_up_tc_ != nullptr) {
-	  (*set_up_tc_)();
-	}
-  }
+  void RunSetUpTestSuite();
 
   // Runs TearDownTestSuite() for this TestSuite.  This wrapper is
   // needed for catching exceptions thrown from TearDownTestSuite().
-  void RunTearDownTestSuite() {
-	if (tear_down_tc_ != nullptr) {
-	  (*tear_down_tc_)();
-	}
-  }
+  void RunTearDownTestSuite();
 
   // Returns true if and only if test passed.
-  static bool TestPassed(const ::testing::TestInfo* test_info) {
-	return test_info->should_run() && test_info->result()->Passed();
-  }
+  static bool TestPassed(const ::testing::TestInfo* test_info);
 
   // Returns true if and only if test skipped.
-  static bool TestSkipped(const ::testing::TestInfo* test_info) {
-	return test_info->should_run() && test_info->result()->Skipped();
-  }
+  static bool TestSkipped(const ::testing::TestInfo* test_info);
 
   // Returns true if and only if test failed.
-  static bool TestFailed(const ::testing::TestInfo* test_info) {
-	return test_info->should_run() && test_info->result()->Failed();
-  }
+  static bool TestFailed(const ::testing::TestInfo* test_info);
 
   // Returns true if and only if the test is disabled and will be reported in
   // the XML report.
-  static bool TestReportableDisabled(const ::testing::TestInfo* test_info) {
-	return test_info->is_reportable() && test_info->is_disabled_;
-  }
+  static bool TestReportableDisabled(const ::testing::TestInfo* test_info);
 
   // Returns true if and only if test is disabled.
-  static bool TestDisabled(const ::testing::TestInfo* test_info) {
-	return test_info->is_disabled_;
-  }
+  static bool TestDisabled(const ::testing::TestInfo* test_info);
 
   // Returns true if and only if this test will appear in the XML report.
-  static bool TestReportable(const ::testing::TestInfo* test_info) {
-	return test_info->is_reportable();
-  }
+  static bool TestReportable(const ::testing::TestInfo* test_info);
 
   // Returns true if the given test should run.
-  static bool ShouldRunTest(const ::testing::TestInfo* test_info) {
-	return test_info->should_run();
-  }
+  static bool ShouldRunTest(const ::testing::TestInfo* test_info);
 
   // Shuffles the tests in this test suite.
   void ShuffleTests( ::testing::internal::Random* random);

@@ -47,6 +47,112 @@ int TestSuite::total_test_count() const {
   return static_cast<int>(test_info_list_.size());
 }
 
+// Returns true if and only if the test suite passed.
+bool TestSuite::Passed() const {
+	return !Failed();
+}
+
+// Returns true if and only if the test suite failed.
+bool TestSuite::Failed() const {
+	return failed_test_count() > 0 || ad_hoc_test_result().Failed();
+}
+
+// Returns the elapsed time, in milliseconds.
+::testing::internal::TimeInMillis TestSuite::elapsed_time() const {
+	return elapsed_time_;
+}
+
+// Gets the time of the test suite start, in ms from the start of the
+// UNIX epoch.
+::testing::internal::TimeInMillis TestSuite::start_timestamp() const {
+	return start_timestamp_;
+}
+
+// Returns the TestResult that holds test properties recorded during
+// execution of SetUpTestSuite and TearDownTestSuite.
+const TestResult& TestSuite::ad_hoc_test_result() const {
+	return ad_hoc_test_result_;
+}
+
+// Gets the (mutable) vector of TestInfos in this TestSuite.
+std::vector<::testing::TestInfo*> &TestSuite::test_info_list() {
+	return test_info_list_;
+}
+
+// Gets the (immutable) vector of TestInfos in this TestSuite.
+const std::vector<::testing::TestInfo*>& TestSuite::test_info_list() const {
+	return test_info_list_;
+}
+
+// Sets the should_run member.
+void TestSuite::set_should_run(bool const should) {
+	should_run_ = should;
+}
+
+// static
+void TestSuite::ClearTestSuiteResult(TestSuite* test_suite) {
+	test_suite->ClearResult();
+}
+
+// Runs SetUpTestSuite() for this TestSuite.  This wrapper is needed
+// for catching exceptions thrown from SetUpTestSuite().
+void TestSuite::RunSetUpTestSuite() {
+	if (set_up_tc_ != nullptr) {
+		(*set_up_tc_)();
+	}
+}
+
+// Runs TearDownTestSuite() for this TestSuite.  This wrapper is
+// needed for catching exceptions thrown from TearDownTestSuite().
+void TestSuite::RunTearDownTestSuite() {
+	if (tear_down_tc_ != nullptr) {
+		(*tear_down_tc_)();
+	}
+}
+
+// Returns true if and only if test passed.
+// static
+bool TestSuite::TestPassed(const ::testing::TestInfo* test_info) {
+	return test_info->should_run() && test_info->result()->Passed();
+}
+
+// Returns true if and only if test skipped.
+// static
+bool TestSuite::TestSkipped(const ::testing::TestInfo* test_info) {
+	return test_info->should_run() && test_info->result()->Skipped();
+}
+
+// Returns true if and only if test failed.
+// static
+bool TestSuite::TestFailed(const ::testing::TestInfo* test_info) {
+	return test_info->should_run() && test_info->result()->Failed();
+}
+
+// Returns true if and only if the test is disabled and will be reported in
+// the XML report.
+// static
+bool TestSuite::TestReportableDisabled(const ::testing::TestInfo* test_info) {
+	return test_info->is_reportable() && test_info->is_disabled_;
+}
+
+// Returns true if and only if test is disabled.
+// static
+bool TestSuite::TestDisabled(const ::testing::TestInfo* test_info) {
+	return test_info->is_disabled_;
+}
+
+// Returns true if and only if this test will appear in the XML report.
+// static
+bool TestSuite::TestReportable(const ::testing::TestInfo* test_info) {
+	return test_info->is_reportable();
+}
+
+// Returns true if the given test should run.
+// static
+bool TestSuite::ShouldRunTest(const ::testing::TestInfo* test_info) {
+	return test_info->should_run();
+}
+
 // Creates a TestSuite with the given name.
 //
 // Arguments:
@@ -71,6 +177,24 @@ TestSuite::TestSuite(const char* a_name, const char* a_type_param,
 TestSuite::~TestSuite() {
   // Deletes every Test in the collection.
   ForEach(test_info_list_, internal::Delete<TestInfo>);
+}
+
+// Gets the name of the TestSuite.
+const char* TestSuite::name() const {
+	return name_.c_str();
+}
+
+// Returns the name of the parameter type, or NULL if this is not a
+// type-parameterized test suite.
+const char* TestSuite::type_param() const {
+	if (type_param_.get() != nullptr) return type_param_->c_str();
+
+	return nullptr;
+}
+
+// Returns true if any test in this test suite should run.
+bool TestSuite::should_run() const {
+	return should_run_;
 }
 
 // Returns the i-th test among all the tests. i can range from 0 to

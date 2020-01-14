@@ -41,6 +41,8 @@
 #include "gtest/internal/gtest-string.h"
 #include "gtest/internal/gtest-type-util.h"
 
+#include "gtest/Test_info.hxx"
+
 // Due to C++ preprocessor weirdness, we need double indirection to
 // concatenate two tokens when one of them is __LINE__.  Writing
 //
@@ -540,7 +542,7 @@ struct SuiteApiResolver : T {
 //   factory:          pointer to the factory that creates a test object.
 //                     The newly created TestInfo instance will assume
 //                     ownership of the factory object.
-GTEST_API_ TestInfo* MakeAndRegisterTestInfo(
+GTEST_API_ ::jmsd::cutf::TestInfo* MakeAndRegisterTestInfo(
 	const char* test_suite_name, const char* name, const char* type_param,
 	const char* value_param, CodeLocation code_location,
 	TypeId fixture_class_id, SetUpTestSuiteFunc set_up_tc,
