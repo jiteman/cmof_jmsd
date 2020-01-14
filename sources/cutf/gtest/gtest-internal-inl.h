@@ -20,7 +20,7 @@
 
 
 #include "Test_property.h"
-
+#include "Test_suite.h"
 
 #include "gtest-test-part.h"
 #include "gtest-death-test.h"
@@ -648,11 +648,11 @@ class StreamingListener : public EmptyTestEventListener {
   explicit StreamingListener(AbstractSocketWriter* socket_writer)
 	  : socket_writer_(socket_writer) { Start(); }
 
-  void OnTestProgramStart(const UnitTest& /* unit_test */) override {
+  void OnTestProgramStart(const ::jmsd::cutf::UnitTest& /* unit_test */) override {
 	SendLn("event=TestProgramStart");
   }
 
-  void OnTestProgramEnd(const UnitTest& unit_test) override {
+  void OnTestProgramEnd(const ::jmsd::cutf::UnitTest& unit_test) override {
 	// Note that Google Test current only report elapsed time for each
 	// test iteration, not for the entire test program.
 	SendLn("event=TestProgramEnd&passed=" + FormatBool(unit_test.Passed()));
@@ -661,26 +661,26 @@ class StreamingListener : public EmptyTestEventListener {
 	socket_writer_->CloseConnection();
   }
 
-  void OnTestIterationStart(const UnitTest& /* unit_test */,
+  void OnTestIterationStart(const ::jmsd::cutf::UnitTest& /* unit_test */,
 							int iteration) override {
 	SendLn("event=TestIterationStart&iteration=" +
 		   StreamableToString(iteration));
   }
 
-  void OnTestIterationEnd(const UnitTest& unit_test,
+  void OnTestIterationEnd(const ::jmsd::cutf::UnitTest& unit_test,
 						  int /* iteration */) override {
 	SendLn("event=TestIterationEnd&passed=" +
 		   FormatBool(unit_test.Passed()) + "&elapsed_time=" +
 		   StreamableToString(unit_test.elapsed_time()) + "ms");
   }
 
-  void OnTestSuiteStart(const TestSuite& test_case) override {
+  void OnTestSuiteStart(const ::jmsd::cutf::TestSuite& test_case) override {
 	SendLn(std::string("event=TestSuiteStart&name=") + test_case.name());
   }
 
   // Note that "event=TestCaseEnd" is a wire format and has to remain
   // "case" for compatibilty
-  void OnTestSuiteEnd(const TestSuite& test_case) override {
+  void OnTestSuiteEnd(const ::jmsd::cutf::TestSuite& test_case) override {
 	SendLn("event=TestSuiteEnd&passed=" + FormatBool(test_case.Passed()) +
 		   "&elapsed_time=" + StreamableToString(test_case.elapsed_time()) +
 		   "ms");

@@ -95,10 +95,10 @@ class GTEST_API_ TestResult {
   }
 
   // Sets the start time.
-  void set_start_timestamp(TimeInMillis start) { start_timestamp_ = start; }
+  void set_start_timestamp(::testing::internal::TimeInMillis start) { start_timestamp_ = start; }
 
   // Sets the elapsed time.
-  void set_elapsed_time(TimeInMillis elapsed) { elapsed_time_ = elapsed; }
+  void set_elapsed_time(::testing::internal::TimeInMillis elapsed) { elapsed_time_ = elapsed; }
 
   // Adds a test property to the list. The property is validated and may add
   // a non-fatal failure if invalid (e.g., if it conflicts with reserved
@@ -116,7 +116,7 @@ class GTEST_API_ TestResult {
 								   const ::jmsd::cutf::TestProperty& test_property);
 
   // Adds a test part result to the list.
-  void AddTestPartResult(const TestPartResult& test_part_result);
+  void AddTestPartResult(const ::testing::TestPartResult& test_part_result);
 
   // Returns the death test count.
   int death_test_count() const { return death_test_count_; }
@@ -132,18 +132,18 @@ class GTEST_API_ TestResult {
 
   // Protects mutable state of the property vector and of owned
   // properties, whose values may be updated.
-  internal::Mutex test_properites_mutex_;
+  ::testing::internal::Mutex test_properites_mutex_;
 
   // The vector of TestPartResults
-  std::vector<TestPartResult> test_part_results_;
+  std::vector<::testing::TestPartResult> test_part_results_;
   // The vector of TestProperties
   std::vector< ::jmsd::cutf::TestProperty > test_properties_;
   // Running count of death tests.
   int death_test_count_;
   // The start time, in milliseconds since UNIX Epoch.
-  TimeInMillis start_timestamp_;
+  ::testing::internal::TimeInMillis start_timestamp_;
   // The elapsed time, in milliseconds.
-  TimeInMillis elapsed_time_;
+  ::testing::internal::TimeInMillis elapsed_time_;
 
   // We disallow copying TestResult.
   GTEST_DISALLOW_COPY_AND_ASSIGN_(TestResult);

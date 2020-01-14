@@ -13,6 +13,15 @@
 #include "internal/Unit_test_impl.hxx"
 
 
+namespace testing {
+
+
+class Test;
+
+
+} // namespace testing
+
+
 namespace jmsd {
 namespace cutf {
 
@@ -102,7 +111,7 @@ class GTEST_API_ TestSuite {
   const TestResult& ad_hoc_test_result() const { return ad_hoc_test_result_; }
 
  private:
-  friend Test;
+  friend ::testing::Test;
   friend internal::UnitTestImpl;
 
   // Gets the (mutable) vector of TestInfos in this TestSuite.
