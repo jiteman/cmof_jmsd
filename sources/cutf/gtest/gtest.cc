@@ -4,6 +4,8 @@
 #include "gtest/internal/custom/gtest.h"
 #include "gtest/gtest-spi.h"
 
+#include "internal/Unit_test_impl.h"
+
 #include <ctype.h>
 #include <math.h>
 #include <stdarg.h>
@@ -19,7 +21,7 @@
 #include <limits>
 #include <list>
 #include <map>
-#include <ostream>  // NOLINT
+#include <ostream>
 #include <sstream>
 #include <vector>
 

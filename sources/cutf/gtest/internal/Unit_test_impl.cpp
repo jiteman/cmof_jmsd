@@ -170,7 +170,7 @@ void UnitTestImpl::AddTestInfo(
 	// AddTestInfo(), which is called to register a TEST or TEST_F
 	// before main() is reached.
 	if ( original_working_dir_.IsEmpty() ) {
-		original_working_dir_.Set( FilePath::GetCurrentDir() );
+		original_working_dir_.Set( ::testing::internal::FilePath::GetCurrentDir() );
 		GTEST_CHECK_( !original_working_dir_.IsEmpty() ) << "Failed to get the current working directory.";
 	}
 
@@ -220,7 +220,7 @@ void UnitTestImpl::set_current_test_info( TestInfo *a_current_test_info ) {
 // trace but Bar() and CurrentOsStackTraceExceptTop() won't.
 std::string UnitTestImpl::CurrentOsStackTraceExceptTop(int skip_count) {
   return os_stack_trace_getter()->CurrentStackTrace(
-	  static_cast<int>(GTEST_FLAG(stack_trace_depth)),
+	  static_cast<int>( ::testing:: GTEST_FLAG(stack_trace_depth)),
 	  skip_count + 1
 	  // Skips the user-specified number of frames plus this function
 	  // itself.
@@ -249,7 +249,7 @@ UnitTestImpl::UnitTestImpl(UnitTest* parent)
 	  start_timestamp_(0),
 	  elapsed_time_(0),
 #if GTEST_HAS_DEATH_TEST
-	  death_test_factory_(new DefaultDeathTestFactory),
+	  death_test_factory_(new ::testing::internal::DefaultDeathTestFactory),
 #endif
 	  // Will be overridden by the flag before first use.
 	  catch_exceptions_(false) {
