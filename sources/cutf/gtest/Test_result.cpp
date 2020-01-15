@@ -1,6 +1,9 @@
 #include "Test_result.h"
 
 
+#include "internal/Stl_utilities.hin"
+
+
 namespace jmsd {
 namespace cutf {
 
@@ -18,9 +21,9 @@ TestResult::~TestResult() {
 // Returns the i-th test part result among all the results. i can
 // range from 0 to total_part_count() - 1. If i is not in that range,
 // aborts the program.
-const TestPartResult& TestResult::GetTestPartResult(int i) const {
+const ::testing::TestPartResult& TestResult::GetTestPartResult(int i) const {
   if (i < 0 || i >= total_part_count())
-	internal::posix::Abort();
+	::testing::internal::posix::Abort();
   return test_part_results_.at(static_cast<size_t>(i));
 }
 
@@ -29,7 +32,7 @@ const TestPartResult& TestResult::GetTestPartResult(int i) const {
 // program.
 const TestProperty& TestResult::GetTestProperty(int i) const {
   if (i < 0 || i >= test_property_count())
-	internal::posix::Abort();
+	::testing::internal::posix::Abort();
   return test_properties_.at(static_cast<size_t>(i));
 }
 
@@ -39,7 +42,7 @@ void TestResult::ClearTestPartResults() {
 }
 
 // Adds a test part result to the list.
-void TestResult::AddTestPartResult(const TestPartResult& test_part_result) {
+void TestResult::AddTestPartResult(const ::testing::TestPartResult& test_part_result) {
   test_part_results_.push_back(test_part_result);
 }
 
@@ -51,10 +54,11 @@ void TestResult::RecordProperty(const std::string& xml_element,
   if (!ValidateTestProperty(xml_element, test_property)) {
 	return;
   }
-  internal::MutexLock lock(&test_properites_mutex_);
+
+  ::testing::internal::MutexLock lock(&test_properites_mutex_);
   const std::vector<TestProperty>::iterator property_with_matching_key =
 	  std::find_if(test_properties_.begin(), test_properties_.end(),
-				   internal::TestPropertyKeyIs(test_property.key()));
+				   ::testing::internal::TestPropertyKeyIs(test_property.key()));
   if (property_with_matching_key == test_properties_.end()) {
 	test_properties_.push_back(test_property);
 	return;
@@ -128,7 +132,7 @@ static std::vector<std::string> GetReservedOutputAttributesForElement(
 }
 
 static std::string FormatWordList(const std::vector<std::string>& words) {
-  Message word_list;
+  ::testing::Message word_list;
   for (size_t i = 0; i < words.size(); ++i) {
 	if (i > 0 && words.size() > 2) {
 	  word_list << ", ";
@@ -171,13 +175,13 @@ void TestResult::Clear() {
 }
 
 // Returns true off the test part was skipped.
-static bool TestPartSkipped(const TestPartResult& result) {
+static bool TestPartSkipped(const ::testing::TestPartResult& result) {
   return result.skipped();
 }
 
 // Returns true if and only if the test was skipped.
 bool TestResult::Skipped() const {
-  return !Failed() && CountIf(test_part_results_, TestPartSkipped) > 0;
+  return !Failed() && internal::CountIf(test_part_results_, TestPartSkipped) > 0;
 }
 
 // Returns true if and only if the test failed.
@@ -190,23 +194,23 @@ bool TestResult::Failed() const {
 }
 
 // Returns true if and only if the test part fatally failed.
-static bool TestPartFatallyFailed(const TestPartResult& result) {
+static bool TestPartFatallyFailed(const ::testing::TestPartResult& result) {
   return result.fatally_failed();
 }
 
 // Returns true if and only if the test fatally failed.
 bool TestResult::HasFatalFailure() const {
-  return CountIf(test_part_results_, TestPartFatallyFailed) > 0;
+  return internal::CountIf(test_part_results_, TestPartFatallyFailed) > 0;
 }
 
 // Returns true if and only if the test part non-fatally failed.
-static bool TestPartNonfatallyFailed(const TestPartResult& result) {
+static bool TestPartNonfatallyFailed(const ::testing::TestPartResult& result) {
   return result.nonfatally_failed();
 }
 
 // Returns true if and only if the test has a non-fatal failure.
 bool TestResult::HasNonfatalFailure() const {
-  return CountIf(test_part_results_, TestPartNonfatallyFailed) > 0;
+  return internal::CountIf(test_part_results_, TestPartNonfatallyFailed) > 0;
 }
 
 // Gets the number of all test parts.  This is the sum of the number

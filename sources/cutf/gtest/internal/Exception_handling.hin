@@ -1,0 +1,111 @@
+#pragma once
+
+#include "Exception_handling.h"
+
+
+#if GTEST_HAS_SEH
+#include <windows.h>
+#endif // #if GTEST_HAS_SEH
+
+
+#include "gtest-port.h"
+
+#include <string>
+
+
+namespace jmsd {
+namespace cutf {
+namespace internal {
+
+// We put these helper functions in the internal namespace as IBM's xlC
+// compiler rejects the code if they were declared static.
+
+// Runs the given method and handles SEH exceptions it throws, when
+// SEH is supported; returns the 0-value for type Result in case of an
+// SEH exception.  (Microsoft compilers cannot handle SEH and C++
+// exceptions in the same function.  Therefore, we provide a separate
+// wrapper function for handling SEH exceptions.)
+template< class T, typename Result >
+Result HandleSehExceptionsInMethodIfSupported( T *object, Result ( T::*method )(), char const *location ) {
+#if GTEST_HAS_SEH
+	__try {
+		return ( object->*method )();
+	} __except ( ::testing::internal::UnitTestOptions::GTestShouldProcessSEH( GetExceptionCode() ) ) {
+		// We create the exception message on the heap because VC++ prohibits
+		// creation of objects with destructors on stack in functions using __try
+		// (see error C2712).
+		::std::string* exception_message = FormatSehExceptionMessage( GetExceptionCode(), location );
+		::testing::internal::ReportFailureInUnknownLocation( ::testing::TestPartResult::kFatalFailure, *exception_message );
+		delete exception_message;
+		return static_cast< Result >( 0 );
+	}
+#else
+	( void )location;
+	return ( object->*method )();
+#endif  // GTEST_HAS_SEH
+}
+
+// Runs the given method and catches and reports C++ and/or SEH-style
+// exceptions, if they are supported; returns the 0-value for type
+// Result in case of an SEH exception.
+template< class T, typename Result >
+Result HandleExceptionsInMethodIfSupported( T *object, Result ( T::*method )(), char const *location ) {
+	// NOTE: The user code can affect the way in which Google Test handles
+	// exceptions by setting GTEST_FLAG(catch_exceptions), but only before
+	// RUN_ALL_TESTS() starts. It is technically possible to check the flag
+	// after the exception is caught and either report or re-throw the
+	// exception based on the flag's value:
+	//
+	// try {
+	//   // Perform the test method.
+	// } catch (...) {
+	//   if (GTEST_FLAG(catch_exceptions))
+	//     // Report the exception as failure.
+	//   else
+	//     throw;  // Re-throws the original exception.
+	// }
+	//
+	// However, the purpose of this flag is to allow the program to drop into
+	// the debugger when the exception is thrown. On most platforms, once the
+	// control enters the catch block, the exception origin information is
+	// lost and the debugger will stop the program at the point of the
+	// re-throw in this function -- instead of at the point of the original
+	// throw statement in the code under test.  For this reason, we perform
+	// the check early, sacrificing the ability to affect Google Test's
+	// exception handling in the method where the exception is thrown.
+	if ( internal::GetUnitTestImpl()->catch_exceptions() ) {
+#if GTEST_HAS_EXCEPTIONS
+		try {
+			return HandleSehExceptionsInMethodIfSupported( object, method, location );
+		} catch ( ::testing::AssertionException const & ) {
+			// This failure was reported already.
+		} catch ( ::testing::internal::GoogleTestFailureException const & ) {
+			// This exception type can only be thrown by a failed Google
+			// Test assertion with the intention of letting another testing
+			// framework catch it.  Therefore we just re-throw it.
+			throw;
+		} catch ( ::std::exception const &e ) {
+			::testing::internal::ReportFailureInUnknownLocation( ::testing::TestPartResult::kFatalFailure, FormatCxxExceptionMessage( e.what(), location ) );
+		} catch ( ... ) {
+			::testing::internal::ReportFailureInUnknownLocation( ::testing::TestPartResult::kFatalFailure, FormatCxxExceptionMessage( nullptr, location ) );
+		}
+
+		return static_cast< Result >( 0 );
+#else
+		return HandleSehExceptionsInMethodIfSupported(object, method, location);
+#endif  // GTEST_HAS_EXCEPTIONS
+	} else {
+		return ( object->*method )();
+	}
+}
+
+
+} // namespace internal
+} // namespace cutf
+} // namespace jmsd
+
+
+namespace testing {
+
+
+} // namespace testing

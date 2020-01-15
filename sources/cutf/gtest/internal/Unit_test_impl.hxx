@@ -9,6 +9,9 @@ namespace internal {
 class UnitTestImpl;
 
 
+UnitTestImpl *GetUnitTestImpl();
+
+
 } // namespace internal
 } // namespace cutf
 } // namespace jmsd

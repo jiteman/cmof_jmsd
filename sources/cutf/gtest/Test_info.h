@@ -7,6 +7,12 @@
 
 #include "internal/gtest-port.h"
 
+#include "internal/Unit_test_impl.hxx"
+#include "Test_suite.hxx"
+
+
+#include <memory>
+
 
 namespace testing {
 namespace internal {
@@ -22,6 +28,20 @@ class StreamingListenerTest;
 
 namespace jmsd {
 namespace cutf {
+namespace internal {
+
+TestInfo* MakeAndRegisterTestInfo(
+	const char* test_suite_name,
+	const char* name,
+	const char* type_param,
+	const char* value_param,
+	::testing::internal::CodeLocation code_location,
+	::testing::internal::TypeId fixture_class_id,
+	::testing::internal::SetUpTestSuiteFunc set_up_tc,
+	::testing::internal::TearDownTestSuiteFunc tear_down_tc,
+	::testing::internal::TestFactoryBase* factory );
+
+} // namespace internal
 
 
 // A TestInfo object stores the following information about a test:
@@ -42,38 +62,32 @@ class GTEST_API_ TestInfo {
   ~TestInfo();
 
   // Returns the test suite name.
-  const char* test_suite_name() const { return test_suite_name_.c_str(); }
+  const char* test_suite_name() const;
 
 // Legacy API is deprecated but still available
 #ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
-  const char* test_case_name() const { return test_suite_name(); }
+  const char* test_case_name() const;
 #endif  // GTEST_REMOVE_LEGACY_TEST_CASEAPI_
 
   // Returns the test name.
-  const char* name() const { return name_.c_str(); }
+  const char* name() const;
 
   // Returns the name of the parameter type, or NULL if this is not a typed
   // or a type-parameterized test.
-  const char* type_param() const {
-	if (type_param_.get() != nullptr) return type_param_->c_str();
-	return nullptr;
-  }
+  const char* type_param() const;
 
   // Returns the text representation of the value parameter, or NULL if this
   // is not a value-parameterized test.
-  const char* value_param() const {
-	if (value_param_.get() != nullptr) return value_param_->c_str();
-	return nullptr;
-  }
+  const char* value_param() const;
 
   // Returns the file name where this test is defined.
-  const char* file() const { return location_.file.c_str(); }
+  const char* file() const;
 
   // Returns the line where this test is defined.
-  int line() const { return location_.line; }
+  int line() const;
 
   // Return true if this test should not be run because it's in another shard.
-  bool is_in_another_shard() const { return is_in_another_shard_; }
+  bool is_in_another_shard() const;
 
   // Returns true if this test should run, that is if the test is not
   // disabled (or it is disabled but the also_run_disabled_tests flag has
@@ -91,28 +105,24 @@ class GTEST_API_ TestInfo {
   //
   // For example, *A*:Foo.* is a filter that matches any string that
   // contains the character 'A' or starts with "Foo.".
-  bool should_run() const { return should_run_; }
+  bool should_run() const;
 
   // Returns true if and only if this test will appear in the XML report.
-  bool is_reportable() const {
-	// The XML report includes tests matching the filter, excluding those
-	// run in other shards.
-	return matches_filter_ && !is_in_another_shard_;
-  }
+  bool is_reportable() const;
 
   // Returns the result of the test.
-  const TestResult* result() const { return &result_; }
+  const TestResult* result() const;
 
  private:
 #if GTEST_HAS_DEATH_TEST
   friend ::testing::internal::DefaultDeathTestFactory;
 #endif  // GTEST_HAS_DEATH_TEST
-  friend class Test;
-  friend class TestSuite;
-  friend class internal::UnitTestImpl;
+  friend ::testing::Test;
+  friend TestSuite;
+  friend internal::UnitTestImpl;
   friend ::testing::internal::StreamingListenerTest;
 
-  friend TestInfo* ::testing::internal::MakeAndRegisterTestInfo(
+  friend TestInfo* internal::MakeAndRegisterTestInfo(
 	  const char *test_suite_name,
 	  const char *name,
 	  const char *type_param,
@@ -123,28 +133,25 @@ class GTEST_API_ TestInfo {
 	  ::testing::internal::TearDownTestSuiteFunc tear_down_tc,
 	  ::testing::internal::TestFactoryBase *factory );
 
-  // Constructs a TestInfo object. The newly constructed instance assumes
-  // ownership of the factory object.
-  TestInfo(const std::string& test_suite_name, const std::string& name,
-		   const char* a_type_param,   // NULL if not a type-parameterized test
-		   const char* a_value_param,  // NULL if not a value-parameterized test
-		   ::testing::internal::CodeLocation a_code_location,
-		   ::testing::internal::TypeId fixture_class_id,
-		   ::testing::internal::TestFactoryBase* factory);
+	// Constructs a TestInfo object. The newly constructed instance assumes
+	// ownership of the factory object.
+	TestInfo(
+		const std::string& test_suite_name,
+		const std::string& name,
+		const char* a_type_param,   // NULL if not a type-parameterized test
+		const char* a_value_param,  // NULL if not a value-parameterized test
+		::testing::internal::CodeLocation a_code_location,
+		::testing::internal::TypeId fixture_class_id,
+		::testing::internal::TestFactoryBase* factory );
 
-  // Increments the number of death tests encountered in this test so
-  // far.
-  int increment_death_test_count() {
-	return result_.increment_death_test_count();
-  }
+  // Increments the number of death tests encountered in this test so far.
+  int increment_death_test_count();
 
   // Creates the test object, runs it, records its result, and then
   // deletes it.
   void Run();
 
-  static void ClearTestResult(TestInfo* test_info) {
-	test_info->result_.Clear();
-  }
+  static void ClearTestResult(TestInfo* test_info);
 
   // These fields are immutable properties of the test.
   const std::string test_suite_name_;    // test suite name
@@ -167,7 +174,7 @@ class GTEST_API_ TestInfo {
 
   // This field is mutable and needs to be reset before running the
   // test for the second time.
-  TestResult result_;
+  ::std::unique_ptr< TestResult > result_; // originaly it was just a data field, not a smart pointer
 
   GTEST_DISALLOW_COPY_AND_ASSIGN_(TestInfo);
 };

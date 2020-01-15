@@ -12,6 +12,9 @@
 
 
 #include "internal/Unit_test_impl.hxx"
+#include "internal/Random_number_generator.hxx"
+
+#include <memory>
 
 
 namespace testing {
@@ -31,22 +34,25 @@ namespace cutf {
 //
 // TestSuite is not copyable.
 class GTEST_API_ TestSuite {
- public:
-  // Creates a TestSuite with the given name.
-  //
-  // TestSuite does NOT have a default constructor.  Always use this
-  // constructor to create a TestSuite object.
-  //
-  // Arguments:
-  //
-  //   name:         name of the test suite
-  //   a_type_param: the name of the test's type parameter, or NULL if
-  //                 this is not a type-parameterized test.
-  //   set_up_tc:    pointer to the function that sets up the test suite
-  //   tear_down_tc: pointer to the function that tears down the test suite
-  TestSuite(const char* name, const char* a_type_param,
-			::testing::internal::SetUpTestSuiteFunc set_up_tc,
-			::testing::internal::TearDownTestSuiteFunc tear_down_tc);
+
+public:
+	// Creates a TestSuite with the given name.
+	//
+	// TestSuite does NOT have a default constructor.  Always use this
+	// constructor to create a TestSuite object.
+	//
+	// Arguments:
+	//
+	//   name:         name of the test suite
+	//   a_type_param: the name of the test's type parameter, or NULL if
+	//                 this is not a type-parameterized test.
+	//   set_up_tc:    pointer to the function that sets up the test suite
+	//   tear_down_tc: pointer to the function that tears down the test suite
+	TestSuite(
+		const char* name,
+		const char* a_type_param,
+		::testing::internal::SetUpTestSuiteFunc set_up_tc,
+		::testing::internal::TearDownTestSuiteFunc tear_down_tc);
 
   // Destructor of TestSuite.
   virtual ~TestSuite();
@@ -100,7 +106,7 @@ class GTEST_API_ TestSuite {
 
   // Returns the i-th test among all the tests. i can range from 0 to
   // total_test_count() - 1. If i is not in that range, returns NULL.
-  const ::testing::TestInfo* GetTestInfo(int i) const;
+  const TestInfo* GetTestInfo(int i) const;
 
   // Returns the TestResult that holds test properties recorded during
   // execution of SetUpTestSuite and TearDownTestSuite.
@@ -111,21 +117,21 @@ class GTEST_API_ TestSuite {
   friend internal::UnitTestImpl;
 
   // Gets the (mutable) vector of TestInfos in this TestSuite.
-  std::vector<::testing::TestInfo*>& test_info_list();
+  std::vector< TestInfo * > &test_info_list();
 
   // Gets the (immutable) vector of TestInfos in this TestSuite.
-  const std::vector<::testing::TestInfo*>& test_info_list() const;
+  const std::vector< TestInfo * > &test_info_list() const;
 
   // Returns the i-th test among all the tests. i can range from 0 to
   // total_test_count() - 1. If i is not in that range, returns NULL.
-  ::testing::TestInfo* GetMutableTestInfo(int i);
+  TestInfo *GetMutableTestInfo(int i);
 
   // Sets the should_run member.
   void set_should_run(bool should);
 
   // Adds a TestInfo to this test suite.  Will delete the TestInfo upon
   // destruction of the TestSuite object.
-  void AddTestInfo(::testing::TestInfo * test_info);
+  void AddTestInfo( TestInfo *test_info );
 
   // Clears the results of all tests in this test suite.
   void ClearResult();
@@ -145,29 +151,29 @@ class GTEST_API_ TestSuite {
   void RunTearDownTestSuite();
 
   // Returns true if and only if test passed.
-  static bool TestPassed(const ::testing::TestInfo* test_info);
+  static bool TestPassed(const TestInfo* test_info);
 
   // Returns true if and only if test skipped.
-  static bool TestSkipped(const ::testing::TestInfo* test_info);
+  static bool TestSkipped(const TestInfo* test_info);
 
   // Returns true if and only if test failed.
-  static bool TestFailed(const ::testing::TestInfo* test_info);
+  static bool TestFailed(const TestInfo* test_info);
 
   // Returns true if and only if the test is disabled and will be reported in
   // the XML report.
-  static bool TestReportableDisabled(const ::testing::TestInfo* test_info);
+  static bool TestReportableDisabled(const TestInfo* test_info);
 
   // Returns true if and only if test is disabled.
-  static bool TestDisabled(const ::testing::TestInfo* test_info);
+  static bool TestDisabled(const TestInfo* test_info);
 
   // Returns true if and only if this test will appear in the XML report.
-  static bool TestReportable(const ::testing::TestInfo* test_info);
+  static bool TestReportable(const TestInfo* test_info);
 
   // Returns true if the given test should run.
-  static bool ShouldRunTest(const ::testing::TestInfo* test_info);
+  static bool ShouldRunTest(const TestInfo* test_info);
 
   // Shuffles the tests in this test suite.
-  void ShuffleTests( ::testing::internal::Random* random);
+  void ShuffleTests( ::jmsd::cutf::internal::Random* random);
 
   // Restores the test order to before the first shuffle.
   void UnshuffleTests();
@@ -179,7 +185,7 @@ class GTEST_API_ TestSuite {
   const std::unique_ptr<const ::std::string> type_param_;
   // The vector of TestInfos in their original order.  It owns the
   // elements in the vector.
-  std::vector<::testing::TestInfo*> test_info_list_;
+  std::vector< TestInfo * > test_info_list_;
   // Provides a level of indirection for the test list to allow easy
   // shuffling and restoring the test order.  The i-th element in this
   // vector is the index of the i-th test in the shuffled test list.
@@ -196,7 +202,7 @@ class GTEST_API_ TestSuite {
   ::testing::internal::TimeInMillis elapsed_time_;
   // Holds test properties recorded during execution of SetUpTestSuite and
   // TearDownTestSuite.
-  TestResult ad_hoc_test_result_;
+  ::std::unique_ptr< TestResult > ad_hoc_test_result_; // originaly it was just a data field, not a smart pointer
 
   // We disallow copying TestSuites.
   GTEST_DISALLOW_COPY_AND_ASSIGN_(TestSuite);

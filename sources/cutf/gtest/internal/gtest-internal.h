@@ -77,7 +77,6 @@ namespace internal {
 
 struct TraceInfo;                      // Information about a trace point.
 class TestInfoImpl;                    // Opaque implementation of TestInfo
-class UnitTestImpl;                    // Opaque implementation of UnitTest
 
 // The text used in failure messages to indicate the start of the
 // stack trace.
@@ -103,26 +102,6 @@ class IgnoredValue {
 // Appends the user-supplied message to the Google-Test-generated message.
 GTEST_API_ std::string AppendUserMessage(
 	const std::string& gtest_msg, const Message& user_msg);
-
-#if GTEST_HAS_EXCEPTIONS
-
-GTEST_DISABLE_MSC_WARNINGS_PUSH_(4275 \
-/* an exported class was derived from a class that was not exported */)
-
-// This exception is thrown by (and only by) a failed Google Test
-// assertion when GTEST_FLAG(throw_on_failure) is true (if exceptions
-// are enabled).  We derive it from std::runtime_error, which is for
-// errors presumably detectable only at run time.  Since
-// std::runtime_error inherits from std::exception, many testing
-// frameworks know how to extract and print the message inside it.
-class GTEST_API_ GoogleTestFailureException : public ::std::runtime_error {
- public:
-  explicit GoogleTestFailureException(const TestPartResult& failure);
-};
-
-GTEST_DISABLE_MSC_WARNINGS_POP_()  //  4275
-
-#endif  // GTEST_HAS_EXCEPTIONS
 
 namespace edit_distance {
 // Returns the optimal edits to go from 'left' to 'right'.
@@ -820,28 +799,6 @@ struct GTEST_API_ TrueWithString {
   explicit TrueWithString(const std::string& str) : value(str) {}
   explicit operator bool() const { return true; }
   std::string value;
-};
-
-// A simple Linear Congruential Generator for generating random
-// numbers with a uniform distribution.  Unlike rand() and srand(), it
-// doesn't use global state (and therefore can't interfere with user
-// code).  Unlike rand_r(), it's portable.  An LCG isn't very random,
-// but it's good enough for our purposes.
-class GTEST_API_ Random {
- public:
-  static const uint32_t kMaxRange = 1u << 31;
-
-  explicit Random(uint32_t seed) : state_(seed) {}
-
-  void Reseed(uint32_t seed) { state_ = seed; }
-
-  // Generates a random number from [0, range).  Crashes if 'range' is
-  // 0 or greater than kMaxRange.
-  uint32_t Generate(uint32_t range);
-
- private:
-  uint32_t state_;
-  GTEST_DISALLOW_COPY_AND_ASSIGN_(Random);
 };
 
 // Turns const U&, U&, const U, and U all into U.

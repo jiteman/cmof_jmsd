@@ -185,26 +185,6 @@ static FILE* OpenFileForWriting(const std::string& output_file) {
 
 namespace internal {
 
-// Generates a random number from [0, range), using a Linear
-// Congruential Generator (LCG).  Crashes if 'range' is 0 or greater
-// than kMaxRange.
-uint32_t Random::Generate(uint32_t range) {
-  // These constants are the same as are used in glibc's rand(3).
-  // Use wider types than necessary to prevent unsigned overflow diagnostics.
-  state_ = static_cast<uint32_t>(1103515245ULL*state_ + 12345U) % kMaxRange;
-
-  GTEST_CHECK_(range > 0)
-	  << "Cannot generate a number in the range [0, 0).";
-  GTEST_CHECK_(range <= kMaxRange)
-	  << "Generation of a number in [0, " << range << ") was requested, "
-	  << "but this can only generate numbers in [0, " << kMaxRange << ").";
-
-  // Converting via modulus introduces a bit of downward bias, but
-  // it's simple, and a linear congruential generator isn't too good
-  // to begin with.
-  return state_ % range;
-}
-
 // GTestIsInitialized() returns true if and only if the user has initialized
 // Google Test.  Useful for catching the user mistake of not initializing
 // Google Test before calling RUN_ALL_TESTS().
@@ -617,23 +597,6 @@ SingleFailureChecker::SingleFailureChecker(const TestPartResultArray* results,
 // non-fatal failure will be generated.
 SingleFailureChecker::~SingleFailureChecker() {
   EXPECT_PRED_FORMAT3(HasOneFailure, *results_, type_, substr_);
-}
-
-//DefaultGlobalTestPartResultReporter::DefaultGlobalTestPartResultReporter(
-//	UnitTestImpl* unit_test) : unit_test_(unit_test) {}
-
-//void DefaultGlobalTestPartResultReporter::ReportTestPartResult(
-//	const TestPartResult& result) {
-//  unit_test_->current_test_result()->AddTestPartResult(result);
-//  unit_test_->listeners()->repeater()->OnTestPartResult(result);
-//}
-
-DefaultPerThreadTestPartResultReporter::DefaultPerThreadTestPartResultReporter(
-	UnitTestImpl* unit_test) : unit_test_(unit_test) {}
-
-void DefaultPerThreadTestPartResultReporter::ReportTestPartResult(
-	const TestPartResult& result) {
-  unit_test_->GetGlobalTestPartResultReporter()->ReportTestPartResult(result);
 }
 
 // Returns the current time in milliseconds.
@@ -2169,142 +2132,6 @@ bool Test::HasSameFixtureClass() {
   return true;
 }
 
-#if GTEST_HAS_SEH
-
-// Adds an "exception thrown" fatal failure to the current test.  This
-// function returns its result via an output parameter pointer because VC++
-// prohibits creation of objects with destructors on stack in functions
-// using __try (see error C2712).
-static std::string* FormatSehExceptionMessage(DWORD exception_code,
-											  const char* location) {
-  Message message;
-  message << "SEH exception with code 0x" << std::setbase(16) <<
-	exception_code << std::setbase(10) << " thrown in " << location << ".";
-
-  return new std::string(message.GetString());
-}
-
-#endif  // GTEST_HAS_SEH
-
-namespace internal {
-
-#if GTEST_HAS_EXCEPTIONS
-
-// Adds an "exception thrown" fatal failure to the current test.
-static std::string FormatCxxExceptionMessage(const char* description,
-											 const char* location) {
-  Message message;
-  if (description != nullptr) {
-	message << "C++ exception with description \"" << description << "\"";
-  } else {
-	message << "Unknown C++ exception";
-  }
-  message << " thrown in " << location << ".";
-
-  return message.GetString();
-}
-
-static std::string PrintTestPartResultToString(
-	const TestPartResult& test_part_result);
-
-GoogleTestFailureException::GoogleTestFailureException(
-	const TestPartResult& failure)
-	: ::std::runtime_error(PrintTestPartResultToString(failure).c_str()) {}
-
-#endif  // GTEST_HAS_EXCEPTIONS
-
-// We put these helper functions in the internal namespace as IBM's xlC
-// compiler rejects the code if they were declared static.
-
-// Runs the given method and handles SEH exceptions it throws, when
-// SEH is supported; returns the 0-value for type Result in case of an
-// SEH exception.  (Microsoft compilers cannot handle SEH and C++
-// exceptions in the same function.  Therefore, we provide a separate
-// wrapper function for handling SEH exceptions.)
-template <class T, typename Result>
-Result HandleSehExceptionsInMethodIfSupported(
-	T* object, Result (T::*method)(), const char* location) {
-#if GTEST_HAS_SEH
-  __try {
-	return (object->*method)();
-  } __except (internal::UnitTestOptions::GTestShouldProcessSEH(  // NOLINT
-	  GetExceptionCode())) {
-	// We create the exception message on the heap because VC++ prohibits
-	// creation of objects with destructors on stack in functions using __try
-	// (see error C2712).
-	std::string* exception_message = FormatSehExceptionMessage(
-		GetExceptionCode(), location);
-	internal::ReportFailureInUnknownLocation(TestPartResult::kFatalFailure,
-											 *exception_message);
-	delete exception_message;
-	return static_cast<Result>(0);
-  }
-#else
-  (void)location;
-  return (object->*method)();
-#endif  // GTEST_HAS_SEH
-}
-
-// Runs the given method and catches and reports C++ and/or SEH-style
-// exceptions, if they are supported; returns the 0-value for type
-// Result in case of an SEH exception.
-template <class T, typename Result>
-Result HandleExceptionsInMethodIfSupported(
-	T* object, Result (T::*method)(), const char* location) {
-  // NOTE: The user code can affect the way in which Google Test handles
-  // exceptions by setting GTEST_FLAG(catch_exceptions), but only before
-  // RUN_ALL_TESTS() starts. It is technically possible to check the flag
-  // after the exception is caught and either report or re-throw the
-  // exception based on the flag's value:
-  //
-  // try {
-  //   // Perform the test method.
-  // } catch (...) {
-  //   if (GTEST_FLAG(catch_exceptions))
-  //     // Report the exception as failure.
-  //   else
-  //     throw;  // Re-throws the original exception.
-  // }
-  //
-  // However, the purpose of this flag is to allow the program to drop into
-  // the debugger when the exception is thrown. On most platforms, once the
-  // control enters the catch block, the exception origin information is
-  // lost and the debugger will stop the program at the point of the
-  // re-throw in this function -- instead of at the point of the original
-  // throw statement in the code under test.  For this reason, we perform
-  // the check early, sacrificing the ability to affect Google Test's
-  // exception handling in the method where the exception is thrown.
-  if (internal::GetUnitTestImpl()->catch_exceptions()) {
-#if GTEST_HAS_EXCEPTIONS
-	try {
-	  return HandleSehExceptionsInMethodIfSupported(object, method, location);
-	} catch (const AssertionException&) {  // NOLINT
-	  // This failure was reported already.
-	} catch (const internal::GoogleTestFailureException&) {  // NOLINT
-	  // This exception type can only be thrown by a failed Google
-	  // Test assertion with the intention of letting another testing
-	  // framework catch it.  Therefore we just re-throw it.
-	  throw;
-	} catch (const std::exception& e) {  // NOLINT
-	  internal::ReportFailureInUnknownLocation(
-		  TestPartResult::kFatalFailure,
-		  FormatCxxExceptionMessage(e.what(), location));
-	} catch (...) {  // NOLINT
-	  internal::ReportFailureInUnknownLocation(
-		  TestPartResult::kFatalFailure,
-		  FormatCxxExceptionMessage(nullptr, location));
-	}
-	return static_cast<Result>(0);
-#else
-	return HandleSehExceptionsInMethodIfSupported(object, method, location);
-#endif  // GTEST_HAS_EXCEPTIONS
-  } else {
-	return (object->*method)();
-  }
-}
-
-}  // namespace internal
-
 // Runs the test and updates the test result.
 void Test::Run() {
   if (!HasSameFixtureClass()) return;
@@ -2706,16 +2533,6 @@ static const char * TestPartResultTypeToString(TestPartResult::Type type) {
 }
 
 namespace internal {
-
-// Prints a TestPartResult to an std::string.
-static std::string PrintTestPartResultToString(
-	const TestPartResult& test_part_result) {
-  return (Message()
-		  << internal::FormatFileLocation(test_part_result.file_name(),
-										  test_part_result.line_number())
-		  << " " << TestPartResultTypeToString(test_part_result.type())
-		  << test_part_result.message()).GetString();
-}
 
 // Prints a TestPartResult.
 static void PrintTestPartResult(const TestPartResult& test_part_result) {

@@ -11,15 +11,13 @@
 
 #include <string>
 
-#include "Scoped_trace.hxx"
 
+#include "Scoped_trace.hxx"
+#include "internal/Unit_test_impl.hxx"
 
 namespace testing {
 
 
-class TestSuite;
-class TestInfo;
-class TestResult;
 class TestEventListeners;
 class Environment;
 
@@ -35,7 +33,6 @@ class Environment;
 
 
 	// Convenience function for accessing the global UnitTest implementation object.
-	UnitTestImpl *GetUnitTestImpl();
 	void ReportFailureInUnknownLocation(TestPartResult::Type result_type, const std::string& message);
 
 
@@ -78,7 +75,7 @@ class GTEST_API_ UnitTest {
 
   // Returns the TestSuite object for the test that's currently running,
   // or NULL if no test is running.
-  const ::testing::TestSuite* current_test_suite() const GTEST_LOCK_EXCLUDED_(mutex_);
+  const TestSuite* current_test_suite() const GTEST_LOCK_EXCLUDED_(mutex_);
 
 // Legacy API is still available but deprecated
 #ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
@@ -162,7 +159,7 @@ class GTEST_API_ UnitTest {
 
   // Gets the i-th test suite among all the test suites. i can range from 0 to
   // total_test_suite_count() - 1. If i is not in that range, returns NULL.
-  const ::testing::TestSuite* GetTestSuite(int i) const;
+  const TestSuite* GetTestSuite(int i) const;
 
 //  Legacy API is deprecated but still available
 #ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
@@ -171,7 +168,7 @@ class GTEST_API_ UnitTest {
 
   // Returns the TestResult containing information on test failures and
   // properties logged outside of individual test suites.
-  const ::testing::TestResult& ad_hoc_test_result() const;
+  const TestResult& ad_hoc_test_result() const;
 
   // Returns the list of event listeners that can be used to track events
   // inside Google Test.
@@ -209,11 +206,11 @@ class GTEST_API_ UnitTest {
 
   // Gets the i-th test suite among all the test suites. i can range from 0 to
   // total_test_suite_count() - 1. If i is not in that range, returns NULL.
-  ::testing::TestSuite* GetMutableTestSuite(int i);
+  TestSuite* GetMutableTestSuite(int i);
 
   // Accessors for the implementation object.
-  ::testing::internal::UnitTestImpl* impl() { return impl_; }
-  const ::testing::internal::UnitTestImpl* impl() const { return impl_; }
+  internal::UnitTestImpl* impl();
+  const internal::UnitTestImpl* impl() const;
 
   // These classes and functions are friends as they need to access private members of UnitTest.
   friend ::jmsd::cutf::ScopedTrace;
@@ -222,7 +219,7 @@ class GTEST_API_ UnitTest {
   friend ::testing::internal::StreamingListenerTest;
   friend ::testing::internal::UnitTestRecordPropertyTestHelper;
   friend ::testing::Environment *AddGlobalTestEnvironment(::testing::Environment* env);
-  friend ::testing::internal::UnitTestImpl *::testing::internal::GetUnitTestImpl();
+  friend internal::UnitTestImpl *internal::GetUnitTestImpl();
   friend void ::testing::internal::ReportFailureInUnknownLocation( TestPartResult::Type result_type, const std::string& message);
 
   // Creates an empty UnitTest.
@@ -248,7 +245,7 @@ class GTEST_API_ UnitTest {
   // the object is constructed.  We don't mark it as const here, as
   // doing so will cause a warning in the constructor of UnitTest.
   // Mutable state in *impl_ is protected by mutex_.
-  ::testing::internal::UnitTestImpl* impl_;
+ internal::UnitTestImpl *impl_;
 
   // We disallow copying UnitTest.
   GTEST_DISALLOW_COPY_AND_ASSIGN_(UnitTest);

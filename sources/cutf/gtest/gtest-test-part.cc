@@ -9,8 +9,6 @@
 
 namespace testing {
 
-using internal::GetUnitTestImpl;
-
 // Gets the summary of the failure message by omitting the stack trace
 // in it.
 std::string TestPartResult::ExtractSummary(const char* message) {
@@ -57,15 +55,15 @@ int TestPartResultArray::size() const {
 namespace internal {
 
 HasNewFatalFailureHelper::HasNewFatalFailureHelper()
-	: has_new_fatal_failure_(false),
-	  original_reporter_(GetUnitTestImpl()->
-						 GetTestPartResultReporterForCurrentThread()) {
-  GetUnitTestImpl()->SetTestPartResultReporterForCurrentThread(this);
+	:
+		has_new_fatal_failure_( false ),
+		original_reporter_( ::jmsd::cutf::internal::GetUnitTestImpl()->GetTestPartResultReporterForCurrentThread() )
+{
+	::jmsd::cutf::internal::GetUnitTestImpl()->SetTestPartResultReporterForCurrentThread( this );
 }
 
 HasNewFatalFailureHelper::~HasNewFatalFailureHelper() {
-  GetUnitTestImpl()->SetTestPartResultReporterForCurrentThread(
-	  original_reporter_);
+	::jmsd::cutf::internal::GetUnitTestImpl()->SetTestPartResultReporterForCurrentThread( original_reporter_ );
 }
 
 void HasNewFatalFailureHelper::ReportTestPartResult(

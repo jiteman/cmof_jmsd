@@ -44,8 +44,10 @@
 
 
 #include "Test_property.h"
+#include "internal/Exception_handling.h"
 
 #include "Unit_test.hxx"
+#include "internal/Unit_test_impl.hxx"
 
 
 GTEST_DISABLE_MSC_WARNINGS_PUSH_(4251 \
@@ -77,7 +79,7 @@ class TestEventRepeater;
 class UnitTestRecordPropertyTestHelper;
 class WindowsDeathTest;
 class FuchsiaDeathTest;
-UnitTestImpl* GetUnitTestImpl();
+
 //void ReportFailureInUnknownLocation(TestPartResult::Type result_type,
 //									const std::string& message);
 
@@ -87,14 +89,6 @@ UnitTestImpl* GetUnitTestImpl();
 // If we don't forward declare them the compiler might confuse the classes
 // in friendship clauses with same named classes on the scope.
 class Test;
-class TestSuite;
-
-// Old API is still available but deprecated
-#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
-using TestCase = TestSuite;
-#endif
-class TestInfo;
-
 
 // A class for indicating whether an assertion was successful.  When
 // the assertion wasn't successful, the AssertionResult object
@@ -304,7 +298,7 @@ namespace testing {
 // Test is not copyable.
 class GTEST_API_ Test {
  public:
-  friend class TestInfo;
+  friend ::jmsd::cutf::TestInfo;
 
   // The d'tor is virtual as we intend to inherit from Test.
   virtual ~Test();
@@ -450,7 +444,7 @@ class Environment {
 
 // Exception which can be thrown from TestEventListener::OnTestPartResult.
 class GTEST_API_ AssertionException
-	: public internal::GoogleTestFailureException {
+	: public ::jmsd::cutf::internal::GoogleTestFailureException {
  public:
   explicit AssertionException(const TestPartResult& result)
 	  : GoogleTestFailureException(result) {}
@@ -480,7 +474,7 @@ class TestEventListener {
   virtual void OnEnvironmentsSetUpEnd(const ::jmsd::cutf::UnitTest& unit_test) = 0;
 
   // Fired before the test suite starts.
-  virtual void OnTestSuiteStart(const TestSuite& /*test_suite*/) {}
+  virtual void OnTestSuiteStart(const ::jmsd::cutf::TestSuite& /*test_suite*/) {}
 
   //  Legacy API is deprecated but still available
 #ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
@@ -488,7 +482,7 @@ class TestEventListener {
 #endif  //  GTEST_REMOVE_LEGACY_TEST_CASEAPI_
 
   // Fired before the test starts.
-  virtual void OnTestStart(const TestInfo& test_info) = 0;
+  virtual void OnTestStart(const ::jmsd::cutf::TestInfo& test_info) = 0;
 
   // Fired after a failed assertion or a SUCCEED() invocation.
   // If you want to throw an exception from this function to skip to the next
@@ -496,10 +490,10 @@ class TestEventListener {
   virtual void OnTestPartResult(const TestPartResult& test_part_result) = 0;
 
   // Fired after the test ends.
-  virtual void OnTestEnd(const TestInfo& test_info) = 0;
+  virtual void OnTestEnd(const ::jmsd::cutf::TestInfo& test_info) = 0;
 
   // Fired after the test suite ends.
-  virtual void OnTestSuiteEnd(const TestSuite& /*test_suite*/) {}
+  virtual void OnTestSuiteEnd(const ::jmsd::cutf::TestSuite& /*test_suite*/) {}
 
 //  Legacy API is deprecated but still available
 #ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
@@ -532,16 +526,16 @@ class EmptyTestEventListener : public TestEventListener {
 							int /*iteration*/) override {}
   void OnEnvironmentsSetUpStart(const ::jmsd::cutf::UnitTest& /*unit_test*/) override {}
   void OnEnvironmentsSetUpEnd(const::jmsd::cutf::UnitTest& /*unit_test*/) override {}
-  void OnTestSuiteStart(const TestSuite& /*test_suite*/) override {}
+  void OnTestSuiteStart(const ::jmsd::cutf::TestSuite& /*test_suite*/) override {}
 //  Legacy API is deprecated but still available
 #ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
   void OnTestCaseStart(const TestCase& /*test_case*/) override {}
 #endif  //  GTEST_REMOVE_LEGACY_TEST_CASEAPI_
 
-  void OnTestStart(const TestInfo& /*test_info*/) override {}
+  void OnTestStart(const ::jmsd::cutf::TestInfo& /*test_info*/) override {}
   void OnTestPartResult(const TestPartResult& /*test_part_result*/) override {}
-  void OnTestEnd(const TestInfo& /*test_info*/) override {}
-  void OnTestSuiteEnd(const TestSuite& /*test_suite*/) override {}
+  void OnTestEnd(const ::jmsd::cutf::TestInfo& /*test_info*/) override {}
+  void OnTestSuiteEnd(const ::jmsd::cutf::TestSuite& /*test_suite*/) override {}
 #ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
   void OnTestCaseEnd(const TestCase& /*test_case*/) override {}
 #endif  //  GTEST_REMOVE_LEGACY_TEST_CASEAPI_
@@ -590,12 +584,12 @@ class GTEST_API_ TestEventListeners {
   }
 
  private:
-  friend class TestSuite;
-  friend class TestInfo;
+  friend ::jmsd::cutf::TestSuite;
+  friend ::jmsd::cutf::TestInfo;
   friend class internal::DefaultGlobalTestPartResultReporter;
   friend class internal::NoExecDeathTest;
   friend class internal::TestEventListenersAccessor;
-  friend class internal::UnitTestImpl;
+  friend ::jmsd::cutf::internal::UnitTestImpl;
 
   // Returns repeater that broadcasts the TestEventListener events to all
   // subscribers.

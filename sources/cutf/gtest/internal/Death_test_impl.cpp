@@ -1,11 +1,73 @@
 #include "Death_test_impl.h"
 
 
+#include "Death_test_check.h"
+
+
 namespace jmsd {
 namespace cutf {
 namespace internal {
 
 
+DeathTestImpl::DeathTestImpl( char const *a_statement, ::testing::Matcher< ::std::string const & > matcher )
+	:
+		statement_( a_statement ),
+		matcher_( ::std::move( matcher ) ),
+		spawned_( false ),
+		status_( -1 ),
+		outcome_( ::testing::internal::DeathTestOutcome::IN_PROGRESS ),
+		read_fd_( -1 ),
+		write_fd_( -1 )
+{}
+
+// read_fd_ is expected to be closed and cleared by a derived class.
+DeathTestImpl::~DeathTestImpl() {
+	GTEST_DEATH_TEST_CHECK_( read_fd_ == -1 );
+}
+
+char const *DeathTestImpl::statement() const {
+	return statement_;
+}
+
+bool DeathTestImpl::spawned() const {
+	return spawned_;
+}
+
+void DeathTestImpl::set_spawned( bool const is_spawned ) {
+	spawned_ = is_spawned;
+}
+
+int DeathTestImpl::status() const {
+	return status_;
+}
+
+void DeathTestImpl::set_status( int const a_status) {
+	status_ = a_status;
+}
+
+::testing::internal::DeathTestOutcome DeathTestImpl::outcome() const {
+	return outcome_;
+}
+
+void DeathTestImpl::set_outcome( ::testing::internal::DeathTestOutcome const an_outcome ) {
+	outcome_ = an_outcome;
+}
+
+int DeathTestImpl::read_fd() const {
+	return read_fd_;
+}
+
+void DeathTestImpl::set_read_fd( int const fd ) {
+	read_fd_ = fd;
+}
+
+int DeathTestImpl::write_fd() const {
+	return write_fd_;
+}
+
+void DeathTestImpl::set_write_fd( int const fd ) {
+	write_fd_ = fd;
+}
 
 // Called in the parent process only. Reads the result code of the death
 // test child process via a pipe, interprets it to set the outcome_
@@ -20,24 +82,24 @@ void DeathTestImpl::ReadAndInterpretStatusByte() {
   // its success), so it's okay to call this in the parent before
   // the child process has exited.
   do {
-	bytes_read = posix::Read(read_fd(), &flag, 1);
+	bytes_read = ::testing::internal::posix::Read(read_fd(), &flag, 1);
   } while (bytes_read == -1 && errno == EINTR);
 
   if (bytes_read == 0) {
-	set_outcome(DIED);
+	set_outcome( ::testing::internal::DeathTestOutcome::DIED);
   } else if (bytes_read == 1) {
 	switch (flag) {
-	  case kDeathTestReturned:
-		set_outcome(RETURNED);
+	  case ::testing::internal::kDeathTestReturned:
+		set_outcome(::testing::internal::DeathTestOutcome::RETURNED);
 		break;
-	  case kDeathTestThrew:
-		set_outcome(THREW);
+	  case ::testing::internal::kDeathTestThrew:
+		set_outcome(::testing::internal::DeathTestOutcome::THREW);
 		break;
-	  case kDeathTestLived:
-		set_outcome(LIVED);
+	  case ::testing::internal::kDeathTestLived:
+		set_outcome(::testing::internal::DeathTestOutcome::LIVED);
 		break;
-	  case kDeathTestInternalError:
-		FailFromInternalError(read_fd());  // Does not return.
+	  case ::testing::internal::kDeathTestInternalError:
+		::testing::internal::FailFromInternalError(read_fd());  // Does not return.
 		break;
 	  default:
 		GTEST_LOG_(FATAL) << "Death test child process reported "

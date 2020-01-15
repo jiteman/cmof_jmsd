@@ -1,10 +1,11 @@
 #include "Unit_test.h"
 
 
-#include "internal/Unit_test_impl.h"
-
 #include "gtest-test-part.h"
 #include "gtest-message.h"
+
+
+#include "internal/Unit_test_impl.h"
 
 
 namespace jmsd {
@@ -126,27 +127,36 @@ bool UnitTest::Failed() const { return impl()->Failed(); }
 
 // Gets the i-th test suite among all the test suites. i can range from 0 to
 // total_test_suite_count() - 1. If i is not in that range, returns NULL.
-const ::testing::TestSuite* UnitTest::GetTestSuite(int i) const {
+TestSuite const *UnitTest::GetTestSuite(int i) const {
   return impl()->GetTestSuite(i);
 }
 
 //  Legacy API is deprecated but still available
 #ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
-const ::testing::TestCase* UnitTest::GetTestCase(int i) const {
+TestCase const *UnitTest::GetTestCase(int i) const {
   return impl()->GetTestCase(i);
 }
 #endif  //  GTEST_REMOVE_LEGACY_TEST_CASEAPI_
 
 // Returns the TestResult containing information on test failures and
 // properties logged outside of individual test suites.
-const ::testing::TestResult& UnitTest::ad_hoc_test_result() const {
-  return *impl()->ad_hoc_test_result();
+TestResult const &UnitTest::ad_hoc_test_result() const {
+	return *impl()->ad_hoc_test_result();
 }
 
 // Gets the i-th test suite among all the test suites. i can range from 0 to
 // total_test_suite_count() - 1. If i is not in that range, returns NULL.
-::testing::TestSuite* UnitTest::GetMutableTestSuite(int i) {
-  return impl()->GetMutableSuiteCase(i);
+TestSuite *UnitTest::GetMutableTestSuite(int i) {
+	return impl()->GetMutableSuiteCase(i);
+}
+
+// Accessors for the implementation object.
+internal::UnitTestImpl *UnitTest::impl() {
+	return impl_;
+}
+
+const internal::UnitTestImpl *UnitTest::impl() const {
+	return impl_;
 }
 
 // Returns the list of event listeners that can be used to track events
@@ -187,34 +197,31 @@ void UnitTest::AddTestPartResult(
   ::testing::Message msg;
   msg << message;
 
-  internal::MutexLock lock(&mutex_);
+  ::testing::internal::MutexLock lock(&mutex_);
   if (impl_->gtest_trace_stack().size() > 0) {
 	msg << "\n" << GTEST_NAME_ << " trace:";
 
 	for (size_t i = impl_->gtest_trace_stack().size(); i > 0; --i) {
-	  const internal::TraceInfo& trace = impl_->gtest_trace_stack()[i - 1];
-	  msg << "\n" << internal::FormatFileLocation(trace.file, trace.line)
+	  const ::testing::internal::TraceInfo& trace = impl_->gtest_trace_stack()[i - 1];
+	  msg << "\n" << ::testing::internal::FormatFileLocation(trace.file, trace.line)
 		  << " " << trace.message;
 	}
   }
 
   if (os_stack_trace.c_str() != nullptr && !os_stack_trace.empty()) {
-	msg << internal::kStackTraceMarker << os_stack_trace;
+	msg << ::testing::internal::kStackTraceMarker << os_stack_trace;
   }
 
-  const TestPartResult result = TestPartResult(
-	  result_type, file_name, line_number, msg.GetString().c_str());
-  impl_->GetTestPartResultReporterForCurrentThread()->
-	  ReportTestPartResult(result);
+  const ::testing::TestPartResult result = ::testing::TestPartResult( result_type, file_name, line_number, msg.GetString().c_str() );
+  impl_->GetTestPartResultReporterForCurrentThread()->ReportTestPartResult( result );
 
-  if (result_type != TestPartResult::kSuccess &&
-	  result_type != TestPartResult::kSkip) {
+  if ( result_type != ::testing::TestPartResult::kSuccess && result_type != ::testing::TestPartResult::kSkip ) {
 	// gtest_break_on_failure takes precedence over
 	// gtest_throw_on_failure.  This allows a user to set the latter
 	// in the code (perhaps in order to use Google Test assertions
 	// with another testing framework) and specify the former on the
 	// command line for debugging.
-	if (GTEST_FLAG(break_on_failure)) {
+	if ( ::testing:: GTEST_FLAG(break_on_failure)) {
 #if GTEST_OS_WINDOWS && !GTEST_OS_WINDOWS_PHONE && !GTEST_OS_WINDOWS_RT
 	  // Using DebugBreak on Windows allows gtest to still break into a debugger
 	  // when a failure happens and both the --gtest_break_on_failure and
@@ -231,7 +238,7 @@ void UnitTest::AddTestPartResult(
 	  // portability: some debuggers don't correctly trap abort().
 	  *static_cast<volatile int*>(nullptr) = 1;
 #endif  // GTEST_OS_WINDOWS
-	} else if (GTEST_FLAG(throw_on_failure)) {
+	} else if ( ::testing:: GTEST_FLAG(throw_on_failure)) {
 #if GTEST_HAS_EXCEPTIONS
 	  throw internal::GoogleTestFailureException(result);
 #else
@@ -410,22 +417,6 @@ void UnitTest::PopGTestTrace()
 
 } // namespace cutf
 } // namespace jmsd
-
-
-namespace jmsd {
-namespace cutf {
-
-
-// Convenience function for accessing the global UnitTest implementation object.
-UnitTestImpl *GetUnitTestImpl() {
-  return UnitTest::GetInstance()->impl();
-}
-
-
-} // namespace cutf
-} // namespace jmsd
-
-
 
 
 namespace testing {

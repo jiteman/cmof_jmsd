@@ -52,10 +52,24 @@ const char kDeathTestStyleFlag[] = "death_test_style";
 const char kDeathTestUseFork[] = "death_test_use_fork";
 const char kInternalRunDeathTestFlag[] = "internal_run_death_test";
 
+// Flag characters for reporting a death test that did not die.
+const char kDeathTestLived = 'L';
+const char kDeathTestReturned = 'R';
+const char kDeathTestThrew = 'T';
+const char kDeathTestInternalError = 'I';
+
 #if GTEST_HAS_DEATH_TEST
 
 GTEST_DISABLE_MSC_WARNINGS_PUSH_(4251 \
 /* class A needs to have dll-interface to be used by clients of class B */)
+
+// An enumeration describing all of the possible ways that a death test can conclude.
+// DIED means that the process died while executing the test code;
+// LIVED means that process lived beyond the end of the test code;
+// RETURNED means that the test statement attempted to execute a return statement, which is not allowed;
+// THREW means that the test statement returned control by throwing an exception.
+// IN_PROGRESS means the test has not yet concluded.
+enum DeathTestOutcome { IN_PROGRESS, DIED, LIVED, RETURNED, THREW };
 
 // DeathTest is a class that hides much of the complexity of the
 // GTEST_DEATH_TEST_ macro.  It is abstract; its static Create method

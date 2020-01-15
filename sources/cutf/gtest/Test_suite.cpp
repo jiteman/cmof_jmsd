@@ -1,6 +1,12 @@
 #include "Test_suite.h"
 
 
+#include "Test_info.h"
+
+#include "internal/Unit_test_impl.h"
+#include "internal/Stl_utilities.hin"
+
+
 namespace jmsd {
 namespace cutf {
 
@@ -9,37 +15,37 @@ namespace cutf {
 
 // Gets the number of successful tests in this test suite.
 int TestSuite::successful_test_count() const {
-  return CountIf(test_info_list_, TestPassed);
+  return internal::CountIf(test_info_list_, TestPassed);
 }
 
 // Gets the number of successful tests in this test suite.
 int TestSuite::skipped_test_count() const {
-  return CountIf(test_info_list_, TestSkipped);
+  return internal::CountIf(test_info_list_, TestSkipped);
 }
 
 // Gets the number of failed tests in this test suite.
 int TestSuite::failed_test_count() const {
-  return CountIf(test_info_list_, TestFailed);
+  return internal::CountIf(test_info_list_, TestFailed);
 }
 
 // Gets the number of disabled tests that will be reported in the XML report.
 int TestSuite::reportable_disabled_test_count() const {
-  return CountIf(test_info_list_, TestReportableDisabled);
+  return internal::CountIf(test_info_list_, TestReportableDisabled);
 }
 
 // Gets the number of disabled tests in this test suite.
 int TestSuite::disabled_test_count() const {
-  return CountIf(test_info_list_, TestDisabled);
+  return internal::CountIf(test_info_list_, TestDisabled);
 }
 
 // Gets the number of tests to be printed in the XML report.
 int TestSuite::reportable_test_count() const {
-  return CountIf(test_info_list_, TestReportable);
+  return internal::CountIf(test_info_list_, TestReportable);
 }
 
 // Get the number of tests in this test suite that should run.
 int TestSuite::test_to_run_count() const {
-  return CountIf(test_info_list_, ShouldRunTest);
+  return internal::CountIf(test_info_list_, ShouldRunTest);
 }
 
 // Gets the number of all tests.
@@ -71,16 +77,16 @@ bool TestSuite::Failed() const {
 // Returns the TestResult that holds test properties recorded during
 // execution of SetUpTestSuite and TearDownTestSuite.
 const TestResult& TestSuite::ad_hoc_test_result() const {
-	return ad_hoc_test_result_;
+	return *ad_hoc_test_result_;
 }
 
 // Gets the (mutable) vector of TestInfos in this TestSuite.
-std::vector<::testing::TestInfo*> &TestSuite::test_info_list() {
+std::vector< TestInfo * > &TestSuite::test_info_list() {
 	return test_info_list_;
 }
 
 // Gets the (immutable) vector of TestInfos in this TestSuite.
-const std::vector<::testing::TestInfo*>& TestSuite::test_info_list() const {
+const std::vector< TestInfo * >& TestSuite::test_info_list() const {
 	return test_info_list_;
 }
 
@@ -112,44 +118,44 @@ void TestSuite::RunTearDownTestSuite() {
 
 // Returns true if and only if test passed.
 // static
-bool TestSuite::TestPassed(const ::testing::TestInfo* test_info) {
+bool TestSuite::TestPassed(const TestInfo* test_info) {
 	return test_info->should_run() && test_info->result()->Passed();
 }
 
 // Returns true if and only if test skipped.
 // static
-bool TestSuite::TestSkipped(const ::testing::TestInfo* test_info) {
+bool TestSuite::TestSkipped(const TestInfo* test_info) {
 	return test_info->should_run() && test_info->result()->Skipped();
 }
 
 // Returns true if and only if test failed.
 // static
-bool TestSuite::TestFailed(const ::testing::TestInfo* test_info) {
+bool TestSuite::TestFailed(const TestInfo* test_info) {
 	return test_info->should_run() && test_info->result()->Failed();
 }
 
 // Returns true if and only if the test is disabled and will be reported in
 // the XML report.
 // static
-bool TestSuite::TestReportableDisabled(const ::testing::TestInfo* test_info) {
+bool TestSuite::TestReportableDisabled(const TestInfo* test_info) {
 	return test_info->is_reportable() && test_info->is_disabled_;
 }
 
 // Returns true if and only if test is disabled.
 // static
-bool TestSuite::TestDisabled(const ::testing::TestInfo* test_info) {
+bool TestSuite::TestDisabled(const TestInfo* test_info) {
 	return test_info->is_disabled_;
 }
 
 // Returns true if and only if this test will appear in the XML report.
 // static
-bool TestSuite::TestReportable(const ::testing::TestInfo* test_info) {
+bool TestSuite::TestReportable(const TestInfo* test_info) {
 	return test_info->is_reportable();
 }
 
 // Returns true if the given test should run.
 // static
-bool TestSuite::ShouldRunTest(const ::testing::TestInfo* test_info) {
+bool TestSuite::ShouldRunTest(const TestInfo* test_info) {
 	return test_info->should_run();
 }
 
@@ -163,20 +169,22 @@ bool TestSuite::ShouldRunTest(const ::testing::TestInfo* test_info) {
 //   set_up_tc:    pointer to the function that sets up the test suite
 //   tear_down_tc: pointer to the function that tears down the test suite
 TestSuite::TestSuite(const char* a_name, const char* a_type_param,
-					 internal::SetUpTestSuiteFunc set_up_tc,
-					 internal::TearDownTestSuiteFunc tear_down_tc)
+					 ::testing::internal::SetUpTestSuiteFunc set_up_tc,
+					 ::testing::internal::TearDownTestSuiteFunc tear_down_tc)
 	: name_(a_name),
 	  type_param_(a_type_param ? new std::string(a_type_param) : nullptr),
 	  set_up_tc_(set_up_tc),
 	  tear_down_tc_(tear_down_tc),
 	  should_run_(false),
 	  start_timestamp_(0),
-	  elapsed_time_(0) {}
+	  elapsed_time_(0),
+	  ad_hoc_test_result_( new TestResult )
+{}
 
 // Destructor of TestSuite.
 TestSuite::~TestSuite() {
   // Deletes every Test in the collection.
-  ForEach(test_info_list_, internal::Delete<TestInfo>);
+  internal::ForEach(test_info_list_, internal::Delete<TestInfo>);
 }
 
 // Gets the name of the TestSuite.
@@ -200,14 +208,14 @@ bool TestSuite::should_run() const {
 // Returns the i-th test among all the tests. i can range from 0 to
 // total_test_count() - 1. If i is not in that range, returns NULL.
 const TestInfo* TestSuite::GetTestInfo(int i) const {
-  const int index = GetElementOr(test_indices_, i, -1);
+  const int index = internal::GetElementOr(test_indices_, i, -1);
   return index < 0 ? nullptr : test_info_list_[static_cast<size_t>(index)];
 }
 
 // Returns the i-th test among all the tests. i can range from 0 to
 // total_test_count() - 1. If i is not in that range, returns NULL.
 TestInfo* TestSuite::GetMutableTestInfo(int i) {
-  const int index = GetElementOr(test_indices_, i, -1);
+  const int index = internal::GetElementOr(test_indices_, i, -1);
   return index < 0 ? nullptr : test_info_list_[static_cast<size_t>(index)];
 }
 
@@ -225,7 +233,7 @@ void TestSuite::Run() {
   internal::UnitTestImpl* const impl = internal::GetUnitTestImpl();
   impl->set_current_test_suite(this);
 
-  TestEventListener* repeater = UnitTest::GetInstance()->listeners().repeater();
+  ::testing::TestEventListener* repeater = UnitTest::GetInstance()->listeners().repeater();
 
   // Call both legacy and the new API
   repeater->OnTestSuiteStart(*this);
@@ -235,18 +243,20 @@ void TestSuite::Run() {
 #endif  //  GTEST_REMOVE_LEGACY_TEST_CASEAPI
 
   impl->os_stack_trace_getter()->UponLeavingGTest();
-  internal::HandleExceptionsInMethodIfSupported(
-	  this, &TestSuite::RunSetUpTestSuite, "SetUpTestSuite()");
 
-  start_timestamp_ = internal::GetTimeInMillis();
+  internal::HandleExceptionsInMethodIfSupported( this, &TestSuite::RunSetUpTestSuite, "SetUpTestSuite()" );
+
+  start_timestamp_ = ::testing::internal::GetTimeInMillis();
+
   for (int i = 0; i < total_test_count(); i++) {
 	GetMutableTestInfo(i)->Run();
   }
-  elapsed_time_ = internal::GetTimeInMillis() - start_timestamp_;
+
+  elapsed_time_ = ::testing::internal::GetTimeInMillis() - start_timestamp_;
 
   impl->os_stack_trace_getter()->UponLeavingGTest();
-  internal::HandleExceptionsInMethodIfSupported(
-	  this, &TestSuite::RunTearDownTestSuite, "TearDownTestSuite()");
+
+  internal::HandleExceptionsInMethodIfSupported( this, &TestSuite::RunTearDownTestSuite, "TearDownTestSuite()");
 
   // Call both legacy and the new API
   repeater->OnTestSuiteEnd(*this);
@@ -260,20 +270,20 @@ void TestSuite::Run() {
 
 // Clears the results of all tests in this test suite.
 void TestSuite::ClearResult() {
-  ad_hoc_test_result_.Clear();
-  ForEach(test_info_list_, TestInfo::ClearTestResult);
+	ad_hoc_test_result_->Clear();
+	internal::ForEach(test_info_list_, TestInfo::ClearTestResult);
 }
 
 // Shuffles the tests in this test suite.
-void TestSuite::ShuffleTests(internal::Random* random) {
-  Shuffle(random, &test_indices_);
+void TestSuite::ShuffleTests( ::jmsd::cutf::internal::Random* random) {
+	internal::Shuffle(random, &test_indices_);
 }
 
 // Restores the test order to before the first shuffle.
 void TestSuite::UnshuffleTests() {
-  for (size_t i = 0; i < test_indices_.size(); i++) {
-	test_indices_[i] = static_cast<int>(i);
-  }
+	for ( size_t i = 0; i < test_indices_.size(); i++ ) {
+		test_indices_[ i ] = static_cast< int >( i );
+	}
 }
 
 

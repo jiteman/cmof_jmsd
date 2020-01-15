@@ -252,76 +252,6 @@ GTEST_API_ int32_t Int32FromEnvOrDie(const char* env_var, int32_t default_val);
 GTEST_API_ bool ShouldRunTestOnShard(
 	int total_shards, int shard_index, int test_id);
 
-// STL container utilities.
-
-// Returns the number of elements in the given container that satisfy
-// the given predicate.
-template <class Container, typename Predicate>
-inline int CountIf(const Container& c, Predicate predicate) {
-  // Implemented as an explicit loop since std::count_if() in libCstd on
-  // Solaris has a non-standard signature.
-  int count = 0;
-  for (typename Container::const_iterator it = c.begin(); it != c.end(); ++it) {
-	if (predicate(*it))
-	  ++count;
-  }
-  return count;
-}
-
-// Applies a function/functor to each element in the container.
-template <class Container, typename Functor>
-void ForEach(const Container& c, Functor functor) {
-  std::for_each(c.begin(), c.end(), functor);
-}
-
-// Returns the i-th element of the vector, or default_value if i is not
-// in range [0, v.size()).
-template <typename E>
-inline E GetElementOr(const std::vector<E>& v, int i, E default_value) {
-  return (i < 0 || i >= static_cast<int>(v.size())) ? default_value
-													: v[static_cast<size_t>(i)];
-}
-
-// Performs an in-place shuffle of a range of the vector's elements.
-// 'begin' and 'end' are element indices as an STL-style range;
-// i.e. [begin, end) are shuffled, where 'end' == size() means to
-// shuffle to the end of the vector.
-template <typename E>
-void ShuffleRange(internal::Random* random, int begin, int end,
-				  std::vector<E>* v) {
-  const int size = static_cast<int>(v->size());
-  GTEST_CHECK_(0 <= begin && begin <= size)
-	  << "Invalid shuffle range start " << begin << ": must be in range [0, "
-	  << size << "].";
-  GTEST_CHECK_(begin <= end && end <= size)
-	  << "Invalid shuffle range finish " << end << ": must be in range ["
-	  << begin << ", " << size << "].";
-
-  // Fisher-Yates shuffle, from
-  // http://en.wikipedia.org/wiki/Fisher-Yates_shuffle
-  for (int range_width = end - begin; range_width >= 2; range_width--) {
-	const int last_in_range = begin + range_width - 1;
-	const int selected =
-		begin +
-		static_cast<int>(random->Generate(static_cast<uint32_t>(range_width)));
-	std::swap((*v)[static_cast<size_t>(selected)],
-			  (*v)[static_cast<size_t>(last_in_range)]);
-  }
-}
-
-// Performs an in-place shuffle of the vector's elements.
-template <typename E>
-inline void Shuffle(internal::Random* random, std::vector<E>* v) {
-  ShuffleRange(random, 0, static_cast<int>(v->size()), v);
-}
-
-// A function for deleting an object.  Handy for being used as a
-// functor.
-template <typename T>
-static void Delete(T* x) {
-  delete x;
-}
-
 // A predicate that checks the key of a TestProperty against a known key.
 //
 // TestPropertyKeyIs is copyable.
@@ -449,38 +379,6 @@ struct TraceInfo {
   const char* file;
   int line;
   std::string message;
-};
-
-//// This is the default global test part result reporter used in UnitTestImpl.
-//// This class should only be used by UnitTestImpl.
-//class DefaultGlobalTestPartResultReporter
-//  : public TestPartResultReporterInterface {
-// public:
-//  explicit DefaultGlobalTestPartResultReporter(UnitTestImpl* unit_test);
-//  // Implements the TestPartResultReporterInterface. Reports the test part
-//  // result in the current test.
-//  void ReportTestPartResult(const TestPartResult& result) override;
-
-// private:
-//  UnitTestImpl* const unit_test_;
-
-//  GTEST_DISALLOW_COPY_AND_ASSIGN_(DefaultGlobalTestPartResultReporter);
-//};
-
-// This is the default per thread test part result reporter used in
-// UnitTestImpl. This class should only be used by UnitTestImpl.
-class DefaultPerThreadTestPartResultReporter
-	: public TestPartResultReporterInterface {
- public:
-  explicit DefaultPerThreadTestPartResultReporter(UnitTestImpl* unit_test);
-  // Implements the TestPartResultReporterInterface. The implementation just
-  // delegates to the current global test part result reporter of *unit_test_.
-  void ReportTestPartResult(const TestPartResult& result) override;
-
- private:
-  UnitTestImpl* const unit_test_;
-
-  GTEST_DISALLOW_COPY_AND_ASSIGN_(DefaultPerThreadTestPartResultReporter);
 };
 
 #if GTEST_USES_SIMPLE_RE

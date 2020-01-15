@@ -3,11 +3,13 @@
 
 namespace jmsd {
 namespace cutf {
+namespace internal {
 
 
+class Random;
 
 
-
+} // namespace internal
 } // namespace cutf
 } // namespace jmsd
 

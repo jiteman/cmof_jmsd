@@ -1,34 +1,43 @@
 #include "Unit_test_impl.h"
 
 
+#include "gtest/Unit_test.h"
+
+
 namespace jmsd {
 namespace cutf {
 namespace internal {
 
 
+// Convenience function for accessing the global UnitTest implementation object.
+UnitTestImpl *GetUnitTestImpl() {
+  return UnitTest::GetInstance()->impl();
+}
+
+
 // Returns the global test part result reporter.
-TestPartResultReporterInterface*
-UnitTestImpl::GetGlobalTestPartResultReporter() {
+TestPartResultReporterInterface *UnitTestImpl::GetGlobalTestPartResultReporter() {
   internal::MutexLock lock(&global_test_part_result_reporter_mutex_);
   return global_test_part_result_repoter_;
 }
 
 // Sets the global test part result reporter.
 void UnitTestImpl::SetGlobalTestPartResultReporter(
-	TestPartResultReporterInterface* reporter) {
+	TestPartResultReporterInterface* reporter )
+{
   internal::MutexLock lock(&global_test_part_result_reporter_mutex_);
   global_test_part_result_repoter_ = reporter;
 }
 
 // Returns the test part result reporter for the current thread.
-TestPartResultReporterInterface*
-UnitTestImpl::GetTestPartResultReporterForCurrentThread() {
+TestPartResultReporterInterface *UnitTestImpl::GetTestPartResultReporterForCurrentThread() {
   return per_thread_test_part_result_reporter_.get();
 }
 
 // Sets the test part result reporter for the current thread.
 void UnitTestImpl::SetTestPartResultReporterForCurrentThread(
-	TestPartResultReporterInterface* reporter) {
+	TestPartResultReporterInterface* reporter)
+{
   per_thread_test_part_result_reporter_.set(reporter);
 }
 
@@ -92,6 +101,109 @@ int UnitTestImpl::total_test_count() const {
 // Gets the number of tests that should run.
 int UnitTestImpl::test_to_run_count() const {
   return SumOverTestSuiteList(test_suites_, &TestSuite::test_to_run_count);
+}
+
+// Gets the time of the test program start, in ms from the start of the UNIX epoch.
+::testing::internal::TimeInMillis UnitTestImpl::start_timestamp() const {
+	return start_timestamp_;
+}
+
+// Gets the elapsed time, in milliseconds.
+::testing::internal::TimeInMillis UnitTestImpl::elapsed_time() const {
+	return elapsed_time_;
+}
+
+// Returns true if and only if the unit test passed (i.e. all test suites passed).
+bool UnitTestImpl::Passed() const {
+	return !Failed();
+}
+
+// Returns true if and only if the unit test failed (i.e. some test suite
+// failed or something outside of all tests failed).
+bool UnitTestImpl::Failed() const {
+	return failed_test_suite_count() > 0 || ad_hoc_test_result()->Failed();
+}
+
+// Gets the i-th test suite among all the test suites. i can range from 0 to
+// total_test_suite_count() - 1. If i is not in that range, returns NULL.
+const TestSuite* UnitTestImpl::GetTestSuite(int i) const {
+	const int index = GetElementOr(test_suite_indices_, i, -1);
+
+	return index < 0 ? nullptr : test_suites_[static_cast<size_t>(i)];
+}
+
+//  Legacy API is deprecated but still available
+#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
+const TestCase* UnitTestImpl::GetTestCase(int i) const {
+	return GetTestSuite(i);
+}
+
+TestCase* UnitTestImpl::GetTestCase(
+	const char* test_case_name,
+	const char* type_param,
+	::testing::internal::SetUpTestSuiteFunc set_up_tc,
+	::testing::internal::TearDownTestSuiteFunc tear_down_tc)
+{
+	return GetTestSuite(test_case_name, type_param, set_up_tc, tear_down_tc);
+}
+#endif  //  GTEST_REMOVE_LEGACY_TEST_CASEAPI_
+
+// Adds a TestInfo to the unit test.
+//
+// Arguments:
+//
+//   set_up_tc:    pointer to the function that sets up the test suite
+//   tear_down_tc: pointer to the function that tears down the test suite
+//   test_info:    the TestInfo object
+void UnitTestImpl::AddTestInfo(
+	::testing::internal::SetUpTestSuiteFunc set_up_tc,
+	::testing::internal::TearDownTestSuiteFunc tear_down_tc,
+	TestInfo* test_info)
+{
+	// In order to support thread-safe death tests, we need to
+	// remember the original working directory when the test program
+	// was first invoked.  We cannot do this in RUN_ALL_TESTS(), as
+	// the user may have changed the current directory before calling
+	// RUN_ALL_TESTS().  Therefore we capture the current directory in
+	// AddTestInfo(), which is called to register a TEST or TEST_F
+	// before main() is reached.
+	if ( original_working_dir_.IsEmpty() ) {
+		original_working_dir_.Set( FilePath::GetCurrentDir() );
+		GTEST_CHECK_( !original_working_dir_.IsEmpty() ) << "Failed to get the current working directory.";
+	}
+
+	GetTestSuite( test_info->test_suite_name(), test_info->type_param(), set_up_tc, tear_down_tc )->AddTestInfo( test_info );
+}
+
+// Gets the i-th test suite among all the test suites. i can range from 0 to
+// total_test_suite_count() - 1. If i is not in that range, returns NULL.
+TestSuite *UnitTestImpl::GetMutableSuiteCase(int i) {
+	const int index = GetElementOr(test_suite_indices_, i, -1);
+
+	return index < 0 ? nullptr : test_suites_[static_cast<size_t>(index)];
+}
+
+// Returns ParameterizedTestSuiteRegistry object used to keep track of
+// value-parameterized tests and instantiate and register them.
+::testing::internal::ParameterizedTestSuiteRegistry &UnitTestImpl::parameterized_test_registry() {
+	return parameterized_test_registry_;
+}
+
+// Sets the TestSuite object for the test that's currently running.
+void UnitTestImpl::set_current_test_suite( TestSuite *a_current_test_suite ) {
+	current_test_suite_ = a_current_test_suite;
+}
+
+// Sets the TestInfo object for the test that's currently running.  If
+// current_test_info is NULL, the assertion results will be stored in
+// ad_hoc_test_result_.
+void UnitTestImpl::set_current_test_info( TestInfo *a_current_test_info ) {
+	current_test_info_ = a_current_test_info;
+}
+
+// Provides access to the event listener list.
+::testing::TestEventListeners* UnitTestImpl::listeners() {
+	return &listeners_;
 }
 
 // Returns the current OS stack trace as an std::string.
@@ -175,6 +287,23 @@ void UnitTestImpl::RecordProperty(const TestProperty& test_property) {
 }
 
 #if GTEST_HAS_DEATH_TEST
+
+void UnitTestImpl::InitDeathTestSubprocessControlInfo() {
+	internal_run_death_test_flag_.reset(ParseInternalRunDeathTestFlag());
+}
+// Returns a pointer to the parsed --gtest_internal_run_death_test
+// flag, or NULL if that flag was not specified.
+// This information is useful only in a death test child process.
+// Must not be called before a call to InitGoogleTest.
+const ::testing::internal::InternalRunDeathTestFlag *UnitTestImpl::internal_run_death_test_flag() const {
+	return internal_run_death_test_flag_.get();
+}
+
+// Returns a pointer to the current death test factory.
+::testing::internal::DeathTestFactory *UnitTestImpl::death_test_factory() {
+	return death_test_factory_.get();
+}
+
 // Disables event forwarding if the control is currently in a death test
 // subprocess. Must not be called before InitGoogleTest.
 void UnitTestImpl::SuppressTestEventsIfInSubprocess() {
@@ -258,6 +387,16 @@ void UnitTestImpl::PostFlagParsingInit() {
 	}
 #endif  // GTEST_HAS_ABSL
   }
+}
+
+// Gets the random seed used at the start of the current test iteration.
+int UnitTestImpl::random_seed() const {
+	return random_seed_;
+}
+
+// Gets the random number generator.
+internal::Random *UnitTestImpl::random() {
+	return &random_;
 }
 
 // A predicate that checks the name of a TestSuite against a known
@@ -509,6 +648,16 @@ bool UnitTestImpl::RunAllTests() {
   return !failed;
 }
 
+// Clears the results of all tests, except the ad hoc tests.
+void UnitTestImpl::ClearNonAdHocTestResult() {
+	ForEach(test_suites_, TestSuite::ClearTestSuiteResult);
+}
+
+// Clears the results of ad-hoc test assertions.
+void UnitTestImpl::ClearAdHocTestResult() {
+	ad_hoc_test_result_.Clear();
+}
+
 // Reads the GTEST_SHARD_STATUS_FILE environment variable, and creates the file
 // if the variable is present. If a file already exists at this location, this
 // function will write over it. If the variable is present, but the file cannot
@@ -735,6 +884,25 @@ void UnitTestImpl::ListTestsMatchingFilter() {
   }
 }
 
+const TestSuite *UnitTestImpl::current_test_suite() const { return current_test_suite_; }
+TestInfo *UnitTestImpl::current_test_info() { return current_test_info_; }
+const TestInfo *UnitTestImpl::current_test_info() const { return current_test_info_; }
+
+// Returns the vector of environments that need to be set-up/torn-down
+// before/after the tests are run.
+::std::vector< ::testing::Environment * > &UnitTestImpl::environments() {
+	return environments_;
+}
+
+// Getters for the per-thread Google Test trace stack.
+::std::vector< ::testing::internal::TraceInfo > &UnitTestImpl::gtest_trace_stack() {
+	return *( gtest_trace_stack_.pointer() );
+}
+
+const ::std::vector< ::testing::internal::TraceInfo > &UnitTestImpl::gtest_trace_stack() const {
+	return gtest_trace_stack_.get();
+}
+
 // Sets the OS stack trace getter.
 //
 // Does nothing if the input and the current OS stack trace getter are
@@ -764,7 +932,7 @@ OsStackTraceGetterInterface* UnitTestImpl::os_stack_trace_getter() {
 }
 
 // Returns the most specific TestResult currently running.
-TestResult* UnitTestImpl::current_test_result() {
+TestResult *UnitTestImpl::current_test_result() {
   if (current_test_info_ != nullptr) {
 	return &current_test_info_->result_;
   }
@@ -772,6 +940,11 @@ TestResult* UnitTestImpl::current_test_result() {
 	return &current_test_suite_->ad_hoc_test_result_;
   }
   return &ad_hoc_test_result_;
+}
+
+// Returns the TestResult for the ad hoc test.
+const TestResult *UnitTestImpl::ad_hoc_test_result() const {
+	return &ad_hoc_test_result_;
 }
 
 // Shuffles all test suites, and the tests within each test suite,
@@ -792,12 +965,15 @@ void UnitTestImpl::ShuffleTests() {
 
 // Restores the test suites and tests to their order before the first shuffle.
 void UnitTestImpl::UnshuffleTests() {
-  for (size_t i = 0; i < test_suites_.size(); i++) {
-	// Unshuffles the tests in each test suite.
-	test_suites_[i]->UnshuffleTests();
-	// Resets the index of each test suite.
-	test_suite_indices_[i] = static_cast<int>(i);
-  }
+	for ( size_t i = 0; i < test_suites_.size(); i++ ) {
+		test_suites_[i]->UnshuffleTests(); // Unshuffles the tests in each test suite.
+		test_suite_indices_[i] = static_cast<int>(i); // Resets the index of each test suite.
+	}
+}
+
+// Returns the value of GTEST_FLAG(catch_exceptions) at the moment UnitTest::Run() starts.
+bool UnitTestImpl::catch_exceptions() const {
+	return catch_exceptions_;
 }
 
 
