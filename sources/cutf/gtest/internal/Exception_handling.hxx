@@ -1,9 +1,13 @@
 #pragma once
 
 
-#include <string>
-
 #include "gtest-port.h"
+
+#if GTEST_HAS_SEH
+#include <windows.h>
+#endif // #if GTEST_HAS_SEH
+
+#include <string>
 
 
 namespace testing {

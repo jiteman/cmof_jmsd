@@ -3,6 +3,10 @@
 
 #include "Death_test_check.h"
 
+#include "Fail_from_internal_error.h"
+
+#include "Exit_summary.h"
+
 
 namespace jmsd {
 namespace cutf {
@@ -99,7 +103,7 @@ void DeathTestImpl::ReadAndInterpretStatusByte() {
 		set_outcome(::testing::internal::DeathTestOutcome::LIVED);
 		break;
 	  case ::testing::internal::kDeathTestInternalError:
-		::testing::internal::FailFromInternalError(read_fd());  // Does not return.
+		::jmsd::cutf::internal::FailFromInternalError(read_fd());  // Does not return.
 		break;
 	  default:
 		GTEST_LOG_(FATAL) << "Death test child process reported "
@@ -110,12 +114,12 @@ void DeathTestImpl::ReadAndInterpretStatusByte() {
 	GTEST_LOG_(FATAL) << "Read from death test child process failed: "
 					  << GetLastErrnoDescription();
   }
-  GTEST_DEATH_TEST_CHECK_SYSCALL_(posix::Close(read_fd()));
+  GTEST_DEATH_TEST_CHECK_SYSCALL_( ::testing::internal::posix::Close(read_fd()));
   set_read_fd(-1);
 }
 
 std::string DeathTestImpl::GetErrorLogs() {
-  return GetCapturedStderr();
+  return ::testing::internal::GetCapturedStderr();
 }
 
 // Signals that the death test code which should have exited, didn't.
@@ -127,10 +131,10 @@ void DeathTestImpl::Abort(AbortReason reason) {
   // it finds any data in our pipe.  So, here we write a single flag byte
   // to the pipe, then exit.
   const char status_ch =
-	  reason == TEST_DID_NOT_DIE ? kDeathTestLived :
-	  reason == TEST_THREW_EXCEPTION ? kDeathTestThrew : kDeathTestReturned;
+	  reason == TEST_DID_NOT_DIE ? ::testing::internal::kDeathTestLived :
+	  reason == TEST_THREW_EXCEPTION ? ::testing::internal::kDeathTestThrew : ::testing::internal::kDeathTestReturned;
 
-  GTEST_DEATH_TEST_CHECK_SYSCALL_(posix::Write(write_fd(), &status_ch, 1));
+  GTEST_DEATH_TEST_CHECK_SYSCALL_( ::testing::internal::posix::Write( write_fd(), &status_ch, 1 ) );
   // We are leaking the descriptor here because on some platforms (i.e.,
   // when built as Windows DLL), destructors of global objects will still
   // run after calling _exit(). On such systems, write_fd_ will be
@@ -139,7 +143,7 @@ void DeathTestImpl::Abort(AbortReason reason) {
   // may assert. As there are no in-process buffers to flush here, we are
   // relying on the OS to close the descriptor after the process terminates
   // when the destructors are not run.
-  _exit(1);  // Exits w/o any normal exit hooks (we were supposed to crash)
+  _exit( 1 );  // Exits w/o any normal exit hooks (we were supposed to crash)
 }
 
 // Returns an indented copy of stderr output for a death test.
@@ -188,23 +192,23 @@ bool DeathTestImpl::Passed(bool status_ok) {
   const std::string error_message = GetErrorLogs();
 
   bool success = false;
-  Message buffer;
+  ::testing::Message buffer;
 
   buffer << "Death test: " << statement() << "\n";
   switch (outcome()) {
-	case LIVED:
+	case ::testing::internal::DeathTestOutcome::LIVED:
 	  buffer << "    Result: failed to die.\n"
 			 << " Error msg:\n" << FormatDeathTestOutput(error_message);
 	  break;
-	case THREW:
+	case ::testing::internal::DeathTestOutcome::THREW:
 	  buffer << "    Result: threw an exception.\n"
 			 << " Error msg:\n" << FormatDeathTestOutput(error_message);
 	  break;
-	case RETURNED:
+	case ::testing::internal::DeathTestOutcome::RETURNED:
 	  buffer << "    Result: illegal return in test statement.\n"
 			 << " Error msg:\n" << FormatDeathTestOutput(error_message);
 	  break;
-	case DIED:
+	case ::testing::internal::DeathTestOutcome::DIED:
 	  if (status_ok) {
 		if (matcher_.Matches(error_message)) {
 		  success = true;
@@ -218,11 +222,11 @@ bool DeathTestImpl::Passed(bool status_ok) {
 		}
 	  } else {
 		buffer << "    Result: died but not with expected exit code:\n"
-			   << "            " << ExitSummary(status()) << "\n"
+			   << "            " << ::jmsd::cutf::internal::ExitSummary(status()) << "\n"
 			   << "Actual msg:\n" << FormatDeathTestOutput(error_message);
 	  }
 	  break;
-	case IN_PROGRESS:
+	case ::testing::internal::DeathTestOutcome::IN_PROGRESS:
 	default:
 	  GTEST_LOG_(FATAL)
 		  << "DeathTest::Passed somehow called before conclusion of test";

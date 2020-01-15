@@ -42,41 +42,41 @@ Configurable_event_listener::~Configurable_event_listener() {
 }
 
 // virtuals TestEventListener
-void Configurable_event_listener::OnTestProgramStart( ::testing::UnitTest const &unit_test ) {
+void Configurable_event_listener::OnTestProgramStart( ::jmsd::cutf::UnitTest const &unit_test ) {
 	_event_listener->OnTestProgramStart( unit_test );
 }
 
-void Configurable_event_listener::OnTestIterationStart( ::testing::UnitTest const &unit_test, int const iteration ) {
+void Configurable_event_listener::OnTestIterationStart( ::jmsd::cutf::UnitTest const &unit_test, int const iteration ) {
 	_event_listener->OnTestIterationStart( unit_test, iteration );
 }
 
-void Configurable_event_listener::OnEnvironmentsSetUpStart( ::testing::UnitTest const &unit_test ) {
+void Configurable_event_listener::OnEnvironmentsSetUpStart( ::jmsd::cutf::UnitTest const &unit_test ) {
 	if ( !_showEnvironment ) return;
 
 	_event_listener->OnEnvironmentsSetUpStart( unit_test );
 }
 
-void Configurable_event_listener::OnEnvironmentsSetUpEnd( ::testing::UnitTest const &unit_test ) {
+void Configurable_event_listener::OnEnvironmentsSetUpEnd( ::jmsd::cutf::UnitTest const &unit_test ) {
 	if ( !_showEnvironment ) return;
 
 	_event_listener->OnEnvironmentsSetUpEnd( unit_test );
 }
 
 #ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI
-void Configurable_event_listener::OnTestCaseStart( ::testing::TestCase const &test_case ) {
+void Configurable_event_listener::OnTestCaseStart( ::jmsd::cutf::TestCase const &test_case ) {
 	if ( !_showTestCases ) return;
 
 	_event_listener->OnTestCaseStart( test_case );
 }
 
-void Configurable_event_listener::OnTestCaseEnd( ::testing::TestCase const &test_case ) {
+void Configurable_event_listener::OnTestCaseEnd( ::jmsd::cutf::TestCase const &test_case ) {
 	if ( !_showTestCases ) return;
 
 	_event_listener->OnTestCaseEnd( test_case );
 }
 #endif // #ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI
 
-void Configurable_event_listener::OnTestStart( ::testing::TestInfo const &test_info ) {
+void Configurable_event_listener::OnTestStart( ::jmsd::cutf::TestInfo const &test_info ) {
 	if ( !_showTestNames ) return;
 
 	_event_listener->OnTestStart( test_info );
@@ -88,7 +88,7 @@ void Configurable_event_listener::OnTestPartResult( ::testing::TestPartResult co
 	_event_listener->OnTestPartResult( result );
 }
 
-void Configurable_event_listener::OnTestEnd( ::testing::TestInfo const &test_info ) {
+void Configurable_event_listener::OnTestEnd( ::jmsd::cutf::TestInfo const &test_info ) {
 	if ( test_info.result()->Failed() ) {
 		if ( !_showInlineFailures ) return;
 	} else {
@@ -98,23 +98,23 @@ void Configurable_event_listener::OnTestEnd( ::testing::TestInfo const &test_inf
 	 _event_listener->OnTestEnd( test_info );
 }
 
-void Configurable_event_listener::OnEnvironmentsTearDownStart( ::testing::UnitTest const &unit_test ) {
+void Configurable_event_listener::OnEnvironmentsTearDownStart( ::jmsd::cutf::UnitTest const &unit_test ) {
 	if ( !_showEnvironment ) return;
 
 	_event_listener->OnEnvironmentsTearDownStart( unit_test );
 }
 
-void Configurable_event_listener::OnEnvironmentsTearDownEnd( ::testing::UnitTest const &unit_test ) {
+void Configurable_event_listener::OnEnvironmentsTearDownEnd( ::jmsd::cutf::UnitTest const &unit_test ) {
 	if ( !_showEnvironment ) return;
 
 	_event_listener->OnEnvironmentsTearDownEnd( unit_test );
 }
 
-void Configurable_event_listener::OnTestIterationEnd( ::testing::UnitTest const &unit_test, int const iteration ) {
+void Configurable_event_listener::OnTestIterationEnd( ::jmsd::cutf::UnitTest const &unit_test, int const iteration ) {
 	_event_listener->OnTestIterationEnd( unit_test, iteration );
 }
 
-void Configurable_event_listener::OnTestProgramEnd( ::testing::UnitTest const &unit_test ) {
+void Configurable_event_listener::OnTestProgramEnd( ::jmsd::cutf::UnitTest const &unit_test ) {
 	_event_listener->OnTestProgramEnd( unit_test );
 }
 

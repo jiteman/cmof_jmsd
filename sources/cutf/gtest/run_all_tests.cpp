@@ -1,7 +1,7 @@
 #include "run_all_tests.h"
 
 
-#include "gtest.h" // for UnitTest
+#include "Unit_test.h"
 
 
 namespace jmsd {
@@ -9,7 +9,7 @@ namespace cutf {
 
 
 int RUN_ALL_TESTS() {
-	return ::testing::UnitTest::GetInstance()->Run();
+	return ::jmsd::cutf::UnitTest::GetInstance()->Run();
 }
 
 

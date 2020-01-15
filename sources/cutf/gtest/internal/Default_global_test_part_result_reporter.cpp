@@ -14,7 +14,7 @@ DefaultGlobalTestPartResultReporter::DefaultGlobalTestPartResultReporter( UnitTe
 		unit_test_(unit_test)
 {}
 
-void DefaultGlobalTestPartResultReporter::ReportTestPartResult( const TestPartResult& result) {
+void DefaultGlobalTestPartResultReporter::ReportTestPartResult( ::testing::TestPartResult const &result ) {
 	unit_test_->current_test_result()->AddTestPartResult(result);
 	unit_test_->listeners()->repeater()->OnTestPartResult(result);
 }

@@ -1,17 +1,15 @@
 #pragma once
 
-#include "Fail_from_internal_error.hxx"
+#include "Text_output_attributes.hxx"
 
 
 namespace jmsd {
 namespace cutf {
-namespace internal {
 
 
 
 
 
-} // namespace internal
 } // namespace cutf
 } // namespace jmsd
 

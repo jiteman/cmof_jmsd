@@ -36,6 +36,12 @@ namespace cutf {
 class GTEST_API_ TestSuite {
 
 public:
+	static bool TestSuitePassed( TestSuite const *test_suite );
+	static bool TestSuiteFailed( TestSuite const *test_suite );
+	static bool ShouldRunTestSuite( TestSuite const *test_suite );
+	static int SumOverTestSuiteList( ::std::vector< TestSuite * > const &case_list, int ( TestSuite::*method )() const );
+
+public:
 	// Creates a TestSuite with the given name.
 	//
 	// TestSuite does NOT have a default constructor.  Always use this

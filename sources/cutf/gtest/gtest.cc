@@ -113,38 +113,6 @@
 #endif  // GTEST_HAS_ABSL
 
 namespace testing {
-
-using internal::CountIf;
-using internal::ForEach;
-using internal::GetElementOr;
-using internal::Shuffle;
-
-//// Constants.
-
-//// A test whose test suite name or test name matches this filter is
-//// disabled and not run.
-//static const char kDisableTestFilter[] = "DISABLED_*:*/DISABLED_*";
-
-//// A test suite whose name matches this filter is considered a death
-//// test suite and will be run before test suites whose name doesn't
-//// match this filter.
-//static const char kDeathTestSuiteFilter[] = "*DeathTest:*DeathTest/*";
-
-//// A test filter that matches everything.
-//static const char kUniversalFilter[] = "*";
-
-//// The default output format.
-//static const char kDefaultOutputFormat[] = "xml";
-//// The default output file.
-//static const char kDefaultOutputFile[] = "test_detail";
-
-//// The environment variable name for the test shard index.
-//static const char kTestShardIndex[] = "GTEST_SHARD_INDEX";
-//// The environment variable name for the total number of test shards.
-//static const char kTestTotalShards[] = "GTEST_TOTAL_SHARDS";
-//// The environment variable name for the test shard status file.
-//static const char kTestShardStatusFile[] = "GTEST_SHARD_STATUS_FILE";
-
 namespace internal {
 
 // The text used in failure messages to indicate the start of the
@@ -170,53 +138,11 @@ static FILE* OpenFileForWriting(const std::string& output_file) {
   return fileout;
 }
 
-}  // namespace internal
-
-//// Bazel passes in the argument to '--test_filter' via the TESTBRIDGE_TEST_ONLY
-//// environment variable.
-//static const char* GetDefaultFilter() {
-//  const char* const testbridge_test_only =
-//	  internal::posix::GetEnv("TESTBRIDGE_TEST_ONLY");
-//  if (testbridge_test_only != nullptr) {
-//	return testbridge_test_only;
-//  }
-//  return kUniversalFilter;
-//}
-
-namespace internal {
 
 // GTestIsInitialized() returns true if and only if the user has initialized
 // Google Test.  Useful for catching the user mistake of not initializing
 // Google Test before calling RUN_ALL_TESTS().
 static bool GTestIsInitialized() { return GetArgvs().size() > 0; }
-
-// Iterates over a vector of TestSuites, keeping a running sum of the
-// results of calling a given int-returning method on each.
-// Returns the sum.
-static int SumOverTestSuiteList(const std::vector<TestSuite*>& case_list,
-								int (TestSuite::*method)() const) {
-  int sum = 0;
-  for (size_t i = 0; i < case_list.size(); i++) {
-	sum += (case_list[i]->*method)();
-  }
-  return sum;
-}
-
-// Returns true if and only if the test suite passed.
-static bool TestSuitePassed(const TestSuite* test_suite) {
-  return test_suite->should_run() && test_suite->Passed();
-}
-
-// Returns true if and only if the test suite failed.
-static bool TestSuiteFailed(const TestSuite* test_suite) {
-  return test_suite->should_run() && test_suite->Failed();
-}
-
-// Returns true if and only if test_suite contains at least one test that
-// should run.
-static bool ShouldRunTestSuite(const TestSuite* test_suite) {
-  return test_suite->should_run();
-}
 
 // AssertHelper constructor.
 AssertHelper::AssertHelper(TestPartResult::Type type,
@@ -232,13 +158,12 @@ AssertHelper::~AssertHelper() {
 
 // Message assignment, for assertion streaming support.
 void AssertHelper::operator=(const Message& message) const {
-  UnitTest::GetInstance()->
-	AddTestPartResult(data_->type, data_->file, data_->line,
-					  AppendUserMessage(data_->message, message),
-					  UnitTest::GetInstance()->impl()
-					  ->CurrentOsStackTraceExceptTop(1)
-					  // Skips the stack frame for this function itself.
-					  );  // NOLINT
+	::jmsd::cutf::UnitTest::GetInstance()->AddTestPartResult(
+		data_->type,
+		data_->file,
+		data_->line,
+		AppendUserMessage( data_->message, message ),
+		::jmsd::cutf::UnitTest::GetInstance()->impl()->CurrentOsStackTraceExceptTop( 1 ) );// Skips the stack frame for this function itself.
 }
 
 namespace {
@@ -1796,220 +1721,6 @@ std::string AppendUserMessage(const std::string& gtest_msg,
 
 }  // namespace internal
 
-//// class TestResult
-
-//// Creates an empty TestResult.
-//TestResult::TestResult()
-//	: death_test_count_(0), start_timestamp_(0), elapsed_time_(0) {}
-
-//// D'tor.
-//TestResult::~TestResult() {
-//}
-
-//// Returns the i-th test part result among all the results. i can
-//// range from 0 to total_part_count() - 1. If i is not in that range,
-//// aborts the program.
-//const TestPartResult& TestResult::GetTestPartResult(int i) const {
-//  if (i < 0 || i >= total_part_count())
-//	internal::posix::Abort();
-//  return test_part_results_.at(static_cast<size_t>(i));
-//}
-
-//// Returns the i-th test property. i can range from 0 to
-//// test_property_count() - 1. If i is not in that range, aborts the
-//// program.
-//const TestProperty& TestResult::GetTestProperty(int i) const {
-//  if (i < 0 || i >= test_property_count())
-//	internal::posix::Abort();
-//  return test_properties_.at(static_cast<size_t>(i));
-//}
-
-//// Clears the test part results.
-//void TestResult::ClearTestPartResults() {
-//  test_part_results_.clear();
-//}
-
-//// Adds a test part result to the list.
-//void TestResult::AddTestPartResult(const TestPartResult& test_part_result) {
-//  test_part_results_.push_back(test_part_result);
-//}
-
-//// Adds a test property to the list. If a property with the same key as the
-//// supplied property is already represented, the value of this test_property
-//// replaces the old value for that key.
-//void TestResult::RecordProperty(const std::string& xml_element,
-//								const TestProperty& test_property) {
-//  if (!ValidateTestProperty(xml_element, test_property)) {
-//	return;
-//  }
-//  internal::MutexLock lock(&test_properites_mutex_);
-//  const std::vector<TestProperty>::iterator property_with_matching_key =
-//	  std::find_if(test_properties_.begin(), test_properties_.end(),
-//				   internal::TestPropertyKeyIs(test_property.key()));
-//  if (property_with_matching_key == test_properties_.end()) {
-//	test_properties_.push_back(test_property);
-//	return;
-//  }
-//  property_with_matching_key->SetValue(test_property.value());
-//}
-
-//// The list of reserved attributes used in the <testsuites> element of XML
-//// output.
-//static const char* const kReservedTestSuitesAttributes[] = {
-//  "disabled",
-//  "errors",
-//  "failures",
-//  "name",
-//  "random_seed",
-//  "tests",
-//  "time",
-//  "timestamp"
-//};
-
-//// The list of reserved attributes used in the <testsuite> element of XML
-//// output.
-//static const char* const kReservedTestSuiteAttributes[] = {
-//	"disabled", "errors", "failures", "name", "tests", "time", "timestamp"};
-
-//// The list of reserved attributes used in the <testcase> element of XML output.
-//static const char* const kReservedTestCaseAttributes[] = {
-//	"classname",   "name", "status", "time",  "type_param",
-//	"value_param", "file", "line"};
-
-//// Use a slightly different set for allowed output to ensure existing tests can
-//// still RecordProperty("result") or "RecordProperty(timestamp")
-//static const char* const kReservedOutputTestCaseAttributes[] = {
-//	"classname",   "name", "status", "time",   "type_param",
-//	"value_param", "file", "line",   "result", "timestamp"};
-
-//template <int kSize>
-//std::vector<std::string> ArrayAsVector(const char* const (&array)[kSize]) {
-//  return std::vector<std::string>(array, array + kSize);
-//}
-
-//static std::vector<std::string> GetReservedAttributesForElement(
-//	const std::string& xml_element) {
-//  if (xml_element == "testsuites") {
-//	return ArrayAsVector(kReservedTestSuitesAttributes);
-//  } else if (xml_element == "testsuite") {
-//	return ArrayAsVector(kReservedTestSuiteAttributes);
-//  } else if (xml_element == "testcase") {
-//	return ArrayAsVector(kReservedTestCaseAttributes);
-//  } else {
-//	GTEST_CHECK_(false) << "Unrecognized xml_element provided: " << xml_element;
-//  }
-//  // This code is unreachable but some compilers may not realizes that.
-//  return std::vector<std::string>();
-//}
-
-//// TODO(jdesprez): Merge the two getReserved attributes once skip is improved
-//static std::vector<std::string> GetReservedOutputAttributesForElement(
-//	const std::string& xml_element) {
-//  if (xml_element == "testsuites") {
-//	return ArrayAsVector(kReservedTestSuitesAttributes);
-//  } else if (xml_element == "testsuite") {
-//	return ArrayAsVector(kReservedTestSuiteAttributes);
-//  } else if (xml_element == "testcase") {
-//	return ArrayAsVector(kReservedOutputTestCaseAttributes);
-//  } else {
-//	GTEST_CHECK_(false) << "Unrecognized xml_element provided: " << xml_element;
-//  }
-//  // This code is unreachable but some compilers may not realizes that.
-//  return std::vector<std::string>();
-//}
-
-//static std::string FormatWordList(const std::vector<std::string>& words) {
-//  Message word_list;
-//  for (size_t i = 0; i < words.size(); ++i) {
-//	if (i > 0 && words.size() > 2) {
-//	  word_list << ", ";
-//	}
-//	if (i == words.size() - 1) {
-//	  word_list << "and ";
-//	}
-//	word_list << "'" << words[i] << "'";
-//  }
-//  return word_list.GetString();
-//}
-
-//static bool ValidateTestPropertyName(
-//	const std::string& property_name,
-//	const std::vector<std::string>& reserved_names) {
-//  if (std::find(reserved_names.begin(), reserved_names.end(), property_name) !=
-//		  reserved_names.end()) {
-//	ADD_FAILURE() << "Reserved key used in RecordProperty(): " << property_name
-//				  << " (" << FormatWordList(reserved_names)
-//				  << " are reserved by " << GTEST_NAME_ << ")";
-//	return false;
-//  }
-//  return true;
-//}
-
-//// Adds a failure if the key is a reserved attribute of the element named
-//// xml_element.  Returns true if the property is valid.
-//bool TestResult::ValidateTestProperty(const std::string& xml_element,
-//									  const TestProperty& test_property) {
-//  return ValidateTestPropertyName(test_property.key(),
-//								  GetReservedAttributesForElement(xml_element));
-//}
-
-//// Clears the object.
-//void TestResult::Clear() {
-//  test_part_results_.clear();
-//  test_properties_.clear();
-//  death_test_count_ = 0;
-//  elapsed_time_ = 0;
-//}
-
-//// Returns true off the test part was skipped.
-//static bool TestPartSkipped(const TestPartResult& result) {
-//  return result.skipped();
-//}
-
-//// Returns true if and only if the test was skipped.
-//bool TestResult::Skipped() const {
-//  return !Failed() && CountIf(test_part_results_, TestPartSkipped) > 0;
-//}
-
-//// Returns true if and only if the test failed.
-//bool TestResult::Failed() const {
-//  for (int i = 0; i < total_part_count(); ++i) {
-//	if (GetTestPartResult(i).failed())
-//	  return true;
-//  }
-//  return false;
-//}
-
-//// Returns true if and only if the test part fatally failed.
-//static bool TestPartFatallyFailed(const TestPartResult& result) {
-//  return result.fatally_failed();
-//}
-
-//// Returns true if and only if the test fatally failed.
-//bool TestResult::HasFatalFailure() const {
-//  return CountIf(test_part_results_, TestPartFatallyFailed) > 0;
-//}
-
-//// Returns true if and only if the test part non-fatally failed.
-//static bool TestPartNonfatallyFailed(const TestPartResult& result) {
-//  return result.nonfatally_failed();
-//}
-
-//// Returns true if and only if the test has a non-fatal failure.
-//bool TestResult::HasNonfatalFailure() const {
-//  return CountIf(test_part_results_, TestPartNonfatallyFailed) > 0;
-//}
-
-//// Gets the number of all test parts.  This is the sum of the number
-//// of successful test parts and the number of failed test parts.
-//int TestResult::total_part_count() const {
-//  return static_cast<int>(test_part_results_.size());
-//}
-
-//// Returns the number of the test properties.
-//int TestResult::test_property_count() const {
-//  return static_cast<int>(test_properties_.size());
-//}
 
 // class Test
 
@@ -2507,29 +2218,6 @@ static std::string FormatTestCount(int test_count) {
 // Formats the count of test suites.
 static std::string FormatTestSuiteCount(int test_suite_count) {
   return FormatCountableNoun(test_suite_count, "test suite", "test suites");
-}
-
-// Converts a TestPartResult::Type enum to human-friendly string
-// representation.  Both kNonFatalFailure and kFatalFailure are translated
-// to "Failure", as the user usually doesn't care about the difference
-// between the two when viewing the test result.
-static const char * TestPartResultTypeToString(TestPartResult::Type type) {
-  switch (type) {
-	case TestPartResult::kSkip:
-	  return "Skipped";
-	case TestPartResult::kSuccess:
-	  return "Success";
-
-	case TestPartResult::kNonFatalFailure:
-	case TestPartResult::kFatalFailure:
-#ifdef _MSC_VER
-	  return "error: ";
-#else
-	  return "Failure\n";
-#endif
-	default:
-	  return "Unknown result type";
-  }
 }
 
 namespace internal {
@@ -4133,43 +3821,6 @@ void OsStackTraceGetter::UponLeavingGTest() GTEST_LOCK_EXCLUDED_(mutex_) {
   caller_frame_ = caller_frame;
 #endif  // GTEST_HAS_ABSL
 }
-
-// A helper class that creates the premature-exit file in its
-// constructor and deletes the file in its destructor.
-class ScopedPrematureExitFile {
- public:
-  explicit ScopedPrematureExitFile(const char* premature_exit_filepath)
-	  : premature_exit_filepath_(premature_exit_filepath ?
-								 premature_exit_filepath : "") {
-	// If a path to the premature-exit file is specified...
-	if (!premature_exit_filepath_.empty()) {
-	  // create the file with a single "0" character in it.  I/O
-	  // errors are ignored as there's nothing better we can do and we
-	  // don't want to fail the test because of this.
-	  FILE* pfile = posix::FOpen(premature_exit_filepath, "w");
-	  fwrite("0", 1, 1, pfile);
-	  fclose(pfile);
-	}
-  }
-
-  ~ScopedPrematureExitFile() {
-#if !defined GTEST_OS_ESP8266
-	if (!premature_exit_filepath_.empty()) {
-	  int retval = remove(premature_exit_filepath_.c_str());
-	  if (retval) {
-		GTEST_LOG_(ERROR) << "Failed to remove premature exit filepath \""
-						  << premature_exit_filepath_ << "\" with error "
-						  << retval;
-	  }
-	}
-#endif
-  }
-
- private:
-  const std::string premature_exit_filepath_;
-
-  GTEST_DISALLOW_COPY_AND_ASSIGN_(ScopedPrematureExitFile);
-};
 
 }  // namespace internal
 

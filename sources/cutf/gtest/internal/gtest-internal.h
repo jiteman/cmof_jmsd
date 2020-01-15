@@ -1335,12 +1335,12 @@ constexpr bool InstantiateTypedTestCase_P_IsDeprecated() { return true; }
 																			  \
    private:                                                                   \
 	void TestBody() override;                                                 \
-	static ::testing::TestInfo* const test_info_ GTEST_ATTRIBUTE_UNUSED_;     \
+	static ::jmsd::cutf::TestInfo* const test_info_ GTEST_ATTRIBUTE_UNUSED_;     \
 	GTEST_DISALLOW_COPY_AND_ASSIGN_(GTEST_TEST_CLASS_NAME_(test_suite_name,   \
 														   test_name));       \
   };                                                                          \
 																			  \
-  ::testing::TestInfo* const GTEST_TEST_CLASS_NAME_(test_suite_name,          \
+  ::jmsd::cutf::TestInfo* const GTEST_TEST_CLASS_NAME_(test_suite_name,          \
 													test_name)::test_info_ =  \
 	  ::testing::internal::MakeAndRegisterTestInfo(                           \
 		  #test_suite_name, #test_name, nullptr, nullptr,                     \

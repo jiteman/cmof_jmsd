@@ -48,6 +48,7 @@
 
 #include "Unit_test.hxx"
 #include "internal/Unit_test_impl.hxx"
+#include "internal/Default_global_test_part_result_reporter.hxx"
 
 
 GTEST_DISABLE_MSC_WARNINGS_PUSH_(4251 \
@@ -67,18 +68,18 @@ namespace testing {
 namespace internal {
 
 class AssertHelper;
-class DefaultGlobalTestPartResultReporter;
+//class DefaultGlobalTestPartResultReporter;
 class ExecDeathTest;
 class NoExecDeathTest;
 class FinalSuccessChecker;
 class GTestFlagSaver;
 class StreamingListenerTest;
-class TestResultAccessor;
+//class TestResultAccessor;
 class TestEventListenersAccessor;
 class TestEventRepeater;
 class UnitTestRecordPropertyTestHelper;
-class WindowsDeathTest;
-class FuchsiaDeathTest;
+//class WindowsDeathTest;
+//class FuchsiaDeathTest;
 
 //void ReportFailureInUnknownLocation(TestPartResult::Type result_type,
 //									const std::string& message);
@@ -586,7 +587,7 @@ class GTEST_API_ TestEventListeners {
  private:
   friend ::jmsd::cutf::TestSuite;
   friend ::jmsd::cutf::TestInfo;
-  friend class internal::DefaultGlobalTestPartResultReporter;
+  friend ::jmsd::cutf::internal::DefaultGlobalTestPartResultReporter;
   friend class internal::NoExecDeathTest;
   friend class internal::TestEventListenersAccessor;
   friend ::jmsd::cutf::internal::UnitTestImpl;

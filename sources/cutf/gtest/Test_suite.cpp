@@ -11,8 +11,6 @@ namespace jmsd {
 namespace cutf {
 
 
-// class TestSuite
-
 // Gets the number of successful tests in this test suite.
 int TestSuite::successful_test_count() const {
   return internal::CountIf(test_info_list_, TestPassed);
@@ -284,6 +282,38 @@ void TestSuite::UnshuffleTests() {
 	for ( size_t i = 0; i < test_indices_.size(); i++ ) {
 		test_indices_[ i ] = static_cast< int >( i );
 	}
+}
+
+// Returns true if and only if the test suite passed.
+// static
+bool TestSuite::TestSuitePassed( TestSuite const *test_suite ) {
+	return test_suite->should_run() && test_suite->Passed();
+}
+
+// Returns true if and only if the test suite failed.
+// static
+bool TestSuite::TestSuiteFailed( TestSuite const *test_suite ) {
+	return test_suite->should_run() && test_suite->Failed();
+}
+
+// Returns true if and only if test_suite contains at least one test that
+// should run.
+// static
+bool TestSuite::ShouldRunTestSuite( TestSuite const *test_suite ) {
+	return test_suite->should_run();
+}
+
+// Iterates over a vector of TestSuites, keeping a running sum of the results of calling a given int-returning method on each.
+// Returns the sum.
+// static
+int TestSuite::SumOverTestSuiteList( ::std::vector< TestSuite * > const &case_list, int ( TestSuite::*method )() const ) {
+	int sum = 0;
+
+	for ( size_t i = 0; i < case_list.size(); i++ ) {
+		sum += ( case_list[ i ]->*method )();
+	}
+
+	return sum;
 }
 
 

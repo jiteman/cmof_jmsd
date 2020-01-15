@@ -45,6 +45,8 @@
 #include "gtest/gtest-spi.h"
 #include "gtest/gtest-internal-inl.h"
 
+#include "gtest/internal/Random_number_generator.h"
+
 using std::make_pair;
 using std::pair;
 
@@ -1051,7 +1053,7 @@ class AtomicCounterWithMutex {
  private:
   volatile int value_;
   Mutex* const mutex_;  // Protects value_.
-  Random       random_;
+  ::jmsd::cutf::internal::Random random_;
 };
 
 void CountingThreadFunc(pair<AtomicCounterWithMutex*, int> param) {

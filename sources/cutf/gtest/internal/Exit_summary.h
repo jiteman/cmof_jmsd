@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Fail_from_internal_error.hxx"
+#include "Exit_summary.hxx"
 
 
 namespace jmsd {

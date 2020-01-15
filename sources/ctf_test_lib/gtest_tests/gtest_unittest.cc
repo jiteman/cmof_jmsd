@@ -40,6 +40,9 @@ TEST(CommandLineFlagsTest, CanBeAccessedInCodeOnceGTestHIsIncluded) {
 #include "gtest/gtest-spi.h"
 #include "gtest/gtest-internal-inl.h"
 
+#include "gtest/internal/Test_result_accessor.h"
+
+
 namespace testing {
 namespace internal {
 
@@ -154,7 +157,7 @@ class UnitTestRecordPropertyTestHelper : public Test {
 	unit_test_.RecordProperty(key, value);
   }
 
-  UnitTest unit_test_;
+  ::jmsd::cutf::UnitTest unit_test_;
 };
 
 }  // namespace internal
@@ -189,15 +192,12 @@ using testing::Message;
 using testing::ScopedFakeTestPartResultReporter;
 using testing::StaticAssertTypeEq;
 using testing::Test;
-using testing::TestSuite;
+
 using testing::TestEventListeners;
-using testing::TestInfo;
+
 using testing::TestPartResult;
 using testing::TestPartResultArray;
-using testing::TestProperty;
-using testing::TestResult;
-using testing::TimeInMillis;
-using testing::UnitTest;
+
 using testing::internal::AlwaysFalse;
 using testing::internal::AlwaysTrue;
 using testing::internal::AppendUserMessage;
@@ -205,21 +205,21 @@ using testing::internal::ArrayAwareFind;
 using testing::internal::ArrayEq;
 using testing::internal::CodePointToUtf8;
 using testing::internal::CopyArray;
-using testing::internal::CountIf;
+
 using testing::internal::EqFailure;
 using testing::internal::FloatingPoint;
-using testing::internal::ForEach;
+
 using testing::internal::FormatEpochTimeInMillisAsIso8601;
 using testing::internal::FormatTimeInMillisAsSeconds;
 using testing::internal::GTestFlagSaver;
 using testing::internal::GetCurrentOsStackTraceExceptTop;
-using testing::internal::GetElementOr;
+
 using testing::internal::GetNextRandomSeed;
 using testing::internal::GetRandomSeedFromFlag;
 using testing::internal::GetTestTypeId;
 using testing::internal::GetTimeInMillis;
 using testing::internal::GetTypeId;
-using testing::internal::GetUnitTestImpl;
+
 using testing::internal::Int32FromEnvOrDie;
 using testing::internal::IsAProtocolMessage;
 using testing::internal::IsContainer;
@@ -234,21 +234,20 @@ using testing::internal::RelationToSourceReference;
 using testing::internal::ShouldRunTestOnShard;
 using testing::internal::ShouldShard;
 using testing::internal::ShouldUseColor;
-using testing::internal::Shuffle;
-using testing::internal::ShuffleRange;
+
 using testing::internal::SkipPrefix;
 using testing::internal::StreamableToString;
 using testing::internal::String;
 using testing::internal::TestEventListenersAccessor;
-using testing::internal::TestResultAccessor;
-using testing::internal::UnitTestImpl;
+//using testing::internal::TestResultAccessor;
+
 using testing::internal::WideStringToUtf8;
 using testing::internal::edit_distance::CalculateOptimalEdits;
 using testing::internal::edit_distance::CreateUnifiedDiff;
 using testing::internal::edit_distance::EditType;
 using testing::internal::kMaxRandomSeed;
 using testing::internal::kTestTypeIdInGoogleTest;
-using testing::kMaxStackTraceDepth;
+
 
 #if GTEST_HAS_STREAM_REDIRECTION
 using testing::internal::CaptureStdout;
@@ -313,7 +312,7 @@ TEST(GetNextRandomSeedTest, WorksForValidInput) {
 }
 
 static void ClearCurrentTestPartResults() {
-  TestResultAccessor::ClearTestPartResults(
+  ::jmsd::cutf::internal::TestResultAccessor::ClearTestPartResults(
 	  GetUnitTestImpl()->current_test_result());
 }
 

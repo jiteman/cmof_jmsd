@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Fail_from_internal_error.hxx"
+
+#include <string>
 
 
 namespace jmsd {
@@ -8,7 +9,7 @@ namespace cutf {
 namespace internal {
 
 
-
+::std::string ExitSummary( int exit_code );
 
 
 } // namespace internal

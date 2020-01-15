@@ -3,6 +3,8 @@
 
 #include "gtest/Unit_test.h"
 
+#include "Stl_utilities.hin"
+
 
 namespace jmsd {
 namespace cutf {
@@ -16,39 +18,39 @@ UnitTestImpl *GetUnitTestImpl() {
 
 
 // Returns the global test part result reporter.
-TestPartResultReporterInterface *UnitTestImpl::GetGlobalTestPartResultReporter() {
-  internal::MutexLock lock(&global_test_part_result_reporter_mutex_);
+::testing::TestPartResultReporterInterface *UnitTestImpl::GetGlobalTestPartResultReporter() {
+  ::testing::internal::MutexLock lock(&global_test_part_result_reporter_mutex_);
   return global_test_part_result_repoter_;
 }
 
 // Sets the global test part result reporter.
 void UnitTestImpl::SetGlobalTestPartResultReporter(
-	TestPartResultReporterInterface* reporter )
+	::testing::TestPartResultReporterInterface* reporter )
 {
-  internal::MutexLock lock(&global_test_part_result_reporter_mutex_);
+  ::testing::internal::MutexLock lock(&global_test_part_result_reporter_mutex_);
   global_test_part_result_repoter_ = reporter;
 }
 
 // Returns the test part result reporter for the current thread.
-TestPartResultReporterInterface *UnitTestImpl::GetTestPartResultReporterForCurrentThread() {
+::testing::TestPartResultReporterInterface *UnitTestImpl::GetTestPartResultReporterForCurrentThread() {
   return per_thread_test_part_result_reporter_.get();
 }
 
 // Sets the test part result reporter for the current thread.
 void UnitTestImpl::SetTestPartResultReporterForCurrentThread(
-	TestPartResultReporterInterface* reporter)
+	::testing::TestPartResultReporterInterface* reporter)
 {
   per_thread_test_part_result_reporter_.set(reporter);
 }
 
 // Gets the number of successful test suites.
 int UnitTestImpl::successful_test_suite_count() const {
-  return CountIf(test_suites_, TestSuitePassed);
+  return CountIf(test_suites_, TestSuite::TestSuitePassed);
 }
 
 // Gets the number of failed test suites.
 int UnitTestImpl::failed_test_suite_count() const {
-  return CountIf(test_suites_, TestSuiteFailed);
+  return CountIf(test_suites_, TestSuite::TestSuiteFailed);
 }
 
 // Gets the number of all test suites.
@@ -59,48 +61,48 @@ int UnitTestImpl::total_test_suite_count() const {
 // Gets the number of all test suites that contain at least one test
 // that should run.
 int UnitTestImpl::test_suite_to_run_count() const {
-  return CountIf(test_suites_, ShouldRunTestSuite);
+  return CountIf(test_suites_, TestSuite::ShouldRunTestSuite);
 }
 
 // Gets the number of successful tests.
 int UnitTestImpl::successful_test_count() const {
-  return SumOverTestSuiteList(test_suites_, &TestSuite::successful_test_count);
+  return TestSuite::SumOverTestSuiteList(test_suites_, &TestSuite::successful_test_count);
 }
 
 // Gets the number of skipped tests.
 int UnitTestImpl::skipped_test_count() const {
-  return SumOverTestSuiteList(test_suites_, &TestSuite::skipped_test_count);
+  return TestSuite::SumOverTestSuiteList(test_suites_, &TestSuite::skipped_test_count);
 }
 
 // Gets the number of failed tests.
 int UnitTestImpl::failed_test_count() const {
-  return SumOverTestSuiteList(test_suites_, &TestSuite::failed_test_count);
+  return TestSuite::SumOverTestSuiteList(test_suites_, &TestSuite::failed_test_count);
 }
 
 // Gets the number of disabled tests that will be reported in the XML report.
 int UnitTestImpl::reportable_disabled_test_count() const {
-  return SumOverTestSuiteList(test_suites_,
+  return TestSuite::SumOverTestSuiteList(test_suites_,
 							  &TestSuite::reportable_disabled_test_count);
 }
 
 // Gets the number of disabled tests.
 int UnitTestImpl::disabled_test_count() const {
-  return SumOverTestSuiteList(test_suites_, &TestSuite::disabled_test_count);
+  return TestSuite::SumOverTestSuiteList(test_suites_, &TestSuite::disabled_test_count);
 }
 
 // Gets the number of tests to be printed in the XML report.
 int UnitTestImpl::reportable_test_count() const {
-  return SumOverTestSuiteList(test_suites_, &TestSuite::reportable_test_count);
+  return TestSuite::SumOverTestSuiteList(test_suites_, &TestSuite::reportable_test_count);
 }
 
 // Gets the number of all tests.
 int UnitTestImpl::total_test_count() const {
-  return SumOverTestSuiteList(test_suites_, &TestSuite::total_test_count);
+  return TestSuite::SumOverTestSuiteList(test_suites_, &TestSuite::total_test_count);
 }
 
 // Gets the number of tests that should run.
 int UnitTestImpl::test_to_run_count() const {
-  return SumOverTestSuiteList(test_suites_, &TestSuite::test_to_run_count);
+  return TestSuite::SumOverTestSuiteList(test_suites_, &TestSuite::test_to_run_count);
 }
 
 // Gets the time of the test program start, in ms from the start of the UNIX epoch.

@@ -30,7 +30,7 @@ int JMSD_TPA_GTM_LIBRARY_SHARED_INTERFACE ctf_main( int const argc, char const *
 	}
 
 	{ // will only print errors, not successes
-		testing::TestEventListeners &listeners = testing::UnitTest::GetInstance()->listeners();
+		::testing::TestEventListeners &listeners = jmsd::cutf::UnitTest::GetInstance()->listeners();
 		auto default_printer = listeners.Release( listeners.default_result_printer() );
 		auto the_listener = new ::jmsd::tpa::gtm::modification::Configurable_event_listener( default_printer );
 		listeners.Append( the_listener );

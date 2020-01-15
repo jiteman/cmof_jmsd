@@ -1,6 +1,14 @@
 #include "Exception_handling.h"
 
 
+#include "gtest/gtest-test-part.h"
+#include "gtest/gtest-message.h"
+
+#include "gtest/Test_part_result_to_string.h"
+
+#include <iomanip>
+
+
 namespace jmsd {
 namespace cutf {
 
@@ -11,12 +19,12 @@ namespace cutf {
 // function returns its result via an output parameter pointer because VC++
 // prohibits creation of objects with destructors on stack in functions
 // using __try (see error C2712).
-static ::std::string *FormatSehExceptionMessage( DWORD exception_code, const char *location ) {
-	Message message;
-	message << "SEH exception with code 0x" << std::setbase(16) <<
-	exception_code << std::setbase(10) << " thrown in " << location << ".";
+::std::string *FormatSehExceptionMessage( DWORD exception_code, const char *location ) {
+	::testing::Message message;
+	message << "SEH exception with code 0x" << ::std::setbase(16) <<
+	exception_code << ::std::setbase(10) << " thrown in " << location << ".";
 
-	return new std::string(message.GetString());
+	return new ::std::string(message.GetString());
 }
 
 #endif  // GTEST_HAS_SEH
@@ -29,7 +37,7 @@ namespace internal {
 
 // Adds an "exception thrown" fatal failure to the current test.
 ::std::string FormatCxxExceptionMessage( char const *description, char const *location ) {
-	Message message;
+	::testing::Message message;
 
 	if ( description != nullptr ) {
 		message << "C++ exception with description \"" << description << "\"";
@@ -42,15 +50,15 @@ namespace internal {
 }
 
 // Prints a TestPartResult to an std::string.
-::std::string PrintTestPartResultToString( TestPartResult const &test_part_result ) {
+::std::string PrintTestPartResultToString( ::testing::TestPartResult const &test_part_result ) {
   return
-	( Message() <<
-		  internal::FormatFileLocation( test_part_result.file_name(), test_part_result.line_number() ) <<
-		  " " << TestPartResultTypeToString(t est_part_result.type() ) <<
+	( ::testing::Message() <<
+		  ::testing::internal::FormatFileLocation( test_part_result.file_name(), test_part_result.line_number() ) <<
+		  " " << ::jmsd::cutf::TestPartResultTypeToString( test_part_result.type() ) <<
 		  test_part_result.message() ).GetString();
 }
 
-GoogleTestFailureException::GoogleTestFailureException( TestPartResult const &failure )
+GoogleTestFailureException::GoogleTestFailureException( ::testing::TestPartResult const &failure )
 	:
 		::std::runtime_error( PrintTestPartResultToString( failure ).c_str() )
 {}

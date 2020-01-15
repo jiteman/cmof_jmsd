@@ -45,7 +45,7 @@ namespace internal {
 //
 class WindowsDeathTest : public DeathTestImpl {
  public:
-  WindowsDeathTest(const char* a_statement, Matcher<const std::string&> matcher,
+  WindowsDeathTest(const char* a_statement, ::testing::Matcher<const std::string&> matcher,
 				   const char* file, int line)
 	  : DeathTestImpl(a_statement, std::move(matcher)),
 		file_(file),
@@ -61,14 +61,14 @@ class WindowsDeathTest : public DeathTestImpl {
   // The line number on which the death test is located.
   const int line_;
   // Handle to the write end of the pipe to the child process.
-  AutoHandle write_handle_;
+  ::testing::internal::AutoHandle write_handle_;
   // Child process handle.
-  AutoHandle child_handle_;
+  ::testing::internal::AutoHandle child_handle_;
   // Event the child process uses to signal the parent that it has
   // acquired the handle to the write end of the pipe. After seeing this
   // event the parent can release its own handles to make sure its
   // ReadFile() calls return when the child terminates.
-  AutoHandle event_handle_;
+  ::testing::internal::AutoHandle event_handle_;
 };
 
 

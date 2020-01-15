@@ -191,13 +191,13 @@ TYPED_TEST_SUITE(TypedTestWithNames, TwoTypes, TypedTestNames);
 
 TYPED_TEST(TypedTestWithNames, TestSuiteName) {
   if (std::is_same<TypeParam, char>::value) {
-	EXPECT_STREQ(::testing::UnitTest::GetInstance()
+	EXPECT_STREQ(::jmsd::cutf::UnitTest::GetInstance()
 					 ->current_test_info()
 					 ->test_suite_name(),
 				 "TypedTestWithNames/char0");
   }
   if (std::is_same<TypeParam, int>::value) {
-	EXPECT_STREQ(::testing::UnitTest::GetInstance()
+	EXPECT_STREQ(::jmsd::cutf::UnitTest::GetInstance()
 					 ->current_test_info()
 					 ->test_suite_name(),
 				 "TypedTestWithNames/int1");
@@ -423,7 +423,7 @@ typedef Types<int, double> NumericTypes;
 INSTANTIATE_TYPED_TEST_SUITE_P(My, NumericTest, NumericTypes);
 
 static const char* GetTestName() {
-  return testing::UnitTest::GetInstance()->current_test_info()->name();
+  return ::jmsd::cutf::UnitTest::GetInstance()->current_test_info()->name();
 }
 // Test the stripping of space from test names
 template <typename T> class TrimmedTest : public Test { };

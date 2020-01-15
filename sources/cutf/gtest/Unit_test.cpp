@@ -6,6 +6,7 @@
 
 
 #include "internal/Unit_test_impl.h"
+#include "internal/Scoped_premature_exit_file.h"
 
 
 namespace jmsd {
@@ -267,7 +268,7 @@ void UnitTest::RecordProperty(const std::string& key,
 // from the main thread.
 int UnitTest::Run() {
   const bool in_death_test_child_process =
-	  internal::GTEST_FLAG(internal_run_death_test).length() > 0;
+	  ::testing::internal:: GTEST_FLAG(internal_run_death_test).length() > 0;
 
   // Google Test implements this protocol for catching that a test
   // program exits before returning control to Google Test:
@@ -290,14 +291,14 @@ int UnitTest::Run() {
   // premature-exit file will be left undeleted, causing a test runner
   // that understands the premature-exit-file protocol to report the
   // test as having failed.
-  const internal::ScopedPrematureExitFile premature_exit_file(
-	  in_death_test_child_process
-		  ? nullptr
-		  : internal::posix::GetEnv("TEST_PREMATURE_EXIT_FILE"));
+  const ::jmsd::cutf::internal::ScopedPrematureExitFile premature_exit_file(
+	  in_death_test_child_process ?
+		nullptr :
+		::testing::internal::posix::GetEnv("TEST_PREMATURE_EXIT_FILE"));
 
   // Captures the value of GTEST_FLAG(catch_exceptions).  This value will be
   // used for the duration of the program.
-  impl()->set_catch_exceptions(GTEST_FLAG(catch_exceptions));
+  impl()->set_catch_exceptions( ::testing:: GTEST_FLAG( catch_exceptions ) );
 
 #if GTEST_OS_WINDOWS
   // Either the user wants Google Test to catch exceptions thrown by the
@@ -324,7 +325,7 @@ int UnitTest::Run() {
 	// this dialog or it will pop up for every EXPECT/ASSERT_DEATH statement
 	// executed. Google Test will notify the user of any unexpected
 	// failure via stderr.
-	if (!GTEST_FLAG(break_on_failure))
+	if (! ::testing:: GTEST_FLAG(break_on_failure))
 	  _set_abort_behavior(
 		  0x0,                                    // Clear the following flags:
 		  _WRITE_ABORT_MSG | _CALL_REPORTFAULT);  // pop-up window, core dump.
@@ -358,7 +359,7 @@ const char* UnitTest::original_working_dir() const {
 // or NULL if no test is running.
 const TestSuite* UnitTest::current_test_suite() const
 	GTEST_LOCK_EXCLUDED_(mutex_) {
-  internal::MutexLock lock(&mutex_);
+  ::testing::internal::MutexLock lock(&mutex_);
   return impl_->current_test_suite();
 }
 
@@ -375,7 +376,7 @@ const TestCase* UnitTest::current_test_case() const
 // or NULL if no test is running.
 const TestInfo* UnitTest::current_test_info() const
 	GTEST_LOCK_EXCLUDED_(mutex_) {
-  internal::MutexLock lock(&mutex_);
+  ::testing::internal::MutexLock lock(&mutex_);
   return impl_->current_test_info();
 }
 
@@ -384,8 +385,7 @@ int UnitTest::random_seed() const { return impl_->random_seed(); }
 
 // Returns ParameterizedTestSuiteRegistry object used to keep track of
 // value-parameterized tests and instantiate and register them.
-internal::ParameterizedTestSuiteRegistry&
-UnitTest::parameterized_test_registry() GTEST_LOCK_EXCLUDED_(mutex_) {
+::testing::internal::ParameterizedTestSuiteRegistry & UnitTest::parameterized_test_registry() GTEST_LOCK_EXCLUDED_(mutex_) {
   return impl_->parameterized_test_registry();
 }
 
@@ -401,16 +401,15 @@ UnitTest::~UnitTest() {
 
 // Pushes a trace defined by SCOPED_TRACE() on to the per-thread
 // Google Test trace stack.
-void UnitTest::PushGTestTrace(const internal::TraceInfo& trace)
+void UnitTest::PushGTestTrace(const ::testing::internal::TraceInfo& trace)
 	GTEST_LOCK_EXCLUDED_(mutex_) {
-  internal::MutexLock lock(&mutex_);
+  ::testing::internal::MutexLock lock(&mutex_);
   impl_->gtest_trace_stack().push_back(trace);
 }
 
 // Pops a trace from the per-thread Google Test trace stack.
-void UnitTest::PopGTestTrace()
-	GTEST_LOCK_EXCLUDED_(mutex_) {
-  internal::MutexLock lock(&mutex_);
+void UnitTest::PopGTestTrace() GTEST_LOCK_EXCLUDED_(mutex_) {
+  ::testing::internal::MutexLock lock(&mutex_);
   impl_->gtest_trace_stack().pop_back();
 }
 

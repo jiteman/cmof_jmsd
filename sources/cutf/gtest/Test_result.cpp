@@ -3,6 +3,8 @@
 
 #include "internal/Stl_utilities.hin"
 
+#include "Text_output_utilities.hxx"
+
 
 namespace jmsd {
 namespace cutf {
@@ -66,104 +68,13 @@ void TestResult::RecordProperty(const std::string& xml_element,
   property_with_matching_key->SetValue(test_property.value());
 }
 
-// The list of reserved attributes used in the <testsuites> element of XML
-// output.
-static const char* const kReservedTestSuitesAttributes[] = {
-  "disabled",
-  "errors",
-  "failures",
-  "name",
-  "random_seed",
-  "tests",
-  "time",
-  "timestamp"
-};
-
-// The list of reserved attributes used in the <testsuite> element of XML
-// output.
-static const char* const kReservedTestSuiteAttributes[] = {
-	"disabled", "errors", "failures", "name", "tests", "time", "timestamp"};
-
-// The list of reserved attributes used in the <testcase> element of XML output.
-static const char* const kReservedTestCaseAttributes[] = {
-	"classname",   "name", "status", "time",  "type_param",
-	"value_param", "file", "line"};
-
-// Use a slightly different set for allowed output to ensure existing tests can
-// still RecordProperty("result") or "RecordProperty(timestamp")
-static const char* const kReservedOutputTestCaseAttributes[] = {
-	"classname",   "name", "status", "time",   "type_param",
-	"value_param", "file", "line",   "result", "timestamp"};
-
-template <int kSize>
-std::vector<std::string> ArrayAsVector(const char* const (&array)[kSize]) {
-  return std::vector<std::string>(array, array + kSize);
-}
-
-static std::vector<std::string> GetReservedAttributesForElement(
-	const std::string& xml_element) {
-  if (xml_element == "testsuites") {
-	return ArrayAsVector(kReservedTestSuitesAttributes);
-  } else if (xml_element == "testsuite") {
-	return ArrayAsVector(kReservedTestSuiteAttributes);
-  } else if (xml_element == "testcase") {
-	return ArrayAsVector(kReservedTestCaseAttributes);
-  } else {
-	GTEST_CHECK_(false) << "Unrecognized xml_element provided: " << xml_element;
-  }
-  // This code is unreachable but some compilers may not realizes that.
-  return std::vector<std::string>();
-}
-
-// TODO(jdesprez): Merge the two getReserved attributes once skip is improved
-static std::vector<std::string> GetReservedOutputAttributesForElement(
-	const std::string& xml_element) {
-  if (xml_element == "testsuites") {
-	return ArrayAsVector(kReservedTestSuitesAttributes);
-  } else if (xml_element == "testsuite") {
-	return ArrayAsVector(kReservedTestSuiteAttributes);
-  } else if (xml_element == "testcase") {
-	return ArrayAsVector(kReservedOutputTestCaseAttributes);
-  } else {
-	GTEST_CHECK_(false) << "Unrecognized xml_element provided: " << xml_element;
-  }
-  // This code is unreachable but some compilers may not realizes that.
-  return std::vector<std::string>();
-}
-
-static std::string FormatWordList(const std::vector<std::string>& words) {
-  ::testing::Message word_list;
-  for (size_t i = 0; i < words.size(); ++i) {
-	if (i > 0 && words.size() > 2) {
-	  word_list << ", ";
-	}
-	if (i == words.size() - 1) {
-	  word_list << "and ";
-	}
-	word_list << "'" << words[i] << "'";
-  }
-  return word_list.GetString();
-}
-
-static bool ValidateTestPropertyName(
-	const std::string& property_name,
-	const std::vector<std::string>& reserved_names) {
-  if (std::find(reserved_names.begin(), reserved_names.end(), property_name) !=
-		  reserved_names.end()) {
-	ADD_FAILURE() << "Reserved key used in RecordProperty(): " << property_name
-				  << " (" << FormatWordList(reserved_names)
-				  << " are reserved by " << GTEST_NAME_ << ")";
-	return false;
-  }
-  return true;
-}
 
 // Adds a failure if the key is a reserved attribute of the element named
 // xml_element.  Returns true if the property is valid.
 bool TestResult::ValidateTestProperty(const std::string& xml_element,
 									  const TestProperty& test_property) {
   return ValidateTestPropertyName(test_property.key(),
-								  GetReservedAttributesForElement(xml_element));
+								  ::jmsd::cutf::GetReservedAttributesForElement(xml_element));
 }
 
 // Clears the object.

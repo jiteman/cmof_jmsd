@@ -33,23 +33,23 @@ public:
 	~Configurable_event_listener() override final;
 
 	// virtuals TestEventListener
-	void OnTestProgramStart( ::testing::UnitTest const &unit_test ) override final;
-	void OnTestIterationStart( ::testing::UnitTest const &unit_test, int iteration ) override final;
-	void OnEnvironmentsSetUpStart( ::testing::UnitTest const &unit_test ) override final;
-	void OnEnvironmentsSetUpEnd( ::testing::UnitTest const &unit_test ) override final;
+	void OnTestProgramStart( ::jmsd::cutf::UnitTest const &unit_test ) override final;
+	void OnTestIterationStart( ::jmsd::cutf::UnitTest const &unit_test, int iteration ) override final;
+	void OnEnvironmentsSetUpStart( ::jmsd::cutf::UnitTest const &unit_test ) override final;
+	void OnEnvironmentsSetUpEnd( ::jmsd::cutf::UnitTest const &unit_test ) override final;
 
 #ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI
 	void OnTestCaseStart( ::testing::TestCase const &test_case ) override final;
 	void OnTestCaseEnd( ::testing::TestCase const &test_case ) override final;
 #endif // #ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI
 
-	void OnTestStart( ::testing::TestInfo const &test_info ) override final;
+	void OnTestStart( ::jmsd::cutf::TestInfo const &test_info ) override final;
 	void OnTestPartResult( ::testing::TestPartResult const &result ) override final;
-	void OnTestEnd( ::testing::TestInfo const &test_info ) override final;
-		void OnEnvironmentsTearDownStart( ::testing::UnitTest const &unit_test ) override final;
-	void OnEnvironmentsTearDownEnd( ::testing::UnitTest const &unit_test ) override final;
-	void OnTestIterationEnd( ::testing::UnitTest const &unit_test, int iteration ) override final;
-	void OnTestProgramEnd( ::testing::UnitTest const &unit_test ) override final;
+	void OnTestEnd( ::jmsd::cutf::TestInfo const &test_info ) override final;
+		void OnEnvironmentsTearDownStart( ::jmsd::cutf::UnitTest const &unit_test ) override final;
+	void OnEnvironmentsTearDownEnd( ::jmsd::cutf::UnitTest const &unit_test ) override final;
+	void OnTestIterationEnd( ::jmsd::cutf::UnitTest const &unit_test, int iteration ) override final;
+	void OnTestProgramEnd( ::jmsd::cutf::UnitTest const &unit_test ) override final;
 	//~virtuals TestEventListener
 
 };

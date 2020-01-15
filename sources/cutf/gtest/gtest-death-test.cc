@@ -2,12 +2,27 @@
 
 #include "gtest/gtest-death-test.h"
 
-#include <utility>
-
-#include "gtest/internal/gtest-port.h"
 #include "gtest/internal/custom/gtest.h"
 
 #include "internal/Unit_test_impl.h"
+#include "internal/Death_test_impl.h"
+
+
+#include "internal/gtest-port.h"
+
+
+#if GTEST_OS_WINDOWS
+
+#include "internal/Windows_death_test.h"
+
+#endif // #if GTEST_OS_WINDOWS
+
+
+#include "internal/Death_test_check.hxx"
+
+
+#include <utility>
+
 
 #if GTEST_HAS_DEATH_TEST
 
@@ -172,32 +187,6 @@ namespace internal {
 
 // Utilities needed for death tests.
 
-// Generates a textual description of a given exit code, in the format
-// specified by wait(2).
-static std::string ExitSummary(int exit_code) {
-  Message m;
-
-# if GTEST_OS_WINDOWS || GTEST_OS_FUCHSIA
-
-  m << "Exited with exit status " << exit_code;
-
-# else
-
-  if (WIFEXITED(exit_code)) {
-	m << "Exited with exit status " << WEXITSTATUS(exit_code);
-  } else if (WIFSIGNALED(exit_code)) {
-	m << "Terminated by signal " << WTERMSIG(exit_code);
-  }
-#  ifdef WCOREDUMP
-  if (WCOREDUMP(exit_code)) {
-	m << " (core dumped)";
-  }
-#  endif
-# endif  // GTEST_OS_WINDOWS || GTEST_OS_FUCHSIA
-
-  return m.GetString();
-}
-
 // Returns true if exit_status describes a process that was terminated
 // by a signal, or exited normally with a nonzero exit code.
 bool ExitedUnsuccessfully(int exit_status) {
@@ -234,42 +223,14 @@ static const int kFuchsiaReadPipeFd = 3;
 
 #endif
 
-// Returns the message describing the last system error in errno.
-std::string GetLastErrnoDescription() {
-	return errno == 0 ? "" : posix::StrError(errno);
-}
-
-// This is called from a death test parent process to read a failure
-// message from the death test child process and log it with the FATAL
-// severity. On Windows, the message is read from a pipe handle. On other
-// platforms, it is read from a file descriptor.
-static void FailFromInternalError(int fd) {
-  Message error;
-  char buffer[256];
-  int num_read;
-
-  do {
-	while ((num_read = posix::Read(fd, buffer, 255)) > 0) {
-	  buffer[num_read] = '\0';
-	  error << buffer;
-	}
-  } while (num_read == -1 && errno == EINTR);
-
-  if (num_read == 0) {
-	GTEST_LOG_(FATAL) << error.GetString();
-  } else {
-	const int last_error = errno;
-	GTEST_LOG_(FATAL) << "Error while reading death test internal: "
-					  << GetLastErrnoDescription() << " [" << last_error << "]";
-  }
-}
 
 // Death test constructor.  Increments the running death test count
 // for the current test.
 DeathTest::DeathTest() {
-  TestInfo* const info = ::jmsd::cutf::internal::GetUnitTestImpl()->current_test_info();
+  ::jmsd::cutf::TestInfo *const info = ::jmsd::cutf::internal::GetUnitTestImpl()->current_test_info();
+
   if (info == nullptr) {
-	DeathTestAbort("Cannot run a death test outside of a TEST or "
+	::jmsd::cutf::internal::DeathTestAbort("Cannot run a death test outside of a TEST or "
 				   "TEST_F construct");
   }
 }
@@ -279,7 +240,7 @@ DeathTest::DeathTest() {
 bool DeathTest::Create(const char* statement,
 					   Matcher<const std::string&> matcher, const char* file,
 					   int line, DeathTest** test) {
-  return GetUnitTestImpl()->death_test_factory()->Create(
+  return ::jmsd::cutf::internal::GetUnitTestImpl()->death_test_factory()->Create(
 	  statement, std::move(matcher), file, line, test);
 }
 
@@ -550,14 +511,14 @@ std::string FuchsiaDeathTest::GetErrorLogs() {
   return captured_stderr_;
 }
 
-#elseif GTEST_OS_WINDOWS
+#elif GTEST_OS_WINDOWS
 
 #else  // We are neither on Windows, nor on Fuchsia.
 
 // ForkingDeathTest provides implementations for most of the abstract
 // methods of the DeathTest interface.  Only the AssumeRole method is
 // left undefined.
-class ForkingDeathTest : public DeathTestImpl {
+class ForkingDeathTest : public ::jmsd::cutf::internal::DeathTestImpl {
  public:
   ForkingDeathTest(const char* statement, Matcher<const std::string&> matcher);
 
@@ -954,7 +915,7 @@ bool DefaultDeathTestFactory::Create(const char* statement,
 									 Matcher<const std::string&> matcher,
 									 const char* file, int line,
 									 DeathTest** test) {
-  UnitTestImpl* const impl = GetUnitTestImpl();
+  ::jmsd::cutf::internal::UnitTestImpl* const impl = ::jmsd::cutf::internal::GetUnitTestImpl();
   const InternalRunDeathTestFlag* const flag =
 	  impl->internal_run_death_test_flag();
   const int death_test_index = impl->current_test_info()
@@ -980,7 +941,7 @@ bool DefaultDeathTestFactory::Create(const char* statement,
 
   if (GTEST_FLAG(death_test_style) == "threadsafe" ||
 	  GTEST_FLAG(death_test_style) == "fast") {
-	*test = new WindowsDeathTest(statement, std::move(matcher), file, line);
+	*test = new ::jmsd::cutf::internal::WindowsDeathTest(statement, std::move(matcher), file, line);
   }
 
 # elif GTEST_OS_FUCHSIA
@@ -1021,7 +982,7 @@ static int GetStatusFileDescriptor(unsigned int parent_process_id,
 												   FALSE,  // Non-inheritable.
 												   parent_process_id));
   if (parent_process_handle.Get() == INVALID_HANDLE_VALUE) {
-	DeathTestAbort("Unable to open parent process " +
+	::jmsd::cutf::internal::DeathTestAbort("Unable to open parent process " +
 				   StreamableToString(parent_process_id));
   }
 
@@ -1040,7 +1001,7 @@ static int GetStatusFileDescriptor(unsigned int parent_process_id,
 								 // DUPLICATE_SAME_ACCESS is used.
 						 FALSE,  // Request non-inheritable handler.
 						 DUPLICATE_SAME_ACCESS)) {
-	DeathTestAbort("Unable to duplicate the pipe handle " +
+	::jmsd::cutf::internal::DeathTestAbort("Unable to duplicate the pipe handle " +
 				   StreamableToString(write_handle_as_size_t) +
 				   " from the parent process " +
 				   StreamableToString(parent_process_id));
@@ -1054,7 +1015,7 @@ static int GetStatusFileDescriptor(unsigned int parent_process_id,
 						 0x0,
 						 FALSE,
 						 DUPLICATE_SAME_ACCESS)) {
-	DeathTestAbort("Unable to duplicate the event handle " +
+	::jmsd::cutf::internal::DeathTestAbort("Unable to duplicate the event handle " +
 				   StreamableToString(event_handle_as_size_t) +
 				   " from the parent process " +
 				   StreamableToString(parent_process_id));
@@ -1063,7 +1024,7 @@ static int GetStatusFileDescriptor(unsigned int parent_process_id,
   const int write_fd =
 	  ::_open_osfhandle(reinterpret_cast<intptr_t>(dup_write_handle), O_APPEND);
   if (write_fd == -1) {
-	DeathTestAbort("Unable to convert pipe handle " +
+	::jmsd::cutf::internal::DeathTestAbort("Unable to convert pipe handle " +
 				   StreamableToString(write_handle_as_size_t) +
 				   " to a file descriptor");
   }
@@ -1102,7 +1063,7 @@ InternalRunDeathTestFlag* ParseInternalRunDeathTestFlag() {
 	  || !ParseNaturalNumber(fields[3], &parent_process_id)
 	  || !ParseNaturalNumber(fields[4], &write_handle_as_size_t)
 	  || !ParseNaturalNumber(fields[5], &event_handle_as_size_t)) {
-	DeathTestAbort("Bad --gtest_internal_run_death_test flag: " +
+	::jmsd::cutf::internal::DeathTestAbort("Bad --gtest_internal_run_death_test flag: " +
 				   GTEST_FLAG(internal_run_death_test));
   }
   write_fd = GetStatusFileDescriptor(parent_process_id,

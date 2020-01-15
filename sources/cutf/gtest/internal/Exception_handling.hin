@@ -3,11 +3,6 @@
 #include "Exception_handling.h"
 
 
-#if GTEST_HAS_SEH
-#include <windows.h>
-#endif // #if GTEST_HAS_SEH
-
-
 #include "gtest-port.h"
 
 #include <string>

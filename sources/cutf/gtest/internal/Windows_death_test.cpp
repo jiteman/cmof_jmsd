@@ -3,6 +3,13 @@
 
 # if GTEST_OS_WINDOWS
 
+#include "Unit_test_impl.h"
+#include "Death_test_check.h"
+
+#include <windows.h>
+#include <fcntl.h>
+//#include <stdio.h>
+
 
 namespace jmsd {
 namespace cutf {
@@ -57,9 +64,9 @@ int WindowsDeathTest::Wait() {
 // death test.  The child process is given the --gtest_filter and
 // --gtest_internal_run_death_test flags such that it knows to run the
 // current death test only.
-DeathTest::TestRole WindowsDeathTest::AssumeRole() {
+::testing::internal::DeathTest::TestRole WindowsDeathTest::AssumeRole() {
   const UnitTestImpl* const impl = GetUnitTestImpl();
-  const InternalRunDeathTestFlag* const flag =
+  const ::testing::internal::InternalRunDeathTestFlag* const flag =
 	  impl->internal_run_death_test_flag();
   const TestInfo* const info = impl->current_test_info();
   const int death_test_index = info->result()->death_test_count();
@@ -81,7 +88,7 @@ DeathTest::TestRole WindowsDeathTest::AssumeRole() {
 				   0)  // Default buffer size.
 	  != FALSE);
   set_read_fd(::_open_osfhandle(reinterpret_cast<intptr_t>(read_handle),
-								O_RDONLY));
+								_O_RDONLY));
   write_handle_.Reset(write_handle);
   event_handle_.Reset(::CreateEvent(
 	  &handles_are_inheritable,
@@ -90,18 +97,18 @@ DeathTest::TestRole WindowsDeathTest::AssumeRole() {
 	  nullptr));  // The even is unnamed.
   GTEST_DEATH_TEST_CHECK_(event_handle_.Get() != nullptr);
   const std::string filter_flag = std::string("--") + GTEST_FLAG_PREFIX_ +
-								  kFilterFlag + "=" + info->test_suite_name() +
+								  ::testing::internal::kFilterFlag + "=" + info->test_suite_name() +
 								  "." + info->name();
   const std::string internal_flag =
-	  std::string("--") + GTEST_FLAG_PREFIX_ + kInternalRunDeathTestFlag +
-	  "=" + file_ + "|" + StreamableToString(line_) + "|" +
-	  StreamableToString(death_test_index) + "|" +
-	  StreamableToString(static_cast<unsigned int>(::GetCurrentProcessId())) +
+	  std::string("--") + GTEST_FLAG_PREFIX_ + ::testing::internal::kInternalRunDeathTestFlag +
+	  "=" + file_ + "|" + ::testing::internal::StreamableToString(line_) + "|" +
+	  ::testing::internal::StreamableToString(death_test_index) + "|" +
+	  ::testing::internal::StreamableToString(static_cast<unsigned int>(::GetCurrentProcessId())) +
 	  // size_t has the same width as pointers on both 32-bit and 64-bit
 	  // Windows platforms.
 	  // See http://msdn.microsoft.com/en-us/library/tcxf1dw6.aspx.
-	  "|" + StreamableToString(reinterpret_cast<size_t>(write_handle)) +
-	  "|" + StreamableToString(reinterpret_cast<size_t>(event_handle_.Get()));
+	  "|" + ::testing::internal::StreamableToString(reinterpret_cast<size_t>(write_handle)) +
+	  "|" + ::testing::internal::StreamableToString(reinterpret_cast<size_t>(event_handle_.Get()));
 
   char executable_path[_MAX_PATH + 1];  // NOLINT
   GTEST_DEATH_TEST_CHECK_(_MAX_PATH + 1 != ::GetModuleFileNameA(nullptr,
@@ -114,9 +121,9 @@ DeathTest::TestRole WindowsDeathTest::AssumeRole() {
 
   DeathTest::set_last_death_test_message("");
 
-  CaptureStderr();
+  ::testing::internal::CaptureStderr();
   // Flush the log buffers since the log streams are shared with the child.
-  FlushInfoLog();
+  ::testing::internal::FlushInfoLog();
 
   // The child process will share the standard handles with the parent.
   STARTUPINFOA startup_info;

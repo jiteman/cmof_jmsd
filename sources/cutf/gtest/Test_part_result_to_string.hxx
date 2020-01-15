@@ -1,17 +1,16 @@
 #pragma once
 
-#include "Fail_from_internal_error.hxx"
+
+#include "gtest-test-part.h"
 
 
 namespace jmsd {
 namespace cutf {
-namespace internal {
 
 
+char const *TestPartResultTypeToString( ::testing::TestPartResult::Type type );
 
 
-
-} // namespace internal
 } // namespace cutf
 } // namespace jmsd
 
