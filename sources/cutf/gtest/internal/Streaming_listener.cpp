@@ -1,13 +1,15 @@
-#pragma once
+#include "gtti.h"
 
 
 namespace jmsd {
 namespace cutf {
+namespace internal {
 
 
-class TestEventListeners;
 
 
+
+} // namespace internal
 } // namespace cutf
 } // namespace jmsd
 

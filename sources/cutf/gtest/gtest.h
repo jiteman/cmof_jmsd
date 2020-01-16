@@ -67,19 +67,19 @@ namespace testing {
 
 namespace internal {
 
-class AssertHelper;
-//class DefaultGlobalTestPartResultReporter;
-class ExecDeathTest;
-class NoExecDeathTest;
-class FinalSuccessChecker;
-class GTestFlagSaver;
-class StreamingListenerTest;
-//class TestResultAccessor;
-class TestEventListenersAccessor;
-class TestEventRepeater;
-class UnitTestRecordPropertyTestHelper;
-//class WindowsDeathTest;
-//class FuchsiaDeathTest;
+////class AssertHelper;
+////class DefaultGlobalTestPartResultReporter;
+//class ExecDeathTest;
+//class NoExecDeathTest;
+//class FinalSuccessChecker;
+//class GTestFlagSaver;
+//class StreamingListenerTest;
+////class TestResultAccessor;
+//class TestEventListenersAccessor;
+//class TestEventRepeater;
+//class UnitTestRecordPropertyTestHelper;
+////class WindowsDeathTest;
+////class FuchsiaDeathTest;
 
 //void ReportFailureInUnknownLocation(TestPartResult::Type result_type,
 //									const std::string& message);
@@ -452,118 +452,6 @@ class GTEST_API_ AssertionException
 };
 
 #endif  // GTEST_HAS_EXCEPTIONS
-
-
-// The convenience class for users who need to override just one or two
-// methods and are not concerned that a possible change to a signature of
-// the methods they override will not be caught during the build.  For
-// comments about each method please see the definition of TestEventListener
-// above.
-class EmptyTestEventListener : public TestEventListener {
- public:
-  void OnTestProgramStart(const ::jmsd::cutf::UnitTest& /*unit_test*/) override {}
-  void OnTestIterationStart(const ::jmsd::cutf::UnitTest& /*unit_test*/,
-							int /*iteration*/) override {}
-  void OnEnvironmentsSetUpStart(const ::jmsd::cutf::UnitTest& /*unit_test*/) override {}
-  void OnEnvironmentsSetUpEnd(const::jmsd::cutf::UnitTest& /*unit_test*/) override {}
-  void OnTestSuiteStart(const ::jmsd::cutf::TestSuite& /*test_suite*/) override {}
-//  Legacy API is deprecated but still available
-#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
-  void OnTestCaseStart(const TestCase& /*test_case*/) override {}
-#endif  //  GTEST_REMOVE_LEGACY_TEST_CASEAPI_
-
-  void OnTestStart(const ::jmsd::cutf::TestInfo& /*test_info*/) override {}
-  void OnTestPartResult(const TestPartResult& /*test_part_result*/) override {}
-  void OnTestEnd(const ::jmsd::cutf::TestInfo& /*test_info*/) override {}
-  void OnTestSuiteEnd(const ::jmsd::cutf::TestSuite& /*test_suite*/) override {}
-#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
-  void OnTestCaseEnd(const TestCase& /*test_case*/) override {}
-#endif  //  GTEST_REMOVE_LEGACY_TEST_CASEAPI_
-
-  void OnEnvironmentsTearDownStart(const ::jmsd::cutf::UnitTest& /*unit_test*/) override {}
-  void OnEnvironmentsTearDownEnd(const ::jmsd::cutf::UnitTest& /*unit_test*/) override {}
-  void OnTestIterationEnd(const ::jmsd::cutf::UnitTest& /*unit_test*/,
-						  int /*iteration*/) override {}
-  void OnTestProgramEnd(const ::jmsd::cutf::UnitTest& /*unit_test*/) override {}
-};
-
-// TestEventListeners lets users add listeners to track events in Google Test.
-class GTEST_API_ TestEventListeners {
- public:
-  TestEventListeners();
-  ~TestEventListeners();
-
-  // Appends an event listener to the end of the list. Google Test assumes
-  // the ownership of the listener (i.e. it will delete the listener when
-  // the test program finishes).
-  void Append(TestEventListener* listener);
-
-  // Removes the given event listener from the list and returns it.  It then
-  // becomes the caller's responsibility to delete the listener. Returns
-  // NULL if the listener is not found in the list.
-  TestEventListener* Release(TestEventListener* listener);
-
-  // Returns the standard listener responsible for the default console
-  // output.  Can be removed from the listeners list to shut down default
-  // console output.  Note that removing this object from the listener list
-  // with Release transfers its ownership to the caller and makes this
-  // function return NULL the next time.
-  TestEventListener* default_result_printer() const {
-	return default_result_printer_;
-  }
-
-  // Returns the standard listener responsible for the default XML output
-  // controlled by the --gtest_output=xml flag.  Can be removed from the
-  // listeners list by users who want to shut down the default XML output
-  // controlled by this flag and substitute it with custom one.  Note that
-  // removing this object from the listener list with Release transfers its
-  // ownership to the caller and makes this function return NULL the next
-  // time.
-  TestEventListener* default_xml_generator() const {
-	return default_xml_generator_;
-  }
-
- private:
-  friend ::jmsd::cutf::TestSuite;
-  friend ::jmsd::cutf::TestInfo;
-  friend ::jmsd::cutf::internal::DefaultGlobalTestPartResultReporter;
-  friend class internal::NoExecDeathTest;
-  friend class internal::TestEventListenersAccessor;
-  friend ::jmsd::cutf::internal::UnitTestImpl;
-
-  // Returns repeater that broadcasts the TestEventListener events to all
-  // subscribers.
-  TestEventListener* repeater();
-
-  // Sets the default_result_printer attribute to the provided listener.
-  // The listener is also added to the listener list and previous
-  // default_result_printer is removed from it and deleted. The listener can
-  // also be NULL in which case it will not be added to the list. Does
-  // nothing if the previous and the current listener objects are the same.
-  void SetDefaultResultPrinter(TestEventListener* listener);
-
-  // Sets the default_xml_generator attribute to the provided listener.  The
-  // listener is also added to the listener list and previous
-  // default_xml_generator is removed from it and deleted. The listener can
-  // also be NULL in which case it will not be added to the list. Does
-  // nothing if the previous and the current listener objects are the same.
-  void SetDefaultXmlGenerator(TestEventListener* listener);
-
-  // Controls whether events will be forwarded by the repeater to the
-  // listeners in the list.
-  bool EventForwardingEnabled() const;
-  void SuppressEventForwarding();
-
-  // The actual list of listeners.
-  internal::TestEventRepeater* repeater_;
-  // Listener responsible for the standard result output.
-  TestEventListener* default_result_printer_;
-  // Listener responsible for the creation of the XML output file.
-  TestEventListener* default_xml_generator_;
-
-  // We disallow copying TestEventListeners.
-  GTEST_DISALLOW_COPY_AND_ASSIGN_(TestEventListeners);
-};
 
 
 // Initializes Google Test.  This must be called before calling

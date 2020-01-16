@@ -5,7 +5,7 @@ namespace jmsd {
 namespace cutf {
 
 
-class TestEventListeners;
+
 
 
 } // namespace cutf
@@ -13,6 +13,11 @@ class TestEventListeners;
 
 
 namespace testing {
+namespace internal {
 
 
+class NoExecDeathTest;
+
+
+} // namespace internal
 } // namespace testing

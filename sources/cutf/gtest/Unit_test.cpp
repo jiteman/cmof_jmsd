@@ -162,7 +162,7 @@ const internal::UnitTestImpl *UnitTest::impl() const {
 
 // Returns the list of event listeners that can be used to track events
 // inside Google Test.
-::testing::TestEventListeners& UnitTest::listeners() {
+TestEventListeners& UnitTest::listeners() {
   return *impl()->listeners();
 }
 

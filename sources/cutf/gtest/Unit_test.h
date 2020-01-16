@@ -13,12 +13,13 @@
 
 
 #include "Scoped_trace.hxx"
+#include "Test_event_listeners.hxx"
 #include "internal/Unit_test_impl.hxx"
+
 
 namespace testing {
 
 
-class TestEventListeners;
 class Environment;
 
 ::testing::Environment *AddGlobalTestEnvironment(::testing::Environment* env);
@@ -172,7 +173,7 @@ class GTEST_API_ UnitTest {
 
   // Returns the list of event listeners that can be used to track events
   // inside Google Test.
-  ::testing::TestEventListeners& listeners();
+  ::jmsd::cutf::TestEventListeners& listeners();
 
  private:
   // Registers and returns a global test environment.  When a test

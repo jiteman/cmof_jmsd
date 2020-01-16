@@ -17,7 +17,7 @@ namespace internal {
 # define GTEST_DEATH_TEST_CHECK_(expression) \
   do { \
 	if (!::testing::internal::IsTrue(expression)) { \
-	  DeathTestAbort( \
+	  ::jmsd::cutf::internal::DeathTestAbort( \
 		  ::std::string("CHECK failed: File ") + __FILE__ +  ", line " \
 		  + ::testing::internal::StreamableToString(__LINE__) + ": " \
 		  + #expression); \
@@ -38,7 +38,7 @@ namespace internal {
 	  gtest_retval = (expression); \
 	} while (gtest_retval == -1 && errno == EINTR); \
 	if (gtest_retval == -1) { \
-	  DeathTestAbort( \
+	  ::jmsd::cutf::internal::DeathTestAbort( \
 		  ::std::string("CHECK failed: File ") + __FILE__ + ", line " \
 		  + ::testing::internal::StreamableToString(__LINE__) + ": " \
 		  + #expression + " != -1"); \

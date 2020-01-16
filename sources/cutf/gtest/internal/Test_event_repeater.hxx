@@ -3,11 +3,13 @@
 
 namespace jmsd {
 namespace cutf {
+namespace internal {
 
 
-class TestEventListeners;
+class TestEventRepeater;
 
 
+} // namespace internal
 } // namespace cutf
 } // namespace jmsd
 

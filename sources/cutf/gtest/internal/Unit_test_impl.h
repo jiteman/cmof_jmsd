@@ -12,6 +12,7 @@
 #include "Random_number_generator.h"
 
 #include "gtest/Test_suite.h"
+#include "gtest/Test_event_listeners.h"
 
 #include "gtest/Unit_test.hxx"
 
@@ -117,7 +118,7 @@ class GTEST_API_ UnitTestImpl {
   TestSuite* GetMutableSuiteCase(int i);
 
   // Provides access to the event listener list.
-  ::testing::TestEventListeners* listeners();
+  TestEventListeners* listeners();
 
   // Returns the TestResult for the test that's currently running, or
   // the TestResult for the ad hoc test if no test is running.
@@ -371,7 +372,7 @@ class GTEST_API_ UnitTestImpl {
   TestResult ad_hoc_test_result_;
 
   // The list of event listeners that can be used to track events inside Google Test.
-  ::testing::TestEventListeners listeners_;
+  TestEventListeners listeners_;
 
   // The OS stack trace getter.
   // Will be deleted when the UnitTest object is destructed.

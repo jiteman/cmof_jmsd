@@ -31,7 +31,7 @@ class GTEST_API_ ScopedTrace {
   // Slow, but flexible.
   template <typename T>
   ScopedTrace(const char* file, int line, const T& message) {
-	PushTrace(file, line, (Message() << message).GetString());
+	PushTrace(file, line, (::testing::Message() << message).GetString());
   }
 
   // Optimize for some known types.

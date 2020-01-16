@@ -3,6 +3,7 @@
 
 #include "Test_info.h"
 
+#include "Test_event_listener.h"
 #include "internal/Unit_test_impl.h"
 #include "internal/Stl_utilities.hin"
 
@@ -231,7 +232,7 @@ void TestSuite::Run() {
   internal::UnitTestImpl* const impl = internal::GetUnitTestImpl();
   impl->set_current_test_suite(this);
 
-  ::testing::TestEventListener* repeater = UnitTest::GetInstance()->listeners().repeater();
+  TestEventListener* repeater = UnitTest::GetInstance()->listeners().repeater();
 
   // Call both legacy and the new API
   repeater->OnTestSuiteStart(*this);

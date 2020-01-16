@@ -1,13 +1,11 @@
 #pragma once
 
-#include "gtt.hxx"
-
 
 namespace jmsd {
 namespace cutf {
 
 
-
+class EmptyTestEventListener;
 
 
 } // namespace cutf

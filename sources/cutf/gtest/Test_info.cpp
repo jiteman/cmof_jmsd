@@ -1,8 +1,10 @@
 #include "Test_info.h"
 
 
-#include "internal/gtest-internal.h"
+//#include "internal/gtest-internal.h"
 
+#include "Test_event_listener.h"
+#include "Test_event_listeners.h"
 #include "internal/Unit_test_impl.h"
 
 
@@ -233,7 +235,7 @@ void TestInfo::Run() {
   internal::UnitTestImpl* const impl = internal::GetUnitTestImpl();
   impl->set_current_test_info(this);
 
-  ::testing::TestEventListener* repeater = UnitTest::GetInstance()->listeners().repeater();
+  TestEventListener* repeater = UnitTest::GetInstance()->listeners().repeater();
 
   // Notifies the unit test event listeners that a test is about to start.
   repeater->OnTestStart(*this);

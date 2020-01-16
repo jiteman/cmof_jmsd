@@ -6,6 +6,7 @@
 
 #include "internal/Unit_test_impl.h"
 #include "internal/Death_test_impl.h"
+#include "internal/Death_test_check.h"
 
 
 #include "internal/gtest-port.h"
@@ -596,7 +597,7 @@ DeathTest::TestRole NoExecDeathTest::AssumeRole() {
 	LogToStderr();
 	// Event forwarding to the listeners of event listener API mush be shut
 	// down in death test subprocesses.
-	GetUnitTestImpl()->listeners()->SuppressEventForwarding();
+	::jmsd::cutf::internal::GetUnitTestImpl()->listeners()->SuppressEventForwarding();
 	g_in_fast_death_test_child = true;
 	return EXECUTE_TEST;
   } else {
