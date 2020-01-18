@@ -24,21 +24,17 @@ public:
 	static AssertionResult AssertionFailure(const Message& msg);
 
 public:
-  // Copy constructor.
-  // Used in EXPECT_TRUE/FALSE(assertion_result).
-  AssertionResult(const AssertionResult& other);
+	// Copy constructor.
+	// Used in EXPECT_TRUE/FALSE(assertion_result).
+	AssertionResult(const AssertionResult& other);
 
-#if defined(_MSC_VER) && _MSC_VER < 1910
-  GTEST_DISABLE_MSC_WARNINGS_PUSH_(4800 /* forcing value to bool */)
-#endif
-
-  // Used in the EXPECT_TRUE/FALSE(bool_expression).
-  //
-  // T must be contextually convertible to bool.
-  //
-  // The second parameter prevents this overload from being considered if
-  // the argument is implicitly convertible to AssertionResult. In that case
-  // we want AssertionResult's copy constructor to be used.
+	// Used in the EXPECT_TRUE/FALSE(bool_expression).
+	//
+	// T must be contextually convertible to bool.
+	//
+	// The second parameter prevents this overload from being considered if
+	// the argument is implicitly convertible to AssertionResult. In that case
+	// we want AssertionResult's copy constructor to be used.
 	template< typename T >
 	explicit AssertionResult(
 		T const &success,
@@ -47,15 +43,11 @@ public:
 			success_( success )
 	{}
 
-#if defined(_MSC_VER) && _MSC_VER < 1910
-  GTEST_DISABLE_MSC_WARNINGS_POP_()
-#endif
-
-  // Assignment operator.
-  AssertionResult& operator=(AssertionResult other) {
-	swap(other);
-	return *this;
-  }
+	// Assignment operator.
+	AssertionResult &operator =( AssertionResult other ) {
+		this->swap( other );
+		return *this;
+	}
 
   // Returns true if and only if the assertion succeeded.
   operator bool() const { return success_; }  // NOLINT
