@@ -63,11 +63,11 @@ namespace testing {
 
 // Forward declarations.
 
-class AssertionResult;                 // Result of an assertion.
-class Message;                         // Represents a failure message.
-class Test;                            // Represents a test.
-class TestInfo;                        // Information about a test.
-class TestPartResult;                  // Result of a test part.
+//class AssertionResult;                 // Result of an assertion.
+//class Message;                         // Represents a failure message.
+//class Test;                            // Represents a test.
+//class TestInfo;                        // Information about a test.
+//class TestPartResult;                  // Result of a test part.
 //class UnitTest;                        // A collection of test suites.
 
 template <typename T>

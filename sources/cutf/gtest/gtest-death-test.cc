@@ -700,10 +700,10 @@ static int ExecDeathTestChildMain(void* child_arg) {
   // it was originally invoked.  Therefore we change to the original
   // working directory first.
   const char* const original_dir =
-	  UnitTest::GetInstance()->original_working_dir();
+	  ::jmsd::cutf::UnitTest::GetInstance()->original_working_dir();
   // We can safely call chdir() as it's a direct system call.
   if (chdir(original_dir) != 0) {
-	DeathTestAbort(std::string("chdir(\"") + original_dir + "\") failed: " +
+	::jmsd::cutf::internal::DeathTestAbort(std::string("chdir(\"") + original_dir + "\") failed: " +
 				   GetLastErrnoDescription());
 	return EXIT_FAILURE;
   }
@@ -714,7 +714,7 @@ static int ExecDeathTestChildMain(void* child_arg) {
   // invoke the test program via a valid path that contains at least
   // one path separator.
   execve(args->argv[0], args->argv, GetEnviron());
-  DeathTestAbort(std::string("execve(") + args->argv[0] + ", ...) in " +
+  ::jmsd::cutf::internal::DeathTestAbort(std::string("execve(") + args->argv[0] + ", ...) in " +
 				 original_dir + " failed: " +
 				 GetLastErrnoDescription());
   return EXIT_FAILURE;
@@ -860,7 +860,7 @@ static pid_t ExecDeathTestSpawnChild(char* const* argv, int close_fd) {
 // and --gtest_internal_run_death_test flags to cause only the current
 // death test to be re-run.
 DeathTest::TestRole ExecDeathTest::AssumeRole() {
-  const UnitTestImpl* const impl = GetUnitTestImpl();
+  const ::jmsd::cutf::internal::UnitTestImpl* const impl = ::jmsd::cutf::internal::GetUnitTestImpl();
   const InternalRunDeathTestFlag* const flag =
 	  impl->internal_run_death_test_flag();
   const TestInfo* const info = impl->current_test_info();
