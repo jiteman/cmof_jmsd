@@ -39,14 +39,13 @@ public:
   // The second parameter prevents this overload from being considered if
   // the argument is implicitly convertible to AssertionResult. In that case
   // we want AssertionResult's copy constructor to be used.
-  template <typename T>
-  explicit AssertionResult(
-	  const T& success,
-	  typename std::enable_if<
-		  !std::is_convertible<T, AssertionResult>::value>::type*
-	  /*enabler*/
-	  = nullptr)
-	  : success_(success) {}
+	template< typename T >
+	explicit AssertionResult(
+		T const &success,
+		typename ::std::enable_if< !::std::is_convertible< T, AssertionResult >::value >::type * /*enabler*/ = nullptr )
+		:
+			success_( success )
+	{}
 
 #if defined(_MSC_VER) && _MSC_VER < 1910
   GTEST_DISABLE_MSC_WARNINGS_POP_()
