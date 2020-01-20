@@ -3,16 +3,7 @@
 
 namespace jmsd {
 namespace cutf {
-
-
-
-
-
-} // namespace cutf
-} // namespace jmsd
-
-
-namespace testing {
+namespace constants {
 
 
 // Constants.
@@ -45,4 +36,6 @@ const char kTestShardStatusFile[] = "GTEST_SHARD_STATUS_FILE";
 const int kMaxStackTraceDepth = 100;
 
 
-} // namespace testing
+} // namespace constants
+} // namespace cutf
+} // namespace jmsd

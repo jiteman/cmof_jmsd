@@ -245,12 +245,12 @@ void TestInfo::Run() {
   impl->os_stack_trace_getter()->UponLeavingGTest();
 
   // Creates the test object.
-  ::testing::Test* const test = internal::HandleExceptionsInMethodIfSupported( factory_, &::testing::internal::TestFactoryBase::CreateTest, "the test fixture's constructor");
+  Test* const test = internal::HandleExceptionsInMethodIfSupported( factory_, &::testing::internal::TestFactoryBase::CreateTest, "the test fixture's constructor");
 
   // Runs the test if the constructor didn't generate a fatal failure or invoke
   // GTEST_SKIP().
   // Note that the object will not be null
-  if ( !::testing::Test::HasFatalFailure() && !::testing::Test::IsSkipped()) {
+  if ( !Test::HasFatalFailure() && !Test::IsSkipped()) {
 	// This doesn't throw as all user code that can throw are wrapped into
 	// exception handling code.
 	test->Run();
@@ -260,7 +260,7 @@ void TestInfo::Run() {
 	// Deletes the test object.
 	impl->os_stack_trace_getter()->UponLeavingGTest();
 	internal::HandleExceptionsInMethodIfSupported(
-		test, &::testing::Test::DeleteSelf_, "the test fixture's destructor");
+		test, &Test::DeleteSelf_, "the test fixture's destructor");
   }
 
   result_->set_start_timestamp(start);

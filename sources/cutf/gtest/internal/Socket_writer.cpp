@@ -6,6 +6,9 @@ namespace cutf {
 namespace internal {
 
 
+#if GTEST_CAN_STREAM_RESULTS_
+
+
 SocketWriter::SocketWriter(const std::string& host, const std::string& port)
 	:
 		sockfd_(-1),
@@ -79,12 +82,9 @@ void SocketWriter::CloseConnection() {
 }
 
 
+#endif // #if GTEST_CAN_STREAM_RESULTS_
+
+
 } // namespace internal
 } // namespace cutf
 } // namespace jmsd
-
-
-namespace testing {
-
-
-} // namespace testing

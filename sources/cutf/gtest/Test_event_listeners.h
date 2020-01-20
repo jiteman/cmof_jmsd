@@ -9,6 +9,7 @@
 #include "Test_info.hxx"
 #include "Test_suite.hxx"
 #include "internal/Test_event_repeater.hxx"
+#include "internal/Default_global_test_part_result_reporter.hxx"
 
 #include "gtest-death-test.hxx"
 
@@ -53,6 +54,7 @@ class GTEST_API_ TestEventListeners {
 	friend TestSuite;
 	friend TestInfo;
 	friend ::testing::internal::NoExecDeathTest;
+	friend internal::DefaultGlobalTestPartResultReporter;
 //  friend ::jmsd::cutf::internal::DefaultGlobalTestPartResultReporter;
 //  friend class internal::NoExecDeathTest;
 //  friend class internal::TestEventListenersAccessor;

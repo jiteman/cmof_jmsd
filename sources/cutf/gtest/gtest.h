@@ -44,6 +44,8 @@
 
 
 #include "Test_property.h"
+#include "Assertion_result.h"
+#include "Test.h"
 #include "internal/Exception_handling.h"
 
 #include "Unit_test.hxx"
@@ -85,12 +87,6 @@ namespace internal {
 //									const std::string& message);
 
 }  // namespace internal
-
-// The friend relationship of some of these classes is cyclic.
-// If we don't forward declare them the compiler might confuse the classes
-// in friendship clauses with same named classes on the scope.
-class Test;
-
 }  // namespace testing
 
 // Includes the auto-generated header that implements a family of generic
@@ -99,142 +95,6 @@ class Test;
 #include "gtest/gtest_pred_impl.h"
 
 namespace testing {
-
-// The abstract class that all tests inherit from.
-//
-// In Google Test, a unit test program contains one or many TestSuites, and
-// each TestSuite contains one or many Tests.
-//
-// When you define a test using the TEST macro, you don't need to
-// explicitly derive from Test - the TEST macro automatically does
-// this for you.
-//
-// The only time you derive from Test is when defining a test fixture
-// to be used in a TEST_F.  For example:
-//
-//   class FooTest : public testing::Test {
-//    protected:
-//     void SetUp() override { ... }
-//     void TearDown() override { ... }
-//     ...
-//   };
-//
-//   TEST_F(FooTest, Bar) { ... }
-//   TEST_F(FooTest, Baz) { ... }
-//
-// Test is not copyable.
-class GTEST_API_ Test {
- public:
-  friend ::jmsd::cutf::TestInfo;
-
-  // The d'tor is virtual as we intend to inherit from Test.
-  virtual ~Test();
-
-  // Sets up the stuff shared by all tests in this test case.
-  //
-  // Google Test will call Foo::SetUpTestSuite() before running the first
-  // test in test case Foo.  Hence a sub-class can define its own
-  // SetUpTestSuite() method to shadow the one defined in the super
-  // class.
-  static void SetUpTestSuite() {}
-
-  // Tears down the stuff shared by all tests in this test suite.
-  //
-  // Google Test will call Foo::TearDownTestSuite() after running the last
-  // test in test case Foo.  Hence a sub-class can define its own
-  // TearDownTestSuite() method to shadow the one defined in the super
-  // class.
-  static void TearDownTestSuite() {}
-
-  // Legacy API is deprecated but still available
-#ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
-  static void TearDownTestCase() {}
-  static void SetUpTestCase() {}
-#endif  // GTEST_REMOVE_LEGACY_TEST_CASEAPI_
-
-  // Returns true if and only if the current test has a fatal failure.
-  static bool HasFatalFailure();
-
-  // Returns true if and only if the current test has a non-fatal failure.
-  static bool HasNonfatalFailure();
-
-  // Returns true if and only if the current test was skipped.
-  static bool IsSkipped();
-
-  // Returns true if and only if the current test has a (either fatal or
-  // non-fatal) failure.
-  static bool HasFailure() { return HasFatalFailure() || HasNonfatalFailure(); }
-
-  // Logs a property for the current test, test suite, or for the entire
-  // invocation of the test program when used outside of the context of a
-  // test suite.  Only the last value for a given key is remembered.  These
-  // are public static so they can be called from utility functions that are
-  // not members of the test fixture.  Calls to RecordProperty made during
-  // lifespan of the test (from the moment its constructor starts to the
-  // moment its destructor finishes) will be output in XML as attributes of
-  // the <testcase> element.  Properties recorded from fixture's
-  // SetUpTestSuite or TearDownTestSuite are logged as attributes of the
-  // corresponding <testsuite> element.  Calls to RecordProperty made in the
-  // global context (before or after invocation of RUN_ALL_TESTS and from
-  // SetUp/TearDown method of Environment objects registered with Google
-  // Test) will be output as attributes of the <testsuites> element.
-  static void RecordProperty(const std::string& key, const std::string& value);
-  static void RecordProperty(const std::string& key, int value);
-
- protected:
-  // Creates a Test object.
-  Test();
-
-  // Sets up the test fixture.
-  virtual void SetUp();
-
-  // Tears down the test fixture.
-  virtual void TearDown();
-
- private:
-  // Returns true if and only if the current test has the same fixture class
-  // as the first test in the current test suite.
-  static bool HasSameFixtureClass();
-
-  // Runs the test after the test fixture has been set up.
-  //
-  // A sub-class must implement this to define the test logic.
-  //
-  // DO NOT OVERRIDE THIS FUNCTION DIRECTLY IN A USER PROGRAM.
-  // Instead, use the TEST or TEST_F macro.
-  virtual void TestBody() = 0;
-
-  // Sets up, executes, and tears down the test.
-  void Run();
-
-  // Deletes self.  We deliberately pick an unusual name for this
-  // internal method to avoid clashing with names used in user TESTs.
-  void DeleteSelf_() { delete this; }
-
-  const std::unique_ptr<GTEST_FLAG_SAVER_> gtest_flag_saver_;
-
-  // Often a user misspells SetUp() as Setup() and spends a long time
-  // wondering why it is never called by Google Test.  The declaration of
-  // the following method is solely for catching such an error at
-  // compile time:
-  //
-  //   - The return type is deliberately chosen to be not void, so it
-  //   will be a conflict if void Setup() is declared in the user's
-  //   test fixture.
-  //
-  //   - This method is private, so it will be another compiler error
-  //   if the method is called from the user's test fixture.
-  //
-  // DO NOT OVERRIDE THIS FUNCTION.
-  //
-  // If you see an error about overriding the following function or
-  // about it being private, you have mis-spelled SetUp() as Setup().
-  struct Setup_should_be_spelled_SetUp {};
-  virtual Setup_should_be_spelled_SetUp* Setup() { return nullptr; }
-
-  // We disallow copying Tests.
-  GTEST_DISALLOW_COPY_AND_ASSIGN_(Test);
-};
 
 // An Environment object is capable of setting up and tearing down an
 // environment.  You should subclass this to define your own
@@ -305,7 +165,7 @@ namespace internal {
 // frame size of CmpHelperEQ. This helps reduce the overhead of some sanitizers
 // when calling EXPECT_* in a tight loop.
 template <typename T1, typename T2>
-AssertionResult CmpHelperEQFailure(const char* lhs_expression,
+::jmsd::cutf::AssertionResult CmpHelperEQFailure(const char* lhs_expression,
 								   const char* rhs_expression,
 								   const T1& lhs, const T2& rhs) {
   return EqFailure(lhs_expression,
@@ -324,7 +184,7 @@ inline bool operator!=(faketype, faketype) { return false; }
 
 // The helper function for {ASSERT|EXPECT}_EQ.
 template <typename T1, typename T2>
-AssertionResult CmpHelperEQ(const char* lhs_expression,
+::jmsd::cutf::AssertionResult CmpHelperEQ(const char* lhs_expression,
 							const char* rhs_expression,
 							const T1& lhs,
 							const T2& rhs) {
@@ -338,7 +198,7 @@ AssertionResult CmpHelperEQ(const char* lhs_expression,
 // With this overloaded version, we allow anonymous enums to be used
 // in {ASSERT|EXPECT}_EQ when compiled with gcc 4, as anonymous enums
 // can be implicitly cast to BiggestInt.
-GTEST_API_ AssertionResult CmpHelperEQ(const char* lhs_expression,
+GTEST_API_ ::jmsd::cutf::AssertionResult CmpHelperEQ(const char* lhs_expression,
 									   const char* rhs_expression,
 									   BiggestInt lhs,
 									   BiggestInt rhs);
@@ -352,7 +212,7 @@ class EqHelper {
 	  // and the other is the null pointer constant.
 	  typename std::enable_if<!std::is_integral<T1>::value ||
 							  !std::is_pointer<T2>::value>::type* = nullptr>
-  static AssertionResult Compare(const char* lhs_expression,
+  static ::jmsd::cutf::AssertionResult Compare(const char* lhs_expression,
 								 const char* rhs_expression, const T1& lhs,
 								 const T2& rhs) {
 	return CmpHelperEQ(lhs_expression, rhs_expression, lhs, rhs);
@@ -364,7 +224,7 @@ class EqHelper {
   //
   // Even though its body looks the same as the above version, we
   // cannot merge the two, as it will make anonymous enums unhappy.
-  static AssertionResult Compare(const char* lhs_expression,
+  static ::jmsd::cutf::AssertionResult Compare(const char* lhs_expression,
 								 const char* rhs_expression,
 								 BiggestInt lhs,
 								 BiggestInt rhs) {
@@ -372,7 +232,7 @@ class EqHelper {
   }
 
   template <typename T>
-  static AssertionResult Compare(
+  static ::jmsd::cutf::AssertionResult Compare(
 	  const char* lhs_expression, const char* rhs_expression,
 	  // Handle cases where '0' is used as a null pointer literal.
 	  std::nullptr_t /* lhs */, T* rhs) {
@@ -386,7 +246,7 @@ class EqHelper {
 // frame size of CmpHelperOP. This helps reduce the overhead of some sanitizers
 // when calling EXPECT_OP in a tight loop.
 template <typename T1, typename T2>
-AssertionResult CmpHelperOpFailure(const char* expr1, const char* expr2,
+::jmsd::cutf::AssertionResult CmpHelperOpFailure(const char* expr1, const char* expr2,
 								   const T1& val1, const T2& val2,
 								   const char* op) {
   return AssertionFailure()
@@ -406,17 +266,17 @@ AssertionResult CmpHelperOpFailure(const char* expr1, const char* expr2,
 //
 // INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
 
-#define GTEST_IMPL_CMP_HELPER_(op_name, op)\
-template <typename T1, typename T2>\
-AssertionResult CmpHelper##op_name(const char* expr1, const char* expr2, \
-								   const T1& val1, const T2& val2) {\
-  if (val1 op val2) {\
-	return AssertionSuccess();\
-  } else {\
-	return CmpHelperOpFailure(expr1, expr2, val1, val2, #op);\
-  }\
-}\
-GTEST_API_ AssertionResult CmpHelper##op_name(\
+#define GTEST_IMPL_CMP_HELPER_(op_name, op) \
+template <typename T1, typename T2> \
+::jmsd::cutf::AssertionResult CmpHelper##op_name(const char* expr1, const char* expr2, \
+								   const T1& val1, const T2& val2) { \
+  if (val1 op val2) { \
+	return AssertionSuccess(); \
+  } else { \
+	return CmpHelperOpFailure(expr1, expr2, val1, val2, #op); \
+  } \
+} \
+GTEST_API_ ::jmsd::cutf::AssertionResult CmpHelper##op_name( \
 	const char* expr1, const char* expr2, BiggestInt val1, BiggestInt val2)
 
 // INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
@@ -437,7 +297,7 @@ GTEST_IMPL_CMP_HELPER_(GT, >);
 // The helper function for {ASSERT|EXPECT}_STREQ.
 //
 // INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
-GTEST_API_ AssertionResult CmpHelperSTREQ(const char* s1_expression,
+GTEST_API_ ::jmsd::cutf::AssertionResult CmpHelperSTREQ(const char* s1_expression,
 										  const char* s2_expression,
 										  const char* s1,
 										  const char* s2);
@@ -445,7 +305,7 @@ GTEST_API_ AssertionResult CmpHelperSTREQ(const char* s1_expression,
 // The helper function for {ASSERT|EXPECT}_STRCASEEQ.
 //
 // INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
-GTEST_API_ AssertionResult CmpHelperSTRCASEEQ(const char* s1_expression,
+GTEST_API_ ::jmsd::cutf::AssertionResult CmpHelperSTRCASEEQ(const char* s1_expression,
 											  const char* s2_expression,
 											  const char* s1,
 											  const char* s2);
@@ -453,7 +313,7 @@ GTEST_API_ AssertionResult CmpHelperSTRCASEEQ(const char* s1_expression,
 // The helper function for {ASSERT|EXPECT}_STRNE.
 //
 // INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
-GTEST_API_ AssertionResult CmpHelperSTRNE(const char* s1_expression,
+GTEST_API_ ::jmsd::cutf::AssertionResult CmpHelperSTRNE(const char* s1_expression,
 										  const char* s2_expression,
 										  const char* s1,
 										  const char* s2);
@@ -461,7 +321,7 @@ GTEST_API_ AssertionResult CmpHelperSTRNE(const char* s1_expression,
 // The helper function for {ASSERT|EXPECT}_STRCASENE.
 //
 // INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
-GTEST_API_ AssertionResult CmpHelperSTRCASENE(const char* s1_expression,
+GTEST_API_ ::jmsd::cutf::AssertionResult CmpHelperSTRCASENE(const char* s1_expression,
 											  const char* s2_expression,
 											  const char* s1,
 											  const char* s2);
@@ -470,7 +330,7 @@ GTEST_API_ AssertionResult CmpHelperSTRCASENE(const char* s1_expression,
 // Helper function for *_STREQ on wide strings.
 //
 // INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
-GTEST_API_ AssertionResult CmpHelperSTREQ(const char* s1_expression,
+GTEST_API_ ::jmsd::cutf::AssertionResult CmpHelperSTREQ(const char* s1_expression,
 										  const char* s2_expression,
 										  const wchar_t* s1,
 										  const wchar_t* s2);
@@ -478,7 +338,7 @@ GTEST_API_ AssertionResult CmpHelperSTREQ(const char* s1_expression,
 // Helper function for *_STRNE on wide strings.
 //
 // INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
-GTEST_API_ AssertionResult CmpHelperSTRNE(const char* s1_expression,
+GTEST_API_ ::jmsd::cutf::AssertionResult CmpHelperSTRNE(const char* s1_expression,
 										  const char* s2_expression,
 										  const wchar_t* s1,
 										  const wchar_t* s2);
@@ -493,30 +353,30 @@ GTEST_API_ AssertionResult CmpHelperSTRNE(const char* s1_expression,
 //
 // The {needle,haystack}_expr arguments are the stringified
 // expressions that generated the two real arguments.
-GTEST_API_ AssertionResult IsSubstring(
+GTEST_API_ ::jmsd::cutf::AssertionResult IsSubstring(
 	const char* needle_expr, const char* haystack_expr,
 	const char* needle, const char* haystack);
-GTEST_API_ AssertionResult IsSubstring(
+GTEST_API_ ::jmsd::cutf::AssertionResult IsSubstring(
 	const char* needle_expr, const char* haystack_expr,
 	const wchar_t* needle, const wchar_t* haystack);
-GTEST_API_ AssertionResult IsNotSubstring(
+GTEST_API_ ::jmsd::cutf::AssertionResult IsNotSubstring(
 	const char* needle_expr, const char* haystack_expr,
 	const char* needle, const char* haystack);
-GTEST_API_ AssertionResult IsNotSubstring(
+GTEST_API_ ::jmsd::cutf::AssertionResult IsNotSubstring(
 	const char* needle_expr, const char* haystack_expr,
 	const wchar_t* needle, const wchar_t* haystack);
-GTEST_API_ AssertionResult IsSubstring(
+GTEST_API_ ::jmsd::cutf::AssertionResult IsSubstring(
 	const char* needle_expr, const char* haystack_expr,
 	const ::std::string& needle, const ::std::string& haystack);
-GTEST_API_ AssertionResult IsNotSubstring(
+GTEST_API_ ::jmsd::cutf::AssertionResult IsNotSubstring(
 	const char* needle_expr, const char* haystack_expr,
 	const ::std::string& needle, const ::std::string& haystack);
 
 #if GTEST_HAS_STD_WSTRING
-GTEST_API_ AssertionResult IsSubstring(
+GTEST_API_ ::jmsd::cutf::AssertionResult IsSubstring(
 	const char* needle_expr, const char* haystack_expr,
 	const ::std::wstring& needle, const ::std::wstring& haystack);
-GTEST_API_ AssertionResult IsNotSubstring(
+GTEST_API_ ::jmsd::cutf::AssertionResult IsNotSubstring(
 	const char* needle_expr, const char* haystack_expr,
 	const ::std::wstring& needle, const ::std::wstring& haystack);
 #endif  // GTEST_HAS_STD_WSTRING
@@ -531,7 +391,7 @@ namespace internal {
 //
 // INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
 template <typename RawType>
-AssertionResult CmpHelperFloatingPointEQ(const char* lhs_expression,
+::jmsd::cutf::AssertionResult CmpHelperFloatingPointEQ(const char* lhs_expression,
 										 const char* rhs_expression,
 										 RawType lhs_value,
 										 RawType rhs_value) {
@@ -559,7 +419,7 @@ AssertionResult CmpHelperFloatingPointEQ(const char* lhs_expression,
 // Helper function for implementing ASSERT_NEAR.
 //
 // INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
-GTEST_API_ AssertionResult DoubleNearPredFormat(const char* expr1,
+GTEST_API_ ::jmsd::cutf::AssertionResult DoubleNearPredFormat(const char* expr1,
 												const char* expr2,
 												const char* abs_error_expr,
 												double val1,
@@ -685,7 +545,7 @@ const T* WithParamInterface<T>::parameter_ = nullptr;
 // WithParamInterface, and can just inherit from ::testing::TestWithParam.
 
 template <typename T>
-class TestWithParam : public Test, public WithParamInterface<T> {
+class TestWithParam : public ::jmsd::cutf::Test, public WithParamInterface<T> {
 };
 
 // Macros for indicating success/failure in test code.
@@ -960,9 +820,9 @@ class TestWithParam : public Test, public WithParamInterface<T> {
 
 // Asserts that val1 is less than, or almost equal to, val2.  Fails
 // otherwise.  In particular, it fails if either val1 or val2 is NaN.
-GTEST_API_ AssertionResult FloatLE(const char* expr1, const char* expr2,
+GTEST_API_ ::jmsd::cutf::AssertionResult FloatLE(const char* expr1, const char* expr2,
 								   float val1, float val2);
-GTEST_API_ AssertionResult DoubleLE(const char* expr1, const char* expr2,
+GTEST_API_ ::jmsd::cutf::AssertionResult DoubleLE(const char* expr1, const char* expr2,
 									double val1, double val2);
 
 
@@ -1237,16 +1097,22 @@ GTEST_API_ std::string TempDir();
 //   return RUN_ALL_TESTS();
 // }
 //
-template <int&... ExplicitParameterBarrier, typename Factory>
-TestInfo* RegisterTest(const char* test_suite_name, const char* test_name,
-					   const char* type_param, const char* value_param,
-					   const char* file, int line, Factory factory) {
-  using TestT = typename std::remove_pointer<decltype(factory())>::type;
+template< int &... ExplicitParameterBarrier, typename Factory >
+::jmsd::cutf::TestInfo* RegisterTest(
+	const char* test_suite_name,
+	const char* test_name,
+	const char* type_param,
+	const char* value_param,
+	const char* file,
+	int line,
+	Factory factory )
+{
+  using TestT = typename ::std::remove_pointer< decltype( factory() ) >::type;
 
   class FactoryImpl : public internal::TestFactoryBase {
    public:
 	explicit FactoryImpl(Factory f) : factory_(std::move(f)) {}
-	Test* CreateTest() override { return factory_(); }
+	::jmsd::cutf::Test* CreateTest() override { return factory_(); }
 
    private:
 	Factory factory_;

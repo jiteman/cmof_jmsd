@@ -110,7 +110,7 @@ GTEST_DEFINE_FLAG_bool_(shuffle, internal::BoolFromGTestEnv("shuffle", false),
 
 GTEST_DEFINE_FLAG_int32_(
 	stack_trace_depth,
-	internal::Int32FromGTestEnv("stack_trace_depth", ::jmsd::cutf::kMaxStackTraceDepth),
+	internal::Int32FromGTestEnv("stack_trace_depth", ::jmsd::cutf::constants::kMaxStackTraceDepth),
 	"The maximum number of stack frames to print when an "
 	"assertion fails.  The valid range is 0 through 100, inclusive.");
 

@@ -396,7 +396,7 @@ class ParameterizedTestFactory : public TestFactoryBase {
   typedef typename TestClass::ParamType ParamType;
   explicit ParameterizedTestFactory(ParamType parameter) :
       parameter_(parameter) {}
-  Test* CreateTest() override {
+  ::jmsd::cutf::Test* CreateTest() override {
     TestClass::SetParam(&parameter_);
     return new TestClass();
   }

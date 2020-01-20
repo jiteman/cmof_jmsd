@@ -215,7 +215,7 @@ class GTEST_API_ UnitTest {
 
   // These classes and functions are friends as they need to access private members of UnitTest.
   friend ::jmsd::cutf::ScopedTrace;
-  friend ::testing::Test;
+  friend Test;
   friend ::testing::internal::AssertHelper;
   friend ::testing::internal::StreamingListenerTest;
   friend ::testing::internal::UnitTestRecordPropertyTestHelper;

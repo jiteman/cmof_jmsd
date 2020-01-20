@@ -5,6 +5,7 @@
 
 namespace jmsd {
 namespace cutf {
+namespace constants {
 
 
 // Constants.
@@ -38,11 +39,6 @@ extern const int kMaxStackTraceDepth;
 
 
 
+} // namespace constants
 } // namespace cutf
 } // namespace jmsd
-
-
-namespace testing {
-
-
-} // namespace testing

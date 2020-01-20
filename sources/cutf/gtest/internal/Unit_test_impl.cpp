@@ -204,7 +204,7 @@ void UnitTestImpl::set_current_test_info( TestInfo *a_current_test_info ) {
 }
 
 // Provides access to the event listener list.
-::testing::TestEventListeners* UnitTestImpl::listeners() {
+TestEventListeners* UnitTestImpl::listeners() {
 	return &listeners_;
 }
 

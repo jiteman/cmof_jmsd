@@ -74,7 +74,7 @@ namespace testing {
 
 #define GTEST_ASSERT_(expression, on_failure) \
   GTEST_AMBIGUOUS_ELSE_BLOCKER_ \
-  if (const ::testing::AssertionResult gtest_ar = (expression)) \
+  if (const ::jmsd::cutf::AssertionResult gtest_ar = (expression)) \
     ; \
   else \
     on_failure(gtest_ar.failure_message())
@@ -84,13 +84,13 @@ namespace testing {
 // this in your code.
 template <typename Pred,
           typename T1>
-AssertionResult AssertPred1Helper(const char* pred_text,
+::jmsd::cutf::AssertionResult AssertPred1Helper(const char* pred_text,
                                   const char* e1,
                                   Pred pred,
                                   const T1& v1) {
-  if (pred(v1)) return AssertionSuccess();
+  if (pred(v1)) return ::jmsd::cutf::AssertionResult::AssertionSuccess();
 
-  return AssertionFailure()
+  return ::jmsd::cutf::AssertionResult::AssertionFailure()
          << pred_text << "(" << e1 << ") evaluates to false, where"
          << "\n"
          << e1 << " evaluates to " << ::testing::PrintToString(v1);
@@ -127,15 +127,15 @@ AssertionResult AssertPred1Helper(const char* pred_text,
 template <typename Pred,
           typename T1,
           typename T2>
-AssertionResult AssertPred2Helper(const char* pred_text,
+::jmsd::cutf::AssertionResult AssertPred2Helper(const char* pred_text,
                                   const char* e1,
                                   const char* e2,
                                   Pred pred,
                                   const T1& v1,
                                   const T2& v2) {
-  if (pred(v1, v2)) return AssertionSuccess();
+  if (pred(v1, v2)) return ::jmsd::cutf::AssertionResult::AssertionSuccess();
 
-  return AssertionFailure()
+  return ::jmsd::cutf::AssertionResult::AssertionFailure()
          << pred_text << "(" << e1 << ", " << e2
          << ") evaluates to false, where"
          << "\n"
@@ -177,7 +177,7 @@ template <typename Pred,
           typename T1,
           typename T2,
           typename T3>
-AssertionResult AssertPred3Helper(const char* pred_text,
+::jmsd::cutf::AssertionResult AssertPred3Helper(const char* pred_text,
                                   const char* e1,
                                   const char* e2,
                                   const char* e3,
@@ -185,9 +185,9 @@ AssertionResult AssertPred3Helper(const char* pred_text,
                                   const T1& v1,
                                   const T2& v2,
                                   const T3& v3) {
-  if (pred(v1, v2, v3)) return AssertionSuccess();
+  if (pred(v1, v2, v3)) return ::jmsd::cutf::AssertionResult::AssertionSuccess();
 
-  return AssertionFailure()
+  return ::jmsd::cutf::AssertionResult::AssertionFailure()
          << pred_text << "(" << e1 << ", " << e2 << ", " << e3
          << ") evaluates to false, where"
          << "\n"
@@ -233,7 +233,7 @@ template <typename Pred,
           typename T2,
           typename T3,
           typename T4>
-AssertionResult AssertPred4Helper(const char* pred_text,
+::jmsd::cutf::AssertionResult AssertPred4Helper(const char* pred_text,
                                   const char* e1,
                                   const char* e2,
                                   const char* e3,
@@ -243,9 +243,9 @@ AssertionResult AssertPred4Helper(const char* pred_text,
                                   const T2& v2,
                                   const T3& v3,
                                   const T4& v4) {
-  if (pred(v1, v2, v3, v4)) return AssertionSuccess();
+  if (pred(v1, v2, v3, v4)) return ::jmsd::cutf::AssertionResult::AssertionSuccess();
 
-  return AssertionFailure()
+  return ::jmsd::cutf::AssertionResult::AssertionFailure()
          << pred_text << "(" << e1 << ", " << e2 << ", " << e3 << ", " << e4
          << ") evaluates to false, where"
          << "\n"
@@ -295,7 +295,7 @@ template <typename Pred,
           typename T3,
           typename T4,
           typename T5>
-AssertionResult AssertPred5Helper(const char* pred_text,
+::jmsd::cutf::AssertionResult AssertPred5Helper(const char* pred_text,
                                   const char* e1,
                                   const char* e2,
                                   const char* e3,
@@ -307,9 +307,9 @@ AssertionResult AssertPred5Helper(const char* pred_text,
                                   const T3& v3,
                                   const T4& v4,
                                   const T5& v5) {
-  if (pred(v1, v2, v3, v4, v5)) return AssertionSuccess();
+  if (pred(v1, v2, v3, v4, v5)) return ::jmsd::cutf::AssertionResult::AssertionSuccess();
 
-  return AssertionFailure()
+  return ::jmsd::cutf::AssertionResult::AssertionFailure()
          << pred_text << "(" << e1 << ", " << e2 << ", " << e3 << ", " << e4
          << ", " << e5 << ") evaluates to false, where"
          << "\n"

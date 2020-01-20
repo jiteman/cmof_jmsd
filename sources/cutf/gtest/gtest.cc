@@ -4,6 +4,13 @@
 #include "gtest/internal/custom/gtest.h"
 #include "gtest/gtest-spi.h"
 
+#include "gtest-constants.h"
+
+#include "Empty_test_event_listener.h"
+#include "Test_event_listener.h"
+#include "Test_suite.h"
+#include "Text_output_utilities.hxx"
+
 #include "internal/Unit_test_impl.h"
 
 #include <ctype.h>
@@ -178,7 +185,7 @@ namespace {
 constexpr bool kErrorOnUninstantiatedParameterizedTest = false;
 
 // A test that fails at a given file/line location with a given message.
-class FailureTest : public Test {
+class FailureTest : public ::jmsd::cutf::Test {
  public:
   explicit FailureTest(const CodeLocation& loc, std::string error_message,
 					   bool as_error)
@@ -268,28 +275,36 @@ std::string UnitTestOptions::GetOutputFormat() {
 						   static_cast<size_t>(colon - gtest_output_flag));
 }
 
-// Returns the name of the requested output file, or the default if none
-// was explicitly specified.
-std::string UnitTestOptions::GetAbsolutePathToOutputFile() {
-  const char* const gtest_output_flag = GTEST_FLAG(output).c_str();
+// Returns the name of the requested output file, or the default if none was explicitly specified.
+::std::string UnitTestOptions::GetAbsolutePathToOutputFile() {
+	char const *const gtest_output_flag = GTEST_FLAG(output).c_str();
 
-  std::string format = GetOutputFormat();
-  if (format.empty())
-	format = std::string(kDefaultOutputFormat);
+	::std::string format = GetOutputFormat();
 
-  const char* const colon = strchr(gtest_output_flag, ':');
-  if (colon == nullptr)
-	return internal::FilePath::MakeFileName(
-		internal::FilePath(
-			UnitTest::GetInstance()->original_working_dir()),
-		internal::FilePath(kDefaultOutputFile), 0,
-		format.c_str()).string();
+	if ( format.empty() ) {
+		format = ::std::string( ::jmsd::cutf::constants::kDefaultOutputFormat );
+	}
 
-  internal::FilePath output_name(colon + 1);
-  if (!output_name.IsAbsolutePath())
-	output_name = internal::FilePath::ConcatPaths(
-		internal::FilePath(UnitTest::GetInstance()->original_working_dir()),
-		internal::FilePath(colon + 1));
+	char const *const colon = ::strchr( gtest_output_flag, ':' );
+
+	if ( colon == nullptr ) {
+		return
+			internal::FilePath::MakeFileName(
+				internal::FilePath(
+					::jmsd::cutf::UnitTest::GetInstance()->original_working_dir() ),
+				internal::FilePath( ::jmsd::cutf::constants::kDefaultOutputFile ),
+				0,
+				format.c_str() ).string();
+	}
+
+	internal::FilePath output_name( colon + 1 );
+
+	if ( !output_name.IsAbsolutePath() ) {
+		output_name =
+			internal::FilePath::ConcatPaths(
+				internal::FilePath( ::jmsd::cutf::UnitTest::GetInstance()->original_working_dir() ),
+				internal::FilePath( colon + 1 ) );
+	}
 
   if (!output_name.IsDirectory())
 	return output_name.string();
@@ -363,7 +378,7 @@ bool UnitTestOptions::FilterMatchesTest(const std::string& test_suite_name,
 	negative = std::string(dash + 1);  // Everything after the dash
 	if (positive.empty()) {
 	  // Treat '-test1' as the same as '*-test1'
-	  positive = kUniversalFilter;
+	  positive = ::jmsd::cutf::constants::kUniversalFilter;
 	}
   }
 
@@ -424,7 +439,7 @@ ScopedFakeTestPartResultReporter::ScopedFakeTestPartResultReporter(
 }
 
 void ScopedFakeTestPartResultReporter::Init() {
-  internal::UnitTestImpl* const impl = internal::GetUnitTestImpl();
+  ::jmsd::cutf::internal::UnitTestImpl* const impl = ::jmsd::cutf::internal::GetUnitTestImpl();
   if (intercept_mode_ == INTERCEPT_ALL_THREADS) {
 	old_reporter_ = impl->GetGlobalTestPartResultReporter();
 	impl->SetGlobalTestPartResultReporter(this);
@@ -437,7 +452,7 @@ void ScopedFakeTestPartResultReporter::Init() {
 // The d'tor restores the test part result reporter used by Google Test
 // before.
 ScopedFakeTestPartResultReporter::~ScopedFakeTestPartResultReporter() {
-  internal::UnitTestImpl* const impl = internal::GetUnitTestImpl();
+  ::jmsd::cutf::internal::UnitTestImpl* const impl = ::jmsd::cutf::internal::GetUnitTestImpl();
   if (intercept_mode_ == INTERCEPT_ALL_THREADS) {
 	impl->SetGlobalTestPartResultReporter(old_reporter_);
   } else {
@@ -464,7 +479,7 @@ namespace internal {
 // return the same value, as it always calls GetTypeId<>() from the
 // gtest.cc, which is within the Google Test framework.
 TypeId GetTestTypeId() {
-  return GetTypeId<Test>();
+	return GetTypeId< ::jmsd::cutf::Test >();
 }
 
 // The value of GetTestTypeId() as seen from within the Google Test
@@ -474,7 +489,7 @@ extern const TypeId kTestTypeIdInGoogleTest = GetTestTypeId();
 // This predicate-formatter checks that 'results' contains a test part
 // failure of the given type and that the failure message contains the
 // given substring.
-static AssertionResult HasOneFailure(const char* /* results_expr */,
+static ::jmsd::cutf::AssertionResult HasOneFailure(const char* /* results_expr */,
 									 const char* /* type_expr */,
 									 const char* /* substr_expr */,
 									 const TestPartResultArray& results,
@@ -490,24 +505,24 @@ static AssertionResult HasOneFailure(const char* /* results_expr */,
 	for (int i = 0; i < results.size(); i++) {
 	  msg << "\n" << results.GetTestPartResult(i);
 	}
-	return AssertionFailure() << msg;
+	return ::jmsd::cutf::AssertionResult::AssertionFailure() << msg;
   }
 
   const TestPartResult& r = results.GetTestPartResult(0);
   if (r.type() != type) {
-	return AssertionFailure() << "Expected: " << expected << "\n"
+	return ::jmsd::cutf::AssertionResult::AssertionFailure() << "Expected: " << expected << "\n"
 							  << "  Actual:\n"
 							  << r;
   }
 
   if (strstr(r.message(), substr.c_str()) == nullptr) {
-	return AssertionFailure() << "Expected: " << expected << " containing \""
+	return ::jmsd::cutf::AssertionResult::AssertionFailure() << "Expected: " << expected << " containing \""
 							  << substr << "\"\n"
 							  << "  Actual:\n"
 							  << r;
   }
 
-  return AssertionSuccess();
+  return ::jmsd::cutf::AssertionResult::AssertionSuccess();
 }
 
 // The constructor of SingleFailureChecker remembers where to look up
@@ -523,7 +538,7 @@ SingleFailureChecker::SingleFailureChecker(const TestPartResultArray* results,
 // type and contains the given substring.  If that's not the case, a
 // non-fatal failure will be generated.
 SingleFailureChecker::~SingleFailureChecker() {
-  EXPECT_PRED_FORMAT3(HasOneFailure, *results_, type_, substr_);
+	EXPECT_PRED_FORMAT3(HasOneFailure, *results_, type_, substr_);
 }
 
 // Returns the current time in milliseconds.
@@ -795,31 +810,35 @@ namespace {
 // It reorders adds/removes when possible to group all removes before all
 // adds. It also adds the hunk header before printint into the stream.
 class Hunk {
- public:
-  Hunk(size_t left_start, size_t right_start)
-	  : left_start_(left_start),
-		right_start_(right_start),
-		adds_(),
-		removes_(),
-		common_() {}
+public:
+	Hunk( size_t left_start, size_t right_start )
+		:
+			left_start_( left_start ),
+			right_start_( right_start ),
+			adds_(),
+			removes_(),
+			common_()
+	{}
 
-  void PushLine(char edit, const char* line) {
-	switch (edit) {
-	  case ' ':
-		++common_;
-		FlushEdits();
-		hunk_.push_back(std::make_pair(' ', line));
-		break;
-	  case '-':
-		++removes_;
-		hunk_removes_.push_back(std::make_pair('-', line));
-		break;
-	  case '+':
-		++adds_;
-		hunk_adds_.push_back(std::make_pair('+', line));
-		break;
+	void PushLine( char edit, char const *line ) {
+		switch ( edit ) {
+			case ' ':
+				++common_;
+				FlushEdits();
+				hunk_.push_back( ::std::make_pair( ' ', line ) );
+				break;
+
+			case '-':
+				++removes_;
+				hunk_removes_.push_back( ::std::make_pair( '-', line ) );
+				break;
+
+			case '+':
+				++adds_;
+				hunk_adds_.push_back( ::std::make_pair( '+', line ) );
+				break;
+		}
 	}
-  }
 
   void PrintTo(std::ostream* os) {
 	PrintHeader(os);
@@ -981,7 +1000,7 @@ std::vector<std::string> SplitEscapedString(const std::string& str) {
 // The ignoring_case parameter is true if and only if the assertion is a
 // *_STRCASEEQ*.  When it's true, the string "Ignoring case" will
 // be inserted into the message.
-AssertionResult EqFailure(const char* lhs_expression,
+::jmsd::cutf::AssertionResult EqFailure(const char* lhs_expression,
 						  const char* rhs_expression,
 						  const std::string& lhs_value,
 						  const std::string& rhs_value,
@@ -1012,12 +1031,12 @@ AssertionResult EqFailure(const char* lhs_expression,
 	}
   }
 
-  return AssertionFailure() << msg;
+  return ::jmsd::cutf::AssertionResult::AssertionFailure() << msg;
 }
 
 // Constructs a failure message for Boolean assertions such as EXPECT_TRUE.
 std::string GetBoolAssertionFailureMessage(
-	const AssertionResult& assertion_result,
+	const ::jmsd::cutf::AssertionResult& assertion_result,
 	const char* expression_text,
 	const char* actual_predicate_value,
 	const char* expected_predicate_value) {
@@ -1032,16 +1051,16 @@ std::string GetBoolAssertionFailureMessage(
 }
 
 // Helper function for implementing ASSERT_NEAR.
-AssertionResult DoubleNearPredFormat(const char* expr1,
+::jmsd::cutf::AssertionResult DoubleNearPredFormat(const char* expr1,
 									 const char* expr2,
 									 const char* abs_error_expr,
 									 double val1,
 									 double val2,
 									 double abs_error) {
   const double diff = fabs(val1 - val2);
-  if (diff <= abs_error) return AssertionSuccess();
+  if (diff <= abs_error) return ::jmsd::cutf::AssertionResult::AssertionSuccess();
 
-  return AssertionFailure()
+  return ::jmsd::cutf::AssertionResult::AssertionFailure()
 	  << "The difference between " << expr1 << " and " << expr2
 	  << " is " << diff << ", which exceeds " << abs_error_expr << ", where\n"
 	  << expr1 << " evaluates to " << val1 << ",\n"
@@ -1052,19 +1071,19 @@ AssertionResult DoubleNearPredFormat(const char* expr1,
 
 // Helper template for implementing FloatLE() and DoubleLE().
 template <typename RawType>
-AssertionResult FloatingPointLE(const char* expr1,
+::jmsd::cutf::AssertionResult FloatingPointLE(const char* expr1,
 								const char* expr2,
 								RawType val1,
 								RawType val2) {
   // Returns success if val1 is less than val2,
   if (val1 < val2) {
-	return AssertionSuccess();
+	return ::jmsd::cutf::AssertionResult::AssertionSuccess();
   }
 
   // or if val1 is almost equal to val2.
   const FloatingPoint<RawType> lhs(val1), rhs(val2);
   if (lhs.AlmostEquals(rhs)) {
-	return AssertionSuccess();
+	return ::jmsd::cutf::AssertionResult::AssertionSuccess();
   }
 
   // Note that the above two checks will both fail if either val1 or
@@ -1079,7 +1098,7 @@ AssertionResult FloatingPointLE(const char* expr1,
   val2_ss << std::setprecision(std::numeric_limits<RawType>::digits10 + 2)
 		  << val2;
 
-  return AssertionFailure()
+  return ::jmsd::cutf::AssertionResult::AssertionFailure()
 	  << "Expected: (" << expr1 << ") <= (" << expr2 << ")\n"
 	  << "  Actual: " << StringStreamToString(&val1_ss) << " vs "
 	  << StringStreamToString(&val2_ss);
@@ -1089,14 +1108,14 @@ AssertionResult FloatingPointLE(const char* expr1,
 
 // Asserts that val1 is less than, or almost equal to, val2.  Fails
 // otherwise.  In particular, it fails if either val1 or val2 is NaN.
-AssertionResult FloatLE(const char* expr1, const char* expr2,
+::jmsd::cutf::AssertionResult FloatLE(const char* expr1, const char* expr2,
 						float val1, float val2) {
   return internal::FloatingPointLE<float>(expr1, expr2, val1, val2);
 }
 
 // Asserts that val1 is less than, or almost equal to, val2.  Fails
 // otherwise.  In particular, it fails if either val1 or val2 is NaN.
-AssertionResult DoubleLE(const char* expr1, const char* expr2,
+::jmsd::cutf::AssertionResult DoubleLE(const char* expr1, const char* expr2,
 						 double val1, double val2) {
   return internal::FloatingPointLE<double>(expr1, expr2, val1, val2);
 }
@@ -1105,12 +1124,12 @@ namespace internal {
 
 // The helper function for {ASSERT|EXPECT}_EQ with int or enum
 // arguments.
-AssertionResult CmpHelperEQ(const char* lhs_expression,
+::jmsd::cutf::AssertionResult CmpHelperEQ(const char* lhs_expression,
 							const char* rhs_expression,
 							BiggestInt lhs,
 							BiggestInt rhs) {
   if (lhs == rhs) {
-	return AssertionSuccess();
+	return ::jmsd::cutf::AssertionResult::AssertionSuccess();
   }
 
   return EqFailure(lhs_expression,
@@ -1124,12 +1143,12 @@ AssertionResult CmpHelperEQ(const char* lhs_expression,
 // ASSERT_?? and EXPECT_?? with integer or enum arguments.  It is here
 // just to avoid copy-and-paste of similar code.
 #define GTEST_IMPL_CMP_HELPER_(op_name, op)\
-AssertionResult CmpHelper##op_name(const char* expr1, const char* expr2, \
+::jmsd::cutf::AssertionResult CmpHelper##op_name(const char* expr1, const char* expr2, \
 								   BiggestInt val1, BiggestInt val2) {\
   if (val1 op val2) {\
-	return AssertionSuccess();\
+	return ::jmsd::cutf::AssertionResult::AssertionSuccess();\
   } else {\
-	return AssertionFailure() \
+	return ::jmsd::cutf::AssertionResult::AssertionFailure() \
 		<< "Expected: (" << expr1 << ") " #op " (" << expr2\
 		<< "), actual: " << FormatForComparisonFailureMessage(val1, val2)\
 		<< " vs " << FormatForComparisonFailureMessage(val2, val1);\
@@ -1155,12 +1174,12 @@ GTEST_IMPL_CMP_HELPER_(GT, > )
 #undef GTEST_IMPL_CMP_HELPER_
 
 // The helper function for {ASSERT|EXPECT}_STREQ.
-AssertionResult CmpHelperSTREQ(const char* lhs_expression,
+::jmsd::cutf::AssertionResult CmpHelperSTREQ(const char* lhs_expression,
 							   const char* rhs_expression,
 							   const char* lhs,
 							   const char* rhs) {
   if (String::CStringEquals(lhs, rhs)) {
-	return AssertionSuccess();
+	return ::jmsd::cutf::AssertionResult::AssertionSuccess();
   }
 
   return EqFailure(lhs_expression,
@@ -1171,12 +1190,12 @@ AssertionResult CmpHelperSTREQ(const char* lhs_expression,
 }
 
 // The helper function for {ASSERT|EXPECT}_STRCASEEQ.
-AssertionResult CmpHelperSTRCASEEQ(const char* lhs_expression,
+::jmsd::cutf::AssertionResult CmpHelperSTRCASEEQ(const char* lhs_expression,
 								   const char* rhs_expression,
 								   const char* lhs,
 								   const char* rhs) {
   if (String::CaseInsensitiveCStringEquals(lhs, rhs)) {
-	return AssertionSuccess();
+	return ::jmsd::cutf::AssertionResult::AssertionSuccess();
   }
 
   return EqFailure(lhs_expression,
@@ -1187,28 +1206,28 @@ AssertionResult CmpHelperSTRCASEEQ(const char* lhs_expression,
 }
 
 // The helper function for {ASSERT|EXPECT}_STRNE.
-AssertionResult CmpHelperSTRNE(const char* s1_expression,
+::jmsd::cutf::AssertionResult CmpHelperSTRNE(const char* s1_expression,
 							   const char* s2_expression,
 							   const char* s1,
 							   const char* s2) {
   if (!String::CStringEquals(s1, s2)) {
-	return AssertionSuccess();
+	return ::jmsd::cutf::AssertionResult::AssertionSuccess();
   } else {
-	return AssertionFailure() << "Expected: (" << s1_expression << ") != ("
+	return ::jmsd::cutf::AssertionResult::AssertionFailure() << "Expected: (" << s1_expression << ") != ("
 							  << s2_expression << "), actual: \""
 							  << s1 << "\" vs \"" << s2 << "\"";
   }
 }
 
 // The helper function for {ASSERT|EXPECT}_STRCASENE.
-AssertionResult CmpHelperSTRCASENE(const char* s1_expression,
+::jmsd::cutf::AssertionResult CmpHelperSTRCASENE(const char* s1_expression,
 								   const char* s2_expression,
 								   const char* s1,
 								   const char* s2) {
   if (!String::CaseInsensitiveCStringEquals(s1, s2)) {
-	return AssertionSuccess();
+	return ::jmsd::cutf::AssertionResult::AssertionSuccess();
   } else {
-	return AssertionFailure()
+	return ::jmsd::cutf::AssertionResult::AssertionFailure()
 		<< "Expected: (" << s1_expression << ") != ("
 		<< s2_expression << ") (ignoring case), actual: \""
 		<< s1 << "\" vs \"" << s2 << "\"";
@@ -1249,16 +1268,16 @@ bool IsSubstringPred(const StringType& needle,
 // StringType here can be const char*, const wchar_t*, ::std::string,
 // or ::std::wstring.
 template <typename StringType>
-AssertionResult IsSubstringImpl(
+::jmsd::cutf::AssertionResult IsSubstringImpl(
 	bool expected_to_be_substring,
 	const char* needle_expr, const char* haystack_expr,
 	const StringType& needle, const StringType& haystack) {
   if (IsSubstringPred(needle, haystack) == expected_to_be_substring)
-	return AssertionSuccess();
+	return ::jmsd::cutf::AssertionResult::AssertionSuccess();
 
   const bool is_wide_string = sizeof(needle[0]) > 1;
   const char* const begin_string_quote = is_wide_string ? "L\"" : "\"";
-  return AssertionFailure()
+  return ::jmsd::cutf::AssertionResult::AssertionFailure()
 	  << "Value of: " << needle_expr << "\n"
 	  << "  Actual: " << begin_string_quote << needle << "\"\n"
 	  << "Expected: " << (expected_to_be_substring ? "" : "not ")
@@ -1272,50 +1291,50 @@ AssertionResult IsSubstringImpl(
 // substring of haystack (NULL is considered a substring of itself
 // only), and return an appropriate error message when they fail.
 
-AssertionResult IsSubstring(
+::jmsd::cutf::AssertionResult IsSubstring(
 	const char* needle_expr, const char* haystack_expr,
 	const char* needle, const char* haystack) {
   return IsSubstringImpl(true, needle_expr, haystack_expr, needle, haystack);
 }
 
-AssertionResult IsSubstring(
+::jmsd::cutf::AssertionResult IsSubstring(
 	const char* needle_expr, const char* haystack_expr,
 	const wchar_t* needle, const wchar_t* haystack) {
   return IsSubstringImpl(true, needle_expr, haystack_expr, needle, haystack);
 }
 
-AssertionResult IsNotSubstring(
+::jmsd::cutf::AssertionResult IsNotSubstring(
 	const char* needle_expr, const char* haystack_expr,
 	const char* needle, const char* haystack) {
   return IsSubstringImpl(false, needle_expr, haystack_expr, needle, haystack);
 }
 
-AssertionResult IsNotSubstring(
+::jmsd::cutf::AssertionResult IsNotSubstring(
 	const char* needle_expr, const char* haystack_expr,
 	const wchar_t* needle, const wchar_t* haystack) {
   return IsSubstringImpl(false, needle_expr, haystack_expr, needle, haystack);
 }
 
-AssertionResult IsSubstring(
+::jmsd::cutf::AssertionResult IsSubstring(
 	const char* needle_expr, const char* haystack_expr,
 	const ::std::string& needle, const ::std::string& haystack) {
   return IsSubstringImpl(true, needle_expr, haystack_expr, needle, haystack);
 }
 
-AssertionResult IsNotSubstring(
+::jmsd::cutf::AssertionResult IsNotSubstring(
 	const char* needle_expr, const char* haystack_expr,
 	const ::std::string& needle, const ::std::string& haystack) {
   return IsSubstringImpl(false, needle_expr, haystack_expr, needle, haystack);
 }
 
 #if GTEST_HAS_STD_WSTRING
-AssertionResult IsSubstring(
+::jmsd::cutf::AssertionResult IsSubstring(
 	const char* needle_expr, const char* haystack_expr,
 	const ::std::wstring& needle, const ::std::wstring& haystack) {
   return IsSubstringImpl(true, needle_expr, haystack_expr, needle, haystack);
 }
 
-AssertionResult IsNotSubstring(
+::jmsd::cutf::AssertionResult IsNotSubstring(
 	const char* needle_expr, const char* haystack_expr,
 	const ::std::wstring& needle, const ::std::wstring& haystack) {
   return IsSubstringImpl(false, needle_expr, haystack_expr, needle, haystack);
@@ -1329,7 +1348,7 @@ namespace internal {
 namespace {
 
 // Helper function for IsHRESULT{SuccessFailure} predicates
-AssertionResult HRESULTFailureHelper(const char* expr,
+::jmsd::cutf::AssertionResult HRESULTFailureHelper(const char* expr,
 									 const char* expected,
 									 long hr) {  // NOLINT
 # if GTEST_OS_WINDOWS_MOBILE || GTEST_OS_WINDOWS_TV_TITLE
@@ -1363,23 +1382,23 @@ AssertionResult HRESULTFailureHelper(const char* expr,
 # endif  // GTEST_OS_WINDOWS_MOBILE
 
   const std::string error_hex("0x" + String::FormatHexInt(hr));
-  return ::testing::AssertionFailure()
+  return ::jmsd::cutf::AssertionResult::AssertionFailure()
 	  << "Expected: " << expr << " " << expected << ".\n"
 	  << "  Actual: " << error_hex << " " << error_text << "\n";
 }
 
 }  // namespace
 
-AssertionResult IsHRESULTSuccess(const char* expr, long hr) {  // NOLINT
+::jmsd::cutf::AssertionResult IsHRESULTSuccess(const char* expr, long hr) {  // NOLINT
   if (SUCCEEDED(hr)) {
-	return AssertionSuccess();
+	return ::jmsd::cutf::AssertionResult::AssertionSuccess();
   }
   return HRESULTFailureHelper(expr, "succeeds", hr);
 }
 
-AssertionResult IsHRESULTFailure(const char* expr, long hr) {  // NOLINT
+::jmsd::cutf::AssertionResult IsHRESULTFailure(const char* expr, long hr) {  // NOLINT
   if (FAILED(hr)) {
-	return AssertionSuccess();
+	return ::jmsd::cutf::AssertionResult::AssertionSuccess();
   }
   return HRESULTFailureHelper(expr, "fails", hr);
 }
@@ -1538,12 +1557,12 @@ bool String::WideCStringEquals(const wchar_t * lhs, const wchar_t * rhs) {
 }
 
 // Helper function for *_STREQ on wide strings.
-AssertionResult CmpHelperSTREQ(const char* lhs_expression,
+::jmsd::cutf::AssertionResult CmpHelperSTREQ(const char* lhs_expression,
 							   const char* rhs_expression,
 							   const wchar_t* lhs,
 							   const wchar_t* rhs) {
   if (String::WideCStringEquals(lhs, rhs)) {
-	return AssertionSuccess();
+	return ::jmsd::cutf::AssertionResult::AssertionSuccess();
   }
 
   return EqFailure(lhs_expression,
@@ -1554,15 +1573,15 @@ AssertionResult CmpHelperSTREQ(const char* lhs_expression,
 }
 
 // Helper function for *_STRNE on wide strings.
-AssertionResult CmpHelperSTRNE(const char* s1_expression,
+::jmsd::cutf::AssertionResult CmpHelperSTRNE(const char* s1_expression,
 							   const char* s2_expression,
 							   const wchar_t* s1,
 							   const wchar_t* s2) {
   if (!String::WideCStringEquals(s1, s2)) {
-	return AssertionSuccess();
+	return ::jmsd::cutf::AssertionResult::AssertionSuccess();
   }
 
-  return AssertionFailure() << "Expected: (" << s1_expression << ") != ("
+  return ::jmsd::cutf::AssertionResult::AssertionFailure() << "Expected: (" << s1_expression << ") != ("
 							<< s2_expression << "), actual: "
 							<< PrintToString(s1)
 							<< " vs " << PrintToString(s2);
@@ -1687,44 +1706,44 @@ std::string AppendUserMessage(const std::string& gtest_msg,
 }  // namespace internal
 
 
-// class Test
+//// class Test
 
-// Creates a Test object.
+//// Creates a Test object.
 
-// The c'tor saves the states of all flags.
-Test::Test()
-	: gtest_flag_saver_(new GTEST_FLAG_SAVER_) {
-}
+//// The c'tor saves the states of all flags.
+//Test::Test()
+//	: gtest_flag_saver_(new GTEST_FLAG_SAVER_) {
+//}
 
-// The d'tor restores the states of all flags.  The actual work is
-// done by the d'tor of the gtest_flag_saver_ field, and thus not
-// visible here.
-Test::~Test() {
-}
+//// The d'tor restores the states of all flags.  The actual work is
+//// done by the d'tor of the gtest_flag_saver_ field, and thus not
+//// visible here.
+//Test::~Test() {
+//}
 
-// Sets up the test fixture.
-//
-// A sub-class may override this.
-void Test::SetUp() {
-}
+//// Sets up the test fixture.
+////
+//// A sub-class may override this.
+//void Test::SetUp() {
+//}
 
-// Tears down the test fixture.
-//
-// A sub-class may override this.
-void Test::TearDown() {
-}
+//// Tears down the test fixture.
+////
+//// A sub-class may override this.
+//void Test::TearDown() {
+//}
 
-// Allows user supplied key value pairs to be recorded for later output.
-void Test::RecordProperty(const std::string& key, const std::string& value) {
-  UnitTest::GetInstance()->RecordProperty(key, value);
-}
+//// Allows user supplied key value pairs to be recorded for later output.
+//void Test::RecordProperty(const std::string& key, const std::string& value) {
+//  UnitTest::GetInstance()->RecordProperty(key, value);
+//}
 
-// Allows user supplied key value pairs to be recorded for later output.
-void Test::RecordProperty(const std::string& key, int value) {
-  Message value_message;
-  value_message << value;
-  RecordProperty(key, value_message.GetString().c_str());
-}
+//// Allows user supplied key value pairs to be recorded for later output.
+//void Test::RecordProperty(const std::string& key, int value) {
+//  Message value_message;
+//  value_message << value;
+//  RecordProperty(key, value_message.GetString().c_str());
+//}
 
 namespace internal {
 
@@ -1732,7 +1751,7 @@ void ReportFailureInUnknownLocation(TestPartResult::Type result_type,
 									const std::string& message) {
   // This function is a friend of UnitTest and as such has access to
   // AddTestPartResult.
-  UnitTest::GetInstance()->AddTestPartResult(
+  ::jmsd::cutf::UnitTest::GetInstance()->AddTestPartResult(
 	  result_type,
 	  nullptr,  // No info about the source file where the exception occurred.
 	  -1,       // We have no info on which line caused the exception.
@@ -1742,110 +1761,110 @@ void ReportFailureInUnknownLocation(TestPartResult::Type result_type,
 
 }  // namespace internal
 
-// Google Test requires all tests in the same test suite to use the same test
-// fixture class.  This function checks if the current test has the
-// same fixture class as the first test in the current test suite.  If
-// yes, it returns true; otherwise it generates a Google Test failure and
-// returns false.
-bool Test::HasSameFixtureClass() {
-  internal::UnitTestImpl* const impl = internal::GetUnitTestImpl();
-  const TestSuite* const test_suite = impl->current_test_suite();
+//// Google Test requires all tests in the same test suite to use the same test
+//// fixture class.  This function checks if the current test has the
+//// same fixture class as the first test in the current test suite.  If
+//// yes, it returns true; otherwise it generates a Google Test failure and
+//// returns false.
+//bool Test::HasSameFixtureClass() {
+//  internal::UnitTestImpl* const impl = internal::GetUnitTestImpl();
+//  const TestSuite* const test_suite = impl->current_test_suite();
 
-  // Info about the first test in the current test suite.
-  const TestInfo* const first_test_info = test_suite->test_info_list()[0];
-  const internal::TypeId first_fixture_id = first_test_info->fixture_class_id_;
-  const char* const first_test_name = first_test_info->name();
+//  // Info about the first test in the current test suite.
+//  const TestInfo* const first_test_info = test_suite->test_info_list()[0];
+//  const internal::TypeId first_fixture_id = first_test_info->fixture_class_id_;
+//  const char* const first_test_name = first_test_info->name();
 
-  // Info about the current test.
-  const TestInfo* const this_test_info = impl->current_test_info();
-  const internal::TypeId this_fixture_id = this_test_info->fixture_class_id_;
-  const char* const this_test_name = this_test_info->name();
+//  // Info about the current test.
+//  const TestInfo* const this_test_info = impl->current_test_info();
+//  const internal::TypeId this_fixture_id = this_test_info->fixture_class_id_;
+//  const char* const this_test_name = this_test_info->name();
 
-  if (this_fixture_id != first_fixture_id) {
-	// Is the first test defined using TEST?
-	const bool first_is_TEST = first_fixture_id == internal::GetTestTypeId();
-	// Is this test defined using TEST?
-	const bool this_is_TEST = this_fixture_id == internal::GetTestTypeId();
+//  if (this_fixture_id != first_fixture_id) {
+//	// Is the first test defined using TEST?
+//	const bool first_is_TEST = first_fixture_id == internal::GetTestTypeId();
+//	// Is this test defined using TEST?
+//	const bool this_is_TEST = this_fixture_id == internal::GetTestTypeId();
 
-	if (first_is_TEST || this_is_TEST) {
-	  // Both TEST and TEST_F appear in same test suite, which is incorrect.
-	  // Tell the user how to fix this.
+//	if (first_is_TEST || this_is_TEST) {
+//	  // Both TEST and TEST_F appear in same test suite, which is incorrect.
+//	  // Tell the user how to fix this.
 
-	  // Gets the name of the TEST and the name of the TEST_F.  Note
-	  // that first_is_TEST and this_is_TEST cannot both be true, as
-	  // the fixture IDs are different for the two tests.
-	  const char* const TEST_name =
-		  first_is_TEST ? first_test_name : this_test_name;
-	  const char* const TEST_F_name =
-		  first_is_TEST ? this_test_name : first_test_name;
+//	  // Gets the name of the TEST and the name of the TEST_F.  Note
+//	  // that first_is_TEST and this_is_TEST cannot both be true, as
+//	  // the fixture IDs are different for the two tests.
+//	  const char* const TEST_name =
+//		  first_is_TEST ? first_test_name : this_test_name;
+//	  const char* const TEST_F_name =
+//		  first_is_TEST ? this_test_name : first_test_name;
 
-	  ADD_FAILURE()
-		  << "All tests in the same test suite must use the same test fixture\n"
-		  << "class, so mixing TEST_F and TEST in the same test suite is\n"
-		  << "illegal.  In test suite " << this_test_info->test_suite_name()
-		  << ",\n"
-		  << "test " << TEST_F_name << " is defined using TEST_F but\n"
-		  << "test " << TEST_name << " is defined using TEST.  You probably\n"
-		  << "want to change the TEST to TEST_F or move it to another test\n"
-		  << "case.";
-	} else {
-	  // Two fixture classes with the same name appear in two different
-	  // namespaces, which is not allowed. Tell the user how to fix this.
-	  ADD_FAILURE()
-		  << "All tests in the same test suite must use the same test fixture\n"
-		  << "class.  However, in test suite "
-		  << this_test_info->test_suite_name() << ",\n"
-		  << "you defined test " << first_test_name << " and test "
-		  << this_test_name << "\n"
-		  << "using two different test fixture classes.  This can happen if\n"
-		  << "the two classes are from different namespaces or translation\n"
-		  << "units and have the same name.  You should probably rename one\n"
-		  << "of the classes to put the tests into different test suites.";
-	}
-	return false;
-  }
+//	  ADD_FAILURE()
+//		  << "All tests in the same test suite must use the same test fixture\n"
+//		  << "class, so mixing TEST_F and TEST in the same test suite is\n"
+//		  << "illegal.  In test suite " << this_test_info->test_suite_name()
+//		  << ",\n"
+//		  << "test " << TEST_F_name << " is defined using TEST_F but\n"
+//		  << "test " << TEST_name << " is defined using TEST.  You probably\n"
+//		  << "want to change the TEST to TEST_F or move it to another test\n"
+//		  << "case.";
+//	} else {
+//	  // Two fixture classes with the same name appear in two different
+//	  // namespaces, which is not allowed. Tell the user how to fix this.
+//	  ADD_FAILURE()
+//		  << "All tests in the same test suite must use the same test fixture\n"
+//		  << "class.  However, in test suite "
+//		  << this_test_info->test_suite_name() << ",\n"
+//		  << "you defined test " << first_test_name << " and test "
+//		  << this_test_name << "\n"
+//		  << "using two different test fixture classes.  This can happen if\n"
+//		  << "the two classes are from different namespaces or translation\n"
+//		  << "units and have the same name.  You should probably rename one\n"
+//		  << "of the classes to put the tests into different test suites.";
+//	}
+//	return false;
+//  }
 
-  return true;
-}
+//  return true;
+//}
 
-// Runs the test and updates the test result.
-void Test::Run() {
-  if (!HasSameFixtureClass()) return;
+//// Runs the test and updates the test result.
+//void Test::Run() {
+//  if (!HasSameFixtureClass()) return;
 
-  internal::UnitTestImpl* const impl = internal::GetUnitTestImpl();
-  impl->os_stack_trace_getter()->UponLeavingGTest();
-  internal::HandleExceptionsInMethodIfSupported(this, &Test::SetUp, "SetUp()");
-  // We will run the test only if SetUp() was successful and didn't call
-  // GTEST_SKIP().
-  if (!HasFatalFailure() && !IsSkipped()) {
-	impl->os_stack_trace_getter()->UponLeavingGTest();
-	internal::HandleExceptionsInMethodIfSupported(
-		this, &Test::TestBody, "the test body");
-  }
+//  internal::UnitTestImpl* const impl = internal::GetUnitTestImpl();
+//  impl->os_stack_trace_getter()->UponLeavingGTest();
+//  internal::HandleExceptionsInMethodIfSupported(this, &Test::SetUp, "SetUp()");
+//  // We will run the test only if SetUp() was successful and didn't call
+//  // GTEST_SKIP().
+//  if (!HasFatalFailure() && !IsSkipped()) {
+//	impl->os_stack_trace_getter()->UponLeavingGTest();
+//	internal::HandleExceptionsInMethodIfSupported(
+//		this, &Test::TestBody, "the test body");
+//  }
 
-  // However, we want to clean up as much as possible.  Hence we will
-  // always call TearDown(), even if SetUp() or the test body has
-  // failed.
-  impl->os_stack_trace_getter()->UponLeavingGTest();
-  internal::HandleExceptionsInMethodIfSupported(
-	  this, &Test::TearDown, "TearDown()");
-}
+//  // However, we want to clean up as much as possible.  Hence we will
+//  // always call TearDown(), even if SetUp() or the test body has
+//  // failed.
+//  impl->os_stack_trace_getter()->UponLeavingGTest();
+//  internal::HandleExceptionsInMethodIfSupported(
+//	  this, &Test::TearDown, "TearDown()");
+//}
 
-// Returns true if and only if the current test has a fatal failure.
-bool Test::HasFatalFailure() {
-  return internal::GetUnitTestImpl()->current_test_result()->HasFatalFailure();
-}
+//// Returns true if and only if the current test has a fatal failure.
+//bool Test::HasFatalFailure() {
+//  return internal::GetUnitTestImpl()->current_test_result()->HasFatalFailure();
+//}
 
-// Returns true if and only if the current test has a non-fatal failure.
-bool Test::HasNonfatalFailure() {
-  return internal::GetUnitTestImpl()->current_test_result()->
-	  HasNonfatalFailure();
-}
+//// Returns true if and only if the current test has a non-fatal failure.
+//bool Test::HasNonfatalFailure() {
+//  return internal::GetUnitTestImpl()->current_test_result()->
+//	  HasNonfatalFailure();
+//}
 
-// Returns true if and only if the current test was skipped.
-bool Test::IsSkipped() {
-  return internal::GetUnitTestImpl()->current_test_result()->Skipped();
-}
+//// Returns true if and only if the current test was skipped.
+//bool Test::IsSkipped() {
+//  return internal::GetUnitTestImpl()->current_test_result()->Skipped();
+//}
 
 //// class TestInfo
 
@@ -2190,7 +2209,7 @@ namespace internal {
 // Prints a TestPartResult.
 static void PrintTestPartResult(const TestPartResult& test_part_result) {
   const std::string& result =
-	  PrintTestPartResultToString(test_part_result);
+	  ::jmsd::cutf::internal::PrintTestPartResultToString(test_part_result);
   printf("%s\n", result.c_str());
   fflush(stdout);
   // If the test program runs in Visual Studio or a debugger, the
@@ -2361,7 +2380,7 @@ void ColoredPrintf(GTestColor color, const char* fmt, ...) {
 static const char kTypeParamLabel[] = "TypeParam";
 static const char kValueParamLabel[] = "GetParam()";
 
-static void PrintFullTestCommentIfPresent(const TestInfo& test_info) {
+static void PrintFullTestCommentIfPresent(const ::jmsd::cutf::TestInfo& test_info) {
   const char* const type_param = test_info.type_param();
   const char* const value_param = test_info.value_param();
 
@@ -2380,7 +2399,7 @@ static void PrintFullTestCommentIfPresent(const TestInfo& test_info) {
 // This class implements the TestEventListener interface.
 //
 // Class PrettyUnitTestResultPrinter is copyable.
-class PrettyUnitTestResultPrinter : public TestEventListener {
+class PrettyUnitTestResultPrinter : public ::jmsd::cutf::TestEventListener {
  public:
   PrettyUnitTestResultPrinter() {}
   static void PrintTestName(const char* test_suite, const char* test) {
@@ -2388,40 +2407,40 @@ class PrettyUnitTestResultPrinter : public TestEventListener {
   }
 
   // The following methods override what's in the TestEventListener class.
-  void OnTestProgramStart(const UnitTest& /*unit_test*/) override {}
-  void OnTestIterationStart(const UnitTest& unit_test, int iteration) override;
-  void OnEnvironmentsSetUpStart(const UnitTest& unit_test) override;
-  void OnEnvironmentsSetUpEnd(const UnitTest& /*unit_test*/) override {}
+  void OnTestProgramStart(const ::jmsd::cutf::UnitTest& /*unit_test*/) override {}
+  void OnTestIterationStart(const ::jmsd::cutf::UnitTest& unit_test, int iteration) override;
+  void OnEnvironmentsSetUpStart(const ::jmsd::cutf::UnitTest& unit_test) override;
+  void OnEnvironmentsSetUpEnd(const ::jmsd::cutf::UnitTest& /*unit_test*/) override {}
 #ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
-  void OnTestCaseStart(const TestCase& test_case) override;
+  void OnTestCaseStart(const ::jmsd::cutf::TestCase& test_case) override;
 #else
-  void OnTestSuiteStart(const TestSuite& test_suite) override;
+  void OnTestSuiteStart(const ::jmsd::cutf::TestSuite& test_suite) override;
 #endif  // OnTestCaseStart
 
-  void OnTestStart(const TestInfo& test_info) override;
+  void OnTestStart(const ::jmsd::cutf::TestInfo& test_info) override;
 
   void OnTestPartResult(const TestPartResult& result) override;
-  void OnTestEnd(const TestInfo& test_info) override;
+  void OnTestEnd(const ::jmsd::cutf::TestInfo& test_info) override;
 #ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
   void OnTestCaseEnd(const TestCase& test_case) override;
 #else
-  void OnTestSuiteEnd(const TestSuite& test_suite) override;
+  void OnTestSuiteEnd(const ::jmsd::cutf::TestSuite& test_suite) override;
 #endif  // GTEST_REMOVE_LEGACY_TEST_CASEAPI_
 
-  void OnEnvironmentsTearDownStart(const UnitTest& unit_test) override;
-  void OnEnvironmentsTearDownEnd(const UnitTest& /*unit_test*/) override {}
-  void OnTestIterationEnd(const UnitTest& unit_test, int iteration) override;
-  void OnTestProgramEnd(const UnitTest& /*unit_test*/) override {}
+  void OnEnvironmentsTearDownStart(const ::jmsd::cutf::UnitTest& unit_test) override;
+  void OnEnvironmentsTearDownEnd(const ::jmsd::cutf::UnitTest& /*unit_test*/) override {}
+  void OnTestIterationEnd(const ::jmsd::cutf::UnitTest& unit_test, int iteration) override;
+  void OnTestProgramEnd(const ::jmsd::cutf::UnitTest& /*unit_test*/) override {}
 
  private:
-  static void PrintFailedTests(const UnitTest& unit_test);
-  static void PrintFailedTestSuites(const UnitTest& unit_test);
-  static void PrintSkippedTests(const UnitTest& unit_test);
+  static void PrintFailedTests(const ::jmsd::cutf::UnitTest& unit_test);
+  static void PrintFailedTestSuites(const ::jmsd::cutf::UnitTest& unit_test);
+  static void PrintSkippedTests(const ::jmsd::cutf::UnitTest& unit_test);
 };
 
   // Fired before each iteration of tests starts.
 void PrettyUnitTestResultPrinter::OnTestIterationStart(
-	const UnitTest& unit_test, int iteration) {
+	const ::jmsd::cutf::UnitTest& unit_test, int iteration) {
   if (GTEST_FLAG(repeat) != 1)
 	printf("\nRepeating all tests (iteration %d) . . .\n\n", iteration + 1);
 
@@ -2429,17 +2448,17 @@ void PrettyUnitTestResultPrinter::OnTestIterationStart(
 
   // Prints the filter if it's not *.  This reminds the user that some
   // tests may be skipped.
-  if (!String::CStringEquals(filter, kUniversalFilter)) {
+  if (!String::CStringEquals(filter, ::jmsd::cutf::constants::kUniversalFilter)) {
 	ColoredPrintf(COLOR_YELLOW,
 				  "Note: %s filter = %s\n", GTEST_NAME_, filter);
   }
 
-  if (internal::ShouldShard(kTestTotalShards, kTestShardIndex, false)) {
-	const int32_t shard_index = Int32FromEnvOrDie(kTestShardIndex, -1);
+  if (internal::ShouldShard(::jmsd::cutf::constants::kTestTotalShards, ::jmsd::cutf::constants::kTestShardIndex, false)) {
+	const int32_t shard_index = Int32FromEnvOrDie(::jmsd::cutf::constants::kTestShardIndex, -1);
 	ColoredPrintf(COLOR_YELLOW,
 				  "Note: This is test shard %d of %s.\n",
 				  static_cast<int>(shard_index) + 1,
-				  internal::posix::GetEnv(kTestTotalShards));
+				  internal::posix::GetEnv(::jmsd::cutf::constants::kTestTotalShards));
   }
 
   if (GTEST_FLAG(shuffle)) {
@@ -2456,7 +2475,7 @@ void PrettyUnitTestResultPrinter::OnTestIterationStart(
 }
 
 void PrettyUnitTestResultPrinter::OnEnvironmentsSetUpStart(
-	const UnitTest& /*unit_test*/) {
+	const ::jmsd::cutf::UnitTest& /*unit_test*/) {
   ColoredPrintf(COLOR_GREEN,  "[----------] ");
   printf("Global test environment set-up.\n");
   fflush(stdout);
@@ -2477,7 +2496,7 @@ void PrettyUnitTestResultPrinter::OnTestCaseStart(const TestCase& test_case) {
 }
 #else
 void PrettyUnitTestResultPrinter::OnTestSuiteStart(
-	const TestSuite& test_suite) {
+	const ::jmsd::cutf::TestSuite& test_suite) {
   const std::string counts =
 	  FormatCountableNoun(test_suite.test_to_run_count(), "test", "tests");
   ColoredPrintf(COLOR_GREEN, "[----------] ");
@@ -2491,7 +2510,7 @@ void PrettyUnitTestResultPrinter::OnTestSuiteStart(
 }
 #endif  // GTEST_REMOVE_LEGACY_TEST_CASEAPI_
 
-void PrettyUnitTestResultPrinter::OnTestStart(const TestInfo& test_info) {
+void PrettyUnitTestResultPrinter::OnTestStart(const ::jmsd::cutf::TestInfo& test_info) {
   ColoredPrintf(COLOR_GREEN,  "[ RUN      ] ");
   PrintTestName(test_info.test_suite_name(), test_info.name());
   printf("\n");
@@ -2513,7 +2532,7 @@ void PrettyUnitTestResultPrinter::OnTestPartResult(
   }
 }
 
-void PrettyUnitTestResultPrinter::OnTestEnd(const TestInfo& test_info) {
+void PrettyUnitTestResultPrinter::OnTestEnd(const ::jmsd::cutf::TestInfo& test_info) {
   if (test_info.result()->Passed()) {
 	ColoredPrintf(COLOR_GREEN, "[       OK ] ");
   } else if (test_info.result()->Skipped()) {
@@ -2546,7 +2565,7 @@ void PrettyUnitTestResultPrinter::OnTestCaseEnd(const TestCase& test_case) {
   fflush(stdout);
 }
 #else
-void PrettyUnitTestResultPrinter::OnTestSuiteEnd(const TestSuite& test_suite) {
+void PrettyUnitTestResultPrinter::OnTestSuiteEnd(const ::jmsd::cutf::TestSuite& test_suite) {
   if (!GTEST_FLAG(print_time)) return;
 
   const std::string counts =
@@ -2559,25 +2578,25 @@ void PrettyUnitTestResultPrinter::OnTestSuiteEnd(const TestSuite& test_suite) {
 #endif  // GTEST_REMOVE_LEGACY_TEST_CASEAPI_
 
 void PrettyUnitTestResultPrinter::OnEnvironmentsTearDownStart(
-	const UnitTest& /*unit_test*/) {
+	const ::jmsd::cutf::UnitTest& /*unit_test*/) {
   ColoredPrintf(COLOR_GREEN,  "[----------] ");
   printf("Global test environment tear-down\n");
   fflush(stdout);
 }
 
 // Internal helper for printing the list of failed tests.
-void PrettyUnitTestResultPrinter::PrintFailedTests(const UnitTest& unit_test) {
+void PrettyUnitTestResultPrinter::PrintFailedTests(const ::jmsd::cutf::UnitTest& unit_test) {
   const int failed_test_count = unit_test.failed_test_count();
   ColoredPrintf(COLOR_RED,  "[  FAILED  ] ");
   printf("%s, listed below:\n", FormatTestCount(failed_test_count).c_str());
 
   for (int i = 0; i < unit_test.total_test_suite_count(); ++i) {
-	const TestSuite& test_suite = *unit_test.GetTestSuite(i);
+	const ::jmsd::cutf::TestSuite& test_suite = *unit_test.GetTestSuite(i);
 	if (!test_suite.should_run() || (test_suite.failed_test_count() == 0)) {
 	  continue;
 	}
 	for (int j = 0; j < test_suite.total_test_count(); ++j) {
-	  const TestInfo& test_info = *test_suite.GetTestInfo(j);
+	  const ::jmsd::cutf::TestInfo& test_info = *test_suite.GetTestInfo(j);
 	  if (!test_info.should_run() || !test_info.result()->Failed()) {
 		continue;
 	  }
@@ -2594,10 +2613,10 @@ void PrettyUnitTestResultPrinter::PrintFailedTests(const UnitTest& unit_test) {
 // Internal helper for printing the list of test suite failures not covered by
 // PrintFailedTests.
 void PrettyUnitTestResultPrinter::PrintFailedTestSuites(
-	const UnitTest& unit_test) {
+	const ::jmsd::cutf::UnitTest& unit_test) {
   int suite_failure_count = 0;
   for (int i = 0; i < unit_test.total_test_suite_count(); ++i) {
-	const TestSuite& test_suite = *unit_test.GetTestSuite(i);
+	const ::jmsd::cutf::TestSuite& test_suite = *unit_test.GetTestSuite(i);
 	if (!test_suite.should_run()) {
 	  continue;
 	}
@@ -2614,19 +2633,19 @@ void PrettyUnitTestResultPrinter::PrintFailedTestSuites(
 }
 
 // Internal helper for printing the list of skipped tests.
-void PrettyUnitTestResultPrinter::PrintSkippedTests(const UnitTest& unit_test) {
+void PrettyUnitTestResultPrinter::PrintSkippedTests(const ::jmsd::cutf::UnitTest& unit_test) {
   const int skipped_test_count = unit_test.skipped_test_count();
   if (skipped_test_count == 0) {
 	return;
   }
 
   for (int i = 0; i < unit_test.total_test_suite_count(); ++i) {
-	const TestSuite& test_suite = *unit_test.GetTestSuite(i);
+	const ::jmsd::cutf::TestSuite& test_suite = *unit_test.GetTestSuite(i);
 	if (!test_suite.should_run() || (test_suite.skipped_test_count() == 0)) {
 	  continue;
 	}
 	for (int j = 0; j < test_suite.total_test_count(); ++j) {
-	  const TestInfo& test_info = *test_suite.GetTestInfo(j);
+	  const ::jmsd::cutf::TestInfo& test_info = *test_suite.GetTestInfo(j);
 	  if (!test_info.should_run() || !test_info.result()->Skipped()) {
 		continue;
 	  }
@@ -2637,7 +2656,7 @@ void PrettyUnitTestResultPrinter::PrintSkippedTests(const UnitTest& unit_test) {
   }
 }
 
-void PrettyUnitTestResultPrinter::OnTestIterationEnd(const UnitTest& unit_test,
+void PrettyUnitTestResultPrinter::OnTestIterationEnd(const ::jmsd::cutf::UnitTest& unit_test,
 													 int /*iteration*/) {
   ColoredPrintf(COLOR_GREEN,  "[==========] ");
   printf("%s from %s ran.",
@@ -2681,16 +2700,16 @@ void PrettyUnitTestResultPrinter::OnTestIterationEnd(const UnitTest& unit_test,
 
 
 // This class generates an XML output file.
-class XmlUnitTestResultPrinter : public EmptyTestEventListener {
+class XmlUnitTestResultPrinter : public ::jmsd::cutf::EmptyTestEventListener {
  public:
   explicit XmlUnitTestResultPrinter(const char* output_file);
 
-  void OnTestIterationEnd(const UnitTest& unit_test, int iteration) override;
-  void ListTestsMatchingFilter(const std::vector<TestSuite*>& test_suites);
+  void OnTestIterationEnd(const ::jmsd::cutf::UnitTest& unit_test, int iteration) override;
+  void ListTestsMatchingFilter(const std::vector<::jmsd::cutf::TestSuite*>& test_suites);
 
   // Prints an XML summary of all unit tests.
   static void PrintXmlTestsList(std::ostream* stream,
-								const std::vector<TestSuite*>& test_suites);
+								const std::vector<::jmsd::cutf::TestSuite*>& test_suites);
 
  private:
   // Is c a whitespace character that is normalized to a space character
@@ -2736,26 +2755,26 @@ class XmlUnitTestResultPrinter : public EmptyTestEventListener {
   // Streams an XML representation of a TestInfo object.
   static void OutputXmlTestInfo(::std::ostream* stream,
 								const char* test_suite_name,
-								const TestInfo& test_info);
+								const ::jmsd::cutf::TestInfo& test_info);
 
   // Prints an XML representation of a TestSuite object
   static void PrintXmlTestSuite(::std::ostream* stream,
-								const TestSuite& test_suite);
+								const ::jmsd::cutf::TestSuite& test_suite);
 
   // Prints an XML summary of unit_test to output stream out.
   static void PrintXmlUnitTest(::std::ostream* stream,
-							   const UnitTest& unit_test);
+							   const ::jmsd::cutf::UnitTest& unit_test);
 
   // Produces a string representing the test properties in a result as space
   // delimited XML attributes based on the property key="value" pairs.
   // When the std::string is not empty, it includes a space at the beginning,
   // to delimit this attribute from prior attributes.
-  static std::string TestPropertiesAsXmlAttributes(const TestResult& result);
+  static std::string TestPropertiesAsXmlAttributes(const ::jmsd::cutf::TestResult& result);
 
   // Streams an XML representation of the test properties of a TestResult
   // object.
   static void OutputXmlTestProperties(std::ostream* stream,
-									  const TestResult& result);
+									  const ::jmsd::cutf::TestResult& result);
 
   // The output file.
   const std::string output_file_;
@@ -2772,7 +2791,7 @@ XmlUnitTestResultPrinter::XmlUnitTestResultPrinter(const char* output_file)
 }
 
 // Called after the unit test ends.
-void XmlUnitTestResultPrinter::OnTestIterationEnd(const UnitTest& unit_test,
+void XmlUnitTestResultPrinter::OnTestIterationEnd(const ::jmsd::cutf::UnitTest& unit_test,
 												  int /*iteration*/) {
   FILE* xmlout = OpenFileForWriting(output_file_);
   std::stringstream stream;
@@ -2782,7 +2801,7 @@ void XmlUnitTestResultPrinter::OnTestIterationEnd(const UnitTest& unit_test,
 }
 
 void XmlUnitTestResultPrinter::ListTestsMatchingFilter(
-	const std::vector<TestSuite*>& test_suites) {
+	const std::vector<::jmsd::cutf::TestSuite*>& test_suites) {
   FILE* xmlout = OpenFileForWriting(output_file_);
   std::stringstream stream;
   PrintXmlTestsList(&stream, test_suites);
@@ -2937,7 +2956,7 @@ void XmlUnitTestResultPrinter::OutputXmlAttribute(
 	const std::string& name,
 	const std::string& value) {
   const std::vector<std::string>& allowed_names =
-	  GetReservedOutputAttributesForElement(element_name);
+	  ::jmsd::cutf::GetReservedOutputAttributesForElement(element_name);
 
   GTEST_CHECK_(std::find(allowed_names.begin(), allowed_names.end(), name) !=
 				   allowed_names.end())
@@ -2950,8 +2969,8 @@ void XmlUnitTestResultPrinter::OutputXmlAttribute(
 // Prints an XML representation of a TestInfo object.
 void XmlUnitTestResultPrinter::OutputXmlTestInfo(::std::ostream* stream,
 												 const char* test_suite_name,
-												 const TestInfo& test_info) {
-  const TestResult& result = *test_info.result();
+												 const ::jmsd::cutf::TestInfo& test_info) {
+  const ::jmsd::cutf::TestResult& result = *test_info.result();
   const std::string kTestsuite = "testcase";
 
   if (test_info.is_in_another_shard()) {
@@ -3023,7 +3042,7 @@ void XmlUnitTestResultPrinter::OutputXmlTestInfo(::std::ostream* stream,
 
 // Prints an XML representation of a TestSuite object
 void XmlUnitTestResultPrinter::PrintXmlTestSuite(std::ostream* stream,
-												 const TestSuite& test_suite) {
+												 const ::jmsd::cutf::TestSuite& test_suite) {
   const std::string kTestsuite = "testsuite";
   *stream << "  <" << kTestsuite;
   OutputXmlAttribute(stream, kTestsuite, "name", test_suite.name());
@@ -3053,7 +3072,7 @@ void XmlUnitTestResultPrinter::PrintXmlTestSuite(std::ostream* stream,
 
 // Prints an XML summary of unit_test to output stream out.
 void XmlUnitTestResultPrinter::PrintXmlUnitTest(std::ostream* stream,
-												const UnitTest& unit_test) {
+												const ::jmsd::cutf::UnitTest& unit_test) {
   const std::string kTestsuites = "testsuites";
 
   *stream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
@@ -3090,7 +3109,7 @@ void XmlUnitTestResultPrinter::PrintXmlUnitTest(std::ostream* stream,
 }
 
 void XmlUnitTestResultPrinter::PrintXmlTestsList(
-	std::ostream* stream, const std::vector<TestSuite*>& test_suites) {
+	std::ostream* stream, const std::vector<::jmsd::cutf::TestSuite*>& test_suites) {
   const std::string kTestsuites = "testsuites";
 
   *stream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
@@ -3114,10 +3133,10 @@ void XmlUnitTestResultPrinter::PrintXmlTestsList(
 // Produces a string representing the test properties in a result as space
 // delimited XML attributes based on the property key="value" pairs.
 std::string XmlUnitTestResultPrinter::TestPropertiesAsXmlAttributes(
-	const TestResult& result) {
+	const ::jmsd::cutf::TestResult& result) {
   Message attributes;
   for (int i = 0; i < result.test_property_count(); ++i) {
-	const TestProperty& property = result.GetTestProperty(i);
+	const ::jmsd::cutf::TestProperty& property = result.GetTestProperty(i);
 	attributes << " " << property.key() << "="
 		<< "\"" << EscapeXmlAttribute(property.value()) << "\"";
   }
@@ -3125,7 +3144,7 @@ std::string XmlUnitTestResultPrinter::TestPropertiesAsXmlAttributes(
 }
 
 void XmlUnitTestResultPrinter::OutputXmlTestProperties(
-	std::ostream* stream, const TestResult& result) {
+	std::ostream* stream, const ::jmsd::cutf::TestResult& result) {
   const std::string kProperties = "properties";
   const std::string kProperty = "property";
 
@@ -3135,7 +3154,7 @@ void XmlUnitTestResultPrinter::OutputXmlTestProperties(
 
   *stream << "<" << kProperties << ">\n";
   for (int i = 0; i < result.test_property_count(); ++i) {
-	const TestProperty& property = result.GetTestProperty(i);
+	const ::jmsd::cutf::TestProperty& property = result.GetTestProperty(i);
 	*stream << "<" << kProperty;
 	*stream << " name=\"" << EscapeXmlAttribute(property.key()) << "\"";
 	*stream << " value=\"" << EscapeXmlAttribute(property.value()) << "\"";
@@ -3147,15 +3166,15 @@ void XmlUnitTestResultPrinter::OutputXmlTestProperties(
 // End XmlUnitTestResultPrinter
 
 // This class generates an JSON output file.
-class JsonUnitTestResultPrinter : public EmptyTestEventListener {
+class JsonUnitTestResultPrinter : public ::jmsd::cutf::EmptyTestEventListener {
  public:
   explicit JsonUnitTestResultPrinter(const char* output_file);
 
-  void OnTestIterationEnd(const UnitTest& unit_test, int iteration) override;
+  void OnTestIterationEnd(const ::jmsd::cutf::UnitTest& unit_test, int iteration) override;
 
   // Prints an JSON summary of all unit tests.
   static void PrintJsonTestList(::std::ostream* stream,
-								const std::vector<TestSuite*>& test_suites);
+								const std::vector<::jmsd::cutf::TestSuite*>& test_suites);
 
  private:
   // Returns an JSON-escaped copy of the input string str.
@@ -3179,19 +3198,19 @@ class JsonUnitTestResultPrinter : public EmptyTestEventListener {
   // Streams a JSON representation of a TestInfo object.
   static void OutputJsonTestInfo(::std::ostream* stream,
 								 const char* test_suite_name,
-								 const TestInfo& test_info);
+								 const ::jmsd::cutf::TestInfo& test_info);
 
   // Prints a JSON representation of a TestSuite object
   static void PrintJsonTestSuite(::std::ostream* stream,
-								 const TestSuite& test_suite);
+								 const ::jmsd::cutf::TestSuite& test_suite);
 
   // Prints a JSON summary of unit_test to output stream out.
   static void PrintJsonUnitTest(::std::ostream* stream,
-								const UnitTest& unit_test);
+								const ::jmsd::cutf::UnitTest& unit_test);
 
   // Produces a string representing the test properties in a result as
   // a JSON dictionary.
-  static std::string TestPropertiesAsJson(const TestResult& result,
+  static std::string TestPropertiesAsJson(const ::jmsd::cutf::TestResult& result,
 										  const std::string& indent);
 
   // The output file.
@@ -3208,7 +3227,7 @@ JsonUnitTestResultPrinter::JsonUnitTestResultPrinter(const char* output_file)
   }
 }
 
-void JsonUnitTestResultPrinter::OnTestIterationEnd(const UnitTest& unit_test,
+void JsonUnitTestResultPrinter::OnTestIterationEnd(const ::jmsd::cutf::UnitTest& unit_test,
 												  int /*iteration*/) {
   FILE* jsonout = OpenFileForWriting(output_file_);
   std::stringstream stream;
@@ -3294,7 +3313,7 @@ void JsonUnitTestResultPrinter::OutputJsonKey(
 	const std::string& indent,
 	bool comma) {
   const std::vector<std::string>& allowed_names =
-	  GetReservedOutputAttributesForElement(element_name);
+	  ::jmsd::cutf::GetReservedOutputAttributesForElement(element_name);
 
   GTEST_CHECK_(std::find(allowed_names.begin(), allowed_names.end(), name) !=
 				   allowed_names.end())
@@ -3314,7 +3333,7 @@ void JsonUnitTestResultPrinter::OutputJsonKey(
 	const std::string& indent,
 	bool comma) {
   const std::vector<std::string>& allowed_names =
-	  GetReservedOutputAttributesForElement(element_name);
+	  ::jmsd::cutf::GetReservedOutputAttributesForElement(element_name);
 
   GTEST_CHECK_(std::find(allowed_names.begin(), allowed_names.end(), name) !=
 				   allowed_names.end())
@@ -3329,8 +3348,8 @@ void JsonUnitTestResultPrinter::OutputJsonKey(
 // Prints a JSON representation of a TestInfo object.
 void JsonUnitTestResultPrinter::OutputJsonTestInfo(::std::ostream* stream,
 												   const char* test_suite_name,
-												   const TestInfo& test_info) {
-  const TestResult& result = *test_info.result();
+												   const ::jmsd::cutf::TestInfo& test_info) {
+  const ::jmsd::cutf::TestResult& result = *test_info.result();
   const std::string kTestsuite = "testcase";
   const std::string kIndent = Indent(10);
 
@@ -3394,7 +3413,7 @@ void JsonUnitTestResultPrinter::OutputJsonTestInfo(::std::ostream* stream,
 
 // Prints an JSON representation of a TestSuite object
 void JsonUnitTestResultPrinter::PrintJsonTestSuite(
-	std::ostream* stream, const TestSuite& test_suite) {
+	std::ostream* stream, const ::jmsd::cutf::TestSuite& test_suite) {
   const std::string kTestsuite = "testsuite";
   const std::string kIndent = Indent(6);
 
@@ -3437,7 +3456,7 @@ void JsonUnitTestResultPrinter::PrintJsonTestSuite(
 
 // Prints a JSON summary of unit_test to output stream out.
 void JsonUnitTestResultPrinter::PrintJsonUnitTest(std::ostream* stream,
-												  const UnitTest& unit_test) {
+												  const ::jmsd::cutf::UnitTest& unit_test) {
   const std::string kTestsuites = "testsuites";
   const std::string kIndent = Indent(2);
   *stream << "{\n";
@@ -3482,7 +3501,7 @@ void JsonUnitTestResultPrinter::PrintJsonUnitTest(std::ostream* stream,
 }
 
 void JsonUnitTestResultPrinter::PrintJsonTestList(
-	std::ostream* stream, const std::vector<TestSuite*>& test_suites) {
+	std::ostream* stream, const std::vector<::jmsd::cutf::TestSuite*>& test_suites) {
   const std::string kTestsuites = "testsuites";
   const std::string kIndent = Indent(2);
   *stream << "{\n";
@@ -3509,10 +3528,10 @@ void JsonUnitTestResultPrinter::PrintJsonTestList(
 // Produces a string representing the test properties in a result as
 // a JSON dictionary.
 std::string JsonUnitTestResultPrinter::TestPropertiesAsJson(
-	const TestResult& result, const std::string& indent) {
+	const ::jmsd::cutf::TestResult& result, const std::string& indent) {
   Message attributes;
   for (int i = 0; i < result.test_property_count(); ++i) {
-	const TestProperty& property = result.GetTestProperty(i);
+	const ::jmsd::cutf::TestProperty& property = result.GetTestProperty(i);
 	attributes << ",\n" << indent << "\"" << property.key() << "\": "
 			   << "\"" << EscapeJson(property.value()) << "\"";
   }
@@ -3627,11 +3646,11 @@ void OsStackTraceGetter::UponLeavingGTest() GTEST_LOCK_EXCLUDED_(mutex_) {
 // For example, if Foo() calls Bar(), which in turn calls
 // GetCurrentOsStackTraceExceptTop(..., 1), Foo() will be included in
 // the trace but Bar() and GetCurrentOsStackTraceExceptTop() won't.
-std::string GetCurrentOsStackTraceExceptTop(UnitTest* /*unit_test*/,
+std::string GetCurrentOsStackTraceExceptTop(::jmsd::cutf::UnitTest* /*unit_test*/,
 											int skip_count) {
   // We pass skip_count + 1 to skip this wrapper function in addition
   // to what the user really wants to skip.
-  return GetUnitTestImpl()->CurrentOsStackTraceExceptTop(skip_count + 1);
+  return ::jmsd::cutf::internal::GetUnitTestImpl()->CurrentOsStackTraceExceptTop(skip_count + 1);
 }
 
 // Used by the GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_ macro to
@@ -4020,7 +4039,7 @@ void InitGoogleTestImpl(int* argc, CharType** argv) {
 #endif  // GTEST_HAS_ABSL
 
   ParseGoogleTestFlagsOnly(argc, argv);
-  GetUnitTestImpl()->PostFlagParsingInit();
+  ::jmsd::cutf::internal::GetUnitTestImpl()->PostFlagParsingInit();
 }
 
 }  // namespace internal

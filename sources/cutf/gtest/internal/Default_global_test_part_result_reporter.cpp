@@ -2,6 +2,7 @@
 
 
 #include "Unit_test_impl.h"
+#include "gtest/Test_event_listener.h"
 
 
 namespace jmsd {

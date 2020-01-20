@@ -1,12 +1,34 @@
 #pragma once
 
-#include "gtt.hxx"
+#include "Assertion_result.h"
 
+
+#include <type_traits>
 
 namespace jmsd {
 namespace cutf {
 
 
+// Used in the EXPECT_TRUE/FALSE(bool_expression).
+//
+// T must be contextually convertible to bool.
+//
+// The second parameter prevents this overload from being considered if
+// the argument is implicitly convertible to AssertionResult. In that case
+// we want AssertionResult's copy constructor to be used.
+template< typename T >
+AssertionResult::AssertionResult(
+	T const &success,
+	typename ::std::enable_if< !::std::is_convertible< T, AssertionResult >::value >::type * /*enabler*/ )
+	:
+		success_( success )
+{}
+
+// Streams a custom failure message into this object.
+template< typename T > AssertionResult &AssertionResult::operator <<( T const &value ) {
+	this->AppendMessage( ::testing::Message() << value );
+	return *this;
+}
 
 
 

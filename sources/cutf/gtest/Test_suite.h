@@ -17,15 +17,6 @@
 #include <memory>
 
 
-namespace testing {
-
-
-class Test;
-
-
-} // namespace testing
-
-
 namespace jmsd {
 namespace cutf {
 
@@ -119,7 +110,7 @@ public:
   const TestResult& ad_hoc_test_result() const;
 
  private:
-  friend ::testing::Test;
+  friend Test;
   friend internal::UnitTestImpl;
 
   // Gets the (mutable) vector of TestInfos in this TestSuite.

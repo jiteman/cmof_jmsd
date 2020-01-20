@@ -21,9 +21,6 @@
 #endif
 
 
-#include "gtest/Unit_test.hxx"
-
-
 #include <ctype.h>
 #include <float.h>
 #include <string.h>
@@ -42,6 +39,9 @@
 #include "gtest/internal/gtest-type-util.h"
 
 #include "gtest/Test_info.hxx"
+#include "gtest/Unit_test.hxx"
+#include "gtest/Assertion_result.hxx"
+#include "gtest/Test.hxx"
 
 // Due to C++ preprocessor weirdness, we need double indirection to
 // concatenate two tokens when one of them is __LINE__.  Writing
@@ -61,14 +61,6 @@ namespace proto2 { class Message; }
 
 namespace testing {
 
-// Forward declarations.
-
-//class AssertionResult;                 // Result of an assertion.
-//class Message;                         // Represents a failure message.
-//class Test;                            // Represents a test.
-//class TestInfo;                        // Information about a test.
-//class TestPartResult;                  // Result of a test part.
-//class UnitTest;                        // A collection of test suites.
 
 template <typename T>
 ::std::string PrintToString(const T& value);
@@ -148,7 +140,7 @@ GTEST_API_ std::string DiffStrings(const std::string& left,
 // The ignoring_case parameter is true if and only if the assertion is a
 // *_STRCASEEQ*.  When it's true, the string " (ignoring case)" will
 // be inserted into the message.
-GTEST_API_ AssertionResult EqFailure(const char* expected_expression,
+GTEST_API_ ::jmsd::cutf::AssertionResult EqFailure(const char* expected_expression,
 									 const char* actual_expression,
 									 const std::string& expected_value,
 									 const std::string& actual_value,
@@ -156,7 +148,7 @@ GTEST_API_ AssertionResult EqFailure(const char* expected_expression,
 
 // Constructs a failure message for Boolean assertions such as EXPECT_TRUE.
 GTEST_API_ std::string GetBoolAssertionFailureMessage(
-	const AssertionResult& assertion_result,
+	const ::jmsd::cutf::AssertionResult& assertion_result,
 	const char* expression_text,
 	const char* actual_predicate_value,
 	const char* expected_predicate_value);
@@ -399,7 +391,7 @@ class TestFactoryBase {
 
   // Creates a test instance to run. The instance is both created and destroyed
   // within TestInfoImpl::Run()
-  virtual Test* CreateTest() = 0;
+  virtual ::jmsd::cutf::Test* CreateTest() = 0;
 
  protected:
   TestFactoryBase() {}
@@ -413,7 +405,7 @@ class TestFactoryBase {
 template <class TestClass>
 class TestFactoryImpl : public TestFactoryBase {
  public:
-  Test* CreateTest() override { return new TestClass; }
+  ::jmsd::cutf::Test* CreateTest() override { return new TestClass; }
 };
 
 #if GTEST_OS_WINDOWS
@@ -422,10 +414,8 @@ class TestFactoryImpl : public TestFactoryBase {
 // {ASSERT|EXPECT}_HRESULT_{SUCCEEDED|FAILED}
 // We pass a long instead of HRESULT to avoid causing an
 // include dependency for the HRESULT type.
-GTEST_API_ AssertionResult IsHRESULTSuccess(const char* expr,
-											long hr);  // NOLINT
-GTEST_API_ AssertionResult IsHRESULTFailure(const char* expr,
-											long hr);  // NOLINT
+GTEST_API_ ::jmsd::cutf::AssertionResult IsHRESULTSuccess(const char* expr, long hr);
+GTEST_API_ ::jmsd::cutf::AssertionResult IsHRESULTFailure(const char* expr, long hr);
 
 #endif  // GTEST_OS_WINDOWS
 
@@ -460,7 +450,7 @@ struct SuiteApiResolver : T {
   // testing::Test is only forward declared at this point. So we make it a
   // dependend class for the compiler to be OK with it.
   using Test =
-	  typename std::conditional<sizeof(T) != 0, ::testing::Test, void>::type;
+	  typename std::conditional<sizeof(T) != 0, ::jmsd::cutf::Test, void>::type;
 
   static SetUpTearDownSuiteFuncType GetSetUpCaseOrSuite(const char* filename,
 														int line_num) {

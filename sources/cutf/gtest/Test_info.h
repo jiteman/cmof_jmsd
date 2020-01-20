@@ -117,7 +117,7 @@ class GTEST_API_ TestInfo {
 #if GTEST_HAS_DEATH_TEST
   friend ::testing::internal::DefaultDeathTestFactory;
 #endif  // GTEST_HAS_DEATH_TEST
-  friend ::testing::Test;
+  friend Test;
   friend TestSuite;
   friend internal::UnitTestImpl;
   friend ::testing::internal::StreamingListenerTest;

@@ -13,6 +13,8 @@ namespace cutf {
 class GTEST_API_ AssertionResult {
 
 public:
+	typedef AssertionResult THIS_STATIC;
+
 	// Makes a successful assertion result.
 	static AssertionResult AssertionSuccess();
 
@@ -21,7 +23,7 @@ public:
 
 	// Makes a failed assertion result with the given failure message.
 	// Deprecated; use AssertionFailure() << msg.
-	static AssertionResult AssertionFailure(const Message& msg);
+	static AssertionResult AssertionFailure(const ::testing::Message& msg);
 
 public:
 	// Copy constructor.
@@ -38,10 +40,7 @@ public:
 	template< typename T >
 	explicit AssertionResult(
 		T const &success,
-		typename ::std::enable_if< !::std::is_convertible< T, AssertionResult >::value >::type * /*enabler*/ = nullptr )
-		:
-			success_( success )
-	{}
+		typename ::std::enable_if< !::std::is_convertible< T, AssertionResult >::value >::type * /*enabler*/ = nullptr );
 
 	// Assignment operator.
 	AssertionResult &operator =( AssertionResult other ) {
@@ -50,7 +49,7 @@ public:
 	}
 
   // Returns true if and only if the assertion succeeded.
-  operator bool() const { return success_; }  // NOLINT
+  operator bool() const;
 
   // Returns the assertion's negation. Used with EXPECT/ASSERT_FALSE.
   AssertionResult operator!() const;
@@ -59,32 +58,21 @@ public:
   // use it when they fail (i.e., the predicate's outcome doesn't match the
   // assertion's expectation). When nothing has been streamed into the
   // object, returns an empty string.
-  const char* message() const {
-	return message_.get() != nullptr ? message_->c_str() : "";
-  }
+  const char* message() const;
+
   // Deprecated; please use message() instead.
-  const char* failure_message() const { return message(); }
+  const char* failure_message() const;
 
-  // Streams a custom failure message into this object.
-  template <typename T> AssertionResult& operator<<(const T& value) {
-	AppendMessage(Message() << value);
-	return *this;
-  }
+	// Streams a custom failure message into this object.
+	template< typename T >
+	AssertionResult &operator <<( T const &value);
 
-  // Allows streaming basic output manipulators such as endl or flush into
-  // this object.
-  AssertionResult& operator<<(
-	  ::std::ostream& (*basic_manipulator)(::std::ostream& stream)) {
-	AppendMessage(Message() << basic_manipulator);
-	return *this;
-  }
+  // Allows streaming basic output manipulators such as endl or flush into this object.
+  AssertionResult& operator<<( ::std::ostream& (*basic_manipulator)(::std::ostream& stream));
 
  private:
   // Appends the contents of message to message_.
-  void AppendMessage(const Message& a_message) {
-	if (message_.get() == nullptr) message_.reset(new ::std::string);
-	message_->append(a_message.GetString().c_str());
-  }
+  void AppendMessage( ::testing::Message const &a_message );
 
   // Swap the contents of this AssertionResult with other.
   void swap(AssertionResult& other);

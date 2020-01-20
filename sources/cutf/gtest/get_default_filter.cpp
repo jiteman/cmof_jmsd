@@ -15,7 +15,7 @@ namespace cutf {
 char const *GetDefaultFilter() {
 	char const *const testbridge_test_only = ::testing::internal::posix::GetEnv("TESTBRIDGE_TEST_ONLY");
 
-	if ( testbridge_test_only == nullptr ) return kUniversalFilter;
+	if ( testbridge_test_only == nullptr ) return constants::kUniversalFilter;
 
 	return testbridge_test_only;
 }
