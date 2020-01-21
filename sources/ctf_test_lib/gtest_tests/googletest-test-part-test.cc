@@ -31,40 +31,38 @@
 
 #include "gtest/gtest.h"
 
-using testing::Message;
-using testing::Test;
-using testing::TestPartResult;
-using testing::TestPartResultArray;
+#include "gtest/internal/gtest-constants-internal.h"
+
 
 namespace {
 
 // Tests the TestPartResult class.
 
 // The test fixture for testing TestPartResult.
-class TestPartResultTest : public Test {
+class TestPartResultTest : public ::jmsd::cutf::Test {
  protected:
   TestPartResultTest()
-      : r1_(TestPartResult::kSuccess, "foo/bar.cc", 10, "Success!"),
-        r2_(TestPartResult::kNonFatalFailure, "foo/bar.cc", -1, "Failure!"),
-        r3_(TestPartResult::kFatalFailure, nullptr, -1, "Failure!"),
-        r4_(TestPartResult::kSkip, "foo/bar.cc", 2, "Skipped!") {}
+      : r1_(::testing::TestPartResult::Type::kSuccess, "foo/bar.cc", 10, "Success!"),
+        r2_(::testing::TestPartResult::Type::kNonFatalFailure, "foo/bar.cc", -1, "Failure!"),
+        r3_(::testing::TestPartResult::Type::kFatalFailure, nullptr, -1, "Failure!"),
+        r4_(::testing::TestPartResult::Type::kSkip, "foo/bar.cc", 2, "Skipped!") {}
 
-  TestPartResult r1_, r2_, r3_, r4_;
+  ::testing::TestPartResult r1_, r2_, r3_, r4_;
 };
 
 
 TEST_F(TestPartResultTest, ConstructorWorks) {
-  Message message;
+  ::testing::Message message;
   message << "something is terribly wrong";
-  message << static_cast<const char*>(testing::internal::kStackTraceMarker);
+  message << static_cast<const char*>( ::jmsd::cutf::constants::internal::kStackTraceMarker);
   message << "some unimportant stack trace";
 
-  const TestPartResult result(TestPartResult::kNonFatalFailure,
+  const ::testing::TestPartResult result(::testing::TestPartResult::Type::kNonFatalFailure,
                               "some_file.cc",
                               42,
                               message.GetString().c_str());
 
-  EXPECT_EQ(TestPartResult::kNonFatalFailure, result.type());
+  EXPECT_EQ( ::testing::TestPartResult::Type::kNonFatalFailure, result.type());
   EXPECT_STREQ("some_file.cc", result.file_name());
   EXPECT_EQ(42, result.line_number());
   EXPECT_STREQ(message.GetString().c_str(), result.message());
@@ -72,7 +70,7 @@ TEST_F(TestPartResultTest, ConstructorWorks) {
 }
 
 TEST_F(TestPartResultTest, ResultAccessorsWork) {
-  const TestPartResult success(TestPartResult::kSuccess,
+  const ::testing::TestPartResult success(::testing::TestPartResult::Type::kSuccess,
                                "file.cc",
                                42,
                                "message");
@@ -82,7 +80,7 @@ TEST_F(TestPartResultTest, ResultAccessorsWork) {
   EXPECT_FALSE(success.fatally_failed());
   EXPECT_FALSE(success.skipped());
 
-  const TestPartResult nonfatal_failure(TestPartResult::kNonFatalFailure,
+  const ::testing::TestPartResult nonfatal_failure(::testing::TestPartResult::Type::kNonFatalFailure,
                                         "file.cc",
                                         42,
                                         "message");
@@ -92,7 +90,7 @@ TEST_F(TestPartResultTest, ResultAccessorsWork) {
   EXPECT_FALSE(nonfatal_failure.fatally_failed());
   EXPECT_FALSE(nonfatal_failure.skipped());
 
-  const TestPartResult fatal_failure(TestPartResult::kFatalFailure,
+  const ::testing::TestPartResult fatal_failure(::testing::TestPartResult::Type::kFatalFailure,
                                      "file.cc",
                                      42,
                                      "message");
@@ -102,7 +100,7 @@ TEST_F(TestPartResultTest, ResultAccessorsWork) {
   EXPECT_TRUE(fatal_failure.fatally_failed());
   EXPECT_FALSE(fatal_failure.skipped());
 
-  const TestPartResult skip(TestPartResult::kSkip, "file.cc", 42, "message");
+  const ::testing::TestPartResult skip(::testing::TestPartResult::Type::kSkip, "file.cc", 42, "message");
   EXPECT_FALSE(skip.passed());
   EXPECT_FALSE(skip.failed());
   EXPECT_FALSE(skip.nonfatally_failed());
@@ -112,10 +110,10 @@ TEST_F(TestPartResultTest, ResultAccessorsWork) {
 
 // Tests TestPartResult::type().
 TEST_F(TestPartResultTest, type) {
-  EXPECT_EQ(TestPartResult::kSuccess, r1_.type());
-  EXPECT_EQ(TestPartResult::kNonFatalFailure, r2_.type());
-  EXPECT_EQ(TestPartResult::kFatalFailure, r3_.type());
-  EXPECT_EQ(TestPartResult::kSkip, r4_.type());
+  EXPECT_EQ(::testing::TestPartResult::kSuccess, r1_.type());
+  EXPECT_EQ(::testing::TestPartResult::kNonFatalFailure, r2_.type());
+  EXPECT_EQ(::testing::TestPartResult::kFatalFailure, r3_.type());
+  EXPECT_EQ(::testing::TestPartResult::kSkip, r4_.type());
 }
 
 // Tests TestPartResult::file_name().

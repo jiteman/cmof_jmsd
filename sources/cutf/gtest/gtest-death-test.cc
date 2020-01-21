@@ -42,7 +42,7 @@
 # include <stdarg.h>
 
 # if GTEST_OS_WINDOWS
-#  include <windows.h>
+#  include "internal/custom/temporary_windows_include.h"
 # else
 #  include <sys/mman.h>
 #  include <sys/wait.h>

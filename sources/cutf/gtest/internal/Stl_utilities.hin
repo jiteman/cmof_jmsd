@@ -38,7 +38,7 @@ void ForEach( Container const &c, Functor functor ) {
 
 // Returns the i-th element of the vector, or default_value if i is not in range [0, v.size()).
 template< typename E >
-E GetElementOr( ::std::vector< E > &v, int i, E default_value ) {
+E GetElementOr( ::std::vector< E > const &v, int i, E default_value ) {
 	return
 		( i < 0 || i >= static_cast< int >( v.size() ) ) ?
 			default_value :

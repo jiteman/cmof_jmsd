@@ -1,6 +1,9 @@
 #include "Configurable_event_listener.h"
 
 
+#include "gtest/Test_info.h"
+
+
 namespace jmsd {
 namespace tpa {
 namespace gtm {

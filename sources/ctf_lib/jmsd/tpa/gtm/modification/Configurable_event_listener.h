@@ -2,7 +2,12 @@
 
 #include "Configurable_event_listener.hxx"
 
-#include "gtest/gtest.h"
+
+
+// #include "gtest/gtest.h"
+
+#include "gtest/Test_event_listener.h"
+
 
 
 namespace jmsd {
@@ -12,11 +17,11 @@ namespace modification {
 
 
 class Configurable_event_listener :
-	public ::testing::TestEventListener
+	public cutf::TestEventListener
 {
 
 private:
-	::testing::TestEventListener* _event_listener;
+	cutf::TestEventListener* _event_listener;
 
 private:
 	bool _showTestCases; // Show the names of each test case.

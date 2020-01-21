@@ -6,7 +6,7 @@
 #include <string>
 
 #if GTEST_OS_WINDOWS && !GTEST_OS_WINDOWS_MOBILE
-#include <windows.h>
+#include "custom/temporary_windows_include.h"
 #endif // #if GTEST_OS_WINDOWS && !GTEST_OS_WINDOWS_MOBILE
 
 

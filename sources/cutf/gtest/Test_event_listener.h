@@ -10,12 +10,15 @@
 #include "Test_suite.hxx"
 
 
+#include "internal/gtest-port.h"
+
+
 namespace jmsd {
 namespace cutf {
 
 
 // The interface for tracing execution of tests. The methods are organized in the order the corresponding events are fired.
-class TestEventListener {
+class GTEST_API_ TestEventListener {
 public:
 	virtual ~TestEventListener() = 0;
 

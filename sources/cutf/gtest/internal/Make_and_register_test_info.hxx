@@ -3,8 +3,8 @@
 
 #include "gtest/Test_info.hxx"
 
-#include "gtest-internal.h"
-#include "gtest-port.h"
+#include "gtest-internal.hxx"
+// #include "gtest-port.h" // GTEST_API_
 
 
 namespace jmsd {

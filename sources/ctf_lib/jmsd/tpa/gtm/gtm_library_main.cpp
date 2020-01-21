@@ -3,7 +3,10 @@
 #include "jmsd/tpa/gtm/modification/Writable_command_line_arguments.h"
 #include "jmsd/tpa/gtm/modification/Configurable_event_listener.h"
 
+#include "gtest/Test_event_listeners.h"
 #include "gtest/run_all_tests.h"
+
+#include "gtest/gtest.h"
 
 
 namespace jmsd {
@@ -30,7 +33,7 @@ int JMSD_TPA_GTM_LIBRARY_SHARED_INTERFACE ctf_main( int const argc, char const *
 	}
 
 	{ // will only print errors, not successes
-		::testing::TestEventListeners &listeners = jmsd::cutf::UnitTest::GetInstance()->listeners();
+		cutf::TestEventListeners &listeners = cutf::UnitTest::GetInstance()->listeners();
 		auto default_printer = listeners.Release( listeners.default_result_printer() );
 		auto the_listener = new ::jmsd::tpa::gtm::modification::Configurable_event_listener( default_printer );
 		listeners.Append( the_listener );

@@ -9,6 +9,8 @@
 #include "internal/Scoped_premature_exit_file.h"
 #include "internal/gtest-constants-internal.h"
 
+#include "internal/Exception_handling.hin"
+
 
 namespace jmsd {
 namespace cutf {

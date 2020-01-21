@@ -39,7 +39,7 @@
 #include <memory>
 
 #if GTEST_OS_WINDOWS
-# include <windows.h>
+# include "internal/custom/temporary_windows_include.h"
 # include <io.h>
 # include <sys/stat.h>
 # include <map>  // Used in ThreadLocal.

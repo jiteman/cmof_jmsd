@@ -6,6 +6,7 @@
 #include "Test_event_listener.h"
 #include "Test_event_listeners.h"
 #include "internal/Unit_test_impl.h"
+#include "internal/Exception_handling.hin"
 
 
 namespace jmsd {

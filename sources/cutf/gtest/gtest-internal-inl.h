@@ -34,7 +34,7 @@
 #endif
 
 #if GTEST_OS_WINDOWS
-# include <windows.h>  // NOLINT
+# include "internal/custom/temporary_windows_include.h"
 #endif  // GTEST_OS_WINDOWS
 
 #include "gtest/gtest.h"

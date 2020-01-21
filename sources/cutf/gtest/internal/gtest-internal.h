@@ -38,6 +38,8 @@
 #include "gtest/internal/gtest-string.h"
 #include "gtest/internal/gtest-type-util.h"
 
+#include "gtest/internal/Make_and_register_test_info.h"
+
 #include "gtest/Test_info.hxx"
 #include "gtest/Unit_test.hxx"
 #include "gtest/Assertion_result.hxx"
@@ -340,14 +342,6 @@ inline double FloatingPoint<double>::Max() { return DBL_MAX; }
 typedef FloatingPoint<float> Float;
 typedef FloatingPoint<double> Double;
 
-// In order to catch the mistake of putting tests that use different
-// test fixture classes in the same test suite, we need to assign
-// unique IDs to fixture classes and compare them.  The TypeId type is
-// used to hold such IDs.  The user should treat TypeId as an opaque
-// type: the only operation allowed on TypeId values is to compare
-// them for equality using the == operator.
-typedef const void* TypeId;
-
 template <typename T>
 class TypeIdHelper {
  public:
@@ -414,10 +408,6 @@ GTEST_API_ ::jmsd::cutf::AssertionResult IsHRESULTSuccess(const char* expr, long
 GTEST_API_ ::jmsd::cutf::AssertionResult IsHRESULTFailure(const char* expr, long hr);
 
 #endif  // GTEST_OS_WINDOWS
-
-// Types of SetUpTestSuite() and TearDownTestSuite() functions.
-using SetUpTestSuiteFunc = void (*)();
-using TearDownTestSuiteFunc = void (*)();
 
 struct CodeLocation {
   CodeLocation(const std::string& a_file, int a_line)
@@ -1259,8 +1249,8 @@ constexpr bool InstantiateTypedTestCase_P_IsDeprecated() { return true; }
 // represenation of expression as it was passed into the EXPECT_TRUE.
 #define GTEST_TEST_BOOLEAN_(expression, text, actual, expected, fail) \
   GTEST_AMBIGUOUS_ELSE_BLOCKER_ \
-  if (const ::testing::AssertionResult gtest_ar_ = \
-	  ::testing::AssertionResult(expression)) \
+  if (const ::jmsd::cutf::AssertionResult gtest_ar_ = \
+	  ::jmsd::cutf::AssertionResult(expression)) \
 	; \
   else \
 	fail(::testing::internal::GetBoolAssertionFailureMessage(\
@@ -1304,7 +1294,7 @@ constexpr bool InstantiateTypedTestCase_P_IsDeprecated() { return true; }
 																			  \
   ::jmsd::cutf::TestInfo* const GTEST_TEST_CLASS_NAME_(test_suite_name,          \
 													test_name)::test_info_ =  \
-	  ::testing::internal::MakeAndRegisterTestInfo(                           \
+	  ::jmsd::cutf::internal::MakeAndRegisterTestInfo(                           \
 		  #test_suite_name, #test_name, nullptr, nullptr,                     \
 		  ::testing::internal::CodeLocation(__FILE__, __LINE__), (parent_id), \
 		  ::testing::internal::SuiteApiResolver<                              \

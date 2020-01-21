@@ -34,7 +34,7 @@
 #include "gtest/gtest-message.h"
 
 #if GTEST_OS_WINDOWS
-# include <windows.h>
+# include "custom/temporary_windows_include.h"
 # include <direct.h>
 # include <io.h>
 #else

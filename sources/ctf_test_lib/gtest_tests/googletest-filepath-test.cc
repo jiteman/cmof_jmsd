@@ -40,7 +40,7 @@
 #include "gtest/gtest-internal-inl.h"
 
 #if GTEST_OS_WINDOWS_MOBILE
-# include <windows.h>  // NOLINT
+# include "internal/custom/temporary_windows_include.h"
 #elif GTEST_OS_WINDOWS
 # include <direct.h>  // NOLINT
 #endif  // GTEST_OS_WINDOWS_MOBILE
@@ -475,7 +475,7 @@ TEST(AssignmentOperatorTest, ConstAssignedToNonConst) {
   EXPECT_EQ("const_path", non_default_path.string());
 }
 
-class DirectoryCreationTest : public Test {
+class DirectoryCreationTest : public ::jmsd::cutf::Test {
  protected:
   void SetUp() override {
     testdata_path_.Set(FilePath(

@@ -2,6 +2,7 @@
 
 #include "Exception_handling.h"
 
+#include "Unit_test_options.h"
 
 #include "gtest-port.h"
 
@@ -25,7 +26,7 @@ Result HandleSehExceptionsInMethodIfSupported( T *object, Result ( T::*method )(
 #if GTEST_HAS_SEH
 	__try {
 		return ( object->*method )();
-	} __except ( ::testing::internal::UnitTestOptions::GTestShouldProcessSEH( GetExceptionCode() ) ) {
+	} __except ( ::jmsd::cutf::internal::UnitTestOptions::GTestShouldProcessSEH( GetExceptionCode() ) ) {
 		// We create the exception message on the heap because VC++ prohibits
 		// creation of objects with destructors on stack in functions using __try
 		// (see error C2712).
@@ -74,7 +75,7 @@ Result HandleExceptionsInMethodIfSupported( T *object, Result ( T::*method )(), 
 			return HandleSehExceptionsInMethodIfSupported( object, method, location );
 		} catch ( ::testing::AssertionException const & ) {
 			// This failure was reported already.
-		} catch ( ::testing::internal::GoogleTestFailureException const & ) {
+		} catch ( ::jmsd::cutf::internal::GoogleTestFailureException const & ) {
 			// This exception type can only be thrown by a failed Google
 			// Test assertion with the intention of letting another testing
 			// framework catch it.  Therefore we just re-throw it.

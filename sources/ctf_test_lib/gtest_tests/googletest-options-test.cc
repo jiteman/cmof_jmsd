@@ -39,12 +39,16 @@
 #include "gtest/gtest.h"
 
 #if GTEST_OS_WINDOWS_MOBILE
-# include <windows.h>
+# include "internal/custom/temporary_windows_include.h"
 #elif GTEST_OS_WINDOWS
 # include <direct.h>
 #endif  // GTEST_OS_WINDOWS_MOBILE
 
+
+#include "gtest/internal/Unit_test_options.h"
+
 #include "gtest/gtest-internal-inl.h"
+
 
 namespace testing {
 namespace internal {
@@ -59,24 +63,24 @@ FilePath GetAbsolutePathOf(const FilePath& relative_path) {
 
 TEST(XmlOutputTest, GetOutputFormatDefault) {
   GTEST_FLAG(output) = "";
-  EXPECT_STREQ("", UnitTestOptions::GetOutputFormat().c_str());
+  EXPECT_STREQ("", ::jmsd::cutf::internal::UnitTestOptions::GetOutputFormat().c_str());
 }
 
 TEST(XmlOutputTest, GetOutputFormat) {
   GTEST_FLAG(output) = "xml:filename";
-  EXPECT_STREQ("xml", UnitTestOptions::GetOutputFormat().c_str());
+  EXPECT_STREQ("xml", ::jmsd::cutf::internal::UnitTestOptions::GetOutputFormat().c_str());
 }
 
 TEST(XmlOutputTest, GetOutputFileDefault) {
   GTEST_FLAG(output) = "";
   EXPECT_EQ(GetAbsolutePathOf(FilePath("test_detail.xml")).string(),
-            UnitTestOptions::GetAbsolutePathToOutputFile());
+            ::jmsd::cutf::internal::UnitTestOptions::GetAbsolutePathToOutputFile());
 }
 
 TEST(XmlOutputTest, GetOutputFileSingleFile) {
   GTEST_FLAG(output) = "xml:filename.abc";
   EXPECT_EQ(GetAbsolutePathOf(FilePath("filename.abc")).string(),
-            UnitTestOptions::GetAbsolutePathToOutputFile());
+            ::jmsd::cutf::internal::UnitTestOptions::GetAbsolutePathToOutputFile());
 }
 
 TEST(XmlOutputTest, GetOutputFileFromDirectoryPath) {
@@ -86,7 +90,7 @@ TEST(XmlOutputTest, GetOutputFileFromDirectoryPath) {
           FilePath(std::string("path") + GTEST_PATH_SEP_ +
                    GetCurrentExecutableName().string() + ".xml")).string();
   const std::string& output_file =
-      UnitTestOptions::GetAbsolutePathToOutputFile();
+      ::jmsd::cutf::internal::UnitTestOptions::GetAbsolutePathToOutputFile();
 #if GTEST_OS_WINDOWS
   EXPECT_STRCASEEQ(expected_output_file.c_str(), output_file.c_str());
 #else
@@ -123,7 +127,7 @@ TEST(OutputFileHelpersTest, DISABLED_GetCurrentExecutableName) {
 
 #if !GTEST_OS_FUCHSIA
 
-class XmlOutputChangeDirTest : public Test {
+class XmlOutputChangeDirTest : public ::jmsd::cutf::Test {
  protected:
   void SetUp() override {
     original_working_dir_ = FilePath::GetCurrentDir();
@@ -144,21 +148,21 @@ TEST_F(XmlOutputChangeDirTest, PreserveOriginalWorkingDirWithDefault) {
   GTEST_FLAG(output) = "";
   EXPECT_EQ(FilePath::ConcatPaths(original_working_dir_,
                                   FilePath("test_detail.xml")).string(),
-            UnitTestOptions::GetAbsolutePathToOutputFile());
+            ::jmsd::cutf::internal::UnitTestOptions::GetAbsolutePathToOutputFile());
 }
 
 TEST_F(XmlOutputChangeDirTest, PreserveOriginalWorkingDirWithDefaultXML) {
   GTEST_FLAG(output) = "xml";
   EXPECT_EQ(FilePath::ConcatPaths(original_working_dir_,
                                   FilePath("test_detail.xml")).string(),
-            UnitTestOptions::GetAbsolutePathToOutputFile());
+            ::jmsd::cutf::internal::UnitTestOptions::GetAbsolutePathToOutputFile());
 }
 
 TEST_F(XmlOutputChangeDirTest, PreserveOriginalWorkingDirWithRelativeFile) {
   GTEST_FLAG(output) = "xml:filename.abc";
   EXPECT_EQ(FilePath::ConcatPaths(original_working_dir_,
                                   FilePath("filename.abc")).string(),
-            UnitTestOptions::GetAbsolutePathToOutputFile());
+            ::jmsd::cutf::internal::UnitTestOptions::GetAbsolutePathToOutputFile());
 }
 
 TEST_F(XmlOutputChangeDirTest, PreserveOriginalWorkingDirWithRelativePath) {
@@ -169,7 +173,7 @@ TEST_F(XmlOutputChangeDirTest, PreserveOriginalWorkingDirWithRelativePath) {
           FilePath(std::string("path") + GTEST_PATH_SEP_ +
                    GetCurrentExecutableName().string() + ".xml")).string();
   const std::string& output_file =
-      UnitTestOptions::GetAbsolutePathToOutputFile();
+      ::jmsd::cutf::internal::UnitTestOptions::GetAbsolutePathToOutputFile();
 #if GTEST_OS_WINDOWS
   EXPECT_STRCASEEQ(expected_output_file.c_str(), output_file.c_str());
 #else
@@ -181,11 +185,11 @@ TEST_F(XmlOutputChangeDirTest, PreserveOriginalWorkingDirWithAbsoluteFile) {
 #if GTEST_OS_WINDOWS
   GTEST_FLAG(output) = "xml:c:\\tmp\\filename.abc";
   EXPECT_EQ(FilePath("c:\\tmp\\filename.abc").string(),
-            UnitTestOptions::GetAbsolutePathToOutputFile());
+            ::jmsd::cutf::internal::UnitTestOptions::GetAbsolutePathToOutputFile());
 #else
   GTEST_FLAG(output) ="xml:/tmp/filename.abc";
   EXPECT_EQ(FilePath("/tmp/filename.abc").string(),
-            UnitTestOptions::GetAbsolutePathToOutputFile());
+            ::jmsd::cutf::internal::UnitTestOptions::GetAbsolutePathToOutputFile());
 #endif
 }
 
@@ -200,7 +204,7 @@ TEST_F(XmlOutputChangeDirTest, PreserveOriginalWorkingDirWithAbsolutePath) {
   const std::string expected_output_file =
       path + GetCurrentExecutableName().string() + ".xml";
   const std::string& output_file =
-      UnitTestOptions::GetAbsolutePathToOutputFile();
+      ::jmsd::cutf::internal::UnitTestOptions::GetAbsolutePathToOutputFile();
 
 #if GTEST_OS_WINDOWS
   EXPECT_STRCASEEQ(expected_output_file.c_str(), output_file.c_str());

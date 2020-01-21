@@ -159,7 +159,7 @@ template <typename T1, typename T2>
 							const T1& lhs,
 							const T2& rhs) {
   if (lhs == rhs) {
-	return AssertionSuccess();
+	return ::jmsd::cutf::AssertionResult::AssertionSuccess();
   }
 
   return CmpHelperEQFailure(lhs_expression, rhs_expression, lhs, rhs);
@@ -219,7 +219,7 @@ template <typename T1, typename T2>
 ::jmsd::cutf::AssertionResult CmpHelperOpFailure(const char* expr1, const char* expr2,
 								   const T1& val1, const T2& val2,
 								   const char* op) {
-  return AssertionFailure()
+  return ::jmsd::cutf::AssertionResult::AssertionFailure()
 		 << "Expected: (" << expr1 << ") " << op << " (" << expr2
 		 << "), actual: " << FormatForComparisonFailureMessage(val1, val2)
 		 << " vs " << FormatForComparisonFailureMessage(val2, val1);
@@ -241,7 +241,7 @@ template <typename T1, typename T2> \
 ::jmsd::cutf::AssertionResult CmpHelper##op_name(const char* expr1, const char* expr2, \
 								   const T1& val1, const T2& val2) { \
   if (val1 op val2) { \
-	return AssertionSuccess(); \
+	return ::jmsd::cutf::AssertionResult::AssertionSuccess(); \
   } else { \
 	return CmpHelperOpFailure(expr1, expr2, val1, val2, #op); \
   } \
@@ -957,7 +957,7 @@ constexpr bool StaticAssertTypeEq() noexcept {
 // value, as it always calls GetTypeId<>() from the Google Test
 // framework.
 #define GTEST_TEST(test_suite_name, test_name)             \
-  GTEST_TEST_(test_suite_name, test_name, ::testing::Test, \
+  GTEST_TEST_(test_suite_name, test_name, ::jmsd::cutf::Test, \
 			  ::testing::internal::GetTestTypeId())
 
 // Define this macro to 1 to omit the definition of TEST(), which

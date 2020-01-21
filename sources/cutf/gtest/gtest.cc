@@ -15,6 +15,8 @@
 #include "internal/Is_initialized.h"
 #include "internal/gtest-flags-internal.h"
 
+#include "Assertion_result.hin"
+
 #include "Text_output_utilities.hxx"
 
 #include <ctype.h>
@@ -59,12 +61,12 @@
 
 #elif GTEST_OS_WINDOWS_MOBILE  // We are on Windows CE.
 
-# include <windows.h>  // NOLINT
+# include "internal/custom/temporary_windows_include.h"
 # undef min
 
 #elif GTEST_OS_WINDOWS  // We are on Windows proper.
 
-# include <windows.h>  // NOLINT
+# include "internal/custom/temporary_windows_include.h"
 # undef min
 
 #ifdef _MSC_VER

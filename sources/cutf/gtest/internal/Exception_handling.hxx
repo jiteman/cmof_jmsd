@@ -4,7 +4,7 @@
 #include "gtest-port.h"
 
 #if GTEST_HAS_SEH
-#include <windows.h>
+#include "custom/temporary_windows_include.h"
 #endif // #if GTEST_HAS_SEH
 
 #include <string>

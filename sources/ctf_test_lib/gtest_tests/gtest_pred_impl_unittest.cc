@@ -97,12 +97,12 @@ struct PredFunctor1 {
 
 // A unary predicate-formatter function.
 template <typename T1>
-testing::AssertionResult PredFormatFunction1(const char* e1,
+::jmsd::cutf::AssertionResult PredFormatFunction1(const char* e1,
                                              const T1& v1) {
   if (PredFunction1(v1))
-    return testing::AssertionSuccess();
+    return ::jmsd::cutf::AssertionResult::AssertionSuccess();
 
-  return testing::AssertionFailure()
+  return ::jmsd::cutf::AssertionResult::AssertionFailure()
       << e1
       << " is expected to be positive, but evaluates to "
       << v1 << ".";
@@ -111,7 +111,7 @@ testing::AssertionResult PredFormatFunction1(const char* e1,
 // A unary predicate-formatter functor.
 struct PredFormatFunctor1 {
   template <typename T1>
-  testing::AssertionResult operator()(const char* e1,
+  ::jmsd::cutf::AssertionResult operator()(const char* e1,
                                       const T1& v1) const {
     return PredFormatFunction1(e1, v1);
   }
@@ -119,7 +119,7 @@ struct PredFormatFunctor1 {
 
 // Tests for {EXPECT|ASSERT}_PRED_FORMAT1.
 
-class Predicate1Test : public testing::Test {
+class Predicate1Test : public ::jmsd::cutf::Test {
  protected:
   void SetUp() override {
     expected_to_finish_ = true;

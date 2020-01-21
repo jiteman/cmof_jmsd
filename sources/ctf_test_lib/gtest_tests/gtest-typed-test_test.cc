@@ -40,13 +40,11 @@
 GTEST_DISABLE_MSC_WARNINGS_PUSH_(4127 /* conditional expression is constant */)
 #endif  //  _MSC_VER
 
-using testing::Test;
-
 // Used for testing that SetUpTestSuite()/TearDownTestSuite(), fixture
 // ctor/dtor, and SetUp()/TearDown() work correctly in typed tests and
 // type-parameterized test.
 template <typename T>
-class CommonTest : public Test {
+class CommonTest : public ::jmsd::cutf::Test {
   // For some technical reason, SetUpTestSuite() and TearDownTestSuite()
   // must be public.
  public:
@@ -214,7 +212,7 @@ using testing::internal::TypedTestSuitePState;
 
 // Tests TypedTestSuitePState.
 
-class TypedTestSuitePStateTest : public Test {
+class TypedTestSuitePStateTest : public ::jmsd::cutf::Test {
  protected:
   void SetUp() override {
 	state_.AddTestName("foo.cc", 0, "FooTest", "A");
