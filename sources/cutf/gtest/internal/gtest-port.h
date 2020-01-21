@@ -2109,9 +2109,9 @@ using TimeInMillis = int64_t;  // Represents time in milliseconds.
 // Utilities for command line flags and environment variables.
 
 // Macro for referencing flags.
-#if !defined(GTEST_FLAG)
-# define GTEST_FLAG(name) FLAGS_gtest_##name
-#endif  // !defined(GTEST_FLAG)
+#if !defined( GTEST_FLAG )
+	#define GTEST_FLAG( name ) FLAGS_gtest_##name
+#endif // #if !defined( GTEST_FLAG )
 
 #if !defined(GTEST_USE_OWN_FLAGFILE_FLAG_)
 # define GTEST_USE_OWN_FLAGFILE_FLAG_ 1

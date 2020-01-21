@@ -38,7 +38,6 @@ namespace internal {
 #if GTEST_HAS_EXCEPTIONS
 
 ::std::string FormatCxxExceptionMessage( char const *description, char const *location );
-::std::string PrintTestPartResultToString( ::testing::TestPartResult const &test_part_result );
 
 // Runs the given method and handles SEH exceptions it throws, when
 // SEH is supported; returns the 0-value for type Result in case of an

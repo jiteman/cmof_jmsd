@@ -38,7 +38,6 @@ extern const char kTestShardStatusFile[];
 extern const int kMaxStackTraceDepth;
 
 
-
 } // namespace constants
 } // namespace cutf
 } // namespace jmsd

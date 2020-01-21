@@ -49,15 +49,6 @@ namespace internal {
 	return message.GetString();
 }
 
-// Prints a TestPartResult to an std::string.
-::std::string PrintTestPartResultToString( ::testing::TestPartResult const &test_part_result ) {
-  return
-	( ::testing::Message() <<
-		  ::testing::internal::FormatFileLocation( test_part_result.file_name(), test_part_result.line_number() ) <<
-		  " " << ::jmsd::cutf::TestPartResultTypeToString( test_part_result.type() ) <<
-		  test_part_result.message() ).GetString();
-}
-
 GoogleTestFailureException::GoogleTestFailureException( ::testing::TestPartResult const &failure )
 	:
 		::std::runtime_error( PrintTestPartResultToString( failure ).c_str() )
