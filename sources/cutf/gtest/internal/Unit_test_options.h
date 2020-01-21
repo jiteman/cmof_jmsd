@@ -4,6 +4,9 @@
 
 #include "gtest-port.h"
 
+#if GTEST_HAS_SEH
+#include <windows.h>
+#endif // #if GTEST_HAS_SEH
 
 namespace jmsd {
 namespace cutf {
@@ -43,7 +46,11 @@ public:
 	// suite name and the test name.
 	static bool FilterMatchesTest(const ::std::string& test_suite_name, const ::std::string& test_name);
 
-#if GTEST_OS_WINDOWS
+	// Returns true if "name" matches the ':' separated list of glob-style
+	// filters in "filter".
+	static bool MatchesFilter(const ::std::string& name, const char* filter);
+
+#if GTEST_HAS_SEH
 	// Function for supporting the gtest_catch_exception flag.
 
 	// Returns EXCEPTION_EXECUTE_HANDLER if Google Test should handle the
@@ -51,10 +58,6 @@ public:
 	// This function is useful as an __except condition.
 	static int GTestShouldProcessSEH(DWORD exception_code);
 #endif  // GTEST_OS_WINDOWS
-
-	// Returns true if "name" matches the ':' separated list of glob-style
-	// filters in "filter".
-	static bool MatchesFilter(const ::std::string& name, const char* filter);
 };
 
 

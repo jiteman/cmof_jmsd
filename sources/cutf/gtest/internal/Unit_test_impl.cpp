@@ -5,6 +5,7 @@
 #include "gtest/Pretty_unit_test_result_printer.h"
 #include "gtest/Environment.h"
 
+#include "Unit_test_options.h"
 #include "Stl_utilities.hin"
 
 #include "gtest-death-test-internal.h"
