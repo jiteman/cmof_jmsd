@@ -1,14 +1,12 @@
 #pragma once
 
-#include "gtest-color.hxx"
-
 
 namespace jmsd {
 namespace cutf {
 namespace internal {
 
 
-
+class UnitTestOptions;
 
 
 } // namespace internal

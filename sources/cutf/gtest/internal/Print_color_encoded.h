@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gtest-color.hxx"
+#include "Print_color_encoded.hxx"
 
 
 namespace jmsd {

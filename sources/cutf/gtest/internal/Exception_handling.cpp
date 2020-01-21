@@ -6,6 +6,8 @@
 
 #include "gtest/Test_part_result_to_string.h"
 
+#include "Print_test_part_result_to_string.h"
+
 #include <iomanip>
 
 
@@ -60,9 +62,3 @@ GoogleTestFailureException::GoogleTestFailureException( ::testing::TestPartResul
 } // namespace internal
 } // namespace cutf
 } // namespace jmsd
-
-
-namespace testing {
-
-
-} // namespace testing

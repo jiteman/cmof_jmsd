@@ -9,9 +9,11 @@
 #include "Empty_test_event_listener.h"
 #include "Test_event_listener.h"
 #include "Test_suite.h"
-#include "Text_output_utilities.hxx"
 
 #include "internal/Unit_test_impl.h"
+#include "internal/Print_color_encoded.h"
+
+#include "Text_output_utilities.hxx"
 
 #include <ctype.h>
 #include <math.h>
@@ -261,58 +263,6 @@ FilePath GetCurrentExecutableName() {
 #endif  // GTEST_OS_WINDOWS
 
   return result.RemoveDirectoryName();
-}
-
-// Functions for processing the gtest_output flag.
-
-// Returns the output format, or "" for normal printed output.
-std::string UnitTestOptions::GetOutputFormat() {
-  const char* const gtest_output_flag = GTEST_FLAG(output).c_str();
-  const char* const colon = strchr(gtest_output_flag, ':');
-  return (colon == nullptr)
-			 ? std::string(gtest_output_flag)
-			 : std::string(gtest_output_flag,
-						   static_cast<size_t>(colon - gtest_output_flag));
-}
-
-// Returns the name of the requested output file, or the default if none was explicitly specified.
-::std::string UnitTestOptions::GetAbsolutePathToOutputFile() {
-	char const *const gtest_output_flag = GTEST_FLAG(output).c_str();
-
-	::std::string format = GetOutputFormat();
-
-	if ( format.empty() ) {
-		format = ::std::string( ::jmsd::cutf::constants::kDefaultOutputFormat );
-	}
-
-	char const *const colon = ::strchr( gtest_output_flag, ':' );
-
-	if ( colon == nullptr ) {
-		return
-			internal::FilePath::MakeFileName(
-				internal::FilePath(
-					::jmsd::cutf::UnitTest::GetInstance()->original_working_dir() ),
-				internal::FilePath( ::jmsd::cutf::constants::kDefaultOutputFile ),
-				0,
-				format.c_str() ).string();
-	}
-
-	internal::FilePath output_name( colon + 1 );
-
-	if ( !output_name.IsAbsolutePath() ) {
-		output_name =
-			internal::FilePath::ConcatPaths(
-				internal::FilePath( ::jmsd::cutf::UnitTest::GetInstance()->original_working_dir() ),
-				internal::FilePath( colon + 1 ) );
-	}
-
-  if (!output_name.IsDirectory())
-	return output_name.string();
-
-  internal::FilePath result(internal::FilePath::GenerateUniqueFileName(
-	  output_name, internal::GetCurrentExecutableName(),
-	  GetOutputFormat().c_str()));
-  return result.string();
 }
 
 // Returns true if and only if the wildcard pattern matches the string.
@@ -1720,42 +1670,6 @@ void ReportFailureInUnknownLocation(TestPartResult::Type result_type,
 	  "");  // No stack trace, either.
 }
 
-//// Prints a TestPartResult.
-//static void PrintTestPartResult(const TestPartResult& test_part_result) {
-//  const std::string& result =
-//	  ::jmsd::cutf::internal::PrintTestPartResultToString(test_part_result);
-//  printf("%s\n", result.c_str());
-//  fflush(stdout);
-//  // If the test program runs in Visual Studio or a debugger, the
-//  // following statements add the test part result message to the Output
-//  // window such that the user can double-click on it to jump to the
-//  // corresponding source code location; otherwise they do nothing.
-//#if GTEST_OS_WINDOWS && !GTEST_OS_WINDOWS_MOBILE
-//  // We don't call OutputDebugString*() on Windows Mobile, as printing
-//  // to stdout is done by OutputDebugString() there already - we don't
-//  // want the same message printed twice.
-//  ::OutputDebugStringA(result.c_str());
-//  ::OutputDebugStringA("\n");
-//#endif
-//}
-
-static void PrintFullTestCommentIfPresent(const ::jmsd::cutf::TestInfo& test_info) {
-  const char* const type_param = test_info.type_param();
-  const char* const value_param = test_info.value_param();
-
-  if (type_param != nullptr || value_param != nullptr) {
-	printf(", where ");
-	if (type_param != nullptr) {
-	  printf("%s = %s", kTypeParamLabel, type_param);
-	  if (value_param != nullptr) printf(" and ");
-	}
-	if (value_param != nullptr) {
-	  printf("%s = %s", kValueParamLabel, value_param);
-	}
-  }
-}
-
-
 // This class generates an XML output file.
 class XmlUnitTestResultPrinter : public ::jmsd::cutf::EmptyTestEventListener {
  public:
@@ -2842,49 +2756,6 @@ static bool HasGoogleTestFlagPrefix(const char* str) {
 		  SkipPrefix(GTEST_FLAG_PREFIX_DASH_, &str));
 }
 
-// Prints a string containing code-encoded text.  The following escape
-// sequences can be used in the string to control the text color:
-//
-//   @@    prints a single '@' character.
-//   @R    changes the color to red.
-//   @G    changes the color to green.
-//   @Y    changes the color to yellow.
-//   @D    changes to the default terminal text color.
-//
-static void PrintColorEncoded(const char* str) {
-  GTestColor color = COLOR_DEFAULT;  // The current color.
-
-  // Conceptually, we split the string into segments divided by escape
-  // sequences.  Then we print one segment at a time.  At the end of
-  // each iteration, the str pointer advances to the beginning of the
-  // next segment.
-  for (;;) {
-	const char* p = strchr(str, '@');
-	if (p == nullptr) {
-	  ColoredPrintf(color, "%s", str);
-	  return;
-	}
-
-	ColoredPrintf(color, "%s", std::string(str, p).c_str());
-
-	const char ch = p[1];
-	str = p + 2;
-	if (ch == '@') {
-	  ColoredPrintf(color, "@");
-	} else if (ch == 'D') {
-	  color = COLOR_DEFAULT;
-	} else if (ch == 'R') {
-	  color = COLOR_RED;
-	} else if (ch == 'G') {
-	  color = COLOR_GREEN;
-	} else if (ch == 'Y') {
-	  color = COLOR_YELLOW;
-	} else {
-	  --str;
-	}
-  }
-}
-
 static const char kColorEncodedHelpMessage[] =
 "This program contains tests written using " GTEST_NAME_ ". You can use the\n"
 "following command line flags to control its behavior:\n"
@@ -3051,7 +2922,7 @@ void ParseGoogleTestFlagsOnlyImpl(int* argc, CharType** argv) {
 	// We print the help here instead of in RUN_ALL_TESTS(), as the
 	// latter may not be called at all if the user is using Google
 	// Test with another testing framework.
-	PrintColorEncoded(kColorEncodedHelpMessage);
+	::jmsd::cutf::internal::PrintColorEncoded(kColorEncodedHelpMessage);
   }
 }
 
@@ -3166,23 +3037,5 @@ std::string TempDir() {
 #endif  // GTEST_OS_WINDOWS_MOBILE
 }
 
-//// Class ScopedTrace
-
-//// Pushes the given source file location and message onto a per-thread
-//// trace stack maintained by Google Test.
-//void ScopedTrace::PushTrace(const char* file, int line, std::string message) {
-//  internal::TraceInfo trace;
-//  trace.file = file;
-//  trace.line = line;
-//  trace.message.swap(message);
-
-//  UnitTest::GetInstance()->PushGTestTrace(trace);
-//}
-
-//// Pops the info pushed by the c'tor.
-//ScopedTrace::~ScopedTrace()
-//	GTEST_LOCK_EXCLUDED_(&UnitTest::mutex_) {
-//  UnitTest::GetInstance()->PopGTestTrace();
-//}
 
 }  // namespace testing

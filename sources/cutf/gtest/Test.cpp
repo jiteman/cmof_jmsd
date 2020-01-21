@@ -139,25 +139,23 @@ bool Test::HasSameFixtureClass() {
 
 // Runs the test and updates the test result.
 void Test::Run() {
-  if (!HasSameFixtureClass()) return;
+	if (!HasSameFixtureClass()) return;
 
-  internal::UnitTestImpl* const impl = internal::GetUnitTestImpl();
-  impl->os_stack_trace_getter()->UponLeavingGTest();
-  internal::HandleExceptionsInMethodIfSupported(this, &Test::SetUp, "SetUp()");
-  // We will run the test only if SetUp() was successful and didn't call
-  // GTEST_SKIP().
-  if (!HasFatalFailure() && !IsSkipped()) {
+	internal::UnitTestImpl* const impl = internal::GetUnitTestImpl();
 	impl->os_stack_trace_getter()->UponLeavingGTest();
-	internal::HandleExceptionsInMethodIfSupported(
-		this, &Test::TestBody, "the test body");
-  }
+	internal::HandleExceptionsInMethodIfSupported(this, &Test::SetUp, "SetUp()");
 
-  // However, we want to clean up as much as possible.  Hence we will
-  // always call TearDown(), even if SetUp() or the test body has
-  // failed.
-  impl->os_stack_trace_getter()->UponLeavingGTest();
-  internal::HandleExceptionsInMethodIfSupported(
-	  this, &Test::TearDown, "TearDown()");
+	// We will run the test only if SetUp() was successful and didn't call GTEST_SKIP().
+	if (!HasFatalFailure() && !IsSkipped()) {
+		impl->os_stack_trace_getter()->UponLeavingGTest();
+		internal::HandleExceptionsInMethodIfSupported(
+		this, &Test::TestBody, "the test body");
+	}
+
+	// However, we want to clean up as much as possible.
+	// Hence we will always call TearDown(), even if SetUp() or the test body has failed.
+	impl->os_stack_trace_getter()->UponLeavingGTest();
+	internal::HandleExceptionsInMethodIfSupported( this, &Test::TearDown, "TearDown()");
 }
 
 void Test::DeleteSelf_() {
@@ -167,20 +165,19 @@ void Test::DeleteSelf_() {
 // Returns true if and only if the current test has a fatal failure.
 // static
 bool Test::HasFatalFailure() {
-  return internal::GetUnitTestImpl()->current_test_result()->HasFatalFailure();
+	return internal::GetUnitTestImpl()->current_test_result()->HasFatalFailure();
 }
 
 // Returns true if and only if the current test has a non-fatal failure.
 // static
 bool Test::HasNonfatalFailure() {
-  return internal::GetUnitTestImpl()->current_test_result()->
-	  HasNonfatalFailure();
+	return internal::GetUnitTestImpl()->current_test_result()->HasNonfatalFailure();
 }
 
 // Returns true if and only if the current test was skipped.
 // static
 bool Test::IsSkipped() {
-  return internal::GetUnitTestImpl()->current_test_result()->Skipped();
+	return internal::GetUnitTestImpl()->current_test_result()->Skipped();
 }
 
 // Returns true if and only if the current test has a (either fatal or non-fatal) failure.
@@ -189,7 +186,7 @@ bool Test::HasFailure() {
 	return THIS_STATIC::HasFatalFailure() || THIS_STATIC::HasNonfatalFailure();
 }
 
-struct Setup_should_be_spelled_SetUp
+struct Test::Setup_should_be_spelled_SetUp
 {};
 
 Test::Setup_should_be_spelled_SetUp *Test::Setup() {

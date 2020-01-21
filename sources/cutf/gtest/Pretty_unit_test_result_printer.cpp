@@ -10,6 +10,7 @@
 #include "internal/Colored_print.h"
 #include "internal/gtest-constants-internal.h"
 #include "internal/Print_test_part_result.h"
+#include "internal/Print_full_test_comment_if_present.h"
 
 #include "gtest-internal-inl.h"
 
@@ -135,11 +136,10 @@ void PrettyUnitTestResultPrinter::OnTestEnd(const ::jmsd::cutf::TestInfo& test_i
   }
   PrintTestName(test_info.test_suite_name(), test_info.name());
   if (test_info.result()->Failed())
-	PrintFullTestCommentIfPresent(test_info);
+	internal::PrintFullTestCommentIfPresent(test_info);
 
-  if (GTEST_FLAG(print_time)) {
-	printf(" (%s ms)\n", internal::StreamableToString(
-		   test_info.result()->elapsed_time()).c_str());
+  if ( ::testing:: GTEST_FLAG( print_time ) ) {
+	printf(" (%s ms)\n", ::testing::internal::StreamableToString( test_info.result()->elapsed_time()).c_str() );
   } else {
 	printf("\n");
   }
@@ -147,13 +147,11 @@ void PrettyUnitTestResultPrinter::OnTestEnd(const ::jmsd::cutf::TestInfo& test_i
 }
 
 void PrettyUnitTestResultPrinter::OnTestSuiteEnd(const ::jmsd::cutf::TestSuite& test_suite) {
-  if (!GTEST_FLAG(print_time)) return;
+  if (!::testing:: GTEST_FLAG( print_time ) ) return;
 
-  const std::string counts =
-	  FormatCountableNoun(test_suite.test_to_run_count(), "test", "tests");
+  const std::string counts = Format_countable::FormatCountableNoun(test_suite.test_to_run_count(), "test", "tests");
   ColoredPrintf(internal::GTestColor::COLOR_GREEN, "[----------] ");
-  printf("%s from %s (%s ms total)\n\n", counts.c_str(), test_suite.name(),
-		 internal::StreamableToString(test_suite.elapsed_time()).c_str());
+  printf("%s from %s (%s ms total)\n\n", counts.c_str(), test_suite.name(), ::testing::internal::StreamableToString(test_suite.elapsed_time()).c_str());
   fflush(stdout);
 }
 
@@ -168,7 +166,7 @@ void PrettyUnitTestResultPrinter::OnEnvironmentsTearDownStart(
 void PrettyUnitTestResultPrinter::PrintFailedTests(const ::jmsd::cutf::UnitTest& unit_test) {
   const int failed_test_count = unit_test.failed_test_count();
   ColoredPrintf(internal::GTestColor::COLOR_RED,  "[  FAILED  ] ");
-  printf("%s, listed below:\n", FormatTestCount(failed_test_count).c_str());
+  printf("%s, listed below:\n", Format_countable::FormatTestCount(failed_test_count).c_str());
 
   for (int i = 0; i < unit_test.total_test_suite_count(); ++i) {
 	const ::jmsd::cutf::TestSuite& test_suite = *unit_test.GetTestSuite(i);
@@ -182,7 +180,7 @@ void PrettyUnitTestResultPrinter::PrintFailedTests(const ::jmsd::cutf::UnitTest&
 	  }
 	  ColoredPrintf(internal::GTestColor::COLOR_RED, "[  FAILED  ] ");
 	  printf("%s.%s", test_suite.name(), test_info.name());
-	  PrintFullTestCommentIfPresent(test_info);
+	  internal::PrintFullTestCommentIfPresent(test_info);
 	  printf("\n");
 	}
   }
@@ -240,20 +238,20 @@ void PrettyUnitTestResultPrinter::OnTestIterationEnd(const ::jmsd::cutf::UnitTes
 													 int /*iteration*/) {
   ColoredPrintf(internal::GTestColor::COLOR_GREEN,  "[==========] ");
   printf("%s from %s ran.",
-		 FormatTestCount(unit_test.test_to_run_count()).c_str(),
-		 FormatTestSuiteCount(unit_test.test_suite_to_run_count()).c_str());
-  if (GTEST_FLAG(print_time)) {
+		 Format_countable::FormatTestCount(unit_test.test_to_run_count()).c_str(),
+		 Format_countable::FormatTestSuiteCount(unit_test.test_suite_to_run_count()).c_str());
+  if ( ::testing:: GTEST_FLAG( print_time ) ) {
 	printf(" (%s ms total)",
-		   internal::StreamableToString(unit_test.elapsed_time()).c_str());
+		   ::testing::internal::StreamableToString(unit_test.elapsed_time()).c_str());
   }
   printf("\n");
   ColoredPrintf(internal::GTestColor::COLOR_GREEN,  "[  PASSED  ] ");
-  printf("%s.\n", FormatTestCount(unit_test.successful_test_count()).c_str());
+  printf("%s.\n", Format_countable::FormatTestCount(unit_test.successful_test_count()).c_str());
 
   const int skipped_test_count = unit_test.skipped_test_count();
   if (skipped_test_count > 0) {
 	ColoredPrintf(internal::GTestColor::COLOR_GREEN, "[  SKIPPED ] ");
-	printf("%s, listed below:\n", FormatTestCount(skipped_test_count).c_str());
+	printf("%s, listed below:\n", Format_countable::FormatTestCount(skipped_test_count).c_str());
 	PrintSkippedTests(unit_test);
   }
 
@@ -263,7 +261,7 @@ void PrettyUnitTestResultPrinter::OnTestIterationEnd(const ::jmsd::cutf::UnitTes
   }
 
   int num_disabled = unit_test.reportable_disabled_test_count();
-  if (num_disabled && !GTEST_FLAG(also_run_disabled_tests)) {
+  if ( num_disabled && !::testing:: GTEST_FLAG(also_run_disabled_tests)) {
 	if (unit_test.Passed()) {
 	  printf("\n");  // Add a spacer if no FAILURE banner is displayed.
 	}

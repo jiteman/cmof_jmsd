@@ -1,6 +1,7 @@
 #pragma once
 
-#include "gtest-color.hxx"
+
+#include "gtest/Test_info.hxx"
 
 
 namespace jmsd {
@@ -8,7 +9,7 @@ namespace cutf {
 namespace internal {
 
 
-
+void PrintFullTestCommentIfPresent( TestInfo const &test_info );
 
 
 } // namespace internal

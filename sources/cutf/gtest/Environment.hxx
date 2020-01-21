@@ -5,14 +5,8 @@ namespace jmsd {
 namespace cutf {
 
 
-
+class Environment;
 
 
 } // namespace cutf
 } // namespace jmsd
-
-
-namespace testing {
-
-
-} // namespace testing

@@ -1,6 +1,11 @@
 #include "Colored_print.h"
 
 
+#include "gtest/gtest-flags.h"
+
+#include "gtest-string.h"
+
+
 #if GTEST_OS_WINDOWS && !GTEST_OS_WINDOWS_MOBILE && !GTEST_OS_WINDOWS_PHONE && !GTEST_OS_WINDOWS_RT && !GTEST_OS_WINDOWS_MINGW
 #include <windows.h>
 #endif // #if GTEST_OS_WINDOWS && !GTEST_OS_WINDOWS_MOBILE && !GTEST_OS_WINDOWS_PHONE && !GTEST_OS_WINDOWS_RT && !GTEST_OS_WINDOWS_MINGW
@@ -75,10 +80,12 @@ WORD GetColorAttribute( GTestColor const color) {
 	}
 }
 
-int GetBitOffset( WORD const color_mask ) {
-	if ( color_mask == 0 ) return 0;
+int GetBitOffset( WORD const color_mask_p ) {
+	if ( color_mask_p == 0 ) return 0;
 
 	int bitOffset = 0;
+
+	WORD color_mask = color_mask_p;
 
 	while ( ( color_mask & 1 ) == 0 ) {
 		color_mask >>= 1;
@@ -125,7 +132,7 @@ char const *GetAnsiColorCode( GTestColor const color ) {
 
 // Returns true if and only if Google Test should use colors in the output.
 bool ShouldUseColor( bool const stdout_is_tty ) {
-	char const *const gtest_color = GTEST_FLAG( color ).c_str();
+	char const *const gtest_color = ::testing:: GTEST_FLAG( color ).c_str();
 
 	if ( ::testing::internal::String::CaseInsensitiveCStringEquals( gtest_color, "auto" ) ) {
 

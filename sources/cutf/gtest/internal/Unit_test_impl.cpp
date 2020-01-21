@@ -2,8 +2,12 @@
 
 
 #include "gtest/Unit_test.h"
+#include "gtest/Pretty_unit_test_result_printer.h"
+#include "gtest/Environment.h"
 
 #include "Stl_utilities.hin"
+
+#include "gtest-death-test-internal.h"
 
 
 namespace jmsd {
@@ -252,8 +256,9 @@ UnitTestImpl::UnitTestImpl(UnitTest* parent)
 	  death_test_factory_(new ::testing::internal::DefaultDeathTestFactory),
 #endif
 	  // Will be overridden by the flag before first use.
-	  catch_exceptions_(false) {
-  listeners()->SetDefaultResultPrinter(new PrettyUnitTestResultPrinter);
+	  catch_exceptions_(false)
+{
+	listeners()->SetDefaultResultPrinter( new PrettyUnitTestResultPrinter );
 }
 
 UnitTestImpl::~UnitTestImpl() {
@@ -277,10 +282,10 @@ void UnitTestImpl::RecordProperty(const TestProperty& test_property) {
 
   if (current_test_info_ != nullptr) {
 	xml_element = "testcase";
-	test_result = &(current_test_info_->result_);
+	test_result = current_test_info_->result_.get();
   } else if (current_test_suite_ != nullptr) {
 	xml_element = "testsuite";
-	test_result = &(current_test_suite_->ad_hoc_test_result_);
+	test_result = current_test_suite_->ad_hoc_test_result_.get();
   } else {
 	xml_element = "testsuites";
 	test_result = &ad_hoc_test_result_;
@@ -291,7 +296,7 @@ void UnitTestImpl::RecordProperty(const TestProperty& test_property) {
 #if GTEST_HAS_DEATH_TEST
 
 void UnitTestImpl::InitDeathTestSubprocessControlInfo() {
-	internal_run_death_test_flag_.reset(ParseInternalRunDeathTestFlag());
+	internal_run_death_test_flag_.reset( ::testing::internal::ParseInternalRunDeathTestFlag() );
 }
 // Returns a pointer to the parsed --gtest_internal_run_death_test
 // flag, or NULL if that flag was not specified.
