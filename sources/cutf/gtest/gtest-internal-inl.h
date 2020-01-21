@@ -79,10 +79,6 @@ const char kFlagfileFlag[] = "flagfile";
 // A valid random seed must be in [1, kMaxRandomSeed].
 const int kMaxRandomSeed = 99999;
 
-// g_help_flag is true if and only if the --help flag or an equivalent form
-// is specified on the command line.
-GTEST_API_ extern bool g_help_flag;
-
 // Returns the current time in milliseconds.
 GTEST_API_ TimeInMillis GetTimeInMillis();
 
@@ -224,33 +220,11 @@ GTEST_API_ std::string CodePointToUtf8(uint32_t code_point);
 // will be encoded as individual Unicode characters from Basic Normal Plane.
 GTEST_API_ std::string WideStringToUtf8(const wchar_t* str, int num_chars);
 
-// Reads the GTEST_SHARD_STATUS_FILE environment variable, and creates the file
-// if the variable is present. If a file already exists at this location, this
-// function will write over it. If the variable is present, but the file cannot
-// be created, prints an error and exits.
-void WriteToShardStatusFileIfNeeded();
-
-// Checks whether sharding is enabled by examining the relevant
-// environment variable values. If the variables are present,
-// but inconsistent (e.g., shard_index >= total_shards), prints
-// an error and exits. If in_subprocess_for_death_test, sharding is
-// disabled because it must only be applied to the original test
-// process. Otherwise, we could filter out death tests we intended to execute.
-GTEST_API_ bool ShouldShard(const char* total_shards_str,
-							const char* shard_index_str,
-							bool in_subprocess_for_death_test);
-
-// Parses the environment variable var as a 32-bit integer. If it is unset,
-// returns default_val. If it is not a 32-bit integer, prints an error and
-// and aborts.
-GTEST_API_ int32_t Int32FromEnvOrDie(const char* env_var, int32_t default_val);
-
 // Given the total number of shards, the shard index, and the test id,
 // returns true if and only if the test should be run on this shard. The test id
 // is some arbitrary but unique non-negative integer assigned to each test
 // method. Assumes that 0 <= shard_index < total_shards.
-GTEST_API_ bool ShouldRunTestOnShard(
-	int total_shards, int shard_index, int test_id);
+GTEST_API_ bool ShouldRunTestOnShard( int total_shards, int shard_index, int test_id);
 
 // A predicate that checks the key of a TestProperty against a known key.
 //

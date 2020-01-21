@@ -17,6 +17,8 @@ namespace internal {
 
 class Format_time {
 
+	typedef Format_time THIS_STATIC;
+
 public:
 	static bool PortableLocaltime( ::std::time_t seconds, struct tm *out );
 

@@ -70,10 +70,6 @@ namespace internal {
 struct TraceInfo;                      // Information about a trace point.
 class TestInfoImpl;                    // Opaque implementation of TestInfo
 
-// The text used in failure messages to indicate the start of the
-// stack trace.
-GTEST_API_ extern const char kStackTraceMarker[];
-
 // An IgnoredValue object can be implicitly constructed from ANY value.
 class IgnoredValue {
   struct Sink {};
@@ -492,30 +488,6 @@ struct SuiteApiResolver : T {
 	return test_case_fp != nullptr ? test_case_fp : test_suite_fp;
   }
 };
-
-// Creates a new TestInfo object and registers it with Google Test;
-// returns the created object.
-//
-// Arguments:
-//
-//   test_suite_name:   name of the test suite
-//   name:             name of the test
-//   type_param        the name of the test's type parameter, or NULL if
-//                     this is not a typed or a type-parameterized test.
-//   value_param       text representation of the test's value parameter,
-//                     or NULL if this is not a type-parameterized test.
-//   code_location:    code location where the test is defined
-//   fixture_class_id: ID of the test fixture class
-//   set_up_tc:        pointer to the function that sets up the test suite
-//   tear_down_tc:     pointer to the function that tears down the test suite
-//   factory:          pointer to the factory that creates a test object.
-//                     The newly created TestInfo instance will assume
-//                     ownership of the factory object.
-GTEST_API_ ::jmsd::cutf::TestInfo* MakeAndRegisterTestInfo(
-	const char* test_suite_name, const char* name, const char* type_param,
-	const char* value_param, CodeLocation code_location,
-	TypeId fixture_class_id, SetUpTestSuiteFunc set_up_tc,
-	TearDownTestSuiteFunc tear_down_tc, TestFactoryBase* factory);
 
 // If *pstr starts with the given prefix, modifies *pstr to be right
 // past the prefix and returns true; otherwise leaves *pstr unchanged

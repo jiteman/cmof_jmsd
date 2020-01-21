@@ -3,16 +3,16 @@
 #include "gtest/gtest-test-part.h"
 
 #include "internal/Unit_test_impl.h"
+#include "internal/gtest-constants-internal.h"
 
 #include "gtest/internal/gtest-port.h"
 #include "gtest/gtest-internal-inl.h"
 
 namespace testing {
 
-// Gets the summary of the failure message by omitting the stack trace
-// in it.
+// Gets the summary of the failure message by omitting the stack trace in it.
 std::string TestPartResult::ExtractSummary(const char* message) {
-  const char* const stack_trace = strstr(message, internal::kStackTraceMarker);
+  const char* const stack_trace = strstr(message, ::jmsd::cutf::constants::internal::kStackTraceMarker);
   return stack_trace == nullptr ? message : std::string(message, stack_trace);
 }
 
@@ -21,11 +21,11 @@ std::ostream& operator<<(std::ostream& os, const TestPartResult& result) {
   return os << internal::FormatFileLocation(result.file_name(),
 											result.line_number())
 			<< " "
-			<< (result.type() == TestPartResult::kSuccess
+			<< (result.type() == TestPartResult::Type::kSuccess
 					? "Success"
-					: result.type() == TestPartResult::kSkip
+					: result.type() == TestPartResult::Type::kSkip
 						  ? "Skipped"
-						  : result.type() == TestPartResult::kFatalFailure
+						  : result.type() == TestPartResult::Type::kFatalFailure
 								? "Fatal failure"
 								: "Non-fatal failure")
 			<< ":\n"

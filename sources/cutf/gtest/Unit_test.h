@@ -222,10 +222,7 @@ class GTEST_API_ UnitTest {
   friend internal::UnitTestImpl *internal::GetUnitTestImpl();
   friend void ::testing::internal::ReportFailureInUnknownLocation( TestPartResult::Type result_type, const std::string& message);
 
-  // Creates an empty UnitTest.
   UnitTest();
-
-  // D'tor
   virtual ~UnitTest();
 
   // Pushes a trace defined by SCOPED_TRACE() on to the per-thread

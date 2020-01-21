@@ -105,9 +105,3 @@ void TestEventListeners::SuppressEventForwarding() {
 
 } // namespace cutf
 } // namespace jmsd
-
-
-namespace testing {
-
-
-} // namespace testing

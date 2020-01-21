@@ -13,6 +13,7 @@
 #include "internal/Unit_test_impl.h"
 #include "internal/Print_color_encoded.h"
 #include "internal/Is_initialized.h"
+#include "internal/gtest-flags-internal.h"
 
 #include "Text_output_utilities.hxx"
 
@@ -1897,7 +1898,7 @@ static void LoadFlagsFromFile(const std::string& path) {
 	if (lines[i].empty())
 	  continue;
 	if (!ParseGoogleTestFlag(lines[i].c_str()))
-	  g_help_flag = true;
+	  ::jmsd::cutf::internal::g_help_flag = true;
   }
 }
 #endif  // GTEST_USE_OWN_FLAGFILE_FLAG_
@@ -1928,7 +1929,7 @@ void ParseGoogleTestFlagsOnlyImpl(int* argc, CharType** argv) {
 			   HasGoogleTestFlagPrefix(arg)) {
 	  // Both help flag and unrecognized Google Test flags (excluding
 	  // internal ones) trigger help display.
-	  g_help_flag = true;
+	  ::jmsd::cutf::internal::g_help_flag = true;
 	}
 
 	if (remove_flag) {
@@ -1949,7 +1950,7 @@ void ParseGoogleTestFlagsOnlyImpl(int* argc, CharType** argv) {
 	}
   }
 
-  if (g_help_flag) {
+  if ( ::jmsd::cutf::internal::g_help_flag ) {
 	// We print the help here instead of in RUN_ALL_TESTS(), as the
 	// latter may not be called at all if the user is using Google
 	// Test with another testing framework.

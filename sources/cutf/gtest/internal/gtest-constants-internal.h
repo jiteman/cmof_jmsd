@@ -15,6 +15,7 @@ extern const char kTypeParamLabel[];
 extern const char kValueParamLabel[];
 
 // The text used in failure messages to indicate the start of the stack trace.
+// GTEST_API_ extern const char kStackTraceMarker[];
 extern const char kStackTraceMarker[];
 
 

@@ -11,6 +11,8 @@
 #include "internal/gtest-constants-internal.h"
 #include "internal/Print_test_part_result.h"
 #include "internal/Print_full_test_comment_if_present.h"
+#include "internal/Should_shard.h"
+#include "internal/Int32_from_environment_or_die.h"
 
 #include "gtest-internal-inl.h"
 
@@ -33,8 +35,8 @@ void PrettyUnitTestResultPrinter::OnTestIterationStart( ::jmsd::cutf::UnitTest c
 		ColoredPrintf( internal::GTestColor::COLOR_YELLOW, "Note: %s filter = %s\n", GTEST_NAME_, filter );
 	}
 
-	if ( ::testing::internal::ShouldShard( constants::kTestTotalShards, constants::kTestShardIndex, false ) ) {
-		int32_t const shard_index = ::testing::internal::Int32FromEnvOrDie( constants::kTestShardIndex, -1 );
+	if ( internal::ShouldShard( constants::kTestTotalShards, constants::kTestShardIndex, false ) ) {
+		int32_t const shard_index = internal::Int32FromEnvOrDie( constants::kTestShardIndex, -1 );
 
 		ColoredPrintf(
 			internal::GTestColor::COLOR_YELLOW,

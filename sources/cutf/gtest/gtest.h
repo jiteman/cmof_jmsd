@@ -47,6 +47,7 @@
 #include "Assertion_result.h"
 #include "Test.h"
 #include "internal/Exception_handling.h"
+#include "internal/Make_and_register_test_info.h"
 
 #include "Unit_test.hxx"
 #include "internal/Unit_test_impl.hxx"
@@ -1082,7 +1083,7 @@ template< int &... ExplicitParameterBarrier, typename Factory >
 	Factory factory_;
   };
 
-  return internal::MakeAndRegisterTestInfo(
+  return ::jmsd::cutf::internal::MakeAndRegisterTestInfo(
 	  test_suite_name, test_name, type_param, value_param,
 	  internal::CodeLocation(file, line), internal::GetTypeId<TestT>(),
 	  internal::SuiteApiResolver<TestT>::GetSetUpCaseOrSuite(file, line),

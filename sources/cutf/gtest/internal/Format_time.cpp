@@ -13,7 +13,7 @@ namespace internal {
 
 
 // static
-bool PortableLocaltime( time_t seconds, struct tm *out ) {
+bool Format_time::PortableLocaltime( time_t seconds, struct tm *out ) {
 #if defined(_MSC_VER)
 	return localtime_s(out, &seconds) == 0;
 #elif defined(__MINGW32__) || defined(__MINGW64__)
@@ -29,7 +29,7 @@ bool PortableLocaltime( time_t seconds, struct tm *out ) {
 
 // Formats the given time in milliseconds as seconds.
 // static
-std::string FormatTimeInMillisAsSeconds( ::testing::internal::TimeInMillis ms ) {
+::std::string Format_time::FormatTimeInMillisAsSeconds( ::testing::internal::TimeInMillis ms ) {
 	::std::stringstream ss;
 	ss << ( static_cast< double >( ms ) * 1e-3 );
 	return ss.str();
@@ -37,9 +37,9 @@ std::string FormatTimeInMillisAsSeconds( ::testing::internal::TimeInMillis ms ) 
 
 // Converts the given epoch time in milliseconds to a date string in the ISO 8601 format, without the timezone information.
 // static
-std::string FormatEpochTimeInMillisAsIso8601( ::testing::internal::TimeInMillis ms ) {
+::std::string Format_time::FormatEpochTimeInMillisAsIso8601( ::testing::internal::TimeInMillis ms ) {
   struct tm time_struct;
-  if (!PortableLocaltime(static_cast<time_t>(ms / 1000), &time_struct))
+  if (!THIS_STATIC::PortableLocaltime(static_cast<time_t>(ms / 1000), &time_struct))
 	return "";
   // YYYY-MM-DDThh:mm:ss
   return ::testing::internal::StreamableToString(time_struct.tm_year + 1900) + "-" +
@@ -52,7 +52,7 @@ std::string FormatEpochTimeInMillisAsIso8601( ::testing::internal::TimeInMillis 
 
 // Formats the given time in milliseconds as seconds.
 // static
-std::string FormatTimeInMillisAsDuration( ::testing::internal::TimeInMillis ms) {
+::std::string Format_time::FormatTimeInMillisAsDuration( ::testing::internal::TimeInMillis ms) {
   ::std::stringstream ss;
   ss << (static_cast<double>(ms) * 1e-3) << "s";
   return ss.str();
@@ -60,9 +60,9 @@ std::string FormatTimeInMillisAsDuration( ::testing::internal::TimeInMillis ms) 
 
 // Converts the given epoch time in milliseconds to a date string in the RFC3339 format, without the timezone information.
 // static
-std::string FormatEpochTimeInMillisAsRFC3339( ::testing::internal::TimeInMillis ms) {
+::std::string Format_time::FormatEpochTimeInMillisAsRFC3339( ::testing::internal::TimeInMillis ms) {
   struct tm time_struct;
-  if (!PortableLocaltime(static_cast<time_t>(ms / 1000), &time_struct))
+  if (!THIS_STATIC::PortableLocaltime(static_cast<time_t>(ms / 1000), &time_struct))
 	return "";
   // YYYY-MM-DDThh:mm:ss
   return ::testing::internal::StreamableToString(time_struct.tm_year + 1900) + "-" +

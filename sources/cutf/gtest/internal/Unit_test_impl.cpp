@@ -12,6 +12,8 @@
 #include "Colored_print.h"
 #include "Open_file_for_writing.h"
 #include "Is_initialized.h"
+#include "Int32_from_environment_or_die.h"
+#include "Write_to_shard_status_file_if_needed.h"
 
 #include "gtest-flags-internal.h"
 #include "gtest-constants-internal.h"
@@ -514,7 +516,7 @@ bool UnitTestImpl::RunAllTests() {
   // Even if sharding is not on, test runners may want to use the
   // GTEST_SHARD_STATUS_FILE to query whether the test supports the sharding
   // protocol.
-  ::testing::internal::WriteToShardStatusFileIfNeeded();
+  WriteToShardStatusFileIfNeeded();
 
   // True if and only if we are in a subprocess for running a thread-safe-style
   // death test.
@@ -672,90 +674,6 @@ void UnitTestImpl::ClearNonAdHocTestResult() {
 // Clears the results of ad-hoc test assertions.
 void UnitTestImpl::ClearAdHocTestResult() {
 	ad_hoc_test_result_.Clear();
-}
-
-// Reads the GTEST_SHARD_STATUS_FILE environment variable, and creates the file
-// if the variable is present. If a file already exists at this location, this
-// function will write over it. If the variable is present, but the file cannot
-// be created, prints an error and exits.
-void WriteToShardStatusFileIfNeeded() {
-  const char* const test_shard_file = ::testing::internal::posix::GetEnv( constants::kTestShardStatusFile );
-  if (test_shard_file != nullptr) {
-	FILE* const file = ::testing::internal::posix::FOpen(test_shard_file, "w");
-	if (file == nullptr) {
-	  ColoredPrintf(COLOR_RED,
-					"Could not write to the test shard status file \"%s\" "
-					"specified by the %s environment variable.\n",
-					test_shard_file, constants::kTestShardStatusFile );
-	  fflush(stdout);
-	  exit(EXIT_FAILURE);
-	}
-	fclose(file);
-  }
-}
-
-// Checks whether sharding is enabled by examining the relevant
-// environment variable values. If the variables are present,
-// but inconsistent (i.e., shard_index >= total_shards), prints
-// an error and exits. If in_subprocess_for_death_test, sharding is
-// disabled because it must only be applied to the original test
-// process. Otherwise, we could filter out death tests we intended to execute.
-bool ShouldShard(const char* total_shards_env,
-				 const char* shard_index_env,
-				 bool in_subprocess_for_death_test) {
-  if (in_subprocess_for_death_test) {
-	return false;
-  }
-
-  const int32_t total_shards = ::testing::internal::Int32FromEnvOrDie(total_shards_env, -1);
-  const int32_t shard_index = ::testing::internal::Int32FromEnvOrDie(shard_index_env, -1);
-
-  if (total_shards == -1 && shard_index == -1) {
-	return false;
-  } else if (total_shards == -1 && shard_index != -1) {
-	const ::testing::Message msg = ::testing::Message()
-	  << "Invalid environment variables: you have "
-	  << constants::kTestShardIndex << " = " << shard_index
-	  << ", but have left " << constants::kTestTotalShards << " unset.\n";
-	ColoredPrintf( GTestColor::COLOR_RED, "%s", msg.GetString().c_str());
-	fflush(stdout);
-	exit(EXIT_FAILURE);
-  } else if (total_shards != -1 && shard_index == -1) {
-	const ::testing::Message msg = ::testing::Message()
-	  << "Invalid environment variables: you have "
-	  << constants::kTestTotalShards << " = " << total_shards
-	  << ", but have left " << constants::kTestShardIndex << " unset.\n";
-	ColoredPrintf( GTestColor::COLOR_RED, "%s", msg.GetString().c_str());
-	fflush(stdout);
-	exit(EXIT_FAILURE);
-  } else if (shard_index < 0 || shard_index >= total_shards) {
-	const ::testing::Message msg = ::testing::Message()
-	  << "Invalid environment variables: we require 0 <= "
-	  << constants::kTestShardIndex << " < " << constants::kTestTotalShards
-	  << ", but you have " << constants::kTestShardIndex << "=" << shard_index
-	  << ", " << constants::kTestTotalShards << "=" << total_shards << ".\n";
-	ColoredPrintf( GTestColor::COLOR_RED, "%s", msg.GetString().c_str());
-	fflush(stdout);
-	exit(EXIT_FAILURE);
-  }
-
-  return total_shards > 1;
-}
-
-// Parses the environment variable var as an Int32. If it is unset,
-// returns default_val. If it is not an Int32, prints an error
-// and aborts.
-int32_t Int32FromEnvOrDie(const char* var, int32_t default_val) {
-  const char* str_val = ::testing::internal::posix::GetEnv(var);
-  if (str_val == nullptr) {
-	return default_val;
-  }
-
-  int32_t result;
-  if (!::testing::internal::ParseInt32( ::testing::Message() << "The value of environment variable " << var, str_val, &result)) {
-	exit(EXIT_FAILURE);
-  }
-  return result;
 }
 
 // Given the total number of shards, the shard index, and the test id,
@@ -986,6 +904,10 @@ void UnitTestImpl::UnshuffleTests() {
 // Returns the value of GTEST_FLAG(catch_exceptions) at the moment UnitTest::Run() starts.
 bool UnitTestImpl::catch_exceptions() const {
 	return catch_exceptions_;
+}
+
+void UnitTestImpl::set_catch_exceptions( bool const value) {
+	catch_exceptions_ = value;
 }
 
 

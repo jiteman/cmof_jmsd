@@ -12,7 +12,7 @@ const char kTypeParamLabel[] = "TypeParam";
 const char kValueParamLabel[] = "GetParam()";
 
 // The text used in failure messages to indicate the start of the stack trace.
-extern const char kStackTraceMarker[] = "\nStack trace:\n";
+const char kStackTraceMarker[] = "\nStack trace:\n";
 
 
 } // namespace internal

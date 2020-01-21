@@ -7,6 +7,7 @@
 
 #include "internal/Unit_test_impl.h"
 #include "internal/Scoped_premature_exit_file.h"
+#include "internal/gtest-constants-internal.h"
 
 
 namespace jmsd {
@@ -210,7 +211,7 @@ void UnitTest::AddTestPartResult(
   }
 
   if (os_stack_trace.c_str() != nullptr && !os_stack_trace.empty()) {
-	msg << ::testing::internal::kStackTraceMarker << os_stack_trace;
+	msg << constants::internal::kStackTraceMarker << os_stack_trace;
   }
 
   const ::testing::TestPartResult result = ::testing::TestPartResult( result_type, file_name, line_number, msg.GetString().c_str() );
@@ -267,8 +268,7 @@ void UnitTest::RecordProperty(const std::string& key,
 // We don't protect this under mutex_, as we only support calling it
 // from the main thread.
 int UnitTest::Run() {
-  const bool in_death_test_child_process =
-	  ::testing::internal:: GTEST_FLAG(internal_run_death_test).length() > 0;
+  const bool in_death_test_child_process = ::testing::internal:: GTEST_FLAG(internal_run_death_test).length() > 0;
 
   // Google Test implements this protocol for catching that a test
   // program exits before returning control to Google Test:
