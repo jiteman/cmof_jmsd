@@ -6,7 +6,7 @@ namespace cutf {
 namespace internal {
 
 
-class JsonUnitTestResultPrinter;
+class Format_time;
 
 
 } // namespace internal

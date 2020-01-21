@@ -4,8 +4,18 @@
 #include "gtest/Unit_test.h"
 #include "gtest/Pretty_unit_test_result_printer.h"
 #include "gtest/Environment.h"
+#include "gtest/gtest-constants.h"
 
+#include "Xml_unit_test_result_printer.h"
+#include "Json_test_result_printer.h"
 #include "Unit_test_options.h"
+#include "Colored_print.h"
+#include "Open_file_for_writing.h"
+#include "Is_initialized.h"
+
+#include "gtest-flags-internal.h"
+#include "gtest-constants-internal.h"
+
 #include "Stl_utilities.hin"
 
 #include "gtest-death-test-internal.h"
@@ -325,11 +335,9 @@ void UnitTestImpl::SuppressTestEventsIfInSubprocess() {
 void UnitTestImpl::ConfigureXmlOutput() {
   const std::string& output_format = UnitTestOptions::GetOutputFormat();
   if (output_format == "xml") {
-	listeners()->SetDefaultXmlGenerator(new XmlUnitTestResultPrinter(
-		UnitTestOptions::GetAbsolutePathToOutputFile().c_str()));
+	listeners()->SetDefaultXmlGenerator( new XmlUnitTestResultPrinter( UnitTestOptions::GetAbsolutePathToOutputFile().c_str() ) );
   } else if (output_format == "json") {
-	listeners()->SetDefaultXmlGenerator(new JsonUnitTestResultPrinter(
-		UnitTestOptions::GetAbsolutePathToOutputFile().c_str()));
+	listeners()->SetDefaultXmlGenerator( new JsonUnitTestResultPrinter( UnitTestOptions::GetAbsolutePathToOutputFile().c_str() ) );
   } else if (output_format != "") {
 	GTEST_LOG_(WARNING) << "WARNING: unrecognized output format \""
 						<< output_format << "\" ignored.";
@@ -444,8 +452,8 @@ class TestSuiteNameIs {
 //   tear_down_tc:   pointer to the function that tears down the test suite
 TestSuite* UnitTestImpl::GetTestSuite(
 	const char* test_suite_name, const char* type_param,
-	internal::SetUpTestSuiteFunc set_up_tc,
-	internal::TearDownTestSuiteFunc tear_down_tc) {
+	::testing::internal::SetUpTestSuiteFunc set_up_tc,
+	::testing::internal::TearDownTestSuiteFunc tear_down_tc) {
   // Can we find a TestSuite with the given name?
   const auto test_suite =
 	  std::find_if(test_suites_.rbegin(), test_suites_.rend(),
@@ -459,7 +467,7 @@ TestSuite* UnitTestImpl::GetTestSuite(
 
   // Is this a death test suite?
   if (internal::UnitTestOptions::MatchesFilter(test_suite_name,
-											   kDeathTestSuiteFilter)) {
+											   constants::kDeathTestSuiteFilter)) {
 	// Yes.  Inserts the test suite after the last death test suite
 	// defined so far.  This only works when the test suites haven't
 	// been shuffled.  Otherwise we may end up running a death test
@@ -506,7 +514,7 @@ bool UnitTestImpl::RunAllTests() {
   // Even if sharding is not on, test runners may want to use the
   // GTEST_SHARD_STATUS_FILE to query whether the test supports the sharding
   // protocol.
-  internal::WriteToShardStatusFileIfNeeded();
+  ::testing::internal::WriteToShardStatusFileIfNeeded();
 
   // True if and only if we are in a subprocess for running a thread-safe-style
   // death test.
@@ -535,26 +543,26 @@ bool UnitTestImpl::RunAllTests() {
 											  : IGNORE_SHARDING_PROTOCOL) > 0;
 
   // Lists the tests and exits if the --gtest_list_tests flag was specified.
-  if (GTEST_FLAG(list_tests)) {
+  if (::testing::GTEST_FLAG(list_tests)) {
 	// This must be called *after* FilterTests() has been called.
 	ListTestsMatchingFilter();
 	return true;
   }
 
-  random_seed_ = GTEST_FLAG(shuffle) ?
-	  GetRandomSeedFromFlag(GTEST_FLAG(random_seed)) : 0;
+  random_seed_ = ::testing::GTEST_FLAG(shuffle) ?
+	  ::testing::internal::GetRandomSeedFromFlag( ::testing::GTEST_FLAG(random_seed)) : 0;
 
   // True if and only if at least one test has failed.
   bool failed = false;
 
   TestEventListener* repeater = listeners()->repeater();
 
-  start_timestamp_ = GetTimeInMillis();
+  start_timestamp_ = ::testing::internal::GetTimeInMillis();
   repeater->OnTestProgramStart(*parent_);
 
   // How many times to repeat the tests?  We don't want to repeat them
   // when we are inside the subprocess of a death test.
-  const int repeat = in_subprocess_for_death_test ? 1 : GTEST_FLAG(repeat);
+  const int repeat = in_subprocess_for_death_test ? 1 : ::testing::GTEST_FLAG(repeat);
   // Repeats forever if the repeat count is negative.
   const bool gtest_repeat_forever = repeat < 0;
   for (int i = 0; gtest_repeat_forever || i != repeat; i++) {
@@ -562,10 +570,10 @@ bool UnitTestImpl::RunAllTests() {
 	// assertions executed before RUN_ALL_TESTS().
 	ClearNonAdHocTestResult();
 
-	const TimeInMillis start = GetTimeInMillis();
+	const ::testing::internal::TimeInMillis start = ::testing::internal::GetTimeInMillis();
 
 	// Shuffles test suites and tests if requested.
-	if (has_tests_to_run && GTEST_FLAG(shuffle)) {
+	if (has_tests_to_run && ::testing::GTEST_FLAG(shuffle)) {
 	  random()->Reseed(static_cast<uint32_t>(random_seed_));
 	  // This should be done before calling OnTestIterationStart(),
 	  // such that a test event listener can see the actual test order
@@ -589,11 +597,11 @@ bool UnitTestImpl::RunAllTests() {
 		// Emit diagnostics when global set-up calls skip, as it will not be
 		// emitted by default.
 		TestResult& test_result =
-			*internal::GetUnitTestImpl()->current_test_result();
+			*GetUnitTestImpl()->current_test_result();
 		for (int j = 0; j < test_result.total_part_count(); ++j) {
-		  const TestPartResult& test_part_result =
+		  const ::testing::TestPartResult& test_part_result =
 			  test_result.GetTestPartResult(j);
-		  if (test_part_result.type() == TestPartResult::kSkip) {
+		  if (test_part_result.type() == ::testing::TestPartResult::kSkip) {
 			const std::string& result = test_part_result.message();
 			printf("%s\n", result.c_str());
 		  }
@@ -613,7 +621,7 @@ bool UnitTestImpl::RunAllTests() {
 	  repeater->OnEnvironmentsTearDownEnd(*parent_);
 	}
 
-	elapsed_time_ = GetTimeInMillis() - start;
+	elapsed_time_ = ::testing::internal::GetTimeInMillis() - start;
 
 	// Tells the unit test event listener that the tests have just finished.
 	repeater->OnTestIterationEnd(*parent_, i);
@@ -631,9 +639,9 @@ bool UnitTestImpl::RunAllTests() {
 	// (it's always safe to unshuffle the tests).
 	UnshuffleTests();
 
-	if (GTEST_FLAG(shuffle)) {
+	if ( ::testing::GTEST_FLAG(shuffle)) {
 	  // Picks a new random seed for each iteration.
-	  random_seed_ = GetNextRandomSeed(random_seed_);
+	  random_seed_ = ::testing::internal::GetNextRandomSeed(random_seed_);
 	}
   }
 
@@ -671,14 +679,14 @@ void UnitTestImpl::ClearAdHocTestResult() {
 // function will write over it. If the variable is present, but the file cannot
 // be created, prints an error and exits.
 void WriteToShardStatusFileIfNeeded() {
-  const char* const test_shard_file = posix::GetEnv(kTestShardStatusFile);
+  const char* const test_shard_file = ::testing::internal::posix::GetEnv( constants::kTestShardStatusFile );
   if (test_shard_file != nullptr) {
-	FILE* const file = posix::FOpen(test_shard_file, "w");
+	FILE* const file = ::testing::internal::posix::FOpen(test_shard_file, "w");
 	if (file == nullptr) {
 	  ColoredPrintf(COLOR_RED,
 					"Could not write to the test shard status file \"%s\" "
 					"specified by the %s environment variable.\n",
-					test_shard_file, kTestShardStatusFile);
+					test_shard_file, constants::kTestShardStatusFile );
 	  fflush(stdout);
 	  exit(EXIT_FAILURE);
 	}
@@ -699,34 +707,34 @@ bool ShouldShard(const char* total_shards_env,
 	return false;
   }
 
-  const int32_t total_shards = Int32FromEnvOrDie(total_shards_env, -1);
-  const int32_t shard_index = Int32FromEnvOrDie(shard_index_env, -1);
+  const int32_t total_shards = ::testing::internal::Int32FromEnvOrDie(total_shards_env, -1);
+  const int32_t shard_index = ::testing::internal::Int32FromEnvOrDie(shard_index_env, -1);
 
   if (total_shards == -1 && shard_index == -1) {
 	return false;
   } else if (total_shards == -1 && shard_index != -1) {
-	const Message msg = Message()
+	const ::testing::Message msg = ::testing::Message()
 	  << "Invalid environment variables: you have "
-	  << kTestShardIndex << " = " << shard_index
-	  << ", but have left " << kTestTotalShards << " unset.\n";
-	ColoredPrintf(COLOR_RED, "%s", msg.GetString().c_str());
+	  << constants::kTestShardIndex << " = " << shard_index
+	  << ", but have left " << constants::kTestTotalShards << " unset.\n";
+	ColoredPrintf( GTestColor::COLOR_RED, "%s", msg.GetString().c_str());
 	fflush(stdout);
 	exit(EXIT_FAILURE);
   } else if (total_shards != -1 && shard_index == -1) {
-	const Message msg = Message()
+	const ::testing::Message msg = ::testing::Message()
 	  << "Invalid environment variables: you have "
-	  << kTestTotalShards << " = " << total_shards
-	  << ", but have left " << kTestShardIndex << " unset.\n";
-	ColoredPrintf(COLOR_RED, "%s", msg.GetString().c_str());
+	  << constants::kTestTotalShards << " = " << total_shards
+	  << ", but have left " << constants::kTestShardIndex << " unset.\n";
+	ColoredPrintf( GTestColor::COLOR_RED, "%s", msg.GetString().c_str());
 	fflush(stdout);
 	exit(EXIT_FAILURE);
   } else if (shard_index < 0 || shard_index >= total_shards) {
-	const Message msg = Message()
+	const ::testing::Message msg = ::testing::Message()
 	  << "Invalid environment variables: we require 0 <= "
-	  << kTestShardIndex << " < " << kTestTotalShards
-	  << ", but you have " << kTestShardIndex << "=" << shard_index
-	  << ", " << kTestTotalShards << "=" << total_shards << ".\n";
-	ColoredPrintf(COLOR_RED, "%s", msg.GetString().c_str());
+	  << constants::kTestShardIndex << " < " << constants::kTestTotalShards
+	  << ", but you have " << constants::kTestShardIndex << "=" << shard_index
+	  << ", " << constants::kTestTotalShards << "=" << total_shards << ".\n";
+	ColoredPrintf( GTestColor::COLOR_RED, "%s", msg.GetString().c_str());
 	fflush(stdout);
 	exit(EXIT_FAILURE);
   }
@@ -738,14 +746,13 @@ bool ShouldShard(const char* total_shards_env,
 // returns default_val. If it is not an Int32, prints an error
 // and aborts.
 int32_t Int32FromEnvOrDie(const char* var, int32_t default_val) {
-  const char* str_val = posix::GetEnv(var);
+  const char* str_val = ::testing::internal::posix::GetEnv(var);
   if (str_val == nullptr) {
 	return default_val;
   }
 
   int32_t result;
-  if (!ParseInt32(Message() << "The value of environment variable " << var,
-				  str_val, &result)) {
+  if (!::testing::internal::ParseInt32( ::testing::Message() << "The value of environment variable " << var, str_val, &result)) {
 	exit(EXIT_FAILURE);
   }
   return result;
@@ -767,10 +774,8 @@ bool ShouldRunTestOnShard(int total_shards, int shard_index, int test_id) {
 // https://github.com/google/googletest/blob/master/googletest/docs/advanced.md
 // . Returns the number of tests that should run.
 int UnitTestImpl::FilterTests(ReactionToSharding shard_tests) {
-  const int32_t total_shards = shard_tests == HONOR_SHARDING_PROTOCOL ?
-	  Int32FromEnvOrDie(kTestTotalShards, -1) : -1;
-  const int32_t shard_index = shard_tests == HONOR_SHARDING_PROTOCOL ?
-	  Int32FromEnvOrDie(kTestShardIndex, -1) : -1;
+  const int32_t total_shards = shard_tests == HONOR_SHARDING_PROTOCOL ? Int32FromEnvOrDie( constants::kTestTotalShards, -1) : -1;
+  const int32_t shard_index = shard_tests == HONOR_SHARDING_PROTOCOL ? Int32FromEnvOrDie( constants::kTestShardIndex, -1) : -1;
 
   // num_runnable_tests are the number of tests that will
   // run across all shards (i.e., match filter and are not disabled).
@@ -788,9 +793,9 @@ int UnitTestImpl::FilterTests(ReactionToSharding shard_tests) {
 	  // A test is disabled if test suite name or test name matches
 	  // kDisableTestFilter.
 	  const bool is_disabled = internal::UnitTestOptions::MatchesFilter(
-								   test_suite_name, kDisableTestFilter) ||
+								   test_suite_name, constants::kDisableTestFilter) ||
 							   internal::UnitTestOptions::MatchesFilter(
-								   test_name, kDisableTestFilter);
+								   test_name, constants::kDisableTestFilter);
 	  test_info->is_disabled_ = is_disabled;
 
 	  const bool matches_filter = internal::UnitTestOptions::FilterMatchesTest(
@@ -798,7 +803,7 @@ int UnitTestImpl::FilterTests(ReactionToSharding shard_tests) {
 	  test_info->matches_filter_ = matches_filter;
 
 	  const bool is_runnable =
-		  (GTEST_FLAG(also_run_disabled_tests) || !is_disabled) &&
+		  ( ::testing::GTEST_FLAG(also_run_disabled_tests) || !is_disabled) &&
 		  matches_filter;
 
 	  const bool is_in_another_shard =
@@ -854,7 +859,7 @@ void UnitTestImpl::ListTestsMatchingFilter() {
 		  printed_test_suite_name = true;
 		  printf("%s.", test_suite->name());
 		  if (test_suite->type_param() != nullptr) {
-			printf("  # %s = ", kTypeParamLabel);
+			printf("  # %s = ", constants::internal::kTypeParamLabel);
 			// We print the type parameter on a single line to make
 			// the output easy to parse by a program.
 			PrintOnOneLine(test_suite->type_param(), kMaxParamLength);
@@ -863,7 +868,7 @@ void UnitTestImpl::ListTestsMatchingFilter() {
 		}
 		printf("  %s", test_info->name());
 		if (test_info->value_param() != nullptr) {
-		  printf("  # %s = ", kValueParamLabel);
+		  printf("  # %s = ", constants::internal::kValueParamLabel);
 		  // We print the value parameter on a single line to make the
 		  // output easy to parse by a program.
 		  PrintOnOneLine(test_info->value_param(), kMaxParamLength);
@@ -887,7 +892,7 @@ void UnitTestImpl::ListTestsMatchingFilter() {
 		  UnitTestOptions::GetAbsolutePathToOutputFile().c_str())
 		  .PrintJsonTestList(&stream, test_suites_);
 	}
-	fprintf(fileout, "%s", StringStreamToString(&stream).c_str());
+	fprintf(fileout, "%s", ::testing::internal::StringStreamToString(&stream).c_str());
 	fclose(fileout);
   }
 }
@@ -896,9 +901,8 @@ const TestSuite *UnitTestImpl::current_test_suite() const { return current_test_
 TestInfo *UnitTestImpl::current_test_info() { return current_test_info_; }
 const TestInfo *UnitTestImpl::current_test_info() const { return current_test_info_; }
 
-// Returns the vector of environments that need to be set-up/torn-down
-// before/after the tests are run.
-::std::vector< ::testing::Environment * > &UnitTestImpl::environments() {
+// Returns the vector of environments that need to be set-up/torn-down before/after the tests are run.
+::std::vector< Environment * > &UnitTestImpl::environments() {
 	return environments_;
 }
 
@@ -917,7 +921,7 @@ const ::std::vector< ::testing::internal::TraceInfo > &UnitTestImpl::gtest_trace
 // the same; otherwise, deletes the old getter and makes the input the
 // current getter.
 void UnitTestImpl::set_os_stack_trace_getter(
-	OsStackTraceGetterInterface* getter) {
+	::testing::internal::OsStackTraceGetterInterface* getter) {
   if (os_stack_trace_getter_ != getter) {
 	delete os_stack_trace_getter_;
 	os_stack_trace_getter_ = getter;
@@ -927,12 +931,12 @@ void UnitTestImpl::set_os_stack_trace_getter(
 // Returns the current OS stack trace getter if it is not NULL;
 // otherwise, creates an OsStackTraceGetter, makes it the current
 // getter, and returns it.
-OsStackTraceGetterInterface* UnitTestImpl::os_stack_trace_getter() {
+::testing::internal::OsStackTraceGetterInterface* UnitTestImpl::os_stack_trace_getter() {
   if (os_stack_trace_getter_ == nullptr) {
 #ifdef GTEST_OS_STACK_TRACE_GETTER_
 	os_stack_trace_getter_ = new GTEST_OS_STACK_TRACE_GETTER_;
 #else
-	os_stack_trace_getter_ = new OsStackTraceGetter;
+	os_stack_trace_getter_ = new ::testing::internal::OsStackTraceGetter;
 #endif  // GTEST_OS_STACK_TRACE_GETTER_
   }
 
@@ -942,10 +946,10 @@ OsStackTraceGetterInterface* UnitTestImpl::os_stack_trace_getter() {
 // Returns the most specific TestResult currently running.
 TestResult *UnitTestImpl::current_test_result() {
   if (current_test_info_ != nullptr) {
-	return &current_test_info_->result_;
+	return current_test_info_->result_.get();
   }
   if (current_test_suite_ != nullptr) {
-	return &current_test_suite_->ad_hoc_test_result_;
+	return current_test_suite_->ad_hoc_test_result_.get();
   }
   return &ad_hoc_test_result_;
 }

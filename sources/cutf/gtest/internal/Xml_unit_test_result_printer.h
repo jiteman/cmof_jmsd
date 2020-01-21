@@ -15,6 +15,22 @@ namespace jmsd {
 namespace cutf {
 namespace internal {
 
+// The following routines generate an XML representation of a UnitTest
+// object.
+// GOOGLETEST_CM0009 DO NOT DELETE
+//
+// This is how Google Test concepts map to the DTD:
+//
+// <testsuites name="AllTests">        <-- corresponds to a UnitTest object
+//   <testsuite name="testcase-name">  <-- corresponds to a TestSuite object
+//     <testcase name="test-name">     <-- corresponds to a TestInfo object
+//       <failure message="...">...</failure>
+//       <failure message="...">...</failure>
+//       <failure message="...">...</failure>
+//                                     <-- individual assertion failures
+//     </testcase>
+//   </testsuite>
+// </testsuites>
 
 // This class generates an XML output file.
 class XmlUnitTestResultPrinter :

@@ -98,7 +98,7 @@ void PrettyUnitTestResultPrinter::OnTestSuiteStart( ::jmsd::cutf::TestSuite cons
   if (test_suite.type_param() == nullptr) {
 	printf("\n");
   } else {
-	printf(", where %s = %s\n", internal::constants::kTypeParamLabel, test_suite.type_param());
+	printf(", where %s = %s\n", constants::internal::kTypeParamLabel, test_suite.type_param());
   }
   fflush(stdout);
 }

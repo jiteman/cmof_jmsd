@@ -4,9 +4,11 @@
 #include "gtest/gtest-message.h"
 #include "gtest/Text_output_utilities.h"
 #include "gtest/Test_info.h"
+
 #include "gtest-string.h"
 
 #include "Open_file_for_writing.h"
+#include "Format_time.h"
 
 
 namespace jmsd {
@@ -164,10 +166,10 @@ void XmlUnitTestResultPrinter::OutputXmlTestInfo(::std::ostream* stream,
 	OutputXmlAttribute(stream, kTestsuite, "type_param",
 					   test_info.type_param());
   }
-  if (GTEST_FLAG(list_tests)) {
+  if ( ::testing:: GTEST_FLAG(list_tests)) {
 	OutputXmlAttribute(stream, kTestsuite, "file", test_info.file());
 	OutputXmlAttribute(stream, kTestsuite, "line",
-					   StreamableToString(test_info.line()));
+					   ::testing::internal::StreamableToString(test_info.line()));
 	*stream << " />\n";
 	return;
   }
@@ -179,21 +181,21 @@ void XmlUnitTestResultPrinter::OutputXmlTestInfo(::std::ostream* stream,
 						 ? (result.Skipped() ? "skipped" : "completed")
 						 : "suppressed");
   OutputXmlAttribute(stream, kTestsuite, "time",
-					 FormatTimeInMillisAsSeconds(result.elapsed_time()));
+					 Format_time::FormatTimeInMillisAsSeconds(result.elapsed_time()));
   OutputXmlAttribute(
 	  stream, kTestsuite, "timestamp",
-	  FormatEpochTimeInMillisAsIso8601(result.start_timestamp()));
+	  Format_time::FormatEpochTimeInMillisAsIso8601(result.start_timestamp()));
   OutputXmlAttribute(stream, kTestsuite, "classname", test_suite_name);
 
   int failures = 0;
   for (int i = 0; i < result.total_part_count(); ++i) {
-	const TestPartResult& part = result.GetTestPartResult(i);
+	const ::testing::TestPartResult& part = result.GetTestPartResult(i);
 	if (part.failed()) {
 	  if (++failures == 1) {
 		*stream << ">\n";
 	  }
 	  const std::string location =
-		  internal::FormatCompilerIndependentFileLocation(part.file_name(),
+		  ::testing::internal::FormatCompilerIndependentFileLocation(part.file_name(),
 														  part.line_number());
 	  const std::string summary = location + "\n" + part.summary();
 	  *stream << "      <failure message=\""
@@ -217,25 +219,24 @@ void XmlUnitTestResultPrinter::OutputXmlTestInfo(::std::ostream* stream,
 }
 
 // Prints an XML representation of a TestSuite object
-void XmlUnitTestResultPrinter::PrintXmlTestSuite(std::ostream* stream,
-												 const ::jmsd::cutf::TestSuite& test_suite) {
+void XmlUnitTestResultPrinter::PrintXmlTestSuite(std::ostream* stream, const TestSuite& test_suite) {
   const std::string kTestsuite = "testsuite";
   *stream << "  <" << kTestsuite;
   OutputXmlAttribute(stream, kTestsuite, "name", test_suite.name());
   OutputXmlAttribute(stream, kTestsuite, "tests",
-					 StreamableToString(test_suite.reportable_test_count()));
-  if (!GTEST_FLAG(list_tests)) {
+					 ::testing::internal::StreamableToString(test_suite.reportable_test_count()));
+  if (!::testing::GTEST_FLAG(list_tests)) {
 	OutputXmlAttribute(stream, kTestsuite, "failures",
-					   StreamableToString(test_suite.failed_test_count()));
+					   ::testing::internal::StreamableToString(test_suite.failed_test_count()));
 	OutputXmlAttribute(
 		stream, kTestsuite, "disabled",
-		StreamableToString(test_suite.reportable_disabled_test_count()));
+		::testing::internal::StreamableToString(test_suite.reportable_disabled_test_count()));
 	OutputXmlAttribute(stream, kTestsuite, "errors", "0");
 	OutputXmlAttribute(stream, kTestsuite, "time",
-					   FormatTimeInMillisAsSeconds(test_suite.elapsed_time()));
+					   Format_time::FormatTimeInMillisAsSeconds(test_suite.elapsed_time()));
 	OutputXmlAttribute(
 		stream, kTestsuite, "timestamp",
-		FormatEpochTimeInMillisAsIso8601(test_suite.start_timestamp()));
+		Format_time::FormatEpochTimeInMillisAsIso8601(test_suite.start_timestamp()));
 	*stream << TestPropertiesAsXmlAttributes(test_suite.ad_hoc_test_result());
   }
   *stream << ">\n";
@@ -255,22 +256,22 @@ void XmlUnitTestResultPrinter::PrintXmlUnitTest(std::ostream* stream,
   *stream << "<" << kTestsuites;
 
   OutputXmlAttribute(stream, kTestsuites, "tests",
-					 StreamableToString(unit_test.reportable_test_count()));
+					 ::testing::internal::StreamableToString(unit_test.reportable_test_count()));
   OutputXmlAttribute(stream, kTestsuites, "failures",
-					 StreamableToString(unit_test.failed_test_count()));
+					 ::testing::internal::StreamableToString(unit_test.failed_test_count()));
   OutputXmlAttribute(
 	  stream, kTestsuites, "disabled",
-	  StreamableToString(unit_test.reportable_disabled_test_count()));
+	  ::testing::internal::StreamableToString(unit_test.reportable_disabled_test_count()));
   OutputXmlAttribute(stream, kTestsuites, "errors", "0");
   OutputXmlAttribute(stream, kTestsuites, "time",
-					 FormatTimeInMillisAsSeconds(unit_test.elapsed_time()));
+					 Format_time::FormatTimeInMillisAsSeconds(unit_test.elapsed_time()));
   OutputXmlAttribute(
 	  stream, kTestsuites, "timestamp",
-	  FormatEpochTimeInMillisAsIso8601(unit_test.start_timestamp()));
+	  Format_time::FormatEpochTimeInMillisAsIso8601(unit_test.start_timestamp()));
 
-  if (GTEST_FLAG(shuffle)) {
+  if ( ::testing:: GTEST_FLAG(shuffle)) {
 	OutputXmlAttribute(stream, kTestsuites, "random_seed",
-					   StreamableToString(unit_test.random_seed()));
+					   ::testing::internal::StreamableToString(unit_test.random_seed()));
   }
   *stream << TestPropertiesAsXmlAttributes(unit_test.ad_hoc_test_result());
 
@@ -296,7 +297,7 @@ void XmlUnitTestResultPrinter::PrintXmlTestsList(
 	total_tests += test_suite->total_test_count();
   }
   OutputXmlAttribute(stream, kTestsuites, "tests",
-					 StreamableToString(total_tests));
+					 ::testing::internal::StreamableToString(total_tests));
   OutputXmlAttribute(stream, kTestsuites, "name", "AllTests");
   *stream << ">\n";
 
@@ -310,7 +311,7 @@ void XmlUnitTestResultPrinter::PrintXmlTestsList(
 // delimited XML attributes based on the property key="value" pairs.
 std::string XmlUnitTestResultPrinter::TestPropertiesAsXmlAttributes(
 	const ::jmsd::cutf::TestResult& result) {
-  Message attributes;
+  ::testing::Message attributes;
   for (int i = 0; i < result.test_property_count(); ++i) {
 	const ::jmsd::cutf::TestProperty& property = result.GetTestProperty(i);
 	attributes << " " << property.key() << "="

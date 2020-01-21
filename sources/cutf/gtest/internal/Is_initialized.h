@@ -1,12 +1,14 @@
 #pragma once
 
+#include "Is_initialized.hxx"
+
 
 namespace jmsd {
 namespace cutf {
 namespace internal {
 
 
-class JsonUnitTestResultPrinter;
+
 
 
 } // namespace internal

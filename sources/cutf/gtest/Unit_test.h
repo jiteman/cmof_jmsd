@@ -14,15 +14,14 @@
 
 #include "Scoped_trace.hxx"
 #include "Test_event_listeners.hxx"
+#include "Environment.hxx"
 #include "internal/Unit_test_impl.hxx"
 
 
 namespace testing {
 
 
-class Environment;
-
-::testing::Environment *AddGlobalTestEnvironment(::testing::Environment* env);
+::jmsd::cutf::Environment *AddGlobalTestEnvironment( ::jmsd::cutf::Environment *env );
 
 	namespace internal {
 
@@ -185,7 +184,7 @@ class GTEST_API_ UnitTest {
   // The UnitTest object takes ownership of the given environment.
   //
   // This method can only be called from the main thread.
-  ::testing::Environment* AddEnvironment(::testing::Environment* env);
+  Environment *AddEnvironment( Environment *env );
 
   // Adds a TestPartResult to the current TestResult object.  All
   // Google Test assertion macros (e.g. ASSERT_TRUE, EXPECT_EQ, etc)
@@ -219,7 +218,7 @@ class GTEST_API_ UnitTest {
   friend ::testing::internal::AssertHelper;
   friend ::testing::internal::StreamingListenerTest;
   friend ::testing::internal::UnitTestRecordPropertyTestHelper;
-  friend ::testing::Environment *AddGlobalTestEnvironment(::testing::Environment* env);
+  friend Environment *AddGlobalTestEnvironment( Environment *env );
   friend internal::UnitTestImpl *internal::GetUnitTestImpl();
   friend void ::testing::internal::ReportFailureInUnknownLocation( TestPartResult::Type result_type, const std::string& message);
 

@@ -243,7 +243,7 @@ class GTEST_API_ UnitTestImpl {
 
   // Returns the vector of environments that need to be set-up/torn-down
   // before/after the tests are run.
-  std::vector< ::testing::Environment * >& environments();
+  std::vector< Environment * >& environments();
 
   // Getters for the per-thread Google Test trace stack.
   std::vector< ::testing::internal::TraceInfo > &gtest_trace_stack();
@@ -298,7 +298,7 @@ class GTEST_API_ UnitTestImpl {
 
   // Returns the value of GTEST_FLAG(catch_exceptions) at the moment
   // UnitTest::Run() starts.
-  bool catch_exceptions() const { return catch_exceptions_; }
+  bool catch_exceptions() const;
 
  private:
   friend ::jmsd::cutf::UnitTest;
@@ -328,7 +328,7 @@ class GTEST_API_ UnitTestImpl {
   ::testing::internal::ThreadLocal< ::testing::TestPartResultReporterInterface * > per_thread_test_part_result_reporter_;
 
   // The vector of environments that need to be set-up/torn-down before/after the tests are run.
-  std::vector< ::testing::Environment * > environments_;
+  std::vector< Environment * > environments_;
 
   // The vector of TestSuites in their original order.  It owns the
   // elements in the vector.

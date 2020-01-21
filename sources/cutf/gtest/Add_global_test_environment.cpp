@@ -26,16 +26,10 @@ namespace cutf {
 // translation units and the environments have dependencies among them
 // (remember that the compiler doesn't guarantee the order in which
 // global variables from different translation units are initialized).
-::testing::Environment* AddGlobalTestEnvironment( ::testing::Environment* env) {
-	return ::jmsd::cutf::UnitTest::GetInstance()->AddEnvironment(env);
+Environment *AddGlobalTestEnvironment( Environment *const env ) {
+	return UnitTest::GetInstance()->AddEnvironment( env );
 }
 
 
 } // namespace cutf
 } // namespace jmsd
-
-
-namespace testing {
-
-
-} // namespace testing

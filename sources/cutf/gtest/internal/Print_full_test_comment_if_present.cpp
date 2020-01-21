@@ -19,7 +19,7 @@ void PrintFullTestCommentIfPresent( TestInfo const &test_info ) {
 		::printf(", where ");
 
 		if ( type_param != nullptr ) {
-			::printf( "%s = %s", constants::kTypeParamLabel, type_param );
+			::printf( "%s = %s", constants::internal::kTypeParamLabel, type_param );
 
 			if ( value_param != nullptr ) {
 				::printf(" and ");
@@ -27,7 +27,7 @@ void PrintFullTestCommentIfPresent( TestInfo const &test_info ) {
 		}
 
 		if ( value_param != nullptr ) {
-			::printf( "%s = %s", constants::kValueParamLabel, value_param );
+			::printf( "%s = %s", constants::internal::kValueParamLabel, value_param );
 		}
 	}
 }

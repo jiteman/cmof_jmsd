@@ -1,27 +1,15 @@
 #pragma once
 
 
-namespace testing {
-
-
-class Environment;
-
-
-} // namespace testing
+#include "Environment.hxx"
 
 
 namespace jmsd {
 namespace cutf {
 
 
-::testing::Environment* AddGlobalTestEnvironment( ::testing::Environment* env);
+Environment *AddGlobalTestEnvironment( Environment *env );
 
 
 } // namespace cutf
 } // namespace jmsd
-
-
-namespace testing {
-
-
-} // namespace testing

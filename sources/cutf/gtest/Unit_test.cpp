@@ -176,7 +176,7 @@ TestEventListeners& UnitTest::listeners() {
 //
 // We don't protect this under mutex_, as we only support calling it
 // from the main thread.
-::testing::Environment* UnitTest::AddEnvironment(::testing::Environment* env) {
+::jmsd::cutf::Environment* UnitTest::AddEnvironment( ::jmsd::cutf::Environment *env ) {
   if (env == nullptr) {
 	return nullptr;
   }
