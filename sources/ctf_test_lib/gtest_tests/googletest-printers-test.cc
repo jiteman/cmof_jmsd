@@ -539,13 +539,13 @@ TEST(PrintPointerTest, NonMemberFunctionPointer) {
 // An assertion predicate determining whether a one string is a prefix for
 // another.
 template <typename StringType>
-AssertionResult HasPrefix(const StringType& str, const StringType& prefix) {
+::jmsd::cutf::AssertionResult HasPrefix(const StringType& str, const StringType& prefix) {
   if (str.find(prefix, 0) == 0)
-    return AssertionSuccess();
+    return ::jmsd::cutf::AssertionResult::AssertionSuccess();
 
   const bool is_wide_string = sizeof(prefix[0]) > 1;
   const char* const begin_string_quote = is_wide_string ? "L\"" : "\"";
-  return AssertionFailure()
+  return ::jmsd::cutf::AssertionResult::AssertionFailure()
       << begin_string_quote << prefix << "\" is not a prefix of "
       << begin_string_quote << str << "\"\n";
 }

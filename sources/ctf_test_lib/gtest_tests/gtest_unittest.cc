@@ -37,10 +37,22 @@ TEST(CommandLineFlagsTest, CanBeAccessedInCodeOnceGTestHIsIncluded) {
 #include <unordered_set>
 #include <vector>
 
+#include "gtest/Test_event_listeners.h"
+#include "gtest/Empty_test_event_listener.h"
+#include "gtest/Test_event_listener.h"
+#include "gtest/Environment.h"
+
+#include "gtest/gtest-constants.h"
+
 #include "gtest/gtest-spi.h"
 #include "gtest/gtest-internal-inl.h"
 
+#include "gtest/internal/Unit_test_impl.h"
 #include "gtest/internal/Test_result_accessor.h"
+#include "gtest/internal/Int32_from_environment_or_die.h"
+#include "gtest/internal/Should_shard.h"
+
+#include "gtest/internal/Stl_utilities.hin"
 
 
 namespace testing {
@@ -126,29 +138,29 @@ TEST_F(StreamingListenerTest, OnTestPartResult) {
 // that are needed to test it.
 class TestEventListenersAccessor {
  public:
-  static TestEventListener* GetRepeater(TestEventListeners* listeners) {
+  static ::jmsd::cutf::TestEventListener* GetRepeater(::jmsd::cutf::TestEventListeners* listeners) {
 	return listeners->repeater();
   }
 
-  static void SetDefaultResultPrinter(TestEventListeners* listeners,
-									  TestEventListener* listener) {
+  static void SetDefaultResultPrinter(::jmsd::cutf::TestEventListeners* listeners,
+									  ::jmsd::cutf::TestEventListener* listener) {
 	listeners->SetDefaultResultPrinter(listener);
   }
-  static void SetDefaultXmlGenerator(TestEventListeners* listeners,
-									 TestEventListener* listener) {
+  static void SetDefaultXmlGenerator(::jmsd::cutf::TestEventListeners* listeners,
+									 ::jmsd::cutf::TestEventListener* listener) {
 	listeners->SetDefaultXmlGenerator(listener);
   }
 
-  static bool EventForwardingEnabled(const TestEventListeners& listeners) {
+  static bool EventForwardingEnabled(const ::jmsd::cutf::TestEventListeners& listeners) {
 	return listeners.EventForwardingEnabled();
   }
 
-  static void SuppressEventForwarding(TestEventListeners* listeners) {
+  static void SuppressEventForwarding(::jmsd::cutf::TestEventListeners* listeners) {
 	listeners->SuppressEventForwarding();
   }
 };
 
-class UnitTestRecordPropertyTestHelper : public Test {
+class UnitTestRecordPropertyTestHelper : public ::jmsd::cutf::Test {
  protected:
   UnitTestRecordPropertyTestHelper() {}
 
@@ -163,99 +175,97 @@ class UnitTestRecordPropertyTestHelper : public Test {
 }  // namespace internal
 }  // namespace testing
 
-using testing::AssertionFailure;
-using testing::AssertionResult;
-using testing::AssertionSuccess;
-using testing::DoubleLE;
-using testing::EmptyTestEventListener;
-using testing::Environment;
-using testing::FloatLE;
-using testing::GTEST_FLAG(also_run_disabled_tests);
-using testing::GTEST_FLAG(break_on_failure);
-using testing::GTEST_FLAG(catch_exceptions);
-using testing::GTEST_FLAG(color);
-using testing::GTEST_FLAG(death_test_use_fork);
-using testing::GTEST_FLAG(filter);
-using testing::GTEST_FLAG(list_tests);
-using testing::GTEST_FLAG(output);
-using testing::GTEST_FLAG(print_time);
-using testing::GTEST_FLAG(random_seed);
-using testing::GTEST_FLAG(repeat);
-using testing::GTEST_FLAG(show_internal_stack_frames);
-using testing::GTEST_FLAG(shuffle);
-using testing::GTEST_FLAG(stack_trace_depth);
-using testing::GTEST_FLAG(stream_result_to);
-using testing::GTEST_FLAG(throw_on_failure);
-using testing::IsNotSubstring;
-using testing::IsSubstring;
-using testing::Message;
-using testing::ScopedFakeTestPartResultReporter;
-using testing::StaticAssertTypeEq;
-using testing::Test;
+using ::jmsd::cutf::AssertionResult;
+using ::testing::DoubleLE;
+using ::jmsd::cutf::EmptyTestEventListener;
+using ::jmsd::cutf::Environment;
+using ::testing::FloatLE;
+using ::testing::GTEST_FLAG(also_run_disabled_tests);
+using ::testing::GTEST_FLAG(break_on_failure);
+using ::testing::GTEST_FLAG(catch_exceptions);
+using ::testing::GTEST_FLAG(color);
+using ::testing::GTEST_FLAG(death_test_use_fork);
+using ::testing::GTEST_FLAG(filter);
+using ::testing::GTEST_FLAG(list_tests);
+using ::testing::GTEST_FLAG(output);
+using ::testing::GTEST_FLAG(print_time);
+using ::testing::GTEST_FLAG(random_seed);
+using ::testing::GTEST_FLAG(repeat);
+using ::testing::GTEST_FLAG(show_internal_stack_frames);
+using ::testing::GTEST_FLAG(shuffle);
+using ::testing::GTEST_FLAG(stack_trace_depth);
+using ::testing::GTEST_FLAG(stream_result_to);
+using ::testing::GTEST_FLAG(throw_on_failure);
+using ::testing::IsNotSubstring;
+using ::testing::IsSubstring;
+using ::testing::Message;
+using ::testing::ScopedFakeTestPartResultReporter;
+using ::testing::StaticAssertTypeEq;
+using ::jmsd::cutf::Test;
 
-using testing::TestEventListeners;
+using ::jmsd::cutf::TestEventListeners;
 
-using testing::TestPartResult;
-using testing::TestPartResultArray;
+using ::testing::TestPartResult;
+using ::testing::TestPartResultArray;
 
-using testing::internal::AlwaysFalse;
-using testing::internal::AlwaysTrue;
-using testing::internal::AppendUserMessage;
-using testing::internal::ArrayAwareFind;
-using testing::internal::ArrayEq;
-using testing::internal::CodePointToUtf8;
-using testing::internal::CopyArray;
+using ::testing::internal::AlwaysFalse;
+using ::testing::internal::AlwaysTrue;
+using ::testing::internal::AppendUserMessage;
+using ::testing::internal::ArrayAwareFind;
+using ::testing::internal::ArrayEq;
+using ::testing::internal::CodePointToUtf8;
+using ::testing::internal::CopyArray;
 
-using testing::internal::EqFailure;
-using testing::internal::FloatingPoint;
+using ::testing::internal::EqFailure;
+using ::testing::internal::FloatingPoint;
 
-using testing::internal::FormatEpochTimeInMillisAsIso8601;
-using testing::internal::FormatTimeInMillisAsSeconds;
-using testing::internal::GTestFlagSaver;
-using testing::internal::GetCurrentOsStackTraceExceptTop;
+using ::testing::internal::FormatEpochTimeInMillisAsIso8601;
+using ::testing::internal::FormatTimeInMillisAsSeconds;
+using ::testing::internal::GTestFlagSaver;
+using ::testing::internal::GetCurrentOsStackTraceExceptTop;
 
-using testing::internal::GetNextRandomSeed;
-using testing::internal::GetRandomSeedFromFlag;
-using testing::internal::GetTestTypeId;
-using testing::internal::GetTimeInMillis;
-using testing::internal::GetTypeId;
+using ::testing::internal::GetNextRandomSeed;
+using ::testing::internal::GetRandomSeedFromFlag;
+using ::testing::internal::GetTestTypeId;
+using ::testing::internal::GetTimeInMillis;
+using ::testing::internal::GetTypeId;
 
-using testing::internal::Int32FromEnvOrDie;
-using testing::internal::IsAProtocolMessage;
-using testing::internal::IsContainer;
-using testing::internal::IsContainerTest;
-using testing::internal::IsNotContainer;
-using testing::internal::NativeArray;
-using testing::internal::OsStackTraceGetter;
-using testing::internal::OsStackTraceGetterInterface;
-using testing::internal::ParseInt32Flag;
-using testing::internal::RelationToSourceCopy;
-using testing::internal::RelationToSourceReference;
-using testing::internal::ShouldRunTestOnShard;
-using testing::internal::ShouldShard;
-using testing::internal::ShouldUseColor;
+using ::jmsd::cutf::internal::Int32FromEnvOrDie;
+using ::testing::internal::IsAProtocolMessage;
+using ::testing::internal::IsContainer;
+using ::testing::internal::IsContainerTest;
+using ::testing::internal::IsNotContainer;
+using ::testing::internal::NativeArray;
+using ::testing::internal::OsStackTraceGetter;
+using ::testing::internal::OsStackTraceGetterInterface;
+using ::testing::internal::ParseInt32Flag;
+using ::testing::internal::RelationToSourceCopy;
+using ::testing::internal::RelationToSourceReference;
+using ::testing::internal::ShouldRunTestOnShard;
+using ::jmsd::cutf::internal::ShouldShard;
+using ::testing::internal::ShouldUseColor;
 
-using testing::internal::SkipPrefix;
-using testing::internal::StreamableToString;
-using testing::internal::String;
-using testing::internal::TestEventListenersAccessor;
+using ::testing::internal::SkipPrefix;
+using ::testing::internal::StreamableToString;
+using ::testing::internal::String;
+using ::testing::internal::TestEventListenersAccessor;
 //using testing::internal::TestResultAccessor;
 
-using testing::internal::WideStringToUtf8;
-using testing::internal::edit_distance::CalculateOptimalEdits;
-using testing::internal::edit_distance::CreateUnifiedDiff;
-using testing::internal::edit_distance::EditType;
-using testing::internal::kMaxRandomSeed;
-using testing::internal::kTestTypeIdInGoogleTest;
+using ::testing::internal::WideStringToUtf8;
+using ::testing::internal::edit_distance::CalculateOptimalEdits;
+using ::testing::internal::edit_distance::CreateUnifiedDiff;
+using ::testing::internal::edit_distance::EditType;
+using ::testing::internal::kMaxRandomSeed;
+using ::testing::internal::kTestTypeIdInGoogleTest;
 
 
 #if GTEST_HAS_STREAM_REDIRECTION
-using testing::internal::CaptureStdout;
-using testing::internal::GetCapturedStdout;
+using ::testing::internal::CaptureStdout;
+using ::testing::internal::GetCapturedStdout;
 #endif
 
 #if GTEST_IS_THREADSAFE
-using testing::internal::ThreadWithParam;
+using ::testing::internal::ThreadWithParam;
 #endif
 
 class TestingVector : public std::vector<int> {
@@ -313,7 +323,7 @@ TEST(GetNextRandomSeedTest, WorksForValidInput) {
 
 static void ClearCurrentTestPartResults() {
   ::jmsd::cutf::internal::TestResultAccessor::ClearTestPartResults(
-	  GetUnitTestImpl()->current_test_result());
+	  ::jmsd::cutf::internal::GetUnitTestImpl()->current_test_result());
 }
 
 // Tests GetTypeId.
@@ -399,7 +409,7 @@ class FormatEpochTimeInMillisAsIso8601Test : public Test {
   // On Cygwin, GCC doesn't allow unqualified integer literals to exceed
   // 32 bits, even when 64-bit integer types are available.  We have to
   // force the constants to have a 64-bit type here.
-  static const TimeInMillis kMillisPerSec = 1000;
+  static const ::testing::internal::TimeInMillis kMillisPerSec = 1000;
 
  private:
   void SetUp() override {
@@ -448,7 +458,7 @@ class FormatEpochTimeInMillisAsIso8601Test : public Test {
   const char* saved_tz_;
 };
 
-const TimeInMillis FormatEpochTimeInMillisAsIso8601Test::kMillisPerSec;
+const ::testing::internal::TimeInMillis FormatEpochTimeInMillisAsIso8601Test::kMillisPerSec;
 
 TEST_F(FormatEpochTimeInMillisAsIso8601Test, PrintsTwoDigitSegments) {
   EXPECT_EQ("2011-10-31T18:52:42",
@@ -745,24 +755,24 @@ TEST(WideStringToUtf8Test, ConcatenatesCodepointsCorrectly) {
 // Tests the Random class.
 
 TEST(RandomDeathTest, GeneratesCrashesOnInvalidRange) {
-  testing::internal::Random random(42);
+  ::jmsd::cutf::internal::Random random(42);
   EXPECT_DEATH_IF_SUPPORTED(
 	  random.Generate(0),
 	  "Cannot generate a number in the range \\[0, 0\\)");
   EXPECT_DEATH_IF_SUPPORTED(
-	  random.Generate(testing::internal::Random::kMaxRange + 1),
+	  random.Generate(::jmsd::cutf::internal::Random::kMaxRange + 1),
 	  "Generation of a number in \\[0, 2147483649\\) was requested, "
 	  "but this can only generate numbers in \\[0, 2147483648\\)");
 }
 
 TEST(RandomTest, GeneratesNumbersWithinRange) {
   constexpr uint32_t kRange = 10000;
-  testing::internal::Random random(12345);
+  ::jmsd::cutf::internal::Random random(12345);
   for (int i = 0; i < 10; i++) {
 	EXPECT_LT(random.Generate(kRange), kRange) << " for iteration " << i;
   }
 
-  testing::internal::Random random2(testing::internal::Random::kMaxRange);
+  ::jmsd::cutf::internal::Random random2(::jmsd::cutf::internal::Random::kMaxRange);
   for (int i = 0; i < 10; i++) {
 	EXPECT_LT(random2.Generate(kRange), kRange) << " for iteration " << i;
   }
@@ -774,7 +784,7 @@ TEST(RandomTest, RepeatsWhenReseeded) {
   constexpr uint32_t kRange = 10000;
   uint32_t values[kArraySize];
 
-  testing::internal::Random random(kSeed);
+  ::jmsd::cutf::internal::Random random(kSeed);
   for (int i = 0; i < kArraySize; i++) {
 	values[i] = random.Generate(kRange);
   }
@@ -793,16 +803,16 @@ static bool IsPositive(int n) { return n > 0; }
 
 TEST(ContainerUtilityTest, CountIf) {
   std::vector<int> v;
-  EXPECT_EQ(0, CountIf(v, IsPositive));  // Works for an empty container.
+  EXPECT_EQ(0, ::jmsd::cutf::internal::CountIf(v, IsPositive));  // Works for an empty container.
 
   v.push_back(-1);
   v.push_back(0);
-  EXPECT_EQ(0, CountIf(v, IsPositive));  // Works when no value satisfies.
+  EXPECT_EQ(0, ::jmsd::cutf::internal::CountIf(v, IsPositive));  // Works when no value satisfies.
 
   v.push_back(2);
   v.push_back(-10);
   v.push_back(10);
-  EXPECT_EQ(2, CountIf(v, IsPositive));
+  EXPECT_EQ(2, ::jmsd::cutf::internal::CountIf(v, IsPositive));
 }
 
 // Tests ForEach().
@@ -813,32 +823,32 @@ static void Accumulate(int n) { g_sum += n; }
 TEST(ContainerUtilityTest, ForEach) {
   std::vector<int> v;
   g_sum = 0;
-  ForEach(v, Accumulate);
+  ::jmsd::cutf::internal::ForEach(v, Accumulate);
   EXPECT_EQ(0, g_sum);  // Works for an empty container;
 
   g_sum = 0;
   v.push_back(1);
-  ForEach(v, Accumulate);
+  ::jmsd::cutf::internal::ForEach(v, Accumulate);
   EXPECT_EQ(1, g_sum);  // Works for a container with one element.
 
   g_sum = 0;
   v.push_back(20);
   v.push_back(300);
-  ForEach(v, Accumulate);
+  ::jmsd::cutf::internal::ForEach(v, Accumulate);
   EXPECT_EQ(321, g_sum);
 }
 
 // Tests GetElementOr().
 TEST(ContainerUtilityTest, GetElementOr) {
   std::vector<char> a;
-  EXPECT_EQ('x', GetElementOr(a, 0, 'x'));
+  EXPECT_EQ('x', ::jmsd::cutf::internal::GetElementOr(a, 0, 'x'));
 
   a.push_back('a');
   a.push_back('b');
-  EXPECT_EQ('a', GetElementOr(a, 0, 'x'));
-  EXPECT_EQ('b', GetElementOr(a, 1, 'x'));
-  EXPECT_EQ('x', GetElementOr(a, -2, 'x'));
-  EXPECT_EQ('x', GetElementOr(a, 2, 'x'));
+  EXPECT_EQ('a', ::jmsd::cutf::internal::GetElementOr(a, 0, 'x'));
+  EXPECT_EQ('b', ::jmsd::cutf::internal::GetElementOr(a, 1, 'x'));
+  EXPECT_EQ('x', ::jmsd::cutf::internal::GetElementOr(a, -2, 'x'));
+  EXPECT_EQ('x', ::jmsd::cutf::internal::GetElementOr(a, 2, 'x'));
 }
 
 TEST(ContainerUtilityDeathTest, ShuffleRange) {
@@ -846,7 +856,7 @@ TEST(ContainerUtilityDeathTest, ShuffleRange) {
   a.push_back(0);
   a.push_back(1);
   a.push_back(2);
-  testing::internal::Random random(1);
+  ::jmsd::cutf::internal::Random random(1);
 
   EXPECT_DEATH_IF_SUPPORTED(
 	  ShuffleRange(&random, -1, 1, &a),
@@ -917,7 +927,7 @@ class VectorShuffleTest : public Test {
 	return !VectorIsShuffled(vector);
   }
 
-  testing::internal::Random random_;
+  ::jmsd::cutf::internal::Random random_;
   TestingVector vector_;
 };  // class VectorShuffleTest
 
@@ -1103,14 +1113,14 @@ TEST(StringTest, AnsiAndUtf16ConvertPathChars) {
 
 // Tests TestProperty construction.
 TEST(TestPropertyTest, StringValue) {
-  TestProperty property("key", "1");
+  ::jmsd::cutf::TestProperty property("key", "1");
   EXPECT_STREQ("key", property.key());
   EXPECT_STREQ("1", property.value());
 }
 
 // Tests TestProperty replacing a value.
 TEST(TestPropertyTest, ReplaceStringValue) {
-  TestProperty property("key", "1");
+  ::jmsd::cutf::TestProperty property("key", "1");
   EXPECT_STREQ("1", property.value());
   property.SetValue("2");
   EXPECT_STREQ("2", property.value());
@@ -1340,13 +1350,13 @@ TEST_F(ExpectFailureWithThreadsTest, ExpectNonFatalFailureOnAllThreads) {
 // Tests the TestProperty class.
 
 TEST(TestPropertyTest, ConstructorWorks) {
-  const TestProperty property("key", "value");
+  const ::jmsd::cutf::TestProperty property("key", "value");
   EXPECT_STREQ("key", property.key());
   EXPECT_STREQ("value", property.value());
 }
 
 TEST(TestPropertyTest, SetValue) {
-  TestProperty property("key", "value_1");
+  ::jmsd::cutf::TestProperty property("key", "value_1");
   EXPECT_STREQ("key", property.key());
   property.SetValue("value_2");
   EXPECT_STREQ("key", property.key());
@@ -1364,7 +1374,7 @@ class TestResultTest : public Test {
   TestPartResult * pr1, * pr2;
 
   // ... and 3 TestResult objects.
-  TestResult * r0, * r1, * r2;
+  ::jmsd::cutf::TestResult * r0, * r1, * r2;
 
   void SetUp() override {
 	// pr1 is for success.
@@ -1380,18 +1390,18 @@ class TestResultTest : public Test {
 							 "Failure!");
 
 	// Creates the TestResult objects.
-	r0 = new TestResult();
-	r1 = new TestResult();
-	r2 = new TestResult();
+	r0 = new ::jmsd::cutf::TestResult();
+	r1 = new ::jmsd::cutf::TestResult();
+	r2 = new ::jmsd::cutf::TestResult();
 
 	// In order to test TestResult, we need to modify its internal
 	// state, in particular the TestPartResult vector it holds.
 	// test_part_results() returns a const reference to this vector.
 	// We cast it to a non-const object s.t. it can be modified
 	TPRVector* results1 = const_cast<TPRVector*>(
-		&TestResultAccessor::test_part_results(*r1));
+		&::jmsd::cutf::internal::TestResultAccessor::test_part_results(*r1));
 	TPRVector* results2 = const_cast<TPRVector*>(
-		&TestResultAccessor::test_part_results(*r2));
+		&::jmsd::cutf::internal::TestResultAccessor::test_part_results(*r2));
 
 	// r0 is an empty TestResult.
 
@@ -1461,73 +1471,73 @@ TEST_F(TestResultDeathTest, GetTestPartResult) {
 
 // Tests TestResult has no properties when none are added.
 TEST(TestResultPropertyTest, NoPropertiesFoundWhenNoneAreAdded) {
-  TestResult test_result;
+  ::jmsd::cutf::TestResult test_result;
   ASSERT_EQ(0, test_result.test_property_count());
 }
 
 // Tests TestResult has the expected property when added.
 TEST(TestResultPropertyTest, OnePropertyFoundWhenAdded) {
-  TestResult test_result;
-  TestProperty property("key_1", "1");
-  TestResultAccessor::RecordProperty(&test_result, "testcase", property);
-  ASSERT_EQ(1, test_result.test_property_count());
-  const TestProperty& actual_property = test_result.GetTestProperty(0);
-  EXPECT_STREQ("key_1", actual_property.key());
-  EXPECT_STREQ("1", actual_property.value());
+	::jmsd::cutf:: TestResult test_result;
+	::jmsd::cutf::TestProperty property("key_1", "1");
+	::jmsd::cutf::internal::TestResultAccessor::RecordProperty(&test_result, "testcase", property);
+	ASSERT_EQ(1, test_result.test_property_count());
+	const ::jmsd::cutf::TestProperty& actual_property = test_result.GetTestProperty(0);
+	EXPECT_STREQ("key_1", actual_property.key());
+	EXPECT_STREQ("1", actual_property.value());
 }
 
 // Tests TestResult has multiple properties when added.
 TEST(TestResultPropertyTest, MultiplePropertiesFoundWhenAdded) {
-  TestResult test_result;
-  TestProperty property_1("key_1", "1");
-  TestProperty property_2("key_2", "2");
-  TestResultAccessor::RecordProperty(&test_result, "testcase", property_1);
-  TestResultAccessor::RecordProperty(&test_result, "testcase", property_2);
+  ::jmsd::cutf::TestResult test_result;
+  ::jmsd::cutf::TestProperty property_1("key_1", "1");
+  ::jmsd::cutf::TestProperty property_2("key_2", "2");
+  ::jmsd::cutf::internal::TestResultAccessor::RecordProperty(&test_result, "testcase", property_1);
+  ::jmsd::cutf::internal::TestResultAccessor::RecordProperty(&test_result, "testcase", property_2);
   ASSERT_EQ(2, test_result.test_property_count());
-  const TestProperty& actual_property_1 = test_result.GetTestProperty(0);
+  const ::jmsd::cutf::TestProperty& actual_property_1 = test_result.GetTestProperty(0);
   EXPECT_STREQ("key_1", actual_property_1.key());
   EXPECT_STREQ("1", actual_property_1.value());
 
-  const TestProperty& actual_property_2 = test_result.GetTestProperty(1);
+  const ::jmsd::cutf::TestProperty& actual_property_2 = test_result.GetTestProperty(1);
   EXPECT_STREQ("key_2", actual_property_2.key());
   EXPECT_STREQ("2", actual_property_2.value());
 }
 
 // Tests TestResult::RecordProperty() overrides values for duplicate keys.
 TEST(TestResultPropertyTest, OverridesValuesForDuplicateKeys) {
-  TestResult test_result;
-  TestProperty property_1_1("key_1", "1");
-  TestProperty property_2_1("key_2", "2");
-  TestProperty property_1_2("key_1", "12");
-  TestProperty property_2_2("key_2", "22");
-  TestResultAccessor::RecordProperty(&test_result, "testcase", property_1_1);
-  TestResultAccessor::RecordProperty(&test_result, "testcase", property_2_1);
-  TestResultAccessor::RecordProperty(&test_result, "testcase", property_1_2);
-  TestResultAccessor::RecordProperty(&test_result, "testcase", property_2_2);
+  ::jmsd::cutf::TestResult test_result;
+  ::jmsd::cutf::TestProperty property_1_1("key_1", "1");
+  ::jmsd::cutf::TestProperty property_2_1("key_2", "2");
+  ::jmsd::cutf::TestProperty property_1_2("key_1", "12");
+  ::jmsd::cutf::TestProperty property_2_2("key_2", "22");
+  ::jmsd::cutf::internal::TestResultAccessor::RecordProperty(&test_result, "testcase", property_1_1);
+  ::jmsd::cutf::internal::TestResultAccessor::RecordProperty(&test_result, "testcase", property_2_1);
+  ::jmsd::cutf::internal::TestResultAccessor::RecordProperty(&test_result, "testcase", property_1_2);
+  ::jmsd::cutf::internal::TestResultAccessor::RecordProperty(&test_result, "testcase", property_2_2);
 
   ASSERT_EQ(2, test_result.test_property_count());
-  const TestProperty& actual_property_1 = test_result.GetTestProperty(0);
+  const ::jmsd::cutf::TestProperty& actual_property_1 = test_result.GetTestProperty(0);
   EXPECT_STREQ("key_1", actual_property_1.key());
   EXPECT_STREQ("12", actual_property_1.value());
 
-  const TestProperty& actual_property_2 = test_result.GetTestProperty(1);
+  const ::jmsd::cutf::TestProperty& actual_property_2 = test_result.GetTestProperty(1);
   EXPECT_STREQ("key_2", actual_property_2.key());
   EXPECT_STREQ("22", actual_property_2.value());
 }
 
 // Tests TestResult::GetTestProperty().
 TEST(TestResultPropertyTest, GetTestProperty) {
-  TestResult test_result;
-  TestProperty property_1("key_1", "1");
-  TestProperty property_2("key_2", "2");
-  TestProperty property_3("key_3", "3");
-  TestResultAccessor::RecordProperty(&test_result, "testcase", property_1);
-  TestResultAccessor::RecordProperty(&test_result, "testcase", property_2);
-  TestResultAccessor::RecordProperty(&test_result, "testcase", property_3);
+  ::jmsd::cutf::TestResult test_result;
+  ::jmsd::cutf::TestProperty property_1("key_1", "1");
+  ::jmsd::cutf::TestProperty property_2("key_2", "2");
+  ::jmsd::cutf::TestProperty property_3("key_3", "3");
+  ::jmsd::cutf::internal::TestResultAccessor::RecordProperty(&test_result, "testcase", property_1);
+  ::jmsd::cutf::internal::TestResultAccessor::RecordProperty(&test_result, "testcase", property_2);
+  ::jmsd::cutf::internal::TestResultAccessor::RecordProperty(&test_result, "testcase", property_3);
 
-  const TestProperty& fetched_property_1 = test_result.GetTestProperty(0);
-  const TestProperty& fetched_property_2 = test_result.GetTestProperty(1);
-  const TestProperty& fetched_property_3 = test_result.GetTestProperty(2);
+  const ::jmsd::cutf::TestProperty& fetched_property_1 = test_result.GetTestProperty(0);
+  const ::jmsd::cutf::TestProperty& fetched_property_2 = test_result.GetTestProperty(1);
+  const ::jmsd::cutf::TestProperty& fetched_property_3 = test_result.GetTestProperty(2);
 
   EXPECT_STREQ("key_1", fetched_property_1.key());
   EXPECT_STREQ("1", fetched_property_1.value());
@@ -1574,7 +1584,7 @@ class GTestFlagSaverTest : public Test {
 	GTEST_FLAG(random_seed) = 0;
 	GTEST_FLAG(repeat) = 1;
 	GTEST_FLAG(shuffle) = false;
-	GTEST_FLAG(stack_trace_depth) = kMaxStackTraceDepth;
+	GTEST_FLAG(stack_trace_depth) = ::jmsd::cutf::constants::kMaxStackTraceDepth;
 	GTEST_FLAG(stream_result_to) = "";
 	GTEST_FLAG(throw_on_failure) = false;
   }
@@ -1601,7 +1611,7 @@ class GTestFlagSaverTest : public Test {
 	EXPECT_EQ(0, GTEST_FLAG(random_seed));
 	EXPECT_EQ(1, GTEST_FLAG(repeat));
 	EXPECT_FALSE(GTEST_FLAG(shuffle));
-	EXPECT_EQ(kMaxStackTraceDepth, GTEST_FLAG(stack_trace_depth));
+	EXPECT_EQ(::jmsd::cutf::constants::kMaxStackTraceDepth, GTEST_FLAG(stack_trace_depth));
 	EXPECT_STREQ("", GTEST_FLAG(stream_result_to).c_str());
 	EXPECT_FALSE(GTEST_FLAG(throw_on_failure));
 
@@ -1829,7 +1839,7 @@ TEST(ShouldRunTestOnShardTest, IsPartitionWhenThereIsOneShard) {
   EXPECT_TRUE(ShouldRunTestOnShard(1, 0, 4));
 }
 
-class ShouldShardTest : public testing::Test {
+class ShouldShardTest : public Test {
  protected:
   void SetUp() override {
 	index_var_ = GTEST_FLAG_PREFIX_UPPER_ "INDEX";
@@ -1952,20 +1962,20 @@ TEST(ShouldRunTestOnShardTest, DISABLED_IsPartitionWhenThereAreFiveShards) {
 //   TEST, TEST_F, RUN_ALL_TESTS
 
 TEST(UnitTestTest, CanGetOriginalWorkingDir) {
-  ASSERT_TRUE(UnitTest::GetInstance()->original_working_dir() != nullptr);
-  EXPECT_STRNE(UnitTest::GetInstance()->original_working_dir(), "");
+  ASSERT_TRUE(::jmsd::cutf::UnitTest::GetInstance()->original_working_dir() != nullptr);
+  EXPECT_STRNE(::jmsd::cutf::UnitTest::GetInstance()->original_working_dir(), "");
 }
 
 TEST(UnitTestTest, ReturnsPlausibleTimestamp) {
-  EXPECT_LT(0, UnitTest::GetInstance()->start_timestamp());
-  EXPECT_LE(UnitTest::GetInstance()->start_timestamp(), GetTimeInMillis());
+  EXPECT_LT(0, ::jmsd::cutf::UnitTest::GetInstance()->start_timestamp());
+  EXPECT_LE(::jmsd::cutf::UnitTest::GetInstance()->start_timestamp(), GetTimeInMillis());
 }
 
 // When a property using a reserved key is supplied to this function, it
 // tests that a non-fatal failure is added, a fatal failure is not added,
 // and that the property is not recorded.
 void ExpectNonFatalFailureRecordingPropertyWithReservedKey(
-	const TestResult& test_result, const char* key) {
+	const ::jmsd::cutf::TestResult& test_result, const char* key) {
   EXPECT_NONFATAL_FAILURE(Test::RecordProperty(key, "1"), "Reserved key");
   ASSERT_EQ(0, test_result.test_property_count()) << "Property for key '" << key
 												  << "' recorded unexpectedly.";
@@ -1973,7 +1983,7 @@ void ExpectNonFatalFailureRecordingPropertyWithReservedKey(
 
 void ExpectNonFatalFailureRecordingPropertyWithReservedKeyForCurrentTest(
 	const char* key) {
-  const TestInfo* test_info = UnitTest::GetInstance()->current_test_info();
+  const ::jmsd::cutf::TestInfo* test_info = ::jmsd::cutf::UnitTest::GetInstance()->current_test_info();
   ASSERT_TRUE(test_info != nullptr);
   ExpectNonFatalFailureRecordingPropertyWithReservedKey(*test_info->result(),
 														key);
@@ -1981,8 +1991,8 @@ void ExpectNonFatalFailureRecordingPropertyWithReservedKeyForCurrentTest(
 
 void ExpectNonFatalFailureRecordingPropertyWithReservedKeyForCurrentTestSuite(
 	const char* key) {
-  const testing::TestSuite* test_suite =
-	  UnitTest::GetInstance()->current_test_suite();
+  const ::jmsd::cutf::TestSuite* test_suite =
+	  ::jmsd::cutf::UnitTest::GetInstance()->current_test_suite();
   ASSERT_TRUE(test_suite != nullptr);
   ExpectNonFatalFailureRecordingPropertyWithReservedKey(
 	  test_suite->ad_hoc_test_result(), key);
@@ -1991,7 +2001,7 @@ void ExpectNonFatalFailureRecordingPropertyWithReservedKeyForCurrentTestSuite(
 void ExpectNonFatalFailureRecordingPropertyWithReservedKeyOutsideOfTestSuite(
 	const char* key) {
   ExpectNonFatalFailureRecordingPropertyWithReservedKey(
-	  UnitTest::GetInstance()->ad_hoc_test_result(), key);
+	  ::jmsd::cutf::UnitTest::GetInstance()->ad_hoc_test_result(), key);
 }
 
 // Tests that property recording functions in UnitTest outside of tests
@@ -2016,8 +2026,8 @@ class UnitTestRecordPropertyTest :
 
 	Test::RecordProperty("test_case_key_1", "1");
 
-	const testing::TestSuite* test_suite =
-		UnitTest::GetInstance()->current_test_suite();
+	const ::jmsd::cutf::TestSuite* test_suite =
+		::jmsd::cutf::UnitTest::GetInstance()->current_test_suite();
 
 	ASSERT_TRUE(test_suite != nullptr);
 
@@ -2149,21 +2159,21 @@ struct IsEvenFunctor {
 // number.
 AssertionResult AssertIsEven(const char* expr, int n) {
   if (IsEven(n)) {
-	return AssertionSuccess();
+	return AssertionResult::AssertionSuccess();
   }
 
   Message msg;
   msg << expr << " evaluates to " << n << ", which is not even.";
-  return AssertionFailure(msg);
+  return AssertionResult::AssertionFailure(msg);
 }
 
 // A predicate function that returns AssertionResult for use in
 // EXPECT/ASSERT_TRUE/FALSE.
 AssertionResult ResultIsEven(int n) {
   if (IsEven(n))
-	return AssertionSuccess() << n << " is even";
+	return AssertionResult::AssertionSuccess() << n << " is even";
   else
-	return AssertionFailure() << n << " is odd";
+	return AssertionResult::AssertionFailure() << n << " is odd";
 }
 
 // A predicate function that returns AssertionResult but gives no
@@ -2171,9 +2181,9 @@ AssertionResult ResultIsEven(int n) {
 // EXPECT/ASSERT_FALSE handles such functions correctly.
 AssertionResult ResultIsEvenNoExplanation(int n) {
   if (IsEven(n))
-	return AssertionSuccess();
+	return AssertionResult::AssertionSuccess();
   else
-	return AssertionFailure() << n << " is odd";
+	return AssertionResult::AssertionFailure() << n << " is odd";
 }
 
 // A predicate-formatter functor that asserts the argument is an even
@@ -2204,14 +2214,14 @@ AssertionResult AssertSumIsEven4(
 	int n1, int n2, int n3, int n4) {
   const int sum = n1 + n2 + n3 + n4;
   if (IsEven(sum)) {
-	return AssertionSuccess();
+	return AssertionResult::AssertionSuccess();
   }
 
   Message msg;
   msg << e1 << " + " << e2 << " + " << e3 << " + " << e4
 	  << " (" << n1 << " + " << n2 << " + " << n3 << " + " << n4
 	  << ") evaluates to " << sum << ", which is not even.";
-  return AssertionFailure(msg);
+  return AssertionResult::AssertionFailure(msg);
 }
 
 // A predicate-formatter functor that asserts the sum of the arguments
@@ -2222,7 +2232,7 @@ struct AssertSumIsEven5Functor {
 	  const char* e5, int n1, int n2, int n3, int n4, int n5) {
 	const int sum = n1 + n2 + n3 + n4 + n5;
 	if (IsEven(sum)) {
-	  return AssertionSuccess();
+	  return AssertionResult::AssertionSuccess();
 	}
 
 	Message msg;
@@ -2230,7 +2240,7 @@ struct AssertSumIsEven5Functor {
 		<< " ("
 		<< n1 << " + " << n2 << " + " << n3 << " + " << n4 << " + " << n5
 		<< ") evaluates to " << sum << ", which is not even.";
-	return AssertionFailure(msg);
+	return AssertionResult::AssertionFailure(msg);
   }
 };
 
@@ -2419,26 +2429,26 @@ TEST(PredicateAssertionTest, AcceptsTemplateFunction) {
 // functions with ASSERT_PRED_FORMATn and EXPECT_PRED_FORMATn.
 
 AssertionResult IsPositiveFormat(const char* /* expr */, int n) {
-  return n > 0 ? AssertionSuccess() :
-	  AssertionFailure(Message() << "Failure");
+  return n > 0 ? AssertionResult::AssertionSuccess() :
+	  AssertionResult::AssertionFailure(Message() << "Failure");
 }
 
 AssertionResult IsPositiveFormat(const char* /* expr */, double x) {
-  return x > 0 ? AssertionSuccess() :
-	  AssertionFailure(Message() << "Failure");
+  return x > 0 ? AssertionResult::AssertionSuccess() :
+	  AssertionResult::AssertionFailure(Message() << "Failure");
 }
 
 template <typename T>
 AssertionResult IsNegativeFormat(const char* /* expr */, T x) {
-  return x < 0 ? AssertionSuccess() :
-	  AssertionFailure(Message() << "Failure");
+  return x < 0 ? AssertionResult::AssertionSuccess() :
+	  AssertionResult::AssertionFailure(Message() << "Failure");
 }
 
 template <typename T1, typename T2>
 AssertionResult EqualsFormat(const char* /* expr1 */, const char* /* expr2 */,
 							 const T1& x1, const T2& x2) {
-  return x1 == x2 ? AssertionSuccess() :
-	  AssertionFailure(Message() << "Failure");
+  return x1 == x2 ? AssertionResult::AssertionSuccess() :
+	  AssertionResult::AssertionFailure(Message() << "Failure");
 }
 
 // Tests that overloaded functions can be used in *_PRED_FORMAT*
@@ -4200,31 +4210,31 @@ namespace testing {
 TEST(SuccessfulAssertionTest, SUCCEED) {
   SUCCEED();
   SUCCEED() << "OK";
-  EXPECT_EQ(2, GetUnitTestImpl()->current_test_result()->total_part_count());
+  EXPECT_EQ(2, ::jmsd::cutf::internal::GetUnitTestImpl()->current_test_result()->total_part_count());
 }
 
 // Tests that Google Test doesn't track successful EXPECT_*.
 TEST(SuccessfulAssertionTest, EXPECT) {
   EXPECT_TRUE(true);
-  EXPECT_EQ(0, GetUnitTestImpl()->current_test_result()->total_part_count());
+  EXPECT_EQ(0, ::jmsd::cutf::internal::GetUnitTestImpl()->current_test_result()->total_part_count());
 }
 
 // Tests that Google Test doesn't track successful EXPECT_STR*.
 TEST(SuccessfulAssertionTest, EXPECT_STR) {
   EXPECT_STREQ("", "");
-  EXPECT_EQ(0, GetUnitTestImpl()->current_test_result()->total_part_count());
+  EXPECT_EQ(0, ::jmsd::cutf::internal::GetUnitTestImpl()->current_test_result()->total_part_count());
 }
 
 // Tests that Google Test doesn't track successful ASSERT_*.
 TEST(SuccessfulAssertionTest, ASSERT) {
   ASSERT_TRUE(true);
-  EXPECT_EQ(0, GetUnitTestImpl()->current_test_result()->total_part_count());
+  EXPECT_EQ(0, ::jmsd::cutf::internal::GetUnitTestImpl()->current_test_result()->total_part_count());
 }
 
 // Tests that Google Test doesn't track successful ASSERT_STR*.
 TEST(SuccessfulAssertionTest, ASSERT_STR) {
   ASSERT_STREQ("", "");
-  EXPECT_EQ(0, GetUnitTestImpl()->current_test_result()->total_part_count());
+  EXPECT_EQ(0, ::jmsd::cutf::internal::GetUnitTestImpl()->current_test_result()->total_part_count());
 }
 
 }  // namespace testing
@@ -5017,7 +5027,7 @@ TEST_F(TestLifeCycleTest, Test2) {
 TEST(AssertionResultTest, CopyConstructorWorksWhenNotOptimied) {
   // Checks that the copy constructor doesn't try to dereference NULL pointers
   // in the source object.
-  AssertionResult r1 = AssertionSuccess();
+  AssertionResult r1 = AssertionResult::AssertionSuccess();
   AssertionResult r2 = r1;
   // The following line is added to prevent the compiler from optimizing
   // away the constructor call.
@@ -5031,46 +5041,46 @@ TEST(AssertionResultTest, CopyConstructorWorksWhenNotOptimied) {
 // Tests that AssertionSuccess and AssertionFailure construct
 // AssertionResult objects as expected.
 TEST(AssertionResultTest, ConstructionWorks) {
-  AssertionResult r1 = AssertionSuccess();
+  AssertionResult r1 = AssertionResult::AssertionSuccess();
   EXPECT_TRUE(r1);
   EXPECT_STREQ("", r1.message());
 
-  AssertionResult r2 = AssertionSuccess() << "abc";
+  AssertionResult r2 = AssertionResult::AssertionSuccess() << "abc";
   EXPECT_TRUE(r2);
   EXPECT_STREQ("abc", r2.message());
 
-  AssertionResult r3 = AssertionFailure();
+  AssertionResult r3 = AssertionResult::AssertionFailure();
   EXPECT_FALSE(r3);
   EXPECT_STREQ("", r3.message());
 
-  AssertionResult r4 = AssertionFailure() << "def";
+  AssertionResult r4 = AssertionResult::AssertionFailure() << "def";
   EXPECT_FALSE(r4);
   EXPECT_STREQ("def", r4.message());
 
-  AssertionResult r5 = AssertionFailure(Message() << "ghi");
+  AssertionResult r5 = AssertionResult::AssertionFailure(Message() << "ghi");
   EXPECT_FALSE(r5);
   EXPECT_STREQ("ghi", r5.message());
 }
 
 // Tests that the negation flips the predicate result but keeps the message.
 TEST(AssertionResultTest, NegationWorks) {
-  AssertionResult r1 = AssertionSuccess() << "abc";
+  AssertionResult r1 = AssertionResult::AssertionSuccess() << "abc";
   EXPECT_FALSE(!r1);
   EXPECT_STREQ("abc", (!r1).message());
 
-  AssertionResult r2 = AssertionFailure() << "def";
+  AssertionResult r2 = AssertionResult::AssertionFailure() << "def";
   EXPECT_TRUE(!r2);
   EXPECT_STREQ("def", (!r2).message());
 }
 
 TEST(AssertionResultTest, StreamingWorks) {
-  AssertionResult r = AssertionSuccess();
+  AssertionResult r = AssertionResult::AssertionSuccess();
   r << "abc" << 'd' << 0 << true;
   EXPECT_STREQ("abcd0true", r.message());
 }
 
 TEST(AssertionResultTest, CanStreamOstreamManipulators) {
-  AssertionResult r = AssertionSuccess();
+  AssertionResult r = AssertionResult::AssertionSuccess();
   r << "Data" << std::endl << std::flush << std::ends << "Will be visible";
   EXPECT_STREQ("Data\n\\0Will be visible", r.message());
 }
@@ -5244,27 +5254,27 @@ namespace testing {
 
 class TestInfoTest : public Test {
  protected:
-  static const TestInfo* GetTestInfo(const char* test_name) {
-	const TestSuite* const test_suite =
-		GetUnitTestImpl()->GetTestSuite("TestInfoTest", "", nullptr, nullptr);
+  static const ::jmsd::cutf::TestInfo* GetTestInfo(const char* test_name) {
+	const ::jmsd::cutf::TestSuite* const test_suite =
+		::jmsd::cutf::internal::GetUnitTestImpl()->GetTestSuite("TestInfoTest", "", nullptr, nullptr);
 
 	for (int i = 0; i < test_suite->total_test_count(); ++i) {
-	  const TestInfo* const test_info = test_suite->GetTestInfo(i);
+	  const ::jmsd::cutf::TestInfo* const test_info = test_suite->GetTestInfo(i);
 	  if (strcmp(test_name, test_info->name()) == 0)
 		return test_info;
 	}
 	return nullptr;
   }
 
-  static const TestResult* GetTestResult(
-	  const TestInfo* test_info) {
+  static const ::jmsd::cutf::TestResult* GetTestResult(
+	  const ::jmsd::cutf::TestInfo* test_info) {
 	return test_info->result();
   }
 };
 
 // Tests TestInfo::test_case_name() and TestInfo::name().
 TEST_F(TestInfoTest, Names) {
-  const TestInfo* const test_info = GetTestInfo("Names");
+  const ::jmsd::cutf::TestInfo* const test_info = GetTestInfo("Names");
 
   ASSERT_STREQ("TestInfoTest", test_info->test_suite_name());
   ASSERT_STREQ("Names", test_info->name());
@@ -5272,7 +5282,7 @@ TEST_F(TestInfoTest, Names) {
 
 // Tests TestInfo::result().
 TEST_F(TestInfoTest, result) {
-  const TestInfo* const test_info = GetTestInfo("result");
+  const ::jmsd::cutf::TestInfo* const test_info = GetTestInfo("result");
 
   // Initially, there is no TestPartResult for this test.
   ASSERT_EQ(0, GetTestResult(test_info)->total_part_count());
@@ -5283,10 +5293,10 @@ TEST_F(TestInfoTest, result) {
 
 #define VERIFY_CODE_LOCATION \
   const int expected_line = __LINE__ - 1; \
-  const TestInfo* const test_info = GetUnitTestImpl()->current_test_info(); \
-  ASSERT_TRUE(test_info); \
-  EXPECT_STREQ(__FILE__, test_info->file()); \
-  EXPECT_EQ(expected_line, test_info->line())
+  const ::jmsd::cutf::TestInfo* const test_info = ::jmsd::cutf::internal::GetUnitTestImpl()->current_test_info(); \
+  ASSERT_TRUE( test_info ); \
+  EXPECT_STREQ( __FILE__, test_info->file() ); \
+  EXPECT_EQ( expected_line, test_info->line() )
 
 TEST(CodeLocationForTEST, Verify) {
   VERIFY_CODE_LOCATION;
@@ -5475,7 +5485,7 @@ struct Flags {
 			random_seed(0),
 			repeat(1),
 			shuffle(false),
-			stack_trace_depth(kMaxStackTraceDepth),
+			stack_trace_depth(::jmsd::cutf::constants::kMaxStackTraceDepth),
 			stream_result_to(""),
 			throw_on_failure(false) {}
 
@@ -5626,7 +5636,7 @@ class ParseFlagsTest : public Test {
 	GTEST_FLAG(random_seed) = 0;
 	GTEST_FLAG(repeat) = 1;
 	GTEST_FLAG(shuffle) = false;
-	GTEST_FLAG(stack_trace_depth) = kMaxStackTraceDepth;
+	GTEST_FLAG(stack_trace_depth) = ::jmsd::cutf::constants::kMaxStackTraceDepth;
 	GTEST_FLAG(stream_result_to) = "";
 	GTEST_FLAG(throw_on_failure) = false;
   }

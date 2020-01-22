@@ -618,9 +618,8 @@ class TypeParameterizedTest {
 	typedef Fixture<Type> FixtureClass;
 	typedef typename GTEST_BIND_(TestSel, Type) TestClass;
 
-	// First, registers the first type-parameterized test in the type
-	// list.
-	MakeAndRegisterTestInfo(
+	// First, registers the first type-parameterized test in the type list.
+	::jmsd::cutf::internal::MakeAndRegisterTestInfo(
 		(std::string(prefix) + (prefix[0] == '\0' ? "" : "/") + case_name +
 		 "/" + type_names[static_cast<size_t>(index)])
 			.c_str(),

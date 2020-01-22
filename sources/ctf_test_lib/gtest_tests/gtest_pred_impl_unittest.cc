@@ -484,14 +484,14 @@ struct PredFunctor2 {
 
 // A binary predicate-formatter function.
 template <typename T1, typename T2>
-testing::AssertionResult PredFormatFunction2(const char* e1,
+::jmsd::cutf::AssertionResult PredFormatFunction2(const char* e1,
                                              const char* e2,
                                              const T1& v1,
                                              const T2& v2) {
   if (PredFunction2(v1, v2))
-    return testing::AssertionSuccess();
+    return ::jmsd::cutf::AssertionResult::AssertionSuccess();
 
-  return testing::AssertionFailure()
+  return ::jmsd::cutf::AssertionResult::AssertionFailure()
       << e1 << " + " << e2
       << " is expected to be positive, but evaluates to "
       << v1 + v2 << ".";
@@ -500,7 +500,7 @@ testing::AssertionResult PredFormatFunction2(const char* e1,
 // A binary predicate-formatter functor.
 struct PredFormatFunctor2 {
   template <typename T1, typename T2>
-  testing::AssertionResult operator()(const char* e1,
+  ::jmsd::cutf::AssertionResult operator()(const char* e1,
                                       const char* e2,
                                       const T1& v1,
                                       const T2& v2) const {
@@ -510,7 +510,7 @@ struct PredFormatFunctor2 {
 
 // Tests for {EXPECT|ASSERT}_PRED_FORMAT2.
 
-class Predicate2Test : public testing::Test {
+class Predicate2Test : public ::jmsd::cutf::Test {
  protected:
   void SetUp() override {
     expected_to_finish_ = true;
@@ -913,16 +913,16 @@ struct PredFunctor3 {
 
 // A ternary predicate-formatter function.
 template <typename T1, typename T2, typename T3>
-testing::AssertionResult PredFormatFunction3(const char* e1,
+::jmsd::cutf::AssertionResult PredFormatFunction3(const char* e1,
                                              const char* e2,
                                              const char* e3,
                                              const T1& v1,
                                              const T2& v2,
                                              const T3& v3) {
   if (PredFunction3(v1, v2, v3))
-    return testing::AssertionSuccess();
+    return ::jmsd::cutf::AssertionResult::AssertionSuccess();
 
-  return testing::AssertionFailure()
+  return ::jmsd::cutf::AssertionResult::AssertionFailure()
       << e1 << " + " << e2 << " + " << e3
       << " is expected to be positive, but evaluates to "
       << v1 + v2 + v3 << ".";
@@ -931,7 +931,7 @@ testing::AssertionResult PredFormatFunction3(const char* e1,
 // A ternary predicate-formatter functor.
 struct PredFormatFunctor3 {
   template <typename T1, typename T2, typename T3>
-  testing::AssertionResult operator()(const char* e1,
+  ::jmsd::cutf::AssertionResult operator()(const char* e1,
                                       const char* e2,
                                       const char* e3,
                                       const T1& v1,
@@ -943,7 +943,7 @@ struct PredFormatFunctor3 {
 
 // Tests for {EXPECT|ASSERT}_PRED_FORMAT3.
 
-class Predicate3Test : public testing::Test {
+class Predicate3Test : public ::jmsd::cutf::Test {
  protected:
   void SetUp() override {
     expected_to_finish_ = true;
@@ -1384,7 +1384,7 @@ struct PredFunctor4 {
 
 // A 4-ary predicate-formatter function.
 template <typename T1, typename T2, typename T3, typename T4>
-testing::AssertionResult PredFormatFunction4(const char* e1,
+::jmsd::cutf::AssertionResult PredFormatFunction4(const char* e1,
                                              const char* e2,
                                              const char* e3,
                                              const char* e4,
@@ -1393,9 +1393,9 @@ testing::AssertionResult PredFormatFunction4(const char* e1,
                                              const T3& v3,
                                              const T4& v4) {
   if (PredFunction4(v1, v2, v3, v4))
-    return testing::AssertionSuccess();
+    return ::jmsd::cutf::AssertionResult::AssertionSuccess();
 
-  return testing::AssertionFailure()
+  return ::jmsd::cutf::AssertionResult::AssertionFailure()
       << e1 << " + " << e2 << " + " << e3 << " + " << e4
       << " is expected to be positive, but evaluates to "
       << v1 + v2 + v3 + v4 << ".";
@@ -1404,7 +1404,7 @@ testing::AssertionResult PredFormatFunction4(const char* e1,
 // A 4-ary predicate-formatter functor.
 struct PredFormatFunctor4 {
   template <typename T1, typename T2, typename T3, typename T4>
-  testing::AssertionResult operator()(const char* e1,
+  ::jmsd::cutf::AssertionResult operator()(const char* e1,
                                       const char* e2,
                                       const char* e3,
                                       const char* e4,
@@ -1418,7 +1418,7 @@ struct PredFormatFunctor4 {
 
 // Tests for {EXPECT|ASSERT}_PRED_FORMAT4.
 
-class Predicate4Test : public testing::Test {
+class Predicate4Test : public ::jmsd::cutf::Test {
  protected:
   void SetUp() override {
     expected_to_finish_ = true;
@@ -1897,7 +1897,7 @@ struct PredFunctor5 {
 
 // A 5-ary predicate-formatter function.
 template <typename T1, typename T2, typename T3, typename T4, typename T5>
-testing::AssertionResult PredFormatFunction5(const char* e1,
+::jmsd::cutf::AssertionResult PredFormatFunction5(const char* e1,
                                              const char* e2,
                                              const char* e3,
                                              const char* e4,
@@ -1908,9 +1908,9 @@ testing::AssertionResult PredFormatFunction5(const char* e1,
                                              const T4& v4,
                                              const T5& v5) {
   if (PredFunction5(v1, v2, v3, v4, v5))
-    return testing::AssertionSuccess();
+    return ::jmsd::cutf::AssertionResult::AssertionSuccess();
 
-  return testing::AssertionFailure()
+  return ::jmsd::cutf::AssertionResult::AssertionFailure()
       << e1 << " + " << e2 << " + " << e3 << " + " << e4 << " + " << e5
       << " is expected to be positive, but evaluates to "
       << v1 + v2 + v3 + v4 + v5 << ".";
@@ -1919,7 +1919,7 @@ testing::AssertionResult PredFormatFunction5(const char* e1,
 // A 5-ary predicate-formatter functor.
 struct PredFormatFunctor5 {
   template <typename T1, typename T2, typename T3, typename T4, typename T5>
-  testing::AssertionResult operator()(const char* e1,
+  ::jmsd::cutf::AssertionResult operator()(const char* e1,
                                       const char* e2,
                                       const char* e3,
                                       const char* e4,
@@ -1935,7 +1935,7 @@ struct PredFormatFunctor5 {
 
 // Tests for {EXPECT|ASSERT}_PRED_FORMAT5.
 
-class Predicate5Test : public testing::Test {
+class Predicate5Test : public ::jmsd::cutf::Test {
  protected:
   void SetUp() override {
     expected_to_finish_ = true;

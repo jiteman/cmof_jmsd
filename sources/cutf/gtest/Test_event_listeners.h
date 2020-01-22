@@ -15,6 +15,17 @@
 #include "gtest-death-test.hxx"
 
 
+namespace testing {
+namespace internal {
+
+
+class TestEventListenersAccessor; // gtest_unittest.cc
+
+
+} // namespace internal
+} // namespace testing
+
+
 namespace jmsd {
 namespace cutf {
 
@@ -57,10 +68,10 @@ class GTEST_API_ TestEventListeners {
 	friend internal::UnitTestImpl;
 	friend ::testing::internal::NoExecDeathTest;
 	friend internal::DefaultGlobalTestPartResultReporter;
-//  friend ::jmsd::cutf::internal::DefaultGlobalTestPartResultReporter;
-//  friend class internal::NoExecDeathTest;
-//  friend class internal::TestEventListenersAccessor;
-//  friend ::jmsd::cutf::internal::UnitTestImpl;
+
+private: // testing
+	friend ::testing::internal::TestEventListenersAccessor; // gtest_unittest.cc
+	//  friend class internal::NoExecDeathTest;
 
   // Returns repeater that broadcasts the TestEventListener events to all
   // subscribers.

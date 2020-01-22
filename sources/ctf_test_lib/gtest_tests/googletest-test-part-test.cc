@@ -178,25 +178,25 @@ TEST_F(TestPartResultTest, NonfatallyFailed) {
 
 // Tests the TestPartResultArray class.
 
-class TestPartResultArrayTest : public Test {
+class TestPartResultArrayTest : public ::jmsd::cutf::Test {
  protected:
   TestPartResultArrayTest()
-      : r1_(TestPartResult::kNonFatalFailure, "foo/bar.cc", -1, "Failure 1"),
-        r2_(TestPartResult::kFatalFailure, "foo/bar.cc", -1, "Failure 2") {}
+      : r1_(::testing::TestPartResult::kNonFatalFailure, "foo/bar.cc", -1, "Failure 1"),
+        r2_(::testing::TestPartResult::kFatalFailure, "foo/bar.cc", -1, "Failure 2") {}
 
-  const TestPartResult r1_, r2_;
+  const ::testing::TestPartResult r1_, r2_;
 };
 
 // Tests that TestPartResultArray initially has size 0.
 TEST_F(TestPartResultArrayTest, InitialSizeIsZero) {
-  TestPartResultArray results;
+  ::testing::TestPartResultArray results;
   EXPECT_EQ(0, results.size());
 }
 
 // Tests that TestPartResultArray contains the given TestPartResult
 // after one Append() operation.
 TEST_F(TestPartResultArrayTest, ContainsGivenResultAfterAppend) {
-  TestPartResultArray results;
+  ::testing::TestPartResultArray results;
   results.Append(r1_);
   EXPECT_EQ(1, results.size());
   EXPECT_STREQ("Failure 1", results.GetTestPartResult(0).message());
@@ -205,7 +205,7 @@ TEST_F(TestPartResultArrayTest, ContainsGivenResultAfterAppend) {
 // Tests that TestPartResultArray contains the given TestPartResults
 // after two Append() operations.
 TEST_F(TestPartResultArrayTest, ContainsGivenResultsAfterTwoAppends) {
-  TestPartResultArray results;
+  ::testing::TestPartResultArray results;
   results.Append(r1_);
   results.Append(r2_);
   EXPECT_EQ(2, results.size());
@@ -218,7 +218,7 @@ typedef TestPartResultArrayTest TestPartResultArrayDeathTest;
 // Tests that the program dies when GetTestPartResult() is called with
 // an invalid index.
 TEST_F(TestPartResultArrayDeathTest, DiesWhenIndexIsOutOfBound) {
-  TestPartResultArray results;
+  ::testing::TestPartResultArray results;
   results.Append(r1_);
 
   EXPECT_DEATH_IF_SUPPORTED(results.GetTestPartResult(-1), "");

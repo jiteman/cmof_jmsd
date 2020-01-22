@@ -32,15 +32,13 @@
 
 #include "gtest/gtest.h"
 
-using ::testing::Test;
-
 
 TEST(SkipTest, DISABLED_DoesSkip) {
   GTEST_SKIP() << "skipping single test";
   EXPECT_EQ(0, 1);
 }
 
-class Fixture : public Test {
+class Fixture : public ::jmsd::cutf::Test {
  protected:
   void SetUp() override {
     GTEST_SKIP() << "skipping all tests for this fixture";

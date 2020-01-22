@@ -131,8 +131,8 @@ TYPED_TEST(CommonTest, ValuesAreStillCorrect) {
 // translation unit.
 
 template <typename T>
-class TypedTest1 : public Test {
-};
+class TypedTest1 : public ::jmsd::cutf::Test
+{};
 
 // Verifies that the second argument of TYPED_TEST_SUITE can be a
 // single type.
@@ -140,7 +140,7 @@ TYPED_TEST_SUITE(TypedTest1, int);
 TYPED_TEST(TypedTest1, A) {}
 
 template <typename T>
-class TypedTest2 : public Test {
+class TypedTest2 : public ::jmsd::cutf::Test {
 };
 
 // Verifies that the second argument of TYPED_TEST_SUITE can be a
@@ -156,8 +156,8 @@ TYPED_TEST(TypedTest2, A) {}
 namespace library1 {
 
 template <typename T>
-class NumericTest : public Test {
-};
+class NumericTest : public ::jmsd::cutf::Test
+{};
 
 typedef Types<int, long> NumericTypes;
 TYPED_TEST_SUITE(NumericTest, NumericTypes);
@@ -170,7 +170,7 @@ TYPED_TEST(NumericTest, DefaultIsZero) {
 
 // Tests that custom names work.
 template <typename T>
-class TypedTestWithNames : public Test {};
+class TypedTestWithNames : public ::jmsd::cutf::Test {};
 
 class TypedTestNames {
  public:
@@ -302,22 +302,22 @@ REGISTER_TYPED_TEST_SUITE_P(DerivedTest,
 typedef Types<short, long> MyTwoTypes;
 INSTANTIATE_TYPED_TEST_SUITE_P(My, DerivedTest, MyTwoTypes);
 
-// Tests that custom names work with type parametrized tests. We reuse the
-// TwoTypes from above here.
+// Tests that custom names work with type parametrized tests. We reuse the TwoTypes from above here.
 template <typename T>
-class TypeParametrizedTestWithNames : public Test {};
+class TypeParametrizedTestWithNames : public ::jmsd::cutf::Test
+{};
 
 TYPED_TEST_SUITE_P(TypeParametrizedTestWithNames);
 
 TYPED_TEST_P(TypeParametrizedTestWithNames, TestSuiteName) {
   if (std::is_same<TypeParam, char>::value) {
-	EXPECT_STREQ(::testing::UnitTest::GetInstance()
+	EXPECT_STREQ(::jmsd::cutf::UnitTest::GetInstance()
 					 ->current_test_info()
 					 ->test_suite_name(),
 				 "CustomName/TypeParametrizedTestWithNames/parChar0");
   }
   if (std::is_same<TypeParam, int>::value) {
-	EXPECT_STREQ(::testing::UnitTest::GetInstance()
+	EXPECT_STREQ(::jmsd::cutf::UnitTest::GetInstance()
 					 ->current_test_info()
 					 ->test_suite_name(),
 				 "CustomName/TypeParametrizedTestWithNames/parInt1");
@@ -346,8 +346,8 @@ INSTANTIATE_TYPED_TEST_SUITE_P(CustomName, TypeParametrizedTestWithNames,
 // translation unit.
 
 template <typename T>
-class TypedTestP1 : public Test {
-};
+class TypedTestP1 : public ::jmsd::cutf::Test
+{};
 
 TYPED_TEST_SUITE_P(TypedTestP1);
 
@@ -365,8 +365,8 @@ using IntBeforeRegisterTypedTestSuiteP = int;
 REGISTER_TYPED_TEST_SUITE_P(TypedTestP1, A, B);
 
 template <typename T>
-class TypedTestP2 : public Test {
-};
+class TypedTestP2 : public ::jmsd::cutf::Test
+{};
 
 TYPED_TEST_SUITE_P(TypedTestP2);
 
@@ -402,8 +402,8 @@ INSTANTIATE_TYPED_TEST_SUITE_P(My, ContainerTest, MyContainers);
 namespace library2 {
 
 template <typename T>
-class NumericTest : public Test {
-};
+class NumericTest : public ::jmsd::cutf::Test
+{};
 
 TYPED_TEST_SUITE_P(NumericTest);
 
@@ -424,7 +424,9 @@ static const char* GetTestName() {
   return ::jmsd::cutf::UnitTest::GetInstance()->current_test_info()->name();
 }
 // Test the stripping of space from test names
-template <typename T> class TrimmedTest : public Test { };
+template <typename T> class TrimmedTest : public ::jmsd::cutf::Test
+{};
+
 TYPED_TEST_SUITE_P(TrimmedTest);
 TYPED_TEST_P(TrimmedTest, Test1) { EXPECT_STREQ("Test1", GetTestName()); }
 TYPED_TEST_P(TrimmedTest, Test2) { EXPECT_STREQ("Test2", GetTestName()); }

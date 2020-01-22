@@ -426,7 +426,7 @@ internal::CartesianProductHolder<Generator...> Combine(const Generator&... g) {
                                                                                \
    private:                                                                    \
     static int AddToRegistry() {                                               \
-      ::testing::UnitTest::GetInstance()                                       \
+      ::jmsd::cutf::UnitTest::GetInstance()                                       \
           ->parameterized_test_registry()                                      \
           .GetTestSuitePatternHolder<test_suite_name>(                         \
               GTEST_STRINGIFY_(test_suite_name),                               \
@@ -490,7 +490,7 @@ internal::CartesianProductHolder<Generator...> Combine(const Generator&... g) {
   }                                                                           \
   static int gtest_##prefix##test_suite_name##_dummy_                         \
       GTEST_ATTRIBUTE_UNUSED_ =                                               \
-          ::testing::UnitTest::GetInstance()                                  \
+         ::jmsd::cutf::UnitTest::GetInstance() \
               ->parameterized_test_registry()                                 \
               .GetTestSuitePatternHolder<test_suite_name>(                    \
                   GTEST_STRINGIFY_(test_suite_name),                          \
