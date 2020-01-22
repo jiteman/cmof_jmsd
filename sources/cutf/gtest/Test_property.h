@@ -6,6 +6,9 @@
 #include <string>
 
 
+#include "cutf.h"
+
+
 namespace jmsd {
 namespace cutf {
 
@@ -14,7 +17,7 @@ namespace cutf {
 // output as a key/value string pair.
 //
 // Don't inherit from TestProperty as its destructor is not virtual.
-class TestProperty {
+class JMSD_CUTF_SHARED_INTERFACE TestProperty {
 
 public:
 	// C'tor.  TestProperty does NOT have a default constructor.

@@ -4,11 +4,14 @@
 #include "Environment.hxx"
 
 
+#include "cutf.h"
+
+
 namespace jmsd {
 namespace cutf {
 
 
-Environment *AddGlobalTestEnvironment( Environment *env );
+JMSD_CUTF_SHARED_INTERFACE Environment *AddGlobalTestEnvironment( Environment *env );
 
 
 } // namespace cutf

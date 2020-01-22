@@ -3,6 +3,9 @@
 #include "Environment.hxx"
 
 
+#include "cutf.h"
+
+
 namespace jmsd {
 namespace cutf {
 
@@ -21,7 +24,7 @@ namespace cutf {
 //      available.
 //   2. You cannot use ASSERT_* directly in a constructor or
 //      destructor.
-class Environment {
+class JMSD_CUTF_SHARED_INTERFACE Environment {
 
 public:
 	virtual ~Environment();

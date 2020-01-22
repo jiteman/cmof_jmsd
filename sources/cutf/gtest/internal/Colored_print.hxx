@@ -5,6 +5,8 @@
 
 #include "gtest-color.hxx"
 
+#include "cutf.h"
+
 
 #if GTEST_OS_WINDOWS && !GTEST_OS_WINDOWS_MOBILE && !GTEST_OS_WINDOWS_PHONE && !GTEST_OS_WINDOWS_RT && !GTEST_OS_WINDOWS_MINGW
 #include <windows.h>
@@ -36,7 +38,7 @@ char const *GetAnsiColorCode( GTestColor color );
 #endif // #if GTEST_OS_WINDOWS && !GTEST_OS_WINDOWS_MOBILE && !GTEST_OS_WINDOWS_PHONE && !GTEST_OS_WINDOWS_RT && !GTEST_OS_WINDOWS_MINGW
 
 // Returns true if and only if Google Test should use colors in the output.
-bool ShouldUseColor( bool stdout_is_tty );
+JMSD_CUTF_SHARED_INTERFACE bool ShouldUseColor( bool stdout_is_tty );
 
 
 } // namespace internal

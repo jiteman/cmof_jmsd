@@ -51,7 +51,12 @@ TEST(CommandLineFlagsTest, CanBeAccessedInCodeOnceGTestHIsIncluded) {
 #include "gtest/internal/Test_result_accessor.h"
 #include "gtest/internal/Int32_from_environment_or_die.h"
 #include "gtest/internal/Should_shard.h"
+#include "gtest/internal/Should_run_test_on_shard.h"
+#include "gtest/internal/Format_time.h"
+#include "gtest/internal/Colored_print.h"
 #include "gtest/internal/gtest-flags-internal.h"
+
+#include "gtest/Assertion_result.hin"
 
 #include "gtest/internal/Stl_utilities.hin"
 
@@ -220,8 +225,6 @@ using ::testing::internal::CopyArray;
 using ::testing::internal::EqFailure;
 using ::testing::internal::FloatingPoint;
 
-using ::testing::internal::FormatEpochTimeInMillisAsIso8601;
-using ::testing::internal::FormatTimeInMillisAsSeconds;
 using ::testing::internal::GTestFlagSaver;
 using ::testing::internal::GetCurrentOsStackTraceExceptTop;
 
@@ -242,9 +245,7 @@ using ::testing::internal::OsStackTraceGetterInterface;
 using ::testing::internal::ParseInt32Flag;
 using ::testing::internal::RelationToSourceCopy;
 using ::testing::internal::RelationToSourceReference;
-using ::testing::internal::ShouldRunTestOnShard;
 using ::jmsd::cutf::internal::ShouldShard;
-using ::testing::internal::ShouldUseColor;
 
 using ::testing::internal::SkipPrefix;
 using ::testing::internal::StreamableToString;
@@ -380,23 +381,23 @@ TEST(CanonicalizeForStdLibVersioning, ElidesDoubleUnderNames) {
 // Tests FormatTimeInMillisAsSeconds().
 
 TEST(FormatTimeInMillisAsSecondsTest, FormatsZero) {
-  EXPECT_EQ("0", FormatTimeInMillisAsSeconds(0));
+  EXPECT_EQ("0", ::jmsd::cutf::internal::Format_time::FormatTimeInMillisAsSeconds(0));
 }
 
 TEST(FormatTimeInMillisAsSecondsTest, FormatsPositiveNumber) {
-  EXPECT_EQ("0.003", FormatTimeInMillisAsSeconds(3));
-  EXPECT_EQ("0.01", FormatTimeInMillisAsSeconds(10));
-  EXPECT_EQ("0.2", FormatTimeInMillisAsSeconds(200));
-  EXPECT_EQ("1.2", FormatTimeInMillisAsSeconds(1200));
-  EXPECT_EQ("3", FormatTimeInMillisAsSeconds(3000));
+  EXPECT_EQ("0.003", ::jmsd::cutf::internal::Format_time::FormatTimeInMillisAsSeconds(3));
+  EXPECT_EQ("0.01", ::jmsd::cutf::internal::Format_time::FormatTimeInMillisAsSeconds(10));
+  EXPECT_EQ("0.2", ::jmsd::cutf::internal::Format_time::FormatTimeInMillisAsSeconds(200));
+  EXPECT_EQ("1.2", ::jmsd::cutf::internal::Format_time::FormatTimeInMillisAsSeconds(1200));
+  EXPECT_EQ("3", ::jmsd::cutf::internal::Format_time::FormatTimeInMillisAsSeconds(3000));
 }
 
 TEST(FormatTimeInMillisAsSecondsTest, FormatsNegativeNumber) {
-  EXPECT_EQ("-0.003", FormatTimeInMillisAsSeconds(-3));
-  EXPECT_EQ("-0.01", FormatTimeInMillisAsSeconds(-10));
-  EXPECT_EQ("-0.2", FormatTimeInMillisAsSeconds(-200));
-  EXPECT_EQ("-1.2", FormatTimeInMillisAsSeconds(-1200));
-  EXPECT_EQ("-3", FormatTimeInMillisAsSeconds(-3000));
+  EXPECT_EQ("-0.003", ::jmsd::cutf::internal::Format_time::FormatTimeInMillisAsSeconds(-3));
+  EXPECT_EQ("-0.01", ::jmsd::cutf::internal::Format_time::FormatTimeInMillisAsSeconds(-10));
+  EXPECT_EQ("-0.2", ::jmsd::cutf::internal::Format_time::FormatTimeInMillisAsSeconds(-200));
+  EXPECT_EQ("-1.2", ::jmsd::cutf::internal::Format_time::FormatTimeInMillisAsSeconds(-1200));
+  EXPECT_EQ("-3", ::jmsd::cutf::internal::Format_time::FormatTimeInMillisAsSeconds(-3000));
 }
 
 // Tests FormatEpochTimeInMillisAsIso8601().  The correctness of conversion
@@ -462,28 +463,23 @@ class FormatEpochTimeInMillisAsIso8601Test : public Test {
 const ::testing::internal::TimeInMillis FormatEpochTimeInMillisAsIso8601Test::kMillisPerSec;
 
 TEST_F(FormatEpochTimeInMillisAsIso8601Test, PrintsTwoDigitSegments) {
-  EXPECT_EQ("2011-10-31T18:52:42",
-			FormatEpochTimeInMillisAsIso8601(1320087162 * kMillisPerSec));
+  EXPECT_EQ("2011-10-31T18:52:42", ::jmsd::cutf::internal::Format_time::FormatEpochTimeInMillisAsIso8601(1320087162 * kMillisPerSec));
 }
 
 TEST_F(FormatEpochTimeInMillisAsIso8601Test, MillisecondsDoNotAffectResult) {
-  EXPECT_EQ(
-	  "2011-10-31T18:52:42",
-	  FormatEpochTimeInMillisAsIso8601(1320087162 * kMillisPerSec + 234));
+  EXPECT_EQ( "2011-10-31T18:52:42", ::jmsd::cutf::internal::Format_time::FormatEpochTimeInMillisAsIso8601(1320087162 * kMillisPerSec + 234));
 }
 
 TEST_F(FormatEpochTimeInMillisAsIso8601Test, PrintsLeadingZeroes) {
-  EXPECT_EQ("2011-09-03T05:07:02",
-			FormatEpochTimeInMillisAsIso8601(1315026422 * kMillisPerSec));
+  EXPECT_EQ("2011-09-03T05:07:02", ::jmsd::cutf::internal::Format_time::FormatEpochTimeInMillisAsIso8601(1315026422 * kMillisPerSec));
 }
 
 TEST_F(FormatEpochTimeInMillisAsIso8601Test, Prints24HourTime) {
-  EXPECT_EQ("2011-09-28T17:08:22",
-			FormatEpochTimeInMillisAsIso8601(1317229702 * kMillisPerSec));
+  EXPECT_EQ("2011-09-28T17:08:22", ::jmsd::cutf::internal::Format_time::FormatEpochTimeInMillisAsIso8601(1317229702 * kMillisPerSec));
 }
 
 TEST_F(FormatEpochTimeInMillisAsIso8601Test, PrintsEpochStart) {
-  EXPECT_EQ("1970-01-01T00:00:00", FormatEpochTimeInMillisAsIso8601(0));
+  EXPECT_EQ("1970-01-01T00:00:00", ::jmsd::cutf::internal::Format_time::FormatEpochTimeInMillisAsIso8601(0));
 }
 
 # ifdef __BORLANDC__
@@ -1833,11 +1829,11 @@ TEST(Int32FromEnvOrDieDeathTest, DISABLED_AbortsOnInt32Overflow) {
 // Tests that ShouldRunTestOnShard() selects all tests
 // where there is 1 shard.
 TEST(ShouldRunTestOnShardTest, IsPartitionWhenThereIsOneShard) {
-  EXPECT_TRUE(ShouldRunTestOnShard(1, 0, 0));
-  EXPECT_TRUE(ShouldRunTestOnShard(1, 0, 1));
-  EXPECT_TRUE(ShouldRunTestOnShard(1, 0, 2));
-  EXPECT_TRUE(ShouldRunTestOnShard(1, 0, 3));
-  EXPECT_TRUE(ShouldRunTestOnShard(1, 0, 4));
+  EXPECT_TRUE(::jmsd::cutf::internal::ShouldRunTestOnShard(1, 0, 0));
+  EXPECT_TRUE(::jmsd::cutf::internal::ShouldRunTestOnShard(1, 0, 1));
+  EXPECT_TRUE(::jmsd::cutf::internal::ShouldRunTestOnShard(1, 0, 2));
+  EXPECT_TRUE(::jmsd::cutf::internal::ShouldRunTestOnShard(1, 0, 3));
+  EXPECT_TRUE(::jmsd::cutf::internal::ShouldRunTestOnShard(1, 0, 4));
 }
 
 class ShouldShardTest : public Test {
@@ -1929,7 +1925,7 @@ TEST(ShouldRunTestOnShardTest, DISABLED_IsPartitionWhenThereAreFiveShards) {
   for (int test_id = 0; test_id < num_tests; test_id++) {
 	int prev_selected_shard_index = -1;
 	for (int shard_index = 0; shard_index < num_shards; shard_index++) {
-	  if (ShouldRunTestOnShard(num_shards, shard_index, test_id)) {
+	  if (::jmsd::cutf::internal::ShouldRunTestOnShard(num_shards, shard_index, test_id)) {
 		if (prev_selected_shard_index < 0) {
 		  prev_selected_shard_index = shard_index;
 		} else {
@@ -1946,7 +1942,7 @@ TEST(ShouldRunTestOnShardTest, DISABLED_IsPartitionWhenThereAreFiveShards) {
 	int num_tests_on_shard = 0;
 	for (int test_id = 0; test_id < num_tests; test_id++) {
 	  num_tests_on_shard +=
-		ShouldRunTestOnShard(num_shards, shard_index, test_id);
+		::jmsd::cutf::internal::ShouldRunTestOnShard(num_shards, shard_index, test_id);
 	}
 	EXPECT_GE(num_tests_on_shard, num_tests / num_shards);
   }
@@ -6455,58 +6451,58 @@ TEST(ColoredOutputTest, UsesColorsWhenGTestColorFlagIsYes) {
   GTEST_FLAG(color) = "yes";
 
   SetEnv("TERM", "xterm");  // TERM supports colors.
-  EXPECT_TRUE(ShouldUseColor(true));  // Stdout is a TTY.
-  EXPECT_TRUE(ShouldUseColor(false));  // Stdout is not a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(false));  // Stdout is not a TTY.
 
   SetEnv("TERM", "dumb");  // TERM doesn't support colors.
-  EXPECT_TRUE(ShouldUseColor(true));  // Stdout is a TTY.
-  EXPECT_TRUE(ShouldUseColor(false));  // Stdout is not a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(false));  // Stdout is not a TTY.
 }
 
 TEST(ColoredOutputTest, UsesColorsWhenGTestColorFlagIsAliasOfYes) {
   SetEnv("TERM", "dumb");  // TERM doesn't support colors.
 
   GTEST_FLAG(color) = "True";
-  EXPECT_TRUE(ShouldUseColor(false));  // Stdout is not a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(false));  // Stdout is not a TTY.
 
   GTEST_FLAG(color) = "t";
-  EXPECT_TRUE(ShouldUseColor(false));  // Stdout is not a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(false));  // Stdout is not a TTY.
 
   GTEST_FLAG(color) = "1";
-  EXPECT_TRUE(ShouldUseColor(false));  // Stdout is not a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(false));  // Stdout is not a TTY.
 }
 
 TEST(ColoredOutputTest, UsesNoColorWhenGTestColorFlagIsNo) {
   GTEST_FLAG(color) = "no";
 
   SetEnv("TERM", "xterm");  // TERM supports colors.
-  EXPECT_FALSE(ShouldUseColor(true));  // Stdout is a TTY.
-  EXPECT_FALSE(ShouldUseColor(false));  // Stdout is not a TTY.
+  EXPECT_FALSE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_FALSE(::jmsd::cutf::internal::ShouldUseColor(false));  // Stdout is not a TTY.
 
   SetEnv("TERM", "dumb");  // TERM doesn't support colors.
-  EXPECT_FALSE(ShouldUseColor(true));  // Stdout is a TTY.
-  EXPECT_FALSE(ShouldUseColor(false));  // Stdout is not a TTY.
+  EXPECT_FALSE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_FALSE(::jmsd::cutf::internal::ShouldUseColor(false));  // Stdout is not a TTY.
 }
 
 TEST(ColoredOutputTest, UsesNoColorWhenGTestColorFlagIsInvalid) {
   SetEnv("TERM", "xterm");  // TERM supports colors.
 
   GTEST_FLAG(color) = "F";
-  EXPECT_FALSE(ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_FALSE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
 
   GTEST_FLAG(color) = "0";
-  EXPECT_FALSE(ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_FALSE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
 
   GTEST_FLAG(color) = "unknown";
-  EXPECT_FALSE(ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_FALSE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
 }
 
 TEST(ColoredOutputTest, UsesColorsWhenStdoutIsTty) {
   GTEST_FLAG(color) = "auto";
 
   SetEnv("TERM", "xterm");  // TERM supports colors.
-  EXPECT_FALSE(ShouldUseColor(false));  // Stdout is not a TTY.
-  EXPECT_TRUE(ShouldUseColor(true));    // Stdout is a TTY.
+  EXPECT_FALSE(::jmsd::cutf::internal::ShouldUseColor(false));  // Stdout is not a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));    // Stdout is a TTY.
 }
 
 TEST(ColoredOutputTest, UsesColorsWhenTermSupportsColors) {
@@ -6516,61 +6512,61 @@ TEST(ColoredOutputTest, UsesColorsWhenTermSupportsColors) {
   // On Windows, we ignore the TERM variable as it's usually not set.
 
   SetEnv("TERM", "dumb");
-  EXPECT_TRUE(ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
 
   SetEnv("TERM", "");
-  EXPECT_TRUE(ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
 
   SetEnv("TERM", "xterm");
-  EXPECT_TRUE(ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
 #else
   // On non-Windows platforms, we rely on TERM to determine if the
   // terminal supports colors.
 
   SetEnv("TERM", "dumb");  // TERM doesn't support colors.
-  EXPECT_FALSE(ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_FALSE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
 
   SetEnv("TERM", "emacs");  // TERM doesn't support colors.
-  EXPECT_FALSE(ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_FALSE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
 
   SetEnv("TERM", "vt100");  // TERM doesn't support colors.
-  EXPECT_FALSE(ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_FALSE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
 
   SetEnv("TERM", "xterm-mono");  // TERM doesn't support colors.
-  EXPECT_FALSE(ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_FALSE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
 
   SetEnv("TERM", "xterm");  // TERM supports colors.
-  EXPECT_TRUE(ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
 
   SetEnv("TERM", "xterm-color");  // TERM supports colors.
-  EXPECT_TRUE(ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
 
   SetEnv("TERM", "xterm-256color");  // TERM supports colors.
-  EXPECT_TRUE(ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
 
   SetEnv("TERM", "screen");  // TERM supports colors.
-  EXPECT_TRUE(ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
 
   SetEnv("TERM", "screen-256color");  // TERM supports colors.
-  EXPECT_TRUE(ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
 
   SetEnv("TERM", "tmux");  // TERM supports colors.
-  EXPECT_TRUE(ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
 
   SetEnv("TERM", "tmux-256color");  // TERM supports colors.
-  EXPECT_TRUE(ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
 
   SetEnv("TERM", "rxvt-unicode");  // TERM supports colors.
-  EXPECT_TRUE(ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
 
   SetEnv("TERM", "rxvt-unicode-256color");  // TERM supports colors.
-  EXPECT_TRUE(ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
 
   SetEnv("TERM", "linux");  // TERM supports colors.
-  EXPECT_TRUE(ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
 
   SetEnv("TERM", "cygwin");  // TERM supports colors.
-  EXPECT_TRUE(ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
 #endif  // GTEST_OS_WINDOWS
 }
 

@@ -1,7 +1,6 @@
 #pragma once
 
-
-#include "cutf.h"
+#include "Should_run_test_on_shard.hxx"
 
 
 namespace jmsd {
@@ -9,10 +8,7 @@ namespace cutf {
 namespace internal {
 
 
-class UnitTestImpl;
 
-
-JMSD_CUTF_SHARED_INTERFACE UnitTestImpl *GetUnitTestImpl();
 
 
 } // namespace internal

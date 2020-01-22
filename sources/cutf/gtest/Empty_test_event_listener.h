@@ -6,6 +6,9 @@
 #include "Test_event_listener.h"
 
 
+#include "cutf.h"
+
+
 namespace jmsd {
 namespace cutf {
 
@@ -15,7 +18,7 @@ namespace cutf {
 // the methods they override will not be caught during the build.  For
 // comments about each method please see the definition of TestEventListener
 // above.
-class EmptyTestEventListener :
+class JMSD_CUTF_SHARED_INTERFACE EmptyTestEventListener :
 	public TestEventListener
 {
 public:

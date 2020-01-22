@@ -3,6 +3,9 @@
 //#include "gtest-constants.hxx"
 
 
+#include "cutf.h"
+
+
 namespace jmsd {
 namespace cutf {
 namespace constants {
@@ -35,7 +38,7 @@ extern const char kTestTotalShards[];
 extern const char kTestShardStatusFile[];
 
 // The upper limit for valid stack trace depths.
-extern const int kMaxStackTraceDepth;
+JMSD_CUTF_SHARED_INTERFACE extern const int kMaxStackTraceDepth;
 
 
 } // namespace constants

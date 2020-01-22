@@ -416,9 +416,3 @@ class JMSD_DEPRECATED_GTEST_API_ UnitTestImpl {
 } // namespace internal
 } // namespace cutf
 } // namespace jmsd
-
-
-namespace testing {
-
-
-} // namespace testing

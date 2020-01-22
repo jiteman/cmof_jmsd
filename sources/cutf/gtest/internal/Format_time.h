@@ -10,12 +10,15 @@
 #include "gtest-port.h"
 
 
+#include "cutf.h"
+
+
 namespace jmsd {
 namespace cutf {
 namespace internal {
 
 
-class Format_time {
+class JMSD_CUTF_SHARED_INTERFACE Format_time {
 
 	typedef Format_time THIS_STATIC;
 

@@ -701,15 +701,16 @@ typedef struct _RTL_CRITICAL_SECTION GTEST_CRITICAL_SECTION;
 // are guarded by #ifndef to give embedders a chance to define JMSD_DEPRECATED_GTEST_API_ in
 // gtest/internal/custom/gtest-port.h
 
-#ifdef _MSC_VER
-	#if JMSD_DEPRECATED_GTEST_LINKED_AS_SHARED_LIBRARY
-		#define JMSD_DEPRECATED_GTEST_API_		__declspec( dllimport )
-	#else
+#if defined( _MSC_VER )
+	#if defined( JMSD_DEPRECATED_GTEST_CREATE_SHARED_LIBRARY )
 		#define JMSD_DEPRECATED_GTEST_API_		__declspec( dllexport )
+	#else
+		#define JMSD_DEPRECATED_GTEST_API_		__declspec( dllimport )
 	#endif
-#elif __GNUC__ >= 4 || defined( __clang__ )
+#elif ( defined( __GNUC__ ) && __GNUC__ >= 4 ) || defined( __clang__ )
 	#define JMSD_DEPRECATED_GTEST_API_			__attribute__( ( visibility( "default" ) ) )
 #else  // _MSC_VER
+	#error
 	#define JMSD_DEPRECATED_GTEST_API_
 #endif
 

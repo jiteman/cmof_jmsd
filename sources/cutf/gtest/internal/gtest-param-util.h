@@ -1,39 +1,6 @@
-// Copyright 2008 Google Inc.
-// All Rights Reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are
-// met:
-//
-//     * Redistributions of source code must retain the above copyright
-// notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above
-// copyright notice, this list of conditions and the following disclaimer
-// in the documentation and/or other materials provided with the
-// distribution.
-//     * Neither the name of Google Inc. nor the names of its
-// contributors may be used to endorse or promote products derived from
-// this software without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
+#pragma once
 
 // Type and function utilities for implementing parameterized tests.
-
-// GOOGLETEST_CM0001 DO NOT DELETE
-
-#ifndef GTEST_INCLUDE_GTEST_INTERNAL_GTEST_PARAM_UTIL_H_
-#define GTEST_INCLUDE_GTEST_INTERNAL_GTEST_PARAM_UTIL_H_
 
 #include <ctype.h>
 
@@ -46,10 +13,14 @@
 #include <utility>
 #include <vector>
 
-#include "gtest/internal/gtest-internal.h"
-#include "gtest/internal/gtest-port.h"
 #include "gtest/gtest-printers.h"
 #include "gtest/gtest-test-part.h"
+
+#include "gtest/internal/gtest-internal.h"
+#include "gtest/internal/gtest-port.h"
+
+#include "gtest/internal/Report_invalid_test_suite_type.h"
+
 
 namespace testing {
 // Input to a parameterized test name generator, describing a test parameter.
@@ -76,13 +47,6 @@ namespace internal {
 
 // INTERNAL IMPLEMENTATION - DO NOT USE IN USER CODE.
 // Utility Functions
-
-// Outputs a message explaining invalid registration of different
-// fixture class for the same test suite. This may happen when
-// TEST_P macro is used to define two tests with the same name
-// but in different namespaces.
-JMSD_DEPRECATED_GTEST_API_ void ReportInvalidTestSuiteType(const char* test_suite_name,
-                                           CodeLocation code_location);
 
 template <typename> class ParamGeneratorInterface;
 template <typename> class ParamGenerator;
@@ -686,7 +650,7 @@ class ParameterizedTestSuiteRegistry {
           // Complain about incorrect usage of Google Test facilities
           // and terminate the program since we cannot guaranty correct
           // test suite setup and tear-down in this case.
-          ReportInvalidTestSuiteType(test_suite_name, code_location);
+          ::jmsd::cutf::internal::ReportInvalidTestSuiteType(test_suite_name, code_location);
           posix::Abort();
         } else {
           // At this point we are sure that the object we found is of the same
@@ -890,5 +854,3 @@ class CartesianProductHolder {
 
 }  // namespace internal
 }  // namespace testing
-
-#endif  // GTEST_INCLUDE_GTEST_INTERNAL_GTEST_PARAM_UTIL_H_

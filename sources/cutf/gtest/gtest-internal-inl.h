@@ -82,18 +82,6 @@ const int kMaxRandomSeed = 99999;
 // Returns the current time in milliseconds.
 JMSD_DEPRECATED_GTEST_API_ TimeInMillis GetTimeInMillis();
 
-// Returns true if and only if Google Test should use colors in the output.
-JMSD_DEPRECATED_GTEST_API_ bool ShouldUseColor(bool stdout_is_tty);
-
-// Formats the given time in milliseconds as seconds.
-JMSD_DEPRECATED_GTEST_API_ std::string FormatTimeInMillisAsSeconds(TimeInMillis ms);
-
-// Converts the given time in milliseconds to a date string in the ISO 8601
-// format, without the timezone information.  N.B.: due to the use the
-// non-reentrant localtime() function, this function is not thread safe.  Do
-// not use it in any code that can be called from multiple threads.
-JMSD_DEPRECATED_GTEST_API_ std::string FormatEpochTimeInMillisAsIso8601(TimeInMillis ms);
-
 // Parses a string for an Int32 flag, in the form of "--flag=value".
 //
 // On success, stores the value of the flag in *value, and returns
@@ -219,12 +207,6 @@ JMSD_DEPRECATED_GTEST_API_ std::string CodePointToUtf8(uint32_t code_point);
 // and contains invalid UTF-16 surrogate pairs, values in those pairs
 // will be encoded as individual Unicode characters from Basic Normal Plane.
 JMSD_DEPRECATED_GTEST_API_ std::string WideStringToUtf8(const wchar_t* str, int num_chars);
-
-// Given the total number of shards, the shard index, and the test id,
-// returns true if and only if the test should be run on this shard. The test id
-// is some arbitrary but unique non-negative integer assigned to each test
-// method. Assumes that 0 <= shard_index < total_shards.
-JMSD_DEPRECATED_GTEST_API_ bool ShouldRunTestOnShard( int total_shards, int shard_index, int test_id);
 
 // A predicate that checks the key of a TestProperty against a known key.
 //

@@ -14,6 +14,7 @@
 #include "Is_initialized.h"
 #include "Int32_from_environment_or_die.h"
 #include "Write_to_shard_status_file_if_needed.h"
+#include "Should_run_test_on_shard.h"
 
 #include "gtest-flags-internal.h"
 #include "gtest-constants-internal.h"
@@ -676,14 +677,6 @@ void UnitTestImpl::ClearAdHocTestResult() {
 	ad_hoc_test_result_.Clear();
 }
 
-// Given the total number of shards, the shard index, and the test id,
-// returns true if and only if the test should be run on this shard. The test id
-// is some arbitrary but unique non-negative integer assigned to each test
-// method. Assumes that 0 <= shard_index < total_shards.
-bool ShouldRunTestOnShard(int total_shards, int shard_index, int test_id) {
-  return (test_id % total_shards) == shard_index;
-}
-
 // Compares the name of each test with the user-specified filter to
 // decide whether the test should be run, then records the result in
 // each TestSuite and TestInfo object.
@@ -914,9 +907,3 @@ void UnitTestImpl::set_catch_exceptions( bool const value) {
 } // namespace internal
 } // namespace cutf
 } // namespace jmsd
-
-
-namespace testing {
-
-
-} // namespace testing
