@@ -7,8 +7,8 @@ namespace internal {
 
 
 // Converts the buffer in a stringstream to an std::string, converting NUL bytes to "\\0" along the way.
-::std::string StringStreamToString( ::std::stringstream *ss ) {
-	::std::string const &str = ss->str();
+::std::string StringStreamToString( ::std::stringstream const &ss ) {
+	::std::string const &str = ss.str();
 	char const *const start = str.c_str();
 	char const *const end = start + str.length();
 

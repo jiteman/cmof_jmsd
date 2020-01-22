@@ -346,8 +346,8 @@ template <typename RawType>
 
   return EqFailure(lhs_expression,
 				   rhs_expression,
-				   ::jmsd::cutf::internal::StringStreamToString(&lhs_ss),
-				   ::jmsd::cutf::internal::StringStreamToString(&rhs_ss),
+				   ::jmsd::cutf::internal::StringStreamToString( lhs_ss ),
+				   ::jmsd::cutf::internal::StringStreamToString( rhs_ss ),
 				   false);
 }
 

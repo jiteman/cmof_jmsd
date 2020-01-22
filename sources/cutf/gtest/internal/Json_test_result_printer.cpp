@@ -30,7 +30,7 @@ void JsonUnitTestResultPrinter::OnTestIterationEnd(const ::jmsd::cutf::UnitTest&
   FILE* jsonout = OpenFileForWriting(output_file_);
   std::stringstream stream;
   PrintJsonUnitTest(&stream, unit_test);
-  fprintf(jsonout, "%s", ::jmsd::cutf::internal::StringStreamToString(&stream).c_str());
+  fprintf(jsonout, "%s", ::jmsd::cutf::internal::StringStreamToString( stream ).c_str());
   fclose(jsonout);
 }
 

@@ -804,7 +804,7 @@ void UnitTestImpl::ListTestsMatchingFilter() {
 		  UnitTestOptions::GetAbsolutePathToOutputFile().c_str())
 		  .PrintJsonTestList(&stream, test_suites_);
 	}
-	fprintf(fileout, "%s", ::jmsd::cutf::internal::StringStreamToString(&stream).c_str());
+	fprintf(fileout, "%s", ::jmsd::cutf::internal::StringStreamToString( stream ).c_str());
 	fclose(fileout);
   }
 }

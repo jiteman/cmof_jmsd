@@ -122,7 +122,7 @@ TEST(MessageTest, StreamsToOStream) {
   Message msg("Hello");
   ::std::stringstream ss;
   ss << msg;
-  EXPECT_EQ("Hello", ::jmsd::cutf::internal::StringStreamToString(&ss));
+  EXPECT_EQ("Hello", ::jmsd::cutf::internal::StringStreamToString( ss ) );
 }
 
 // Tests that a Message object doesn't take up too much stack space.

@@ -47,7 +47,7 @@ AssertionResult Floating_point_less_or_near_equal< A_floating_point_type >::comp
 	return
 		AssertionResult::AssertionFailure() <<
 		"Expected: (" << expr1 << ") <= (" << expr2 << ")\n" <<
-		"  Actual: " << ::jmsd::cutf::internal::StringStreamToString( &val1_ss ) << " vs " << ::jmsd::cutf::internal::StringStreamToString( &val2_ss );
+		"  Actual: " << ::jmsd::cutf::internal::StringStreamToString( val1_ss ) << " vs " << ::jmsd::cutf::internal::StringStreamToString( val2_ss );
 }
 
 

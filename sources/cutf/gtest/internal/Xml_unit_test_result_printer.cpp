@@ -30,7 +30,7 @@ void XmlUnitTestResultPrinter::OnTestIterationEnd(const ::jmsd::cutf::UnitTest& 
   FILE* xmlout = OpenFileForWriting(output_file_);
   std::stringstream stream;
   PrintXmlUnitTest(&stream, unit_test);
-  fprintf(xmlout, "%s", ::jmsd::cutf::internal::StringStreamToString(&stream).c_str());
+  fprintf(xmlout, "%s", ::jmsd::cutf::internal::StringStreamToString( stream ).c_str());
   fclose(xmlout);
 }
 
@@ -39,7 +39,7 @@ void XmlUnitTestResultPrinter::ListTestsMatchingFilter(
   FILE* xmlout = OpenFileForWriting(output_file_);
   std::stringstream stream;
   PrintXmlTestsList(&stream, test_suites);
-  fprintf(xmlout, "%s", ::jmsd::cutf::internal::StringStreamToString(&stream).c_str());
+  fprintf(xmlout, "%s", ::jmsd::cutf::internal::StringStreamToString( stream ).c_str());
   fclose(xmlout);
 }
 

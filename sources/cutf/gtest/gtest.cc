@@ -530,7 +530,7 @@ Message& Message::operator <<(const ::std::wstring& wstr) {
 // Gets the text streamed to this object so far as an std::string.
 // Each '\0' character in the buffer is replaced with "\\0".
 std::string Message::GetString() const {
-  return ::jmsd::cutf::internal::StringStreamToString(ss_.get());
+  return ::jmsd::cutf::internal::StringStreamToString( *ss_.get() );
 }
 
 
@@ -1250,7 +1250,7 @@ std::string WideStringToUtf8(const wchar_t* str, int num_chars) {
 
 	stream << CodePointToUtf8(unicode_code_point);
   }
-  return ::jmsd::cutf::internal::StringStreamToString(&stream);
+  return ::jmsd::cutf::internal::StringStreamToString( stream );
 }
 
 // Converts a wide C string to an std::string using the UTF-8 encoding.
