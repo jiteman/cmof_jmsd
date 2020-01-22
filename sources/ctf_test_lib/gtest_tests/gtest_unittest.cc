@@ -58,6 +58,7 @@ TEST(CommandLineFlagsTest, CanBeAccessedInCodeOnceGTestHIsIncluded) {
 #include "gtest/internal/gtest-flags-internal.h"
 
 #include "gtest/Assertion_result.hin"
+#include "gtest/Static_assert_type_sameness.hin"
 
 #include "gtest/internal/Stl_utilities.hin"
 
@@ -206,7 +207,7 @@ using ::testing::GTEST_FLAG(throw_on_failure);
 
 using ::testing::Message;
 using ::testing::ScopedFakeTestPartResultReporter;
-using ::testing::StaticAssertTypeEq;
+
 using ::jmsd::cutf::Test;
 
 using ::jmsd::cutf::TestEventListeners;
@@ -6569,16 +6570,15 @@ TEST(ColoredOutputTest, UsesColorsWhenTermSupportsColors) {
 
 // Verifies that StaticAssertTypeEq works in a namespace scope.
 
-static bool dummy1 GTEST_ATTRIBUTE_UNUSED_ = StaticAssertTypeEq<bool, bool>();
-static bool dummy2 GTEST_ATTRIBUTE_UNUSED_ =
-	StaticAssertTypeEq<const int, const int>();
+static bool dummy1 GTEST_ATTRIBUTE_UNUSED_ = ::jmsd::cutf::Static_assert_type_sameness<bool, bool>();
+static bool dummy2 GTEST_ATTRIBUTE_UNUSED_ = ::jmsd::cutf::Static_assert_type_sameness<const int, const int>();
 
 // Verifies that StaticAssertTypeEq works in a class.
 
 template <typename T>
 class StaticAssertTypeEqTestHelper {
  public:
-  StaticAssertTypeEqTestHelper() { StaticAssertTypeEq<bool, T>(); }
+  StaticAssertTypeEqTestHelper() { ::jmsd::cutf::Static_assert_type_sameness<bool, T>(); }
 };
 
 TEST(StaticAssertTypeEqTest, WorksInClass) {
@@ -6590,8 +6590,8 @@ TEST(StaticAssertTypeEqTest, WorksInClass) {
 typedef int IntAlias;
 
 TEST(StaticAssertTypeEqTest, CompilesForEqualTypes) {
-  StaticAssertTypeEq<int, IntAlias>();
-  StaticAssertTypeEq<int*, IntAlias*>();
+  ::jmsd::cutf::Static_assert_type_sameness<int, IntAlias>();
+  ::jmsd::cutf::Static_assert_type_sameness<int*, IntAlias*>();
 }
 
 TEST(HasNonfatalFailureTest, ReturnsFalseWhenThereIsNoFailure) {
@@ -7261,11 +7261,11 @@ TEST(NativeArrayTest, CreatesAndDeletesCopyOfArrayWhenAskedTo) {
 }
 
 TEST(NativeArrayTest, TypeMembersAreCorrect) {
-  StaticAssertTypeEq<char, NativeArray<char>::value_type>();
-  StaticAssertTypeEq<int[2], NativeArray<int[2]>::value_type>();
+  ::jmsd::cutf::Static_assert_type_sameness<char, NativeArray<char>::value_type>();
+  ::jmsd::cutf::Static_assert_type_sameness<int[2], NativeArray<int[2]>::value_type>();
 
-  StaticAssertTypeEq<const char*, NativeArray<char>::const_iterator>();
-  StaticAssertTypeEq<const bool(*)[2], NativeArray<bool[2]>::const_iterator>();
+  ::jmsd::cutf::Static_assert_type_sameness<const char*, NativeArray<char>::const_iterator>();
+  ::jmsd::cutf::Static_assert_type_sameness<const bool(*)[2], NativeArray<bool[2]>::const_iterator>();
 }
 
 TEST(NativeArrayTest, MethodsWork) {

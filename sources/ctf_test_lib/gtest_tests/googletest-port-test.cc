@@ -18,6 +18,7 @@
 
 #include "gtest/Substring_utilities.h"
 #include "gtest/Assertion_result.hin"
+#include "gtest/Static_assert_type_sameness.hin"
 
 #include "gtest/internal/Random_number_generator.h"
 
@@ -1229,7 +1230,7 @@ TEST(ThreadLocalTest, ThreadLocalMutationsAffectOnlyCurrentThread) {
 
 #if GTEST_OS_WINDOWS
 TEST(WindowsTypesTest, HANDLEIsVoidStar) {
-  StaticAssertTypeEq<HANDLE, void*>();
+  ::jmsd::cutf::Static_assert_type_sameness<HANDLE, void*>();
 }
 
 #if GTEST_OS_WINDOWS_MINGW && !defined(__MINGW64_VERSION_MAJOR)
@@ -1238,7 +1239,7 @@ TEST(WindowsTypesTest, _CRITICAL_SECTIONIs_CRITICAL_SECTION) {
 }
 #else
 TEST(WindowsTypesTest, CRITICAL_SECTIONIs_RTL_CRITICAL_SECTION) {
-  StaticAssertTypeEq<CRITICAL_SECTION, _RTL_CRITICAL_SECTION>();
+  ::jmsd::cutf::Static_assert_type_sameness<CRITICAL_SECTION, _RTL_CRITICAL_SECTION>();
 }
 #endif
 

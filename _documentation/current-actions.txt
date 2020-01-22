@@ -5,5 +5,6 @@ Separating cutf (ex google test)
 		+ Separate UnitTest class
 		+ Separate UnitTestImpl class
 		+ Remove forward declarations from gtest.h
-		* Substring_utitlities
+		+ Substring_utitlities
+		* StaticAssertTypeEq
 		
