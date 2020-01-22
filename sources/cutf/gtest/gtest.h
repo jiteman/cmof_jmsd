@@ -315,42 +315,6 @@ JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult CmpHelperSTRNE(const ch
 
 }  // namespace internal
 
-// IsSubstring() and IsNotSubstring() are intended to be used as the
-// first argument to {EXPECT,ASSERT}_PRED_FORMAT2(), not by
-// themselves.  They check whether needle is a substring of haystack
-// (NULL is considered a substring of itself only), and return an
-// appropriate error message when they fail.
-//
-// The {needle,haystack}_expr arguments are the stringified
-// expressions that generated the two real arguments.
-JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult IsSubstring(
-	const char* needle_expr, const char* haystack_expr,
-	const char* needle, const char* haystack);
-JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult IsSubstring(
-	const char* needle_expr, const char* haystack_expr,
-	const wchar_t* needle, const wchar_t* haystack);
-JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult IsNotSubstring(
-	const char* needle_expr, const char* haystack_expr,
-	const char* needle, const char* haystack);
-JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult IsNotSubstring(
-	const char* needle_expr, const char* haystack_expr,
-	const wchar_t* needle, const wchar_t* haystack);
-JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult IsSubstring(
-	const char* needle_expr, const char* haystack_expr,
-	const ::std::string& needle, const ::std::string& haystack);
-JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult IsNotSubstring(
-	const char* needle_expr, const char* haystack_expr,
-	const ::std::string& needle, const ::std::string& haystack);
-
-#if GTEST_HAS_STD_WSTRING
-JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult IsSubstring(
-	const char* needle_expr, const char* haystack_expr,
-	const ::std::wstring& needle, const ::std::wstring& haystack);
-JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult IsNotSubstring(
-	const char* needle_expr, const char* haystack_expr,
-	const ::std::wstring& needle, const ::std::wstring& haystack);
-#endif  // GTEST_HAS_STD_WSTRING
-
 namespace internal {
 
 // Helper template function for comparing floating-points.

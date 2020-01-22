@@ -1112,60 +1112,6 @@ template <typename StringType>
 
 }  // namespace
 
-// IsSubstring() and IsNotSubstring() check whether needle is a
-// substring of haystack (NULL is considered a substring of itself
-// only), and return an appropriate error message when they fail.
-
-::jmsd::cutf::AssertionResult IsSubstring(
-	const char* needle_expr, const char* haystack_expr,
-	const char* needle, const char* haystack) {
-  return IsSubstringImpl(true, needle_expr, haystack_expr, needle, haystack);
-}
-
-::jmsd::cutf::AssertionResult IsSubstring(
-	const char* needle_expr, const char* haystack_expr,
-	const wchar_t* needle, const wchar_t* haystack) {
-  return IsSubstringImpl(true, needle_expr, haystack_expr, needle, haystack);
-}
-
-::jmsd::cutf::AssertionResult IsNotSubstring(
-	const char* needle_expr, const char* haystack_expr,
-	const char* needle, const char* haystack) {
-  return IsSubstringImpl(false, needle_expr, haystack_expr, needle, haystack);
-}
-
-::jmsd::cutf::AssertionResult IsNotSubstring(
-	const char* needle_expr, const char* haystack_expr,
-	const wchar_t* needle, const wchar_t* haystack) {
-  return IsSubstringImpl(false, needle_expr, haystack_expr, needle, haystack);
-}
-
-::jmsd::cutf::AssertionResult IsSubstring(
-	const char* needle_expr, const char* haystack_expr,
-	const ::std::string& needle, const ::std::string& haystack) {
-  return IsSubstringImpl(true, needle_expr, haystack_expr, needle, haystack);
-}
-
-::jmsd::cutf::AssertionResult IsNotSubstring(
-	const char* needle_expr, const char* haystack_expr,
-	const ::std::string& needle, const ::std::string& haystack) {
-  return IsSubstringImpl(false, needle_expr, haystack_expr, needle, haystack);
-}
-
-#if GTEST_HAS_STD_WSTRING
-::jmsd::cutf::AssertionResult IsSubstring(
-	const char* needle_expr, const char* haystack_expr,
-	const ::std::wstring& needle, const ::std::wstring& haystack) {
-  return IsSubstringImpl(true, needle_expr, haystack_expr, needle, haystack);
-}
-
-::jmsd::cutf::AssertionResult IsNotSubstring(
-	const char* needle_expr, const char* haystack_expr,
-	const ::std::wstring& needle, const ::std::wstring& haystack) {
-  return IsSubstringImpl(false, needle_expr, haystack_expr, needle, haystack);
-}
-#endif  // GTEST_HAS_STD_WSTRING
-
 namespace internal {
 
 #if GTEST_OS_WINDOWS

@@ -41,6 +41,7 @@ TEST(CommandLineFlagsTest, CanBeAccessedInCodeOnceGTestHIsIncluded) {
 #include "gtest/Empty_test_event_listener.h"
 #include "gtest/Test_event_listener.h"
 #include "gtest/Environment.h"
+#include "gtest/Substring_utilities.h"
 
 #include "gtest/gtest-constants.h"
 
@@ -202,8 +203,7 @@ using ::testing::GTEST_FLAG(shuffle);
 using ::testing::GTEST_FLAG(stack_trace_depth);
 using ::testing::GTEST_FLAG(stream_result_to);
 using ::testing::GTEST_FLAG(throw_on_failure);
-using ::testing::IsNotSubstring;
-using ::testing::IsSubstring;
+
 using ::testing::Message;
 using ::testing::ScopedFakeTestPartResultReporter;
 using ::testing::StaticAssertTypeEq;
@@ -2589,24 +2589,23 @@ TEST(StringAssertionTest, STRNE_Wide) {
 // Tests that IsSubstring() returns the correct result when the input
 // argument type is const char*.
 TEST(IsSubstringTest, ReturnsCorrectResultForCString) {
-  EXPECT_FALSE(IsSubstring("", "", nullptr, "a"));
-  EXPECT_FALSE(IsSubstring("", "", "b", nullptr));
-  EXPECT_FALSE(IsSubstring("", "", "needle", "haystack"));
+  EXPECT_FALSE(::jmsd::cutf::Substring_utilities::IsSubstring("", "", nullptr, "a"));
+  EXPECT_FALSE(::jmsd::cutf::Substring_utilities::IsSubstring("", "", "b", nullptr));
+  EXPECT_FALSE(::jmsd::cutf::Substring_utilities::IsSubstring("", "", "needle", "haystack"));
 
-  EXPECT_TRUE(IsSubstring("", "", static_cast<const char*>(nullptr), nullptr));
-  EXPECT_TRUE(IsSubstring("", "", "needle", "two needles"));
+  EXPECT_TRUE(::jmsd::cutf::Substring_utilities::IsSubstring("", "", static_cast<const char*>(nullptr), nullptr));
+  EXPECT_TRUE(::jmsd::cutf::Substring_utilities::IsSubstring("", "", "needle", "two needles"));
 }
 
 // Tests that IsSubstring() returns the correct result when the input
 // argument type is const wchar_t*.
 TEST(IsSubstringTest, ReturnsCorrectResultForWideCString) {
-  EXPECT_FALSE(IsSubstring("", "", kNull, L"a"));
-  EXPECT_FALSE(IsSubstring("", "", L"b", kNull));
-  EXPECT_FALSE(IsSubstring("", "", L"needle", L"haystack"));
+  EXPECT_FALSE(::jmsd::cutf::Substring_utilities::IsSubstring("", "", kNull, L"a"));
+  EXPECT_FALSE(::jmsd::cutf::Substring_utilities::IsSubstring("", "", L"b", kNull));
+  EXPECT_FALSE(::jmsd::cutf::Substring_utilities::IsSubstring("", "", L"needle", L"haystack"));
 
-  EXPECT_TRUE(
-	  IsSubstring("", "", static_cast<const wchar_t*>(nullptr), nullptr));
-  EXPECT_TRUE(IsSubstring("", "", L"needle", L"two needles"));
+  EXPECT_TRUE( ::jmsd::cutf::Substring_utilities::IsSubstring("", "", static_cast<const wchar_t*>(nullptr), nullptr));
+  EXPECT_TRUE( ::jmsd::cutf::Substring_utilities::IsSubstring("", "", L"needle", L"two needles"));
 }
 
 // Tests that IsSubstring() generates the correct message when the input
@@ -2616,23 +2615,23 @@ TEST(IsSubstringTest, GeneratesCorrectMessageForCString) {
 			   "  Actual: \"needle\"\n"
 			   "Expected: a substring of haystack_expr\n"
 			   "Which is: \"haystack\"",
-			   IsSubstring("needle_expr", "haystack_expr",
+			   ::jmsd::cutf::Substring_utilities::IsSubstring("needle_expr", "haystack_expr",
 						   "needle", "haystack").failure_message());
 }
 
 // Tests that IsSubstring returns the correct result when the input
 // argument type is ::std::string.
 TEST(IsSubstringTest, ReturnsCorrectResultsForStdString) {
-  EXPECT_TRUE(IsSubstring("", "", std::string("hello"), "ahellob"));
-  EXPECT_FALSE(IsSubstring("", "", "hello", std::string("world")));
+  EXPECT_TRUE(::jmsd::cutf::Substring_utilities::IsSubstring("", "", std::string("hello"), "ahellob"));
+  EXPECT_FALSE(::jmsd::cutf::Substring_utilities::IsSubstring("", "", "hello", std::string("world")));
 }
 
 #if GTEST_HAS_STD_WSTRING
 // Tests that IsSubstring returns the correct result when the input
 // argument type is ::std::wstring.
 TEST(IsSubstringTest, ReturnsCorrectResultForStdWstring) {
-  EXPECT_TRUE(IsSubstring("", "", ::std::wstring(L"needle"), L"two needles"));
-  EXPECT_FALSE(IsSubstring("", "", L"needle", ::std::wstring(L"haystack")));
+  EXPECT_TRUE(::jmsd::cutf::Substring_utilities::IsSubstring("", "", ::std::wstring(L"needle"), L"two needles"));
+  EXPECT_FALSE(::jmsd::cutf::Substring_utilities::IsSubstring("", "", L"needle", ::std::wstring(L"haystack")));
 }
 
 // Tests that IsSubstring() generates the correct message when the input
@@ -2642,7 +2641,7 @@ TEST(IsSubstringTest, GeneratesCorrectMessageForWstring) {
 			   "  Actual: L\"needle\"\n"
 			   "Expected: a substring of haystack_expr\n"
 			   "Which is: L\"haystack\"",
-			   IsSubstring(
+			   ::jmsd::cutf::Substring_utilities::IsSubstring(
 				   "needle_expr", "haystack_expr",
 				   ::std::wstring(L"needle"), L"haystack").failure_message());
 }
@@ -2654,15 +2653,15 @@ TEST(IsSubstringTest, GeneratesCorrectMessageForWstring) {
 // Tests that IsNotSubstring() returns the correct result when the input
 // argument type is const char*.
 TEST(IsNotSubstringTest, ReturnsCorrectResultForCString) {
-  EXPECT_TRUE(IsNotSubstring("", "", "needle", "haystack"));
-  EXPECT_FALSE(IsNotSubstring("", "", "needle", "two needles"));
+  EXPECT_TRUE(::jmsd::cutf::Substring_utilities::IsNotSubstring("", "", "needle", "haystack"));
+  EXPECT_FALSE(::jmsd::cutf::Substring_utilities::IsNotSubstring("", "", "needle", "two needles"));
 }
 
 // Tests that IsNotSubstring() returns the correct result when the input
 // argument type is const wchar_t*.
 TEST(IsNotSubstringTest, ReturnsCorrectResultForWideCString) {
-  EXPECT_TRUE(IsNotSubstring("", "", L"needle", L"haystack"));
-  EXPECT_FALSE(IsNotSubstring("", "", L"needle", L"two needles"));
+  EXPECT_TRUE(::jmsd::cutf::Substring_utilities::IsNotSubstring("", "", L"needle", L"haystack"));
+  EXPECT_FALSE(::jmsd::cutf::Substring_utilities::IsNotSubstring("", "", L"needle", L"two needles"));
 }
 
 // Tests that IsNotSubstring() generates the correct message when the input
@@ -2672,7 +2671,7 @@ TEST(IsNotSubstringTest, GeneratesCorrectMessageForWideCString) {
 			   "  Actual: L\"needle\"\n"
 			   "Expected: not a substring of haystack_expr\n"
 			   "Which is: L\"two needles\"",
-			   IsNotSubstring(
+			   ::jmsd::cutf::Substring_utilities::IsNotSubstring(
 				   "needle_expr", "haystack_expr",
 				   L"needle", L"two needles").failure_message());
 }
@@ -2680,8 +2679,8 @@ TEST(IsNotSubstringTest, GeneratesCorrectMessageForWideCString) {
 // Tests that IsNotSubstring returns the correct result when the input
 // argument type is ::std::string.
 TEST(IsNotSubstringTest, ReturnsCorrectResultsForStdString) {
-  EXPECT_FALSE(IsNotSubstring("", "", std::string("hello"), "ahellob"));
-  EXPECT_TRUE(IsNotSubstring("", "", "hello", std::string("world")));
+  EXPECT_FALSE(::jmsd::cutf::Substring_utilities::IsNotSubstring("", "", std::string("hello"), "ahellob"));
+  EXPECT_TRUE(::jmsd::cutf::Substring_utilities::IsNotSubstring("", "", "hello", std::string("world")));
 }
 
 // Tests that IsNotSubstring() generates the correct message when the input
@@ -2691,7 +2690,7 @@ TEST(IsNotSubstringTest, GeneratesCorrectMessageForStdString) {
 			   "  Actual: \"needle\"\n"
 			   "Expected: not a substring of haystack_expr\n"
 			   "Which is: \"two needles\"",
-			   IsNotSubstring(
+			   ::jmsd::cutf::Substring_utilities::IsNotSubstring(
 				   "needle_expr", "haystack_expr",
 				   ::std::string("needle"), "two needles").failure_message());
 }
@@ -2701,9 +2700,8 @@ TEST(IsNotSubstringTest, GeneratesCorrectMessageForStdString) {
 // Tests that IsNotSubstring returns the correct result when the input
 // argument type is ::std::wstring.
 TEST(IsNotSubstringTest, ReturnsCorrectResultForStdWstring) {
-  EXPECT_FALSE(
-	  IsNotSubstring("", "", ::std::wstring(L"needle"), L"two needles"));
-  EXPECT_TRUE(IsNotSubstring("", "", L"needle", ::std::wstring(L"haystack")));
+  EXPECT_FALSE( ::jmsd::cutf::Substring_utilities::IsNotSubstring("", "", ::std::wstring(L"needle"), L"two needles"));
+  EXPECT_TRUE(::jmsd::cutf::Substring_utilities::IsNotSubstring("", "", L"needle", ::std::wstring(L"haystack")));
 }
 
 #endif  // GTEST_HAS_STD_WSTRING
@@ -3411,9 +3409,9 @@ TEST_F(NoFatalFailureTest, AssertNoFatalFailureOnFatalFailure) {
 			gtest_failures.GetTestPartResult(0).type());
   EXPECT_EQ(TestPartResult::kFatalFailure,
 			gtest_failures.GetTestPartResult(1).type());
-  EXPECT_PRED_FORMAT2(testing::IsSubstring, "some fatal failure",
+  EXPECT_PRED_FORMAT2(::jmsd::cutf::Substring_utilities::IsSubstring, "some fatal failure",
 					  gtest_failures.GetTestPartResult(0).message());
-  EXPECT_PRED_FORMAT2(testing::IsSubstring, "it does",
+  EXPECT_PRED_FORMAT2(::jmsd::cutf::Substring_utilities::IsSubstring, "it does",
 					  gtest_failures.GetTestPartResult(1).message());
 }
 
@@ -3430,11 +3428,11 @@ TEST_F(NoFatalFailureTest, ExpectNoFatalFailureOnFatalFailure) {
 			gtest_failures.GetTestPartResult(1).type());
   EXPECT_EQ(TestPartResult::kNonFatalFailure,
 			gtest_failures.GetTestPartResult(2).type());
-  EXPECT_PRED_FORMAT2(testing::IsSubstring, "some fatal failure",
+  EXPECT_PRED_FORMAT2(::jmsd::cutf::Substring_utilities::IsSubstring, "some fatal failure",
 					  gtest_failures.GetTestPartResult(0).message());
-  EXPECT_PRED_FORMAT2(testing::IsSubstring, "it does",
+  EXPECT_PRED_FORMAT2(::jmsd::cutf::Substring_utilities::IsSubstring, "it does",
 					  gtest_failures.GetTestPartResult(1).message());
-  EXPECT_PRED_FORMAT2(testing::IsSubstring, "other failure",
+  EXPECT_PRED_FORMAT2(::jmsd::cutf::Substring_utilities::IsSubstring, "other failure",
 					  gtest_failures.GetTestPartResult(2).message());
 }
 
@@ -3449,9 +3447,9 @@ TEST_F(NoFatalFailureTest, MessageIsStreamable) {
 			gtest_failures.GetTestPartResult(0).type());
   EXPECT_EQ(TestPartResult::kNonFatalFailure,
 			gtest_failures.GetTestPartResult(1).type());
-  EXPECT_PRED_FORMAT2(testing::IsSubstring, "foo",
+  EXPECT_PRED_FORMAT2(::jmsd::cutf::Substring_utilities::IsSubstring, "foo",
 					  gtest_failures.GetTestPartResult(0).message());
-  EXPECT_PRED_FORMAT2(testing::IsSubstring, "my message",
+  EXPECT_PRED_FORMAT2(::jmsd::cutf::Substring_utilities::IsSubstring, "my message",
 					  gtest_failures.GetTestPartResult(1).message());
 }
 
@@ -5705,10 +5703,9 @@ class ParseFlagsTest : public Test {
 	const char* const expected_help_fragment =
 		"This program contains tests written using";
 	if (should_print_help) {
-	  EXPECT_PRED_FORMAT2(IsSubstring, expected_help_fragment, captured_stdout);
+	  EXPECT_PRED_FORMAT2(::jmsd::cutf::Substring_utilities::IsSubstring, expected_help_fragment, captured_stdout);
 	} else {
-	  EXPECT_PRED_FORMAT2(IsNotSubstring,
-						  expected_help_fragment, captured_stdout);
+	  EXPECT_PRED_FORMAT2(::jmsd::cutf::Substring_utilities::IsNotSubstring, expected_help_fragment, captured_stdout);
 	}
 # endif  // GTEST_HAS_STREAM_REDIRECTION
 

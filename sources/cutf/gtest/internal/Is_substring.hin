@@ -1,0 +1,46 @@
+#pragma once
+
+#include "Is_substring.h"
+
+
+#include "gtest/Assertion_result.h"
+
+
+namespace jmsd {
+namespace cutf {
+namespace internal {
+
+
+// StringType here can be either ::std::string or ::std::wstring.
+template< typename StringType >
+// static
+bool Is_substring::IsSubstringPred( StringType const &needle, StringType const &haystack ) {
+	return haystack.find( needle ) != StringType::npos;
+}
+
+// This function implements either IsSubstring() or IsNotSubstring(),
+// depending on the value of the expected_to_be_substring parameter.
+// StringType here can be const char*, const wchar_t*, ::std::string,
+// or ::std::wstring.
+template< typename StringType >
+// static
+AssertionResult Is_substring::IsSubstringImpl( bool expected_to_be_substring, char const *needle_expr, char const *haystack_expr, StringType const &needle, StringType const &haystack ) {
+	if ( IsSubstringPred( needle, haystack ) == expected_to_be_substring ) {
+		return AssertionResult::AssertionSuccess();
+	}
+
+	bool const is_wide_string = sizeof( needle[ 0 ] ) > 1;
+	char const *const begin_string_quote = is_wide_string ? "L\"" : "\"";
+
+	return AssertionResult::AssertionFailure() <<
+		"Value of: " << needle_expr << "\n" <<
+		"  Actual: " << begin_string_quote << needle << "\"\n" <<
+		"Expected: " << (expected_to_be_substring ? "" : "not ") <<
+		"a substring of " << haystack_expr << "\n" <<
+		"Which is: " << begin_string_quote << haystack << "\"";
+}
+
+
+} // namespace internal
+} // namespace cutf
+} // namespace jmsd

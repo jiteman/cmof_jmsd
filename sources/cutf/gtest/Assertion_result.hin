@@ -2,6 +2,7 @@
 
 #include "Assertion_result.h"
 
+#include "gtest-message.h"
 
 #include <type_traits>
 
