@@ -9,6 +9,7 @@ Separating cutf (ex google test)
 		+ StaticAssertTypeEq
 		+ Separate of FloatingPointLE and FloatLE and DoubleLE
 		+ change pointer to constant reference in parameter StringStreamToString
-		- test removal of FloatingPointLE and FloatLE and DoubleLE
+		+ test removal of FloatingPointLE and FloatLE and DoubleLE
+		+ Removing of FloatingPointLE and FloatLE and DoubleLE
+		- Separate CmpHelperFloatingPointEQ
 		- Separate FloatingPoint
-				
