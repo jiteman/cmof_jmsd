@@ -48,7 +48,7 @@ namespace internal {
 
 // Joins a vector of strings as if they are fields of a tuple; returns
 // the joined string.
-GMOCK_API_ std::string JoinAsTuple(const Strings& fields) {
+JMSD_DEPRECATED_GMOCK_API_ std::string JoinAsTuple(const Strings& fields) {
   switch (fields.size()) {
     case 0:
       return "";
@@ -69,7 +69,7 @@ GMOCK_API_ std::string JoinAsTuple(const Strings& fields) {
 // words.  Each maximum substring of the form [A-Za-z][a-z]*|\d+ is
 // treated as one word.  For example, both "FooBar123" and
 // "foo_bar_123" are converted to "foo bar 123".
-GMOCK_API_ std::string ConvertIdentifierNameToWords(const char* id_name) {
+JMSD_DEPRECATED_GMOCK_API_ std::string ConvertIdentifierNameToWords(const char* id_name) {
   std::string result;
   char prev_char = '\0';
   for (const char* p = id_name; *p != '\0'; prev_char = *(p++)) {
@@ -109,7 +109,7 @@ class GoogleTestFailureReporter : public FailureReporterInterface {
 
 // Returns the global failure reporter.  Will create a
 // GoogleTestFailureReporter and return it the first time called.
-GMOCK_API_ FailureReporterInterface* GetFailureReporter() {
+JMSD_DEPRECATED_GMOCK_API_ FailureReporterInterface* GetFailureReporter() {
   // Points to the global failure reporter used by Google Mock.  gcc
   // guarantees that the following use of failure_reporter is
   // thread-safe.  We may need to add additional synchronization to
@@ -125,7 +125,7 @@ static GTEST_DEFINE_STATIC_MUTEX_(g_log_mutex);
 
 // Returns true if and only if a log with the given severity is visible
 // according to the --gmock_verbose flag.
-GMOCK_API_ bool LogIsVisible(LogSeverity severity) {
+JMSD_DEPRECATED_GMOCK_API_ bool LogIsVisible(LogSeverity severity) {
   if (GMOCK_FLAG(verbose) == kInfoVerbosity) {
     // Always show the log if --gmock_verbose=info.
     return true;
@@ -146,7 +146,7 @@ GMOCK_API_ bool LogIsVisible(LogSeverity severity) {
 // stack_frames_to_skip is treated as 0, since we don't know which
 // function calls will be inlined by the compiler and need to be
 // conservative.
-GMOCK_API_ void Log(LogSeverity severity, const std::string& message,
+JMSD_DEPRECATED_GMOCK_API_ void Log(LogSeverity severity, const std::string& message,
                     int stack_frames_to_skip) {
   if (!LogIsVisible(severity))
     return;
@@ -179,14 +179,14 @@ GMOCK_API_ void Log(LogSeverity severity, const std::string& message,
     }
     std::cout << "Stack trace:\n"
          << ::testing::internal::GetCurrentOsStackTraceExceptTop(
-             ::testing::UnitTest::GetInstance(), actual_to_skip);
+             ::jmsd::cutf::UnitTest::GetInstance(), actual_to_skip);
   }
   std::cout << ::std::flush;
 }
 
-GMOCK_API_ WithoutMatchers GetWithoutMatchers() { return WithoutMatchers(); }
+JMSD_DEPRECATED_GMOCK_API_ WithoutMatchers GetWithoutMatchers() { return WithoutMatchers(); }
 
-GMOCK_API_ void IllegalDoDefault(const char* file, int line) {
+JMSD_DEPRECATED_GMOCK_API_ void IllegalDoDefault(const char* file, int line) {
   internal::Assert(
       false, file, line,
       "You are using DoDefault() inside a composite action like "

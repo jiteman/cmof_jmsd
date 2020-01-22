@@ -1,35 +1,3 @@
-// Copyright 2007, Google Inc.
-// All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are
-// met:
-//
-//     * Redistributions of source code must retain the above copyright
-// notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above
-// copyright notice, this list of conditions and the following disclaimer
-// in the documentation and/or other materials provided with the
-// distribution.
-//     * Neither the name of Google Inc. nor the names of its
-// contributors may be used to endorse or promote products derived from
-// this software without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-
-// Google Mock - a framework for writing C++ mock classes.
-//
 // This file tests the built-in actions.
 
 // Silence C4800 (C4800: 'int *const ': forcing value
@@ -51,6 +19,10 @@
 #include "gmock/internal/gmock-port.h"
 #include "gtest/gtest.h"
 #include "gtest/gtest-spi.h"
+
+
+#include "gtest/internal/Floating_point_comparator.hin"
+
 
 namespace {
 
@@ -1182,7 +1154,7 @@ TEST(WithArgsTest, InnerActionWithConversion) {
 
 #if !GTEST_OS_WINDOWS_MOBILE
 
-class SetErrnoAndReturnTest : public testing::Test {
+class SetErrnoAndReturnTest : public ::jmsd::cutf::Test {
  protected:
   void SetUp() override { errno = 0; }
   void TearDown() override { errno = 0; }

@@ -63,13 +63,13 @@ namespace internal {
 
 // Joins a vector of strings as if they are fields of a tuple; returns
 // the joined string.
-GMOCK_API_ std::string JoinAsTuple(const Strings& fields);
+JMSD_DEPRECATED_GMOCK_API_ std::string JoinAsTuple(const Strings& fields);
 
 // Converts an identifier name to a space-separated list of lower-case
 // words.  Each maximum substring of the form [A-Za-z][a-z]*|\d+ is
 // treated as one word.  For example, both "FooBar123" and
 // "foo_bar_123" are converted to "foo bar 123".
-GMOCK_API_ std::string ConvertIdentifierNameToWords(const char* id_name);
+JMSD_DEPRECATED_GMOCK_API_ std::string ConvertIdentifierNameToWords(const char* id_name);
 
 // PointeeOf<Pointer>::type is the type of a value pointed to by a
 // Pointer, which can be either a smart pointer or a raw pointer.  The
@@ -219,7 +219,7 @@ class FailureReporterInterface {
 };
 
 // Returns the failure reporter used by Google Mock.
-GMOCK_API_ FailureReporterInterface* GetFailureReporter();
+JMSD_DEPRECATED_GMOCK_API_ FailureReporterInterface* GetFailureReporter();
 
 // Asserts that condition is true; aborts the process with the given
 // message if condition is false.  We cannot use LOG(FATAL) or CHECK()
@@ -267,7 +267,7 @@ const char kErrorVerbosity[] = "error";
 
 // Returns true if and only if a log with the given severity is visible
 // according to the --gmock_verbose flag.
-GMOCK_API_ bool LogIsVisible(LogSeverity severity);
+JMSD_DEPRECATED_GMOCK_API_ bool LogIsVisible(LogSeverity severity);
 
 // Prints the given message to stdout if and only if 'severity' >= the level
 // specified by the --gmock_verbose flag.  If stack_frames_to_skip >=
@@ -276,7 +276,7 @@ GMOCK_API_ bool LogIsVisible(LogSeverity severity);
 // stack_frames_to_skip is treated as 0, since we don't know which
 // function calls will be inlined by the compiler and need to be
 // conservative.
-GMOCK_API_ void Log(LogSeverity severity, const std::string& message,
+JMSD_DEPRECATED_GMOCK_API_ void Log(LogSeverity severity, const std::string& message,
                     int stack_frames_to_skip);
 
 // A marker class that is used to resolve parameterless expectations to the
@@ -288,11 +288,11 @@ GMOCK_API_ void Log(LogSeverity severity, const std::string& message,
 class WithoutMatchers {
  private:
   WithoutMatchers() {}
-  friend GMOCK_API_ WithoutMatchers GetWithoutMatchers();
+  friend JMSD_DEPRECATED_GMOCK_API_ WithoutMatchers GetWithoutMatchers();
 };
 
 // Internal use only: access the singleton instance of WithoutMatchers.
-GMOCK_API_ WithoutMatchers GetWithoutMatchers();
+JMSD_DEPRECATED_GMOCK_API_ WithoutMatchers GetWithoutMatchers();
 
 // Disable MSVC warnings for infinite recursion, since in this case the
 // the recursion is unreachable.
@@ -412,7 +412,7 @@ struct RemoveConstFromKey<std::pair<const K, V> > {
 
 // Emit an assertion failure due to incorrect DoDefault() usage. Out-of-lined to
 // reduce code size.
-GMOCK_API_ void IllegalDoDefault(const char* file, int line);
+JMSD_DEPRECATED_GMOCK_API_ void IllegalDoDefault(const char* file, int line);
 
 template <typename F, typename Tuple, size_t... Idx>
 auto ApplyImpl(F&& f, Tuple&& args, IndexSequence<Idx...>) -> decltype(

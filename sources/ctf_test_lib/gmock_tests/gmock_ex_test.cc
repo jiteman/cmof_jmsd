@@ -38,7 +38,6 @@ namespace {
 
 using testing::HasSubstr;
 
-using testing::internal::GoogleTestFailureException;
 
 // A type that cannot be default constructed.
 class NonDefaultConstructible {
@@ -64,7 +63,7 @@ TEST(DefaultValueTest, ThrowsRuntimeErrorWhenNoDefaultValue) {
     mock.GetNonDefaultConstructible();
     FAIL() << "GetNonDefaultConstructible()'s return type has no default "
            << "value, so Google Mock should have thrown.";
-  } catch (const GoogleTestFailureException& /* unused */) {
+  } catch (const ::jmsd::cutf::internal::GoogleTestFailureException& /* unused */) {
     FAIL() << "Google Test does not try to catch an exception of type "
            << "GoogleTestFailureException, which is used for reporting "
            << "a failure to other testing frameworks.  Google Mock should "

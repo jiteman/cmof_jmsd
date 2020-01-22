@@ -1,35 +1,3 @@
-// Copyright 2007, Google Inc.
-// All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are
-// met:
-//
-//     * Redistributions of source code must retain the above copyright
-// notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above
-// copyright notice, this list of conditions and the following disclaimer
-// in the documentation and/or other materials provided with the
-// distribution.
-//     * Neither the name of Google Inc. nor the names of its
-// contributors may be used to endorse or promote products derived from
-// this software without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-
-// Google Mock - a framework for writing C++ mock classes.
-//
 // This file tests the internal utilities.
 
 #include "gmock/internal/gmock-internal-utils.h"
@@ -48,14 +16,17 @@
 #include "gtest/gtest-spi.h"
 #include "gtest/gtest.h"
 
+#include "gtest/Static_assert_type_sameness.hin"
+
+#include "gtest/internal/Unit_test_impl.h"
+
 // Indicates that this translation unit is part of Google Test's
 // implementation.  It must come before gtest-internal-inl.h is
 // included, or there will be a compiler error.  This trick is to
 // prevent a user from accidentally including gtest-internal-inl.h in
 // their code.
-#define GTEST_IMPLEMENTATION_ 1
 #include "gtest/gtest-internal-inl.h"
-#undef GTEST_IMPLEMENTATION_
+
 
 #if GTEST_OS_CYGWIN
 # include <sys/types.h>  // For ssize_t. NOLINT
@@ -373,7 +344,7 @@ TEST(ExpectTest, FailsNonfatallyOnFalse) {
 
 // Tests LogIsVisible().
 
-class LogIsVisibleTest : public ::testing::Test {
+class LogIsVisibleTest : public ::jmsd::cutf::Test {
  protected:
   void SetUp() override { original_verbose_ = GMOCK_FLAG(verbose); }
 
@@ -447,7 +418,7 @@ struct MockStackTraceGetter : testing::internal::OsStackTraceGetterInterface {
 // treated as 0.
 TEST(LogTest, DISABLED_NoSkippingStackFrameInOptMode) {
   MockStackTraceGetter* mock_os_stack_trace_getter = new MockStackTraceGetter;
-  GetUnitTestImpl()->set_os_stack_trace_getter(mock_os_stack_trace_getter);
+  ::jmsd::cutf::internal::GetUnitTestImpl()->set_os_stack_trace_getter(mock_os_stack_trace_getter);
 
   CaptureStdout();
   Log(kWarning, "Test log.\n", 100);
@@ -478,7 +449,7 @@ TEST(LogTest, DISABLED_NoSkippingStackFrameInOptMode) {
               AllOf(Ge(expected_skip_count), Le(expected_skip_count + 10)));
 
   // Restores the default OS stack trace getter.
-  GetUnitTestImpl()->set_os_stack_trace_getter(nullptr);
+  ::jmsd::cutf::internal::GetUnitTestImpl()->set_os_stack_trace_getter(nullptr);
 }
 
 // Tests that all logs are printed when the value of the
@@ -589,10 +560,8 @@ TEST(OnCallTest, LogsAnythingArgument) {
 // Tests StlContainerView.
 
 TEST(StlContainerViewTest, WorksForStlContainer) {
-  StaticAssertTypeEq<std::vector<int>,
-      StlContainerView<std::vector<int> >::type>();
-  StaticAssertTypeEq<const std::vector<double>&,
-      StlContainerView<std::vector<double> >::const_reference>();
+  ::jmsd::cutf::Static_assert_type_sameness< std::vector< int >, StlContainerView< std::vector< int > >::type >();
+  ::jmsd::cutf::Static_assert_type_sameness< const std::vector<double>&, StlContainerView<std::vector<double> >::const_reference>();
 
   typedef std::vector<char> Chars;
   Chars v1;
@@ -605,15 +574,11 @@ TEST(StlContainerViewTest, WorksForStlContainer) {
 }
 
 TEST(StlContainerViewTest, WorksForStaticNativeArray) {
-  StaticAssertTypeEq<NativeArray<int>,
-      StlContainerView<int[3]>::type>();
-  StaticAssertTypeEq<NativeArray<double>,
-      StlContainerView<const double[4]>::type>();
-  StaticAssertTypeEq<NativeArray<char[3]>,
-      StlContainerView<const char[2][3]>::type>();
+  ::jmsd::cutf::Static_assert_type_sameness<NativeArray<int>, StlContainerView<int[3]>::type>();
+  ::jmsd::cutf::Static_assert_type_sameness<NativeArray<double>, StlContainerView<const double[4]>::type>();
+  ::jmsd::cutf::Static_assert_type_sameness<NativeArray<char[3]>, StlContainerView<const char[2][3]>::type>();
 
-  StaticAssertTypeEq<const NativeArray<int>,
-      StlContainerView<int[2]>::const_reference>();
+  ::jmsd::cutf::Static_assert_type_sameness<const NativeArray<int>, StlContainerView<int[2]>::const_reference>();
 
   int a1[3] = { 0, 1, 2 };
   NativeArray<int> a2 = StlContainerView<int[3]>::ConstReference(a1);
@@ -632,15 +597,10 @@ TEST(StlContainerViewTest, WorksForStaticNativeArray) {
 }
 
 TEST(StlContainerViewTest, WorksForDynamicNativeArray) {
-  StaticAssertTypeEq<NativeArray<int>,
-                     StlContainerView<std::tuple<const int*, size_t> >::type>();
-  StaticAssertTypeEq<
-      NativeArray<double>,
-      StlContainerView<std::tuple<std::shared_ptr<double>, int> >::type>();
+  ::jmsd::cutf::Static_assert_type_sameness<NativeArray<int>, StlContainerView<std::tuple<const int*, size_t> >::type>();
+  ::jmsd::cutf::Static_assert_type_sameness< NativeArray<double>, StlContainerView<std::tuple<std::shared_ptr<double>, int> >::type>();
 
-  StaticAssertTypeEq<
-      const NativeArray<int>,
-      StlContainerView<std::tuple<const int*, int> >::const_reference>();
+  ::jmsd::cutf::Static_assert_type_sameness< const NativeArray<int>, StlContainerView<std::tuple<const int*, int> >::const_reference>();
 
   int a1[3] = { 0, 1, 2 };
   const int* const p1 = a1;
@@ -650,8 +610,7 @@ TEST(StlContainerViewTest, WorksForDynamicNativeArray) {
   EXPECT_EQ(3U, a2.size());
   EXPECT_EQ(a1, a2.begin());
 
-  const NativeArray<int> a3 = StlContainerView<std::tuple<int*, size_t> >::Copy(
-      std::make_tuple(static_cast<int*>(a1), 3));
+  const NativeArray<int> a3 = StlContainerView<std::tuple<int*, size_t> >::Copy( std::make_tuple(static_cast<int*>(a1), 3));
   ASSERT_EQ(3U, a3.size());
   EXPECT_EQ(0, a3.begin()[0]);
   EXPECT_EQ(1, a3.begin()[1]);

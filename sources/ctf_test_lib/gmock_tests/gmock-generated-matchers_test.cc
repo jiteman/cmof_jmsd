@@ -87,7 +87,7 @@ using testing::Not;
 using testing::Pointee;
 using testing::PrintToString;
 using testing::Ref;
-using testing::StaticAssertTypeEq;
+
 using testing::StrEq;
 using testing::Value;
 using testing::internal::ElementsAreArrayMatcher;

@@ -1285,7 +1285,7 @@ class PredicateFormatterFromMatcher {
   // object to act as a predicate-formatter suitable for using with
   // Google Test's EXPECT_PRED_FORMAT1() macro.
   template <typename T>
-  AssertionResult operator()(const char* value_text, const T& x) const {
+  ::jmsd::cutf::AssertionResult operator()(const char* value_text, const T& x) const {
     // We convert matcher_ to a Matcher<const T&> *now* instead of
     // when the PredicateFormatterFromMatcher object was constructed,
     // as matcher_ may be polymorphic (e.g. NotNull()) and we won't
@@ -1302,7 +1302,7 @@ class PredicateFormatterFromMatcher {
     // The expected path here is that the matcher should match (i.e. that most
     // tests pass) so optimize for this case.
     if (matcher.Matches(x)) {
-      return AssertionSuccess();
+      return ::jmsd::cutf::AssertionResult::AssertionSuccess();
     }
 
     ::std::stringstream ss;
@@ -1317,7 +1317,7 @@ class PredicateFormatterFromMatcher {
             "rerun to generate the explanation.";
     }
     ss << "\n  Actual: " << listener.str();
-    return AssertionFailure() << ss.str();
+    return ::jmsd::cutf::AssertionResult::AssertionFailure() << ss.str();
   }
 
  private:
@@ -2843,7 +2843,7 @@ class ElementsAreMatcherImpl : public MatcherInterface<Container> {
 // Initially, there are no edges.
 // Use NextGraph() to iterate over all possible edge configurations.
 // Use Randomize() to generate a random edge configuration.
-class GMOCK_API_ MatchMatrix {
+class JMSD_DEPRECATED_GMOCK_API_ MatchMatrix {
  public:
   MatchMatrix(size_t num_elements, size_t num_matchers)
       : num_elements_(num_elements),
@@ -2888,7 +2888,7 @@ typedef ::std::vector<ElementMatcherPair> ElementMatcherPairs;
 
 // Returns a maximum bipartite matching for the specified graph 'g'.
 // The matching is represented as a vector of {element, matcher} pairs.
-GMOCK_API_ ElementMatcherPairs
+JMSD_DEPRECATED_GMOCK_API_ ElementMatcherPairs
 FindMaxBipartiteMatching(const MatchMatrix& g);
 
 struct UnorderedMatcherRequire {
@@ -2902,7 +2902,7 @@ struct UnorderedMatcherRequire {
 // Untyped base class for implementing UnorderedElementsAre.  By
 // putting logic that's not specific to the element type here, we
 // reduce binary bloat and increase compilation speed.
-class GMOCK_API_ UnorderedElementsAreMatcherImplBase {
+class JMSD_DEPRECATED_GMOCK_API_ UnorderedElementsAreMatcherImplBase {
  protected:
   explicit UnorderedElementsAreMatcherImplBase(
       UnorderedMatcherRequire::Flags matcher_flags)
@@ -3234,7 +3234,7 @@ BoundSecondMatcher<Tuple2Matcher, Second> MatcherBindSecond(
 // 'negation' is false; otherwise returns the description of the
 // negation of the matcher.  'param_values' contains a list of strings
 // that are the print-out of the matcher's parameters.
-GMOCK_API_ std::string FormatMatcherDescription(bool negation,
+JMSD_DEPRECATED_GMOCK_API_ std::string FormatMatcherDescription(bool negation,
                                                 const char* matcher_name,
                                                 const Strings& param_values);
 

@@ -181,7 +181,7 @@ class MockFoo : public FooInterface {
 # pragma warning(pop)
 #endif
 
-class FunctionMockerTest : public testing::Test {
+class FunctionMockerTest : public ::jmsd::cutf::Test {
  protected:
   FunctionMockerTest() : foo_(&mock_foo_) {}
 
