@@ -51,6 +51,7 @@ TEST(CommandLineFlagsTest, CanBeAccessedInCodeOnceGTestHIsIncluded) {
 #include "gtest/internal/Test_result_accessor.h"
 #include "gtest/internal/Int32_from_environment_or_die.h"
 #include "gtest/internal/Should_shard.h"
+#include "gtest/internal/gtest-flags-internal.h"
 
 #include "gtest/internal/Stl_utilities.hin"
 
@@ -5679,8 +5680,8 @@ class ParseFlagsTest : public Test {
   static void TestParsingFlags(int argc1, const CharType** argv1,
 							   int argc2, const CharType** argv2,
 							   const Flags& expected, bool should_print_help) {
-	const bool saved_help_flag = ::testing::internal::g_help_flag;
-	::testing::internal::g_help_flag = false;
+	const bool saved_help_flag = ::jmsd::cutf::internal::g_help_flag;
+	::jmsd::cutf::internal::g_help_flag = false;
 
 # if GTEST_HAS_STREAM_REDIRECTION
 	CaptureStdout();
@@ -5702,7 +5703,7 @@ class ParseFlagsTest : public Test {
 
 	// ParseGoogleTestFlagsOnly should neither set g_help_flag nor print the
 	// help message for the flags it recognizes.
-	EXPECT_EQ(should_print_help, ::testing::internal::g_help_flag);
+	EXPECT_EQ(should_print_help, ::jmsd::cutf::internal::g_help_flag);
 
 # if GTEST_HAS_STREAM_REDIRECTION
 	const char* const expected_help_fragment =
@@ -5715,7 +5716,7 @@ class ParseFlagsTest : public Test {
 	}
 # endif  // GTEST_HAS_STREAM_REDIRECTION
 
-	::testing::internal::g_help_flag = saved_help_flag;
+	::jmsd::cutf::internal::g_help_flag = saved_help_flag;
   }
 
   // This macro wraps TestParsingFlags s.t. the user doesn't need
@@ -6227,8 +6228,8 @@ class CurrentTestInfoTest : public Test {
   // the test case is run.
   static void SetUpTestSuite() {
 	// There should be no tests running at this point.
-	const TestInfo* test_info =
-	  UnitTest::GetInstance()->current_test_info();
+	const ::jmsd::cutf::TestInfo* test_info =
+	  ::jmsd::cutf::UnitTest::GetInstance()->current_test_info();
 	EXPECT_TRUE(test_info == nullptr)
 		<< "There should be no tests running at this point.";
   }
@@ -6236,8 +6237,8 @@ class CurrentTestInfoTest : public Test {
   // Tests that current_test_info() returns NULL after the last test in
   // the test case has run.
   static void TearDownTestSuite() {
-	const TestInfo* test_info =
-	  UnitTest::GetInstance()->current_test_info();
+	const ::jmsd::cutf::TestInfo* test_info =
+	  ::jmsd::cutf::UnitTest::GetInstance()->current_test_info();
 	EXPECT_TRUE(test_info == nullptr)
 		<< "There should be no tests running at this point.";
   }
@@ -6246,8 +6247,8 @@ class CurrentTestInfoTest : public Test {
 // Tests that current_test_info() returns TestInfo for currently running
 // test by checking the expected test name against the actual one.
 TEST_F(CurrentTestInfoTest, WorksForFirstTestInATestSuite) {
-  const TestInfo* test_info =
-	UnitTest::GetInstance()->current_test_info();
+  const ::jmsd::cutf::TestInfo* test_info =
+	::jmsd::cutf::UnitTest::GetInstance()->current_test_info();
   ASSERT_TRUE(nullptr != test_info)
 	  << "There is a test running so we should have a valid TestInfo.";
   EXPECT_STREQ("CurrentTestInfoTest", test_info->test_suite_name())
@@ -6261,8 +6262,8 @@ TEST_F(CurrentTestInfoTest, WorksForFirstTestInATestSuite) {
 // use this test to see that the TestInfo object actually changed from
 // the previous invocation.
 TEST_F(CurrentTestInfoTest, WorksForSecondTestInATestSuite) {
-  const TestInfo* test_info =
-	UnitTest::GetInstance()->current_test_info();
+  const ::jmsd::cutf::TestInfo* test_info =
+	::jmsd::cutf::UnitTest::GetInstance()->current_test_info();
   ASSERT_TRUE(nullptr != test_info)
 	  << "There is a test running so we should have a valid TestInfo.";
   EXPECT_STREQ("CurrentTestInfoTest", test_info->test_suite_name())
@@ -6630,7 +6631,7 @@ TEST(HasNonfatalFailureTest, ReturnsTrueWhenThereAreFatalAndNonfatalFailures) {
 
 // A wrapper for calling HasNonfatalFailure outside of a test body.
 static bool HasNonfatalFailureHelper() {
-  return testing::Test::HasNonfatalFailure();
+  return Test::HasNonfatalFailure();
 }
 
 TEST(HasNonfatalFailureTest, WorksOutsideOfTestBody) {
@@ -6671,7 +6672,7 @@ TEST(HasFailureTest, ReturnsTrueWhenThereAreFatalAndNonfatalFailures) {
 }
 
 // A wrapper for calling HasFailure outside of a test body.
-static bool HasFailureHelper() { return testing::Test::HasFailure(); }
+static bool HasFailureHelper() { return Test::HasFailure(); }
 
 TEST(HasFailureTest, WorksOutsideOfTestBody) {
   EXPECT_FALSE(HasFailureHelper());
@@ -6697,7 +6698,7 @@ class TestListener : public EmptyTestEventListener {
   }
 
  protected:
-  void OnTestProgramStart(const UnitTest& /*unit_test*/) override {
+  void OnTestProgramStart(const ::jmsd::cutf::UnitTest& /*unit_test*/) override {
 	if (on_start_counter_ != nullptr) (*on_start_counter_)++;
   }
 
@@ -6751,7 +6752,7 @@ TEST(TestEventListenersTest, Append) {
 	TestEventListeners listeners;
 	listeners.Append(listener);
 	TestEventListenersAccessor::GetRepeater(&listeners)->OnTestProgramStart(
-		*UnitTest::GetInstance());
+		*::jmsd::cutf::UnitTest::GetInstance());
 	EXPECT_EQ(1, on_start_counter);
   }
   EXPECT_TRUE(is_destroyed);
@@ -6766,20 +6767,20 @@ class SequenceTestingListener : public EmptyTestEventListener {
 	  : vector_(vector), id_(id) {}
 
  protected:
-  void OnTestProgramStart(const UnitTest& /*unit_test*/) override {
+  void OnTestProgramStart(const ::jmsd::cutf::UnitTest& /*unit_test*/) override {
 	vector_->push_back(GetEventDescription("OnTestProgramStart"));
   }
 
-  void OnTestProgramEnd(const UnitTest& /*unit_test*/) override {
+  void OnTestProgramEnd(const ::jmsd::cutf::UnitTest& /*unit_test*/) override {
 	vector_->push_back(GetEventDescription("OnTestProgramEnd"));
   }
 
-  void OnTestIterationStart(const UnitTest& /*unit_test*/,
+  void OnTestIterationStart(const ::jmsd::cutf::UnitTest& /*unit_test*/,
 							int /*iteration*/) override {
 	vector_->push_back(GetEventDescription("OnTestIterationStart"));
   }
 
-  void OnTestIterationEnd(const UnitTest& /*unit_test*/,
+  void OnTestIterationEnd(const ::jmsd::cutf::UnitTest& /*unit_test*/,
 						  int /*iteration*/) override {
 	vector_->push_back(GetEventDescription("OnTestIterationEnd"));
   }
@@ -6805,7 +6806,7 @@ TEST(EventListenerTest, AppendKeepsOrder) {
   listeners.Append(new SequenceTestingListener(&vec, "3rd"));
 
   TestEventListenersAccessor::GetRepeater(&listeners)->OnTestProgramStart(
-	  *UnitTest::GetInstance());
+	  *::jmsd::cutf::UnitTest::GetInstance());
   ASSERT_EQ(3U, vec.size());
   EXPECT_STREQ("1st.OnTestProgramStart", vec[0].c_str());
   EXPECT_STREQ("2nd.OnTestProgramStart", vec[1].c_str());
@@ -6813,7 +6814,7 @@ TEST(EventListenerTest, AppendKeepsOrder) {
 
   vec.clear();
   TestEventListenersAccessor::GetRepeater(&listeners)->OnTestProgramEnd(
-	  *UnitTest::GetInstance());
+	  *::jmsd::cutf::UnitTest::GetInstance());
   ASSERT_EQ(3U, vec.size());
   EXPECT_STREQ("3rd.OnTestProgramEnd", vec[0].c_str());
   EXPECT_STREQ("2nd.OnTestProgramEnd", vec[1].c_str());
@@ -6821,7 +6822,7 @@ TEST(EventListenerTest, AppendKeepsOrder) {
 
   vec.clear();
   TestEventListenersAccessor::GetRepeater(&listeners)->OnTestIterationStart(
-	  *UnitTest::GetInstance(), 0);
+	  *::jmsd::cutf::UnitTest::GetInstance(), 0);
   ASSERT_EQ(3U, vec.size());
   EXPECT_STREQ("1st.OnTestIterationStart", vec[0].c_str());
   EXPECT_STREQ("2nd.OnTestIterationStart", vec[1].c_str());
@@ -6829,7 +6830,7 @@ TEST(EventListenerTest, AppendKeepsOrder) {
 
   vec.clear();
   TestEventListenersAccessor::GetRepeater(&listeners)->OnTestIterationEnd(
-	  *UnitTest::GetInstance(), 0);
+	  *::jmsd::cutf::UnitTest::GetInstance(), 0);
   ASSERT_EQ(3U, vec.size());
   EXPECT_STREQ("3rd.OnTestIterationEnd", vec[0].c_str());
   EXPECT_STREQ("2nd.OnTestIterationEnd", vec[1].c_str());
@@ -6850,7 +6851,7 @@ TEST(TestEventListenersTest, Release) {
 	listeners.Append(listener);
 	EXPECT_EQ(listener, listeners.Release(listener));
 	TestEventListenersAccessor::GetRepeater(&listeners)->OnTestProgramStart(
-		*UnitTest::GetInstance());
+		*::jmsd::cutf::UnitTest::GetInstance());
 	EXPECT_TRUE(listeners.Release(listener) == nullptr);
   }
   EXPECT_EQ(0, on_start_counter);
@@ -6869,7 +6870,7 @@ TEST(EventListenerTest, SuppressEventForwarding) {
   TestEventListenersAccessor::SuppressEventForwarding(&listeners);
   ASSERT_FALSE(TestEventListenersAccessor::EventForwardingEnabled(listeners));
   TestEventListenersAccessor::GetRepeater(&listeners)->OnTestProgramStart(
-	  *UnitTest::GetInstance());
+	  *::jmsd::cutf::UnitTest::GetInstance());
   EXPECT_EQ(0, on_start_counter);
 }
 
@@ -6878,7 +6879,7 @@ TEST(EventListenerTest, SuppressEventForwarding) {
 TEST(EventListenerDeathTest, EventsNotForwardedInDeathTestSubprecesses) {
   EXPECT_DEATH_IF_SUPPORTED({
 	  GTEST_CHECK_(TestEventListenersAccessor::EventForwardingEnabled(
-		  *GetUnitTestImpl()->listeners())) << "expected failure";},
+		  *::jmsd::cutf::internal::GetUnitTestImpl()->listeners())) << "expected failure";},
 	  "expected failure");
 }
 
@@ -6896,7 +6897,7 @@ TEST(EventListenerTest, default_result_printer) {
   EXPECT_EQ(listener, listeners.default_result_printer());
 
   TestEventListenersAccessor::GetRepeater(&listeners)->OnTestProgramStart(
-	  *UnitTest::GetInstance());
+	  *::jmsd::cutf::UnitTest::GetInstance());
 
   EXPECT_EQ(1, on_start_counter);
 
@@ -6910,7 +6911,7 @@ TEST(EventListenerTest, default_result_printer) {
   // After broadcasting an event the counter is still the same, indicating
   // the listener is not in the list anymore.
   TestEventListenersAccessor::GetRepeater(&listeners)->OnTestProgramStart(
-	  *UnitTest::GetInstance());
+	  *::jmsd::cutf::UnitTest::GetInstance());
   EXPECT_EQ(1, on_start_counter);
 }
 
@@ -6933,7 +6934,7 @@ TEST(EventListenerTest, RemovingDefaultResultPrinterWorks) {
 
 	// Broadcasting events now should not affect default_result_printer.
 	TestEventListenersAccessor::GetRepeater(&listeners)->OnTestProgramStart(
-		*UnitTest::GetInstance());
+		*::jmsd::cutf::UnitTest::GetInstance());
 	EXPECT_EQ(0, on_start_counter);
   }
   // Destroying the list should not affect the listener now, too.
@@ -6955,7 +6956,7 @@ TEST(EventListenerTest, default_xml_generator) {
   EXPECT_EQ(listener, listeners.default_xml_generator());
 
   TestEventListenersAccessor::GetRepeater(&listeners)->OnTestProgramStart(
-	  *UnitTest::GetInstance());
+	  *::jmsd::cutf::UnitTest::GetInstance());
 
   EXPECT_EQ(1, on_start_counter);
 
@@ -6969,7 +6970,7 @@ TEST(EventListenerTest, default_xml_generator) {
   // After broadcasting an event the counter is still the same, indicating
   // the listener is not in the list anymore.
   TestEventListenersAccessor::GetRepeater(&listeners)->OnTestProgramStart(
-	  *UnitTest::GetInstance());
+	  *::jmsd::cutf::UnitTest::GetInstance());
   EXPECT_EQ(1, on_start_counter);
 }
 
@@ -6992,7 +6993,7 @@ TEST(EventListenerTest, RemovingDefaultXmlGeneratorWorks) {
 
 	// Broadcasting events now should not affect default_xml_generator.
 	TestEventListenersAccessor::GetRepeater(&listeners)->OnTestProgramStart(
-		*UnitTest::GetInstance());
+		*::jmsd::cutf::UnitTest::GetInstance());
 	EXPECT_EQ(0, on_start_counter);
   }
   // Destroying the list should not affect the listener now, too.
@@ -7408,12 +7409,12 @@ TEST(SkipPrefixTest, DoesNotSkipWhenPrefixDoesNotMatch) {
 
 // Tests ad_hoc_test_result().
 TEST(AdHocTestResultTest, AdHocTestResultForUnitTestDoesNotShowFailure) {
-  const testing::TestResult& test_result =
-	  testing::UnitTest::GetInstance()->ad_hoc_test_result();
+  const ::jmsd::cutf::TestResult& test_result =
+	  ::jmsd::cutf::UnitTest::GetInstance()->ad_hoc_test_result();
   EXPECT_FALSE(test_result.Failed());
 }
 
-class DynamicUnitTestFixture : public testing::Test {};
+class DynamicUnitTestFixture : public Test {};
 
 class DynamicTest : public DynamicUnitTestFixture {
   void TestBody() override { EXPECT_TRUE(true); }
@@ -7424,7 +7425,7 @@ auto* dynamic_test = testing::RegisterTest(
 	__LINE__, []() -> DynamicUnitTestFixture* { return new DynamicTest; });
 
 TEST(RegisterTest, WasRegistered) {
-  auto* unittest = testing::UnitTest::GetInstance();
+  auto* unittest = ::jmsd::cutf::UnitTest::GetInstance();
   for (int i = 0; i < unittest->total_test_suite_count(); ++i) {
 	auto* tests = unittest->GetTestSuite(i);
 	if (tests->name() != std::string("DynamicUnitTestFixture")) continue;

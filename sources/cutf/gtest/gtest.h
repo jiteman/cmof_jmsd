@@ -368,7 +368,7 @@ template <typename RawType>
   const FloatingPoint<RawType> lhs(lhs_value), rhs(rhs_value);
 
   if (lhs.AlmostEquals(rhs)) {
-	return AssertionSuccess();
+	return ::jmsd::cutf::AssertionResult::AssertionSuccess();
   }
 
   ::std::stringstream lhs_ss;
