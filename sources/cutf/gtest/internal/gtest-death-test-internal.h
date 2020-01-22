@@ -84,7 +84,7 @@ enum DeathTestOutcome { IN_PROGRESS, DIED, LIVED, RETURNED, THREW };
 //               by wait(2)
 // exit code:    The integer code passed to exit(3), _exit(2), or
 //               returned from main()
-class GTEST_API_ DeathTest {
+class JMSD_DEPRECATED_GTEST_API_ DeathTest {
  public:
   // Create returns false if there was an error determining the
   // appropriate action to take for the current death test; for example,
@@ -174,7 +174,7 @@ class DefaultDeathTestFactory : public DeathTestFactory {
 
 // Returns true if exit_status describes a process that was terminated
 // by a signal, or exited normally with a nonzero exit code.
-GTEST_API_ bool ExitedUnsuccessfully(int exit_status);
+JMSD_DEPRECATED_GTEST_API_ bool ExitedUnsuccessfully(int exit_status);
 
 // A string passed to EXPECT_DEATH (etc.) is caught by one of these overloads
 // and interpreted as a regex (rather than an Eq matcher) for legacy

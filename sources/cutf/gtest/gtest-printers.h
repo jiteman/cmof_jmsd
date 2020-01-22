@@ -125,7 +125,7 @@ namespace internal2 {
 
 // Prints the given number of bytes in the given object to the given
 // ostream.
-GTEST_API_ void PrintBytesInObjectTo(const unsigned char* obj_bytes,
+JMSD_DEPRECATED_GTEST_API_ void PrintBytesInObjectTo(const unsigned char* obj_bytes,
                                      size_t count,
                                      ::std::ostream* os);
 
@@ -516,8 +516,8 @@ void PrintTo(const T& value, ::std::ostream* os) {
 // types, strings, plain arrays, and pointers).
 
 // Overloads for various char types.
-GTEST_API_ void PrintTo(unsigned char c, ::std::ostream* os);
-GTEST_API_ void PrintTo(signed char c, ::std::ostream* os);
+JMSD_DEPRECATED_GTEST_API_ void PrintTo(unsigned char c, ::std::ostream* os);
+JMSD_DEPRECATED_GTEST_API_ void PrintTo(signed char c, ::std::ostream* os);
 inline void PrintTo(char c, ::std::ostream* os) {
   // When printing a plain char, we always treat it as unsigned.  This
   // way, the output won't be affected by whether the compiler thinks
@@ -537,10 +537,10 @@ inline void PrintTo(bool x, ::std::ostream* os) {
 // as signed integer when wchar_t is implemented by the compiler
 // as a signed type and is printed as an unsigned integer when wchar_t
 // is implemented as an unsigned type.
-GTEST_API_ void PrintTo(wchar_t wc, ::std::ostream* os);
+JMSD_DEPRECATED_GTEST_API_ void PrintTo(wchar_t wc, ::std::ostream* os);
 
 // Overloads for C strings.
-GTEST_API_ void PrintTo(const char* s, ::std::ostream* os);
+JMSD_DEPRECATED_GTEST_API_ void PrintTo(const char* s, ::std::ostream* os);
 inline void PrintTo(char* s, ::std::ostream* os) {
   PrintTo(ImplicitCast_<const char*>(s), os);
 }
@@ -567,7 +567,7 @@ inline void PrintTo(unsigned char* s, ::std::ostream* os) {
 // possibly causing invalid memory accesses.
 #if !defined(_MSC_VER) || defined(_NATIVE_WCHAR_T_DEFINED)
 // Overloads for wide C strings
-GTEST_API_ void PrintTo(const wchar_t* s, ::std::ostream* os);
+JMSD_DEPRECATED_GTEST_API_ void PrintTo(const wchar_t* s, ::std::ostream* os);
 inline void PrintTo(wchar_t* s, ::std::ostream* os) {
   PrintTo(ImplicitCast_<const wchar_t*>(s), os);
 }
@@ -588,14 +588,14 @@ void PrintRawArrayTo(const T a[], size_t count, ::std::ostream* os) {
 }
 
 // Overloads for ::std::string.
-GTEST_API_ void PrintStringTo(const ::std::string&s, ::std::ostream* os);
+JMSD_DEPRECATED_GTEST_API_ void PrintStringTo(const ::std::string&s, ::std::ostream* os);
 inline void PrintTo(const ::std::string& s, ::std::ostream* os) {
   PrintStringTo(s, os);
 }
 
 // Overloads for ::std::wstring.
 #if GTEST_HAS_STD_WSTRING
-GTEST_API_ void PrintWideStringTo(const ::std::wstring&s, ::std::ostream* os);
+JMSD_DEPRECATED_GTEST_API_ void PrintWideStringTo(const ::std::wstring&s, ::std::ostream* os);
 inline void PrintTo(const ::std::wstring& s, ::std::ostream* os) {
   PrintWideStringTo(s, os);
 }
@@ -746,11 +746,11 @@ void UniversalPrintArray(const T* begin, size_t len, ::std::ostream* os) {
   }
 }
 // This overload prints a (const) char array compactly.
-GTEST_API_ void UniversalPrintArray(
+JMSD_DEPRECATED_GTEST_API_ void UniversalPrintArray(
     const char* begin, size_t len, ::std::ostream* os);
 
 // This overload prints a (const) wchar_t array compactly.
-GTEST_API_ void UniversalPrintArray(
+JMSD_DEPRECATED_GTEST_API_ void UniversalPrintArray(
     const wchar_t* begin, size_t len, ::std::ostream* os);
 
 // Implements printing an array type T[N].

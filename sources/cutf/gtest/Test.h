@@ -36,7 +36,7 @@ namespace cutf {
 //   TEST_F(FooTest, Baz) { ... }
 //
 // Test is not copyable.
-class GTEST_API_ Test {
+class JMSD_DEPRECATED_GTEST_API_ Test {
 
 public:
 	typedef Test THIS_STATIC;

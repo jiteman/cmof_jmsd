@@ -22,7 +22,7 @@ GTEST_DISABLE_MSC_WARNINGS_PUSH_(4275 \
 // errors presumably detectable only at run time.  Since
 // std::runtime_error inherits from std::exception, many testing
 // frameworks know how to extract and print the message inside it.
-class GTEST_API_ GoogleTestFailureException :
+class JMSD_DEPRECATED_GTEST_API_ GoogleTestFailureException :
 	public ::std::runtime_error
 {
 public:

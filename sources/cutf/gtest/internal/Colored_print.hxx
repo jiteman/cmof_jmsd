@@ -16,7 +16,7 @@ namespace cutf {
 namespace internal {
 
 
-GTEST_API_ GTEST_ATTRIBUTE_PRINTF_( 2, 3 )
+JMSD_DEPRECATED_GTEST_API_ GTEST_ATTRIBUTE_PRINTF_( 2, 3 )
 void ColoredPrintf( GTestColor color, char const *fmt, ... );
 
 #if GTEST_OS_WINDOWS && !GTEST_OS_WINDOWS_MOBILE && !GTEST_OS_WINDOWS_PHONE && !GTEST_OS_WINDOWS_RT && !GTEST_OS_WINDOWS_MINGW

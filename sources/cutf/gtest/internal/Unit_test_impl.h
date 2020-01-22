@@ -26,7 +26,7 @@ namespace internal {
 // the methods under a mutex, as this class is not accessible by a
 // user and the UnitTest class that delegates work to this class does
 // proper locking.
-class GTEST_API_ UnitTestImpl {
+class JMSD_DEPRECATED_GTEST_API_ UnitTestImpl {
  public:
   explicit UnitTestImpl(::jmsd::cutf::UnitTest* parent);
   virtual ~UnitTestImpl();

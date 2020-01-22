@@ -1019,7 +1019,7 @@ const char kUnknownFile[] = "unknown file";
 
 // Formats a source file path and a line number as they would appear
 // in an error message from the compiler used to compile this code.
-GTEST_API_ ::std::string FormatFileLocation(const char* file, int line) {
+JMSD_DEPRECATED_GTEST_API_ ::std::string FormatFileLocation(const char* file, int line) {
   const std::string file_name(file == nullptr ? kUnknownFile : file);
 
   if (line < 0) {
@@ -1037,7 +1037,7 @@ GTEST_API_ ::std::string FormatFileLocation(const char* file, int line) {
 // FormatFileLocation in order to contrast the two functions.
 // Note that FormatCompilerIndependentFileLocation() does NOT append colon
 // to the file location it produces, unlike FormatFileLocation().
-GTEST_API_ ::std::string FormatCompilerIndependentFileLocation(
+JMSD_DEPRECATED_GTEST_API_ ::std::string FormatCompilerIndependentFileLocation(
 	const char* file, int line) {
   const std::string file_name(file == nullptr ? kUnknownFile : file);
 

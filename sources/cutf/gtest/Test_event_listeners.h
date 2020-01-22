@@ -31,7 +31,7 @@ namespace cutf {
 
 
 // TestEventListeners lets users add listeners to track events in Google Test.
-class GTEST_API_ TestEventListeners {
+class JMSD_DEPRECATED_GTEST_API_ TestEventListeners {
  public:
   TestEventListeners();
   ~TestEventListeners();

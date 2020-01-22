@@ -56,7 +56,7 @@ namespace testing {
 namespace internal {
 
 // String - an abstract class holding static string utilities.
-class GTEST_API_ String {
+class JMSD_DEPRECATED_GTEST_API_ String {
  public:
   // Static utility methods
 
@@ -164,7 +164,7 @@ class GTEST_API_ String {
 
 // Gets the content of the stringstream's buffer as an std::string.  Each '\0'
 // character in the buffer is replaced with "\\0".
-GTEST_API_ std::string StringStreamToString(::std::stringstream* stream);
+JMSD_DEPRECATED_GTEST_API_ std::string StringStreamToString(::std::stringstream* stream);
 
 }  // namespace internal
 }  // namespace testing

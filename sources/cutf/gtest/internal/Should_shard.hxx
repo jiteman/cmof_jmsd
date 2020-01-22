@@ -15,7 +15,7 @@ namespace internal {
 // an error and exits. If in_subprocess_for_death_test, sharding is
 // disabled because it must only be applied to the original test
 // process. Otherwise, we could filter out death tests we intended to execute.
-GTEST_API_ bool ShouldShard( char const *total_shards_env, char const *shard_index_env, bool in_subprocess_for_death_test);
+JMSD_DEPRECATED_GTEST_API_ bool ShouldShard( char const *total_shards_env, char const *shard_index_env, bool in_subprocess_for_death_test);
 
 
 } // namespace internal

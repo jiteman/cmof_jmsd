@@ -58,7 +58,7 @@ namespace internal {
 // Valgrind heap checkers may need this to modify their behavior in death
 // tests.  IMPORTANT: This is an internal utility.  Using it may break the
 // implementation of death tests.  User code MUST NOT use it.
-GTEST_API_ bool InDeathTestChild();
+JMSD_DEPRECATED_GTEST_API_ bool InDeathTestChild();
 
 }  // namespace internal
 
@@ -187,7 +187,7 @@ GTEST_API_ bool InDeathTestChild();
 // Two predicate classes that can be used in {ASSERT,EXPECT}_EXIT*:
 
 // Tests that an exit code describes a normal exit with a given exit code.
-class GTEST_API_ ExitedWithCode {
+class JMSD_DEPRECATED_GTEST_API_ ExitedWithCode {
  public:
   explicit ExitedWithCode(int exit_code);
   bool operator()(int exit_status) const;
@@ -202,7 +202,7 @@ class GTEST_API_ ExitedWithCode {
 // Tests that an exit code describes an exit due to termination by a
 // given signal.
 // GOOGLETEST_CM0006 DO NOT DELETE
-class GTEST_API_ KilledBySignal {
+class JMSD_DEPRECATED_GTEST_API_ KilledBySignal {
  public:
   explicit KilledBySignal(int signum);
   bool operator()(int exit_status) const;

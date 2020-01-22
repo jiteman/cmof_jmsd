@@ -18,7 +18,7 @@ namespace cutf {
 
 
 // The interface for tracing execution of tests. The methods are organized in the order the corresponding events are fired.
-class GTEST_API_ TestEventListener {
+class JMSD_DEPRECATED_GTEST_API_ TestEventListener {
 public:
 	virtual ~TestEventListener() = 0;
 

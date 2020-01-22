@@ -10,7 +10,7 @@ namespace jmsd {
 namespace cutf {
 
 
-class GTEST_API_ AssertionResult {
+class JMSD_DEPRECATED_GTEST_API_ AssertionResult {
 
 public:
 	typedef AssertionResult THIS_STATIC;

@@ -16,7 +16,7 @@ namespace cutf {
 //
 // This function was formerly a macro; thus, it is in the global
 // namespace and has an all-caps name.
-int GTEST_API_ RUN_ALL_TESTS() GTEST_MUST_USE_RESULT_;
+int JMSD_DEPRECATED_GTEST_API_ RUN_ALL_TESTS() GTEST_MUST_USE_RESULT_;
 
 
 } // namespace cutf

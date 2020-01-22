@@ -24,7 +24,7 @@ namespace cutf {
 // A test suite, which consists of a vector of TestInfos.
 //
 // TestSuite is not copyable.
-class GTEST_API_ TestSuite {
+class JMSD_DEPRECATED_GTEST_API_ TestSuite {
 
 public:
 	static bool TestSuitePassed( TestSuite const *test_suite );

@@ -21,7 +21,7 @@ namespace internal {
 // test filter using either GTEST_FILTER or --gtest_filter.  If both
 // the variable and the flag are present, the latter overrides the
 // former.
-class GTEST_API_ UnitTestOptions {
+class JMSD_DEPRECATED_GTEST_API_ UnitTestOptions {
 public:
 	// Functions for processing the gtest_output flag.
 

@@ -46,7 +46,7 @@ namespace testing {
 // assertion or an explicit FAIL(), ADD_FAILURE(), or SUCCESS()).
 //
 // Don't inherit from TestPartResult as its destructor is not virtual.
-class GTEST_API_ TestPartResult {
+class JMSD_DEPRECATED_GTEST_API_ TestPartResult {
  public:
   // The possible outcomes of a test part (i.e. an assertion or an
   // explicit SUCCEED(), FAIL(), or ADD_FAILURE()).
@@ -126,7 +126,7 @@ std::ostream& operator<<(std::ostream& os, const TestPartResult& result);
 //
 // Don't inherit from TestPartResultArray as its destructor is not
 // virtual.
-class GTEST_API_ TestPartResultArray {
+class JMSD_DEPRECATED_GTEST_API_ TestPartResultArray {
  public:
   TestPartResultArray() {}
 
@@ -146,7 +146,7 @@ class GTEST_API_ TestPartResultArray {
 };
 
 // This interface knows how to report a test part result.
-class GTEST_API_ TestPartResultReporterInterface {
+class JMSD_DEPRECATED_GTEST_API_ TestPartResultReporterInterface {
  public:
   virtual ~TestPartResultReporterInterface() {}
 
@@ -161,7 +161,7 @@ namespace internal {
 // reported, it only delegates the reporting to the former result reporter.
 // The original result reporter is restored in the destructor.
 // INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
-class GTEST_API_ HasNewFatalFailureHelper
+class JMSD_DEPRECATED_GTEST_API_ HasNewFatalFailureHelper
     : public TestPartResultReporterInterface {
  public:
   HasNewFatalFailureHelper();

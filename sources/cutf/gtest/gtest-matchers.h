@@ -349,7 +349,7 @@ class Matcher : public internal::MatcherBase<T> {
 // instead of Eq(str) and "foo" instead of Eq("foo") when a std::string
 // matcher is expected.
 template <>
-class GTEST_API_ Matcher<const std::string&>
+class JMSD_DEPRECATED_GTEST_API_ Matcher<const std::string&>
     : public internal::MatcherBase<const std::string&> {
  public:
   Matcher() {}
@@ -366,7 +366,7 @@ class GTEST_API_ Matcher<const std::string&>
 };
 
 template <>
-class GTEST_API_ Matcher<std::string>
+class JMSD_DEPRECATED_GTEST_API_ Matcher<std::string>
     : public internal::MatcherBase<std::string> {
  public:
   Matcher() {}
@@ -389,7 +389,7 @@ class GTEST_API_ Matcher<std::string>
 // instead of Eq(str) and "foo" instead of Eq("foo") when a absl::string_view
 // matcher is expected.
 template <>
-class GTEST_API_ Matcher<const absl::string_view&>
+class JMSD_DEPRECATED_GTEST_API_ Matcher<const absl::string_view&>
     : public internal::MatcherBase<const absl::string_view&> {
  public:
   Matcher() {}
@@ -409,7 +409,7 @@ class GTEST_API_ Matcher<const absl::string_view&>
 };
 
 template <>
-class GTEST_API_ Matcher<absl::string_view>
+class JMSD_DEPRECATED_GTEST_API_ Matcher<absl::string_view>
     : public internal::MatcherBase<absl::string_view> {
  public:
   Matcher() {}

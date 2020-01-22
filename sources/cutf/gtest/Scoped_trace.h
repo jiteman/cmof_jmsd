@@ -22,7 +22,7 @@ namespace cutf {
 // Example:
 //   testing::ScopedTrace trace("file.cc", 123, "message");
 //
-class GTEST_API_ ScopedTrace {
+class JMSD_DEPRECATED_GTEST_API_ ScopedTrace {
  public:
   // The c'tor pushes the given source file location and message onto
   // a trace stack maintained by Google Test.

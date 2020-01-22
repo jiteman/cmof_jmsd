@@ -90,7 +90,7 @@ class IgnoredValue {
 };
 
 // Appends the user-supplied message to the Google-Test-generated message.
-GTEST_API_ std::string AppendUserMessage(
+JMSD_DEPRECATED_GTEST_API_ std::string AppendUserMessage(
 	const std::string& gtest_msg, const Message& user_msg);
 
 namespace edit_distance {
@@ -100,16 +100,16 @@ namespace edit_distance {
 // Simple implementation of the Wagner-Fischer algorithm.
 // See http://en.wikipedia.org/wiki/Wagner-Fischer_algorithm
 enum EditType { kMatch, kAdd, kRemove, kReplace };
-GTEST_API_ std::vector<EditType> CalculateOptimalEdits(
+JMSD_DEPRECATED_GTEST_API_ std::vector<EditType> CalculateOptimalEdits(
 	const std::vector<size_t>& left, const std::vector<size_t>& right);
 
 // Same as above, but the input is represented as strings.
-GTEST_API_ std::vector<EditType> CalculateOptimalEdits(
+JMSD_DEPRECATED_GTEST_API_ std::vector<EditType> CalculateOptimalEdits(
 	const std::vector<std::string>& left,
 	const std::vector<std::string>& right);
 
 // Create a diff of the input strings in Unified diff format.
-GTEST_API_ std::string CreateUnifiedDiff(const std::vector<std::string>& left,
+JMSD_DEPRECATED_GTEST_API_ std::string CreateUnifiedDiff(const std::vector<std::string>& left,
 										 const std::vector<std::string>& right,
 										 size_t context = 2);
 
@@ -119,7 +119,7 @@ GTEST_API_ std::string CreateUnifiedDiff(const std::vector<std::string>& left,
 // format.
 // If not null, stores in 'total_line_count' the total number of lines found
 // in left + right.
-GTEST_API_ std::string DiffStrings(const std::string& left,
+JMSD_DEPRECATED_GTEST_API_ std::string DiffStrings(const std::string& left,
 								   const std::string& right,
 								   size_t* total_line_count);
 
@@ -138,14 +138,14 @@ GTEST_API_ std::string DiffStrings(const std::string& left,
 // The ignoring_case parameter is true if and only if the assertion is a
 // *_STRCASEEQ*.  When it's true, the string " (ignoring case)" will
 // be inserted into the message.
-GTEST_API_ ::jmsd::cutf::AssertionResult EqFailure(const char* expected_expression,
+JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult EqFailure(const char* expected_expression,
 									 const char* actual_expression,
 									 const std::string& expected_value,
 									 const std::string& actual_value,
 									 bool ignoring_case);
 
 // Constructs a failure message for Boolean assertions such as EXPECT_TRUE.
-GTEST_API_ std::string GetBoolAssertionFailureMessage(
+JMSD_DEPRECATED_GTEST_API_ std::string GetBoolAssertionFailureMessage(
 	const ::jmsd::cutf::AssertionResult& assertion_result,
 	const char* expression_text,
 	const char* actual_predicate_value,
@@ -371,7 +371,7 @@ TypeId GetTypeId() {
 // ::testing::Test, as the latter may give the wrong result due to a
 // suspected linker bug when compiling Google Test as a Mac OS X
 // framework.
-GTEST_API_ TypeId GetTestTypeId();
+JMSD_DEPRECATED_GTEST_API_ TypeId GetTestTypeId();
 
 // Defines the abstract factory interface that creates instances
 // of a Test object.
@@ -404,8 +404,8 @@ class TestFactoryImpl : public TestFactoryBase {
 // {ASSERT|EXPECT}_HRESULT_{SUCCEEDED|FAILED}
 // We pass a long instead of HRESULT to avoid causing an
 // include dependency for the HRESULT type.
-GTEST_API_ ::jmsd::cutf::AssertionResult IsHRESULTSuccess(const char* expr, long hr);
-GTEST_API_ ::jmsd::cutf::AssertionResult IsHRESULTFailure(const char* expr, long hr);
+JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult IsHRESULTSuccess(const char* expr, long hr);
+JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult IsHRESULTFailure(const char* expr, long hr);
 
 #endif  // GTEST_OS_WINDOWS
 
@@ -482,7 +482,7 @@ struct SuiteApiResolver : T {
 // If *pstr starts with the given prefix, modifies *pstr to be right
 // past the prefix and returns true; otherwise leaves *pstr unchanged
 // and returns false.  None of pstr, *pstr, and prefix can be NULL.
-GTEST_API_ bool SkipPrefix(const char* prefix, const char** pstr);
+JMSD_DEPRECATED_GTEST_API_ bool SkipPrefix(const char* prefix, const char** pstr);
 
 #if GTEST_HAS_TYPED_TEST || GTEST_HAS_TYPED_TEST_P
 
@@ -490,7 +490,7 @@ GTEST_DISABLE_MSC_WARNINGS_PUSH_(4251 \
 /* class A needs to have dll-interface to be used by clients of class B */)
 
 // State of the definition of a type-parameterized test suite.
-class GTEST_API_ TypedTestSuitePState {
+class JMSD_DEPRECATED_GTEST_API_ TypedTestSuitePState {
  public:
   TypedTestSuitePState() : registered_(false) {}
 
@@ -721,14 +721,14 @@ class TypeParameterizedTestSuite<Fixture, internal::None, Types> {
 // For example, if Foo() calls Bar(), which in turn calls
 // GetCurrentOsStackTraceExceptTop(..., 1), Foo() will be included in
 // the trace but Bar() and GetCurrentOsStackTraceExceptTop() won't.
-GTEST_API_ std::string GetCurrentOsStackTraceExceptTop(
+JMSD_DEPRECATED_GTEST_API_ std::string GetCurrentOsStackTraceExceptTop(
 	::jmsd::cutf::UnitTest* unit_test, int skip_count);
 
 // Helpers for suppressing warnings on unreachable code or constant
 // condition.
 
 // Always returns true.
-GTEST_API_ bool AlwaysTrue();
+JMSD_DEPRECATED_GTEST_API_ bool AlwaysTrue();
 
 // Always returns false.
 inline bool AlwaysFalse() { return !AlwaysTrue(); }
@@ -736,7 +736,7 @@ inline bool AlwaysFalse() { return !AlwaysTrue(); }
 // Helper for suppressing false warning from Clang on a const char*
 // variable declared in a conditional expression always being NULL in
 // the else branch.
-struct GTEST_API_ ConstCharPtr {
+struct JMSD_DEPRECATED_GTEST_API_ ConstCharPtr {
   ConstCharPtr(const char* str) : value(str) {}
   operator bool() const { return true; }
   const char* value;
@@ -744,7 +744,7 @@ struct GTEST_API_ ConstCharPtr {
 
 // Helper for declaring std::string within 'if' statement
 // in pre C++17 build environment.
-struct GTEST_API_ TrueWithString {
+struct JMSD_DEPRECATED_GTEST_API_ TrueWithString {
   TrueWithString() = default;
   explicit TrueWithString(const char* str) : value(str) {}
   explicit TrueWithString(const std::string& str) : value(str) {}

@@ -697,26 +697,38 @@ typedef struct _RTL_CRITICAL_SECTION GTEST_CRITICAL_SECTION;
 
 #endif  // GTEST_IS_THREADSAFE
 
-// GTEST_API_ qualifies all symbols that must be exported. The definitions below
-// are guarded by #ifndef to give embedders a chance to define GTEST_API_ in
+// JMSD_DEPRECATED_GTEST_API_ qualifies all symbols that must be exported. The definitions below
+// are guarded by #ifndef to give embedders a chance to define JMSD_DEPRECATED_GTEST_API_ in
 // gtest/internal/custom/gtest-port.h
-#ifndef GTEST_API_
 
 #ifdef _MSC_VER
-# if GTEST_LINKED_AS_SHARED_LIBRARY
-#  define GTEST_API_ __declspec(dllimport)
-# elif GTEST_CREATE_SHARED_LIBRARY
-#  define GTEST_API_ __declspec(dllexport)
-# endif
-#elif __GNUC__ >= 4 || defined(__clang__)
-# define GTEST_API_ __attribute__((visibility ("default")))
-#endif  // _MSC_VER
+	#if JMSD_DEPRECATED_GTEST_LINKED_AS_SHARED_LIBRARY
+		#define JMSD_DEPRECATED_GTEST_API_		__declspec( dllimport )
+	#else
+		#define JMSD_DEPRECATED_GTEST_API_		__declspec( dllexport )
+	#endif
+#elif __GNUC__ >= 4 || defined( __clang__ )
+	#define JMSD_DEPRECATED_GTEST_API_			__attribute__( ( visibility( "default" ) ) )
+#else  // _MSC_VER
+	#define JMSD_DEPRECATED_GTEST_API_
+#endif
 
-#endif  // GTEST_API_
 
-#ifndef GTEST_API_
-# define GTEST_API_
-#endif  // GTEST_API_
+//#ifndef JMSD_DEPRECATED_GTEST_API_
+//	#ifdef _MSC_VER
+//		#if JMSD_DEPRECATED_GTEST_LINKED_AS_SHARED_LIBRARY
+//			#define JMSD_DEPRECATED_GTEST_API_		__declspec( dllimport )
+//		#else
+//			#define JMSD_DEPRECATED_GTEST_API_		__declspec( dllexport )
+//		#endif
+//	#elif __GNUC__ >= 4 || defined( __clang__ )
+//		#define JMSD_DEPRECATED_GTEST_API_			__attribute__( ( visibility( "default" ) ) )
+//	#endif  // _MSC_VER
+//#endif  // JMSD_DEPRECATED_GTEST_API_
+
+//#ifndef JMSD_DEPRECATED_GTEST_API_
+//	#define JMSD_DEPRECATED_GTEST_API_
+//#endif  // JMSD_DEPRECATED_GTEST_API_
 
 #ifndef GTEST_DEFAULT_DEATH_TEST_STYLE
 # define GTEST_DEFAULT_DEATH_TEST_STYLE  "fast"
@@ -819,7 +831,7 @@ class Secret;
 
 // A helper for suppressing warnings on constant condition.  It just
 // returns 'condition'.
-GTEST_API_ bool IsTrue(bool condition);
+JMSD_DEPRECATED_GTEST_API_ bool IsTrue(bool condition);
 
 // Defines RE.
 
@@ -829,7 +841,7 @@ GTEST_API_ bool IsTrue(bool condition);
 
 // A simple C++ wrapper for <regex.h>.  It uses the POSIX Extended
 // Regular Expression syntax.
-class GTEST_API_ RE {
+class JMSD_DEPRECATED_GTEST_API_ RE {
  public:
   // A copy constructor is required by the Standard to initialize object
   // references from r-values.
@@ -881,12 +893,12 @@ class GTEST_API_ RE {
 
 // Formats a source file path and a line number as they would appear
 // in an error message from the compiler used to compile this code.
-GTEST_API_ ::std::string FormatFileLocation(const char* file, int line);
+JMSD_DEPRECATED_GTEST_API_ ::std::string FormatFileLocation(const char* file, int line);
 
 // Formats a file location for compiler-independent XML output.
 // Although this function is not platform dependent, we put it next to
 // FormatFileLocation in order to contrast the two functions.
-GTEST_API_ ::std::string FormatCompilerIndependentFileLocation(const char* file,
+JMSD_DEPRECATED_GTEST_API_ ::std::string FormatCompilerIndependentFileLocation(const char* file,
                                                                int line);
 
 // Defines logging utilities:
@@ -905,7 +917,7 @@ enum GTestLogSeverity {
 // Formats log entry severity, provides a stream object for streaming the
 // log message, and terminates the message with a newline when going out of
 // scope.
-class GTEST_API_ GTestLog {
+class JMSD_DEPRECATED_GTEST_API_ GTestLog {
  public:
   GTestLog(GTestLogSeverity severity, const char* file, int line);
 
@@ -1076,20 +1088,20 @@ Derived* CheckedDowncastToActualType(Base* base) {
 //   CaptureStderr     - starts capturing stderr.
 //   GetCapturedStderr - stops capturing stderr and returns the captured string.
 //
-GTEST_API_ void CaptureStdout();
-GTEST_API_ std::string GetCapturedStdout();
-GTEST_API_ void CaptureStderr();
-GTEST_API_ std::string GetCapturedStderr();
+JMSD_DEPRECATED_GTEST_API_ void CaptureStdout();
+JMSD_DEPRECATED_GTEST_API_ std::string GetCapturedStdout();
+JMSD_DEPRECATED_GTEST_API_ void CaptureStderr();
+JMSD_DEPRECATED_GTEST_API_ std::string GetCapturedStderr();
 
 #endif  // GTEST_HAS_STREAM_REDIRECTION
 // Returns the size (in bytes) of a file.
-GTEST_API_ size_t GetFileSize(FILE* file);
+JMSD_DEPRECATED_GTEST_API_ size_t GetFileSize(FILE* file);
 
 // Reads the entire content of a file as a string.
-GTEST_API_ std::string ReadEntireFile(FILE* file);
+JMSD_DEPRECATED_GTEST_API_ std::string ReadEntireFile(FILE* file);
 
 // All command line arguments.
-GTEST_API_ std::vector<std::string> GetArgvs();
+JMSD_DEPRECATED_GTEST_API_ std::vector<std::string> GetArgvs();
 
 #if GTEST_HAS_DEATH_TEST
 
@@ -1166,11 +1178,11 @@ class Notification {
 
 # elif GTEST_OS_WINDOWS && !GTEST_OS_WINDOWS_PHONE && !GTEST_OS_WINDOWS_RT
 
-GTEST_API_ void SleepMilliseconds(int n);
+JMSD_DEPRECATED_GTEST_API_ void SleepMilliseconds(int n);
 
 // Provides leak-safe Windows kernel handle ownership.
 // Used in death tests and in threading support.
-class GTEST_API_ AutoHandle {
+class JMSD_DEPRECATED_GTEST_API_ AutoHandle {
  public:
   // Assume that Win32 HANDLE type is equivalent to void*. Doing so allows us to
   // avoid including <windows.h> in this header file. Including <windows.h> is
@@ -1203,7 +1215,7 @@ class GTEST_API_ AutoHandle {
 //
 // This class is only for testing Google Test's own constructs. Do not
 // use it in user tests, either directly or indirectly.
-class GTEST_API_ Notification {
+class JMSD_DEPRECATED_GTEST_API_ Notification {
  public:
   Notification();
   void Notify();
@@ -1320,7 +1332,7 @@ class ThreadWithParam : public ThreadWithParamBase {
 //   GTEST_DECLARE_STATIC_MUTEX_(g_some_mutex);
 //
 // (A non-static Mutex is defined/declared in the usual way).
-class GTEST_API_ Mutex {
+class JMSD_DEPRECATED_GTEST_API_ Mutex {
  public:
   enum MutexType { kStatic = 0, kDynamic = 1 };
   // We rely on kStaticMutex being 0 as it is to what the linker initializes
@@ -1415,7 +1427,7 @@ class ThreadLocalBase {
 // Maps a thread to a set of ThreadLocals that have values instantiated on that
 // thread and notifies them when the thread exits.  A ThreadLocal instance is
 // expected to persist until all threads it has values on have terminated.
-class GTEST_API_ ThreadLocalRegistry {
+class JMSD_DEPRECATED_GTEST_API_ ThreadLocalRegistry {
  public:
   // Registers thread_local_instance as having value on the current thread.
   // Returns a value that can be used to identify the thread from other threads.
@@ -1427,7 +1439,7 @@ class GTEST_API_ ThreadLocalRegistry {
       const ThreadLocalBase* thread_local_instance);
 };
 
-class GTEST_API_ ThreadWithParamBase {
+class JMSD_DEPRECATED_GTEST_API_ ThreadWithParamBase {
  public:
   void Join();
 
@@ -1695,7 +1707,7 @@ extern "C" inline void DeleteThreadLocalValue(void* value_holder) {
 
 // Implements thread-local storage on pthreads-based systems.
 template <typename T>
-class GTEST_API_ ThreadLocal {
+class JMSD_DEPRECATED_GTEST_API_ ThreadLocal {
  public:
   ThreadLocal()
       : key_(CreateKey()), default_factory_(new DefaultValueHolderFactory()) {}
@@ -1827,7 +1839,7 @@ class GTestMutexLock {
 typedef GTestMutexLock MutexLock;
 
 template <typename T>
-class GTEST_API_ ThreadLocal {
+class JMSD_DEPRECATED_GTEST_API_ ThreadLocal {
  public:
   ThreadLocal() : value_() {}
   explicit ThreadLocal(const T& value) : value_(value) {}
@@ -1843,7 +1855,7 @@ class GTEST_API_ ThreadLocal {
 
 // Returns the number of threads running in the process, or 0 to indicate that
 // we cannot detect it.
-GTEST_API_ size_t GetThreadCount();
+JMSD_DEPRECATED_GTEST_API_ size_t GetThreadCount();
 
 #if GTEST_OS_WINDOWS
 # define GTEST_PATH_SEP_ "\\"
@@ -2124,19 +2136,19 @@ class GTestFlagSaver; // eisha: REMOVE THIS SHIT
 # define GTEST_FLAG_SAVER_ ::testing::internal::GTestFlagSaver
 
 // Macros for declaring flags.
-# define GTEST_DECLARE_FLAG_bool_(name) GTEST_API_ extern bool GTEST_FLAG(name)
+# define GTEST_DECLARE_FLAG_bool_(name) JMSD_DEPRECATED_GTEST_API_ extern bool GTEST_FLAG(name)
 # define GTEST_DECLARE_FLAG_int32_(name) \
-    GTEST_API_ extern std::int32_t GTEST_FLAG(name)
+    JMSD_DEPRECATED_GTEST_API_ extern std::int32_t GTEST_FLAG(name)
 # define GTEST_DECLARE_FLAG_string_(name) \
-    GTEST_API_ extern ::std::string GTEST_FLAG(name)
+    JMSD_DEPRECATED_GTEST_API_ extern ::std::string GTEST_FLAG(name)
 
 // Macros for defining flags.
 # define GTEST_DEFINE_FLAG_bool_(name, default_val, doc) \
-    GTEST_API_ bool GTEST_FLAG(name) = (default_val)
+    JMSD_DEPRECATED_GTEST_API_ bool GTEST_FLAG(name) = (default_val)
 # define GTEST_DEFINE_FLAG_int32_(name, default_val, doc) \
-    GTEST_API_ std::int32_t GTEST_FLAG(name) = (default_val)
+    JMSD_DEPRECATED_GTEST_API_ std::int32_t GTEST_FLAG(name) = (default_val)
 # define GTEST_DEFINE_FLAG_string_(name, default_val, doc) \
-    GTEST_API_ ::std::string GTEST_FLAG(name) = (default_val)
+    JMSD_DEPRECATED_GTEST_API_ ::std::string GTEST_FLAG(name) = (default_val)
 
 #endif  // !defined(GTEST_DECLARE_bool_)
 
@@ -2149,12 +2161,12 @@ class GTestFlagSaver; // eisha: REMOVE THIS SHIT
 // Parses 'str' for a 32-bit signed integer.  If successful, writes the result
 // to *value and returns true; otherwise leaves *value unchanged and returns
 // false.
-bool GTEST_API_ ParseInt32(const Message& src_text, const char* str, int32_t* value);
+bool JMSD_DEPRECATED_GTEST_API_ ParseInt32(const Message& src_text, const char* str, int32_t* value);
 
 // Parses a bool/int32_t/string from the environment variable
 // corresponding to the given Google Test flag.
 bool BoolFromGTestEnv(const char* flag, bool default_val);
-GTEST_API_ int32_t Int32FromGTestEnv(const char* flag, int32_t default_val);
+JMSD_DEPRECATED_GTEST_API_ int32_t Int32FromGTestEnv(const char* flag, int32_t default_val);
 std::string OutputFlagAlsoCheckEnvVar();
 const char* StringFromGTestEnv(const char* flag, const char* default_val);
 

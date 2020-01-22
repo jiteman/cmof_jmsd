@@ -15,7 +15,7 @@ namespace internal {
 // Unlike rand() and srand(), it doesn't use global state (and therefore can't interfere with user code).
 // Unlike rand_r(), it's portable.
 // An LCG isn't very random, but it's good enough for our purposes.
-class GTEST_API_ Random {
+class JMSD_DEPRECATED_GTEST_API_ Random {
 
 public:
 	static const uint32_t kMaxRange;

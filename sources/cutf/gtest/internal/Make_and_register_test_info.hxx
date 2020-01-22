@@ -4,7 +4,8 @@
 #include "gtest/Test_info.hxx"
 
 #include "gtest-internal.hxx"
-// #include "gtest-port.h" // GTEST_API_
+
+#include "cutf.h"
 
 
 namespace jmsd {
@@ -30,8 +31,7 @@ namespace internal {
 //   factory:          pointer to the factory that creates a test object.
 //                     The newly created TestInfo instance will assume
 //                     ownership of the factory object.
-// GTEST_API_ TestInfo* MakeAndRegisterTestInfo(
-TestInfo *MakeAndRegisterTestInfo(
+JMSD_CUTF_SHARED_INTERFACE TestInfo *MakeAndRegisterTestInfo(
 	const char* test_suite_name,
 	const char* name,
 	const char* type_param,

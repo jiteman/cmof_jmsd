@@ -28,20 +28,6 @@ class StreamingListenerTest;
 
 namespace jmsd {
 namespace cutf {
-namespace internal {
-
-TestInfo* MakeAndRegisterTestInfo(
-	const char* test_suite_name,
-	const char* name,
-	const char* type_param,
-	const char* value_param,
-	::testing::internal::CodeLocation code_location,
-	::testing::internal::TypeId fixture_class_id,
-	::testing::internal::SetUpTestSuiteFunc set_up_tc,
-	::testing::internal::TearDownTestSuiteFunc tear_down_tc,
-	::testing::internal::TestFactoryBase* factory );
-
-} // namespace internal
 
 
 // A TestInfo object stores the following information about a test:
@@ -55,7 +41,7 @@ TestInfo* MakeAndRegisterTestInfo(
 // The constructor of TestInfo registers itself with the UnitTest
 // singleton such that the RUN_ALL_TESTS() macro knows which tests to
 // run.
-class GTEST_API_ TestInfo {
+class JMSD_DEPRECATED_GTEST_API_ TestInfo {
  public:
   // Destructs a TestInfo object.  This function is not virtual, so
   // don't inherit from TestInfo.

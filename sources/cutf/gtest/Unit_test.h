@@ -54,7 +54,7 @@ namespace cutf {
 //
 // This class is thread-safe as long as the methods are called
 // according to their specification.
-class GTEST_API_ UnitTest {
+class JMSD_DEPRECATED_GTEST_API_ UnitTest {
  public:
   // Gets the singleton UnitTest object.  The first time this method
   // is called, a UnitTest object is constructed and returned.

@@ -52,7 +52,7 @@ namespace testing {
 // generated in the same thread that created this object or it can intercept
 // all generated failures. The scope of this mock object can be controlled with
 // the second argument to the two arguments constructor.
-class GTEST_API_ ScopedFakeTestPartResultReporter
+class JMSD_DEPRECATED_GTEST_API_ ScopedFakeTestPartResultReporter
     : public TestPartResultReporterInterface {
  public:
   // The two possible mocking modes of this object.
@@ -98,7 +98,7 @@ namespace internal {
 // TestPartResultArray contains exactly one failure that has the given
 // type and contains the given substring.  If that's not the case, a
 // non-fatal failure will be generated.
-class GTEST_API_ SingleFailureChecker {
+class JMSD_DEPRECATED_GTEST_API_ SingleFailureChecker {
  public:
   // The constructor remembers the arguments.
   SingleFailureChecker(const TestPartResultArray* results,

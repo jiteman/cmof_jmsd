@@ -27,7 +27,7 @@ namespace cutf {
 // the Test.
 //
 // TestResult is not copyable.
-class GTEST_API_ TestResult {
+class JMSD_DEPRECATED_GTEST_API_ TestResult {
  public:
   // Creates an empty TestResult.
   TestResult();

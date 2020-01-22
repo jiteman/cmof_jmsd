@@ -100,7 +100,7 @@ namespace testing {
 #if GTEST_HAS_EXCEPTIONS
 
 // Exception which can be thrown from TestEventListener::OnTestPartResult.
-class GTEST_API_ AssertionException
+class JMSD_DEPRECATED_GTEST_API_ AssertionException
 	: public ::jmsd::cutf::internal::GoogleTestFailureException {
  public:
   explicit AssertionException(const TestPartResult& result)
@@ -119,15 +119,15 @@ class GTEST_API_ AssertionException
 // updated.
 //
 // Calling the function for the second time has no user-visible effect.
-GTEST_API_ void InitGoogleTest(int* argc, char** argv);
+JMSD_DEPRECATED_GTEST_API_ void InitGoogleTest(int* argc, char** argv);
 
 // This overloaded version can be used in Windows programs compiled in
 // UNICODE mode.
-GTEST_API_ void InitGoogleTest(int* argc, wchar_t** argv);
+JMSD_DEPRECATED_GTEST_API_ void InitGoogleTest(int* argc, wchar_t** argv);
 
 // This overloaded version can be used on Arduino/embedded platforms where
 // there is no argc/argv.
-GTEST_API_ void InitGoogleTest();
+JMSD_DEPRECATED_GTEST_API_ void InitGoogleTest();
 
 namespace internal {
 
@@ -168,7 +168,7 @@ template <typename T1, typename T2>
 // With this overloaded version, we allow anonymous enums to be used
 // in {ASSERT|EXPECT}_EQ when compiled with gcc 4, as anonymous enums
 // can be implicitly cast to BiggestInt.
-GTEST_API_ ::jmsd::cutf::AssertionResult CmpHelperEQ(const char* lhs_expression,
+JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult CmpHelperEQ(const char* lhs_expression,
 									   const char* rhs_expression,
 									   BiggestInt lhs,
 									   BiggestInt rhs);
@@ -246,7 +246,7 @@ template <typename T1, typename T2> \
 	return CmpHelperOpFailure(expr1, expr2, val1, val2, #op); \
   } \
 } \
-GTEST_API_ ::jmsd::cutf::AssertionResult CmpHelper##op_name( \
+JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult CmpHelper##op_name( \
 	const char* expr1, const char* expr2, BiggestInt val1, BiggestInt val2)
 
 // INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
@@ -267,7 +267,7 @@ GTEST_IMPL_CMP_HELPER_(GT, >);
 // The helper function for {ASSERT|EXPECT}_STREQ.
 //
 // INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
-GTEST_API_ ::jmsd::cutf::AssertionResult CmpHelperSTREQ(const char* s1_expression,
+JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult CmpHelperSTREQ(const char* s1_expression,
 										  const char* s2_expression,
 										  const char* s1,
 										  const char* s2);
@@ -275,7 +275,7 @@ GTEST_API_ ::jmsd::cutf::AssertionResult CmpHelperSTREQ(const char* s1_expressio
 // The helper function for {ASSERT|EXPECT}_STRCASEEQ.
 //
 // INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
-GTEST_API_ ::jmsd::cutf::AssertionResult CmpHelperSTRCASEEQ(const char* s1_expression,
+JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult CmpHelperSTRCASEEQ(const char* s1_expression,
 											  const char* s2_expression,
 											  const char* s1,
 											  const char* s2);
@@ -283,7 +283,7 @@ GTEST_API_ ::jmsd::cutf::AssertionResult CmpHelperSTRCASEEQ(const char* s1_expre
 // The helper function for {ASSERT|EXPECT}_STRNE.
 //
 // INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
-GTEST_API_ ::jmsd::cutf::AssertionResult CmpHelperSTRNE(const char* s1_expression,
+JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult CmpHelperSTRNE(const char* s1_expression,
 										  const char* s2_expression,
 										  const char* s1,
 										  const char* s2);
@@ -291,7 +291,7 @@ GTEST_API_ ::jmsd::cutf::AssertionResult CmpHelperSTRNE(const char* s1_expressio
 // The helper function for {ASSERT|EXPECT}_STRCASENE.
 //
 // INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
-GTEST_API_ ::jmsd::cutf::AssertionResult CmpHelperSTRCASENE(const char* s1_expression,
+JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult CmpHelperSTRCASENE(const char* s1_expression,
 											  const char* s2_expression,
 											  const char* s1,
 											  const char* s2);
@@ -300,7 +300,7 @@ GTEST_API_ ::jmsd::cutf::AssertionResult CmpHelperSTRCASENE(const char* s1_expre
 // Helper function for *_STREQ on wide strings.
 //
 // INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
-GTEST_API_ ::jmsd::cutf::AssertionResult CmpHelperSTREQ(const char* s1_expression,
+JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult CmpHelperSTREQ(const char* s1_expression,
 										  const char* s2_expression,
 										  const wchar_t* s1,
 										  const wchar_t* s2);
@@ -308,7 +308,7 @@ GTEST_API_ ::jmsd::cutf::AssertionResult CmpHelperSTREQ(const char* s1_expressio
 // Helper function for *_STRNE on wide strings.
 //
 // INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
-GTEST_API_ ::jmsd::cutf::AssertionResult CmpHelperSTRNE(const char* s1_expression,
+JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult CmpHelperSTRNE(const char* s1_expression,
 										  const char* s2_expression,
 										  const wchar_t* s1,
 										  const wchar_t* s2);
@@ -323,30 +323,30 @@ GTEST_API_ ::jmsd::cutf::AssertionResult CmpHelperSTRNE(const char* s1_expressio
 //
 // The {needle,haystack}_expr arguments are the stringified
 // expressions that generated the two real arguments.
-GTEST_API_ ::jmsd::cutf::AssertionResult IsSubstring(
+JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult IsSubstring(
 	const char* needle_expr, const char* haystack_expr,
 	const char* needle, const char* haystack);
-GTEST_API_ ::jmsd::cutf::AssertionResult IsSubstring(
+JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult IsSubstring(
 	const char* needle_expr, const char* haystack_expr,
 	const wchar_t* needle, const wchar_t* haystack);
-GTEST_API_ ::jmsd::cutf::AssertionResult IsNotSubstring(
+JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult IsNotSubstring(
 	const char* needle_expr, const char* haystack_expr,
 	const char* needle, const char* haystack);
-GTEST_API_ ::jmsd::cutf::AssertionResult IsNotSubstring(
+JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult IsNotSubstring(
 	const char* needle_expr, const char* haystack_expr,
 	const wchar_t* needle, const wchar_t* haystack);
-GTEST_API_ ::jmsd::cutf::AssertionResult IsSubstring(
+JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult IsSubstring(
 	const char* needle_expr, const char* haystack_expr,
 	const ::std::string& needle, const ::std::string& haystack);
-GTEST_API_ ::jmsd::cutf::AssertionResult IsNotSubstring(
+JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult IsNotSubstring(
 	const char* needle_expr, const char* haystack_expr,
 	const ::std::string& needle, const ::std::string& haystack);
 
 #if GTEST_HAS_STD_WSTRING
-GTEST_API_ ::jmsd::cutf::AssertionResult IsSubstring(
+JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult IsSubstring(
 	const char* needle_expr, const char* haystack_expr,
 	const ::std::wstring& needle, const ::std::wstring& haystack);
-GTEST_API_ ::jmsd::cutf::AssertionResult IsNotSubstring(
+JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult IsNotSubstring(
 	const char* needle_expr, const char* haystack_expr,
 	const ::std::wstring& needle, const ::std::wstring& haystack);
 #endif  // GTEST_HAS_STD_WSTRING
@@ -389,7 +389,7 @@ template <typename RawType>
 // Helper function for implementing ASSERT_NEAR.
 //
 // INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
-GTEST_API_ ::jmsd::cutf::AssertionResult DoubleNearPredFormat(const char* expr1,
+JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult DoubleNearPredFormat(const char* expr1,
 												const char* expr2,
 												const char* abs_error_expr,
 												double val1,
@@ -398,7 +398,7 @@ GTEST_API_ ::jmsd::cutf::AssertionResult DoubleNearPredFormat(const char* expr1,
 
 // INTERNAL IMPLEMENTATION - DO NOT USE IN USER CODE.
 // A class that enables one to stream messages to assertion macros
-class GTEST_API_ AssertHelper {
+class JMSD_DEPRECATED_GTEST_API_ AssertHelper {
  public:
   // Constructor.
   AssertHelper(TestPartResult::Type type,
@@ -785,9 +785,9 @@ class TestWithParam : public ::jmsd::cutf::Test, public WithParamInterface<T> {
 
 // Asserts that val1 is less than, or almost equal to, val2.  Fails
 // otherwise.  In particular, it fails if either val1 or val2 is NaN.
-GTEST_API_ ::jmsd::cutf::AssertionResult FloatLE(const char* expr1, const char* expr2,
+JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult FloatLE(const char* expr1, const char* expr2,
 								   float val1, float val2);
-GTEST_API_ ::jmsd::cutf::AssertionResult DoubleLE(const char* expr1, const char* expr2,
+JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult DoubleLE(const char* expr1, const char* expr2,
 									double val1, double val2);
 
 
@@ -841,7 +841,7 @@ GTEST_API_ ::jmsd::cutf::AssertionResult DoubleLE(const char* expr1, const char*
 //// Example:
 ////   testing::ScopedTrace trace("file.cc", 123, "message");
 ////
-//class GTEST_API_ ScopedTrace {
+//class JMSD_DEPRECATED_GTEST_API_ ScopedTrace {
 // public:
 //  // The c'tor pushes the given source file location and message onto
 //  // a trace stack maintained by Google Test.
@@ -999,7 +999,7 @@ constexpr bool StaticAssertTypeEq() noexcept {
 
 // Returns a path to temporary directory.
 // Tries to determine an appropriate directory for the platform.
-GTEST_API_ std::string TempDir();
+JMSD_DEPRECATED_GTEST_API_ std::string TempDir();
 
 #ifdef _MSC_VER
 #  pragma warning(pop)

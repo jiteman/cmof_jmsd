@@ -81,7 +81,7 @@ namespace internal {
 // fixture class for the same test suite. This may happen when
 // TEST_P macro is used to define two tests with the same name
 // but in different namespaces.
-GTEST_API_ void ReportInvalidTestSuiteType(const char* test_suite_name,
+JMSD_DEPRECATED_GTEST_API_ void ReportInvalidTestSuiteType(const char* test_suite_name,
                                            CodeLocation code_location);
 
 template <typename> class ParamGeneratorInterface;
@@ -474,7 +474,7 @@ class ParameterizedTestSuiteInfoBase {
   GTEST_DISALLOW_COPY_AND_ASSIGN_(ParameterizedTestSuiteInfoBase);
 };
 
-GTEST_API_ void InsertSyntheticTestCase(const std::string& name,
+JMSD_DEPRECATED_GTEST_API_ void InsertSyntheticTestCase(const std::string& name,
                                         CodeLocation location);
 
 // INTERNAL IMPLEMENTATION - DO NOT USE IN USER CODE.
