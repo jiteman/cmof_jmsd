@@ -7,6 +7,7 @@
 
 #include "Open_file_for_writing.h"
 #include "Format_time.h"
+#include "String_stream_to_string.h"
 
 #include "gtest-string.h"
 
@@ -29,7 +30,7 @@ void JsonUnitTestResultPrinter::OnTestIterationEnd(const ::jmsd::cutf::UnitTest&
   FILE* jsonout = OpenFileForWriting(output_file_);
   std::stringstream stream;
   PrintJsonUnitTest(&stream, unit_test);
-  fprintf(jsonout, "%s", ::testing::internal::StringStreamToString(&stream).c_str());
+  fprintf(jsonout, "%s", ::jmsd::cutf::internal::StringStreamToString(&stream).c_str());
   fclose(jsonout);
 }
 

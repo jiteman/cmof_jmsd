@@ -48,6 +48,7 @@
 #include "Test.h"
 #include "internal/Exception_handling.h"
 #include "internal/Make_and_register_test_info.h"
+#include "internal/String_stream_to_string.h"
 
 #include "Unit_test.hxx"
 #include "internal/Unit_test_impl.hxx"
@@ -345,8 +346,8 @@ template <typename RawType>
 
   return EqFailure(lhs_expression,
 				   rhs_expression,
-				   StringStreamToString(&lhs_ss),
-				   StringStreamToString(&rhs_ss),
+				   ::jmsd::cutf::internal::StringStreamToString(&lhs_ss),
+				   ::jmsd::cutf::internal::StringStreamToString(&rhs_ss),
 				   false);
 }
 
@@ -746,14 +747,6 @@ class TestWithParam : public ::jmsd::cutf::Test, public WithParamInterface<T> {
 // can be used in {ASSERT|EXPECT}_PRED_FORMAT2*(), e.g.
 //
 //   EXPECT_PRED_FORMAT2(testing::DoubleLE, Foo(), 5.0);
-
-// Asserts that val1 is less than, or almost equal to, val2.  Fails
-// otherwise.  In particular, it fails if either val1 or val2 is NaN.
-JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult FloatLE(const char* expr1, const char* expr2,
-								   float val1, float val2);
-JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult DoubleLE(const char* expr1, const char* expr2,
-									double val1, double val2);
-
 
 #if GTEST_OS_WINDOWS
 

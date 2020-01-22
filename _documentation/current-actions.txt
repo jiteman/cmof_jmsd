@@ -6,5 +6,9 @@ Separating cutf (ex google test)
 		+ Separate UnitTestImpl class
 		+ Remove forward declarations from gtest.h
 		+ Substring_utitlities
-		* StaticAssertTypeEq
-		
+		+ StaticAssertTypeEq
+		* Separate of FloatingPointLE and FloatLE and DoubleLE
+		- change pointer to constant reference in parameter StringStreamToString
+		- test removal of FloatingPointLE and FloatLE and DoubleLE
+		- Separate FloatingPoint
+				

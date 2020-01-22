@@ -162,9 +162,6 @@ class JMSD_DEPRECATED_GTEST_API_ String {
   String();  // Not meant to be instantiated.
 };  // class String
 
-// Gets the content of the stringstream's buffer as an std::string.  Each '\0'
-// character in the buffer is replaced with "\\0".
-JMSD_DEPRECATED_GTEST_API_ std::string StringStreamToString(::std::stringstream* stream);
 
 }  // namespace internal
 }  // namespace testing

@@ -13,6 +13,7 @@
 #include "internal/Unit_test_impl.h"
 #include "internal/Print_color_encoded.h"
 #include "internal/Is_initialized.h"
+#include "internal/String_stream_to_string.h"
 #include "internal/gtest-flags-internal.h"
 
 #include "Assertion_result.hin"
@@ -529,7 +530,7 @@ Message& Message::operator <<(const ::std::wstring& wstr) {
 // Gets the text streamed to this object so far as an std::string.
 // Each '\0' character in the buffer is replaced with "\\0".
 std::string Message::GetString() const {
-  return internal::StringStreamToString(ss_.get());
+  return ::jmsd::cutf::internal::StringStreamToString(ss_.get());
 }
 
 
@@ -894,59 +895,6 @@ std::string GetBoolAssertionFailureMessage(
 }
 
 
-// Helper template for implementing FloatLE() and DoubleLE().
-template <typename RawType>
-::jmsd::cutf::AssertionResult FloatingPointLE(const char* expr1,
-								const char* expr2,
-								RawType val1,
-								RawType val2) {
-  // Returns success if val1 is less than val2,
-  if (val1 < val2) {
-	return ::jmsd::cutf::AssertionResult::AssertionSuccess();
-  }
-
-  // or if val1 is almost equal to val2.
-  const FloatingPoint<RawType> lhs(val1), rhs(val2);
-  if (lhs.AlmostEquals(rhs)) {
-	return ::jmsd::cutf::AssertionResult::AssertionSuccess();
-  }
-
-  // Note that the above two checks will both fail if either val1 or
-  // val2 is NaN, as the IEEE floating-point standard requires that
-  // any predicate involving a NaN must return false.
-
-  ::std::stringstream val1_ss;
-  val1_ss << std::setprecision(std::numeric_limits<RawType>::digits10 + 2)
-		  << val1;
-
-  ::std::stringstream val2_ss;
-  val2_ss << std::setprecision(std::numeric_limits<RawType>::digits10 + 2)
-		  << val2;
-
-  return ::jmsd::cutf::AssertionResult::AssertionFailure()
-	  << "Expected: (" << expr1 << ") <= (" << expr2 << ")\n"
-	  << "  Actual: " << StringStreamToString(&val1_ss) << " vs "
-	  << StringStreamToString(&val2_ss);
-}
-
-}  // namespace internal
-
-// Asserts that val1 is less than, or almost equal to, val2.  Fails
-// otherwise.  In particular, it fails if either val1 or val2 is NaN.
-::jmsd::cutf::AssertionResult FloatLE(const char* expr1, const char* expr2,
-						float val1, float val2) {
-  return internal::FloatingPointLE<float>(expr1, expr2, val1, val2);
-}
-
-// Asserts that val1 is less than, or almost equal to, val2.  Fails
-// otherwise.  In particular, it fails if either val1 or val2 is NaN.
-::jmsd::cutf::AssertionResult DoubleLE(const char* expr1, const char* expr2,
-						 double val1, double val2) {
-  return internal::FloatingPointLE<double>(expr1, expr2, val1, val2);
-}
-
-namespace internal {
-
 // The helper function for {ASSERT|EXPECT}_EQ with int or enum
 // arguments.
 ::jmsd::cutf::AssertionResult CmpHelperEQ(const char* lhs_expression,
@@ -1302,7 +1250,7 @@ std::string WideStringToUtf8(const wchar_t* str, int num_chars) {
 
 	stream << CodePointToUtf8(unicode_code_point);
   }
-  return StringStreamToString(&stream);
+  return ::jmsd::cutf::internal::StringStreamToString(&stream);
 }
 
 // Converts a wide C string to an std::string using the UTF-8 encoding.
@@ -1442,26 +1390,6 @@ std::string String::FormatByte(unsigned char value) {
   return ss.str();
 }
 
-// Converts the buffer in a stringstream to an std::string, converting NUL
-// bytes to "\\0" along the way.
-std::string StringStreamToString(::std::stringstream* ss) {
-  const ::std::string& str = ss->str();
-  const char* const start = str.c_str();
-  const char* const end = start + str.length();
-
-  std::string result;
-  result.reserve(static_cast<size_t>(2 * (end - start)));
-  for (const char* ch = start; ch != end; ++ch) {
-	if (*ch == '\0') {
-	  result += "\\0";  // Replaces NUL with "\\0";
-	} else {
-	  result += *ch;
-	}
-  }
-
-  return result;
-}
-
 // Appends the user-supplied message to the Google-Test-generated message.
 std::string AppendUserMessage(const std::string& gtest_msg,
 							  const Message& user_msg) {
@@ -1473,11 +1401,6 @@ std::string AppendUserMessage(const std::string& gtest_msg,
 
   return gtest_msg + "\n" + user_msg_string;
 }
-
-}  // namespace internal
-
-
-namespace internal {
 
 void ReportFailureInUnknownLocation(TestPartResult::Type result_type,
 									const std::string& message) {

@@ -1,0 +1,55 @@
+#pragma once
+
+#include "Floating_point_less_or_near_equal.hpp"
+
+
+#include "Assertion_result.h"
+
+#include "internal/String_stream_to_string.h"
+
+#include "internal/gtest-internal.h"
+
+
+#include <iomanip>
+#include <limits>
+
+
+namespace jmsd {
+namespace cutf {
+
+
+// Helper template for implementing FloatLE() and DoubleLE().
+template< typename A_floating_point_type >
+AssertionResult Floating_point_less_or_near_equal< A_floating_point_type >::compare( char const *const expr1, char const *const expr2, A_floating_point_type const val1, A_floating_point_type const val2 ) {
+	// Returns success if val1 is less than val2,
+	if ( val1 < val2 ) {
+		return AssertionResult::AssertionSuccess();
+	}
+
+	// or if val1 is almost equal to val2.
+	::testing::internal::FloatingPoint< A_floating_point_type > const lhs( val1 );
+	::testing::internal::FloatingPoint< A_floating_point_type > const rhs( val2 );
+
+	if ( lhs.AlmostEquals( rhs ) ) {
+		return AssertionResult::AssertionSuccess();
+	}
+
+	// Note that the above two checks will both fail if either val1 or
+	// val2 is NaN, as the IEEE floating-point standard requires that
+	// any predicate involving a NaN must return false.
+
+	::std::stringstream val1_ss;
+	val1_ss << ::std::setprecision( ::std::numeric_limits< A_floating_point_type >::digits10 + 2 ) << val1;
+
+	::std::stringstream val2_ss;
+	val2_ss << ::std::setprecision( ::std::numeric_limits< A_floating_point_type >::digits10 + 2 ) << val2;
+
+	return
+		AssertionResult::AssertionFailure() <<
+		"Expected: (" << expr1 << ") <= (" << expr2 << ")\n" <<
+		"  Actual: " << ::jmsd::cutf::internal::StringStreamToString( &val1_ss ) << " vs " << ::jmsd::cutf::internal::StringStreamToString( &val2_ss );
+}
+
+
+} // namespace cutf
+} // namespace jmsd

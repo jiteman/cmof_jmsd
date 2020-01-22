@@ -15,6 +15,7 @@
 #include "Int32_from_environment_or_die.h"
 #include "Write_to_shard_status_file_if_needed.h"
 #include "Should_run_test_on_shard.h"
+#include "String_stream_to_string.h"
 
 #include "gtest-flags-internal.h"
 #include "gtest-constants-internal.h"
@@ -803,7 +804,7 @@ void UnitTestImpl::ListTestsMatchingFilter() {
 		  UnitTestOptions::GetAbsolutePathToOutputFile().c_str())
 		  .PrintJsonTestList(&stream, test_suites_);
 	}
-	fprintf(fileout, "%s", ::testing::internal::StringStreamToString(&stream).c_str());
+	fprintf(fileout, "%s", ::jmsd::cutf::internal::StringStreamToString(&stream).c_str());
 	fclose(fileout);
   }
 }

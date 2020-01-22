@@ -55,6 +55,7 @@ TEST(CommandLineFlagsTest, CanBeAccessedInCodeOnceGTestHIsIncluded) {
 #include "gtest/internal/Should_run_test_on_shard.h"
 #include "gtest/internal/Format_time.h"
 #include "gtest/internal/Colored_print.h"
+#include "gtest/Floating_point_comparator.h"
 #include "gtest/internal/gtest-flags-internal.h"
 
 #include "gtest/Assertion_result.hin"
@@ -184,10 +185,9 @@ class UnitTestRecordPropertyTestHelper : public ::jmsd::cutf::Test {
 }  // namespace testing
 
 using ::jmsd::cutf::AssertionResult;
-using ::testing::DoubleLE;
 using ::jmsd::cutf::EmptyTestEventListener;
 using ::jmsd::cutf::Environment;
-using ::testing::FloatLE;
+
 using ::testing::GTEST_FLAG(also_run_disabled_tests);
 using ::testing::GTEST_FLAG(break_on_failure);
 using ::testing::GTEST_FLAG(catch_exceptions);
@@ -2914,32 +2914,32 @@ TEST_F(FloatTest, ASSERT_NEAR) {
 
 // Tests the cases where FloatLE() should succeed.
 TEST_F(FloatTest, FloatLESucceeds) {
-  EXPECT_PRED_FORMAT2(FloatLE, 1.0f, 2.0f);  // When val1 < val2,
-  ASSERT_PRED_FORMAT2(FloatLE, 1.0f, 1.0f);  // val1 == val2,
+  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Floating_point_comparator::float_less_or_near_equal, 1.0f, 2.0f);  // When val1 < val2,
+  ASSERT_PRED_FORMAT2( ::jmsd::cutf::Floating_point_comparator::float_less_or_near_equal, 1.0f, 1.0f);  // val1 == val2,
 
   // or when val1 is greater than, but almost equals to, val2.
-  EXPECT_PRED_FORMAT2(FloatLE, values_.close_to_positive_zero, 0.0f);
+  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Floating_point_comparator::float_less_or_near_equal, values_.close_to_positive_zero, 0.0f);
 }
 
 // Tests the cases where FloatLE() should fail.
 TEST_F(FloatTest, FloatLEFails) {
   // When val1 is greater than val2 by a large margin,
-  EXPECT_NONFATAL_FAILURE(EXPECT_PRED_FORMAT2(FloatLE, 2.0f, 1.0f),
+  EXPECT_NONFATAL_FAILURE(EXPECT_PRED_FORMAT2( ::jmsd::cutf::Floating_point_comparator::float_less_or_near_equal, 2.0f, 1.0f),
 						  "(2.0f) <= (1.0f)");
 
   // or by a small yet non-negligible margin,
   EXPECT_NONFATAL_FAILURE({  // NOLINT
-	EXPECT_PRED_FORMAT2(FloatLE, values_.further_from_one, 1.0f);
+	EXPECT_PRED_FORMAT2( ::jmsd::cutf::Floating_point_comparator::float_less_or_near_equal, values_.further_from_one, 1.0f);
   }, "(values_.further_from_one) <= (1.0f)");
 
   EXPECT_NONFATAL_FAILURE({  // NOLINT
-	EXPECT_PRED_FORMAT2(FloatLE, values_.nan1, values_.infinity);
+	EXPECT_PRED_FORMAT2( ::jmsd::cutf::Floating_point_comparator::float_less_or_near_equal, values_.nan1, values_.infinity);
   }, "(values_.nan1) <= (values_.infinity)");
   EXPECT_NONFATAL_FAILURE({  // NOLINT
-	EXPECT_PRED_FORMAT2(FloatLE, -values_.infinity, values_.nan1);
+	EXPECT_PRED_FORMAT2( ::jmsd::cutf::Floating_point_comparator::float_less_or_near_equal, -values_.infinity, values_.nan1);
   }, "(-values_.infinity) <= (values_.nan1)");
   EXPECT_FATAL_FAILURE({  // NOLINT
-	ASSERT_PRED_FORMAT2(FloatLE, values_.nan1, values_.nan1);
+	ASSERT_PRED_FORMAT2( ::jmsd::cutf::Floating_point_comparator::float_less_or_near_equal, values_.nan1, values_.nan1);
   }, "(values_.nan1) <= (values_.nan1)");
 }
 
@@ -3063,32 +3063,32 @@ TEST_F(DoubleTest, ASSERT_NEAR) {
 
 // Tests the cases where DoubleLE() should succeed.
 TEST_F(DoubleTest, DoubleLESucceeds) {
-  EXPECT_PRED_FORMAT2(DoubleLE, 1.0, 2.0);  // When val1 < val2,
-  ASSERT_PRED_FORMAT2(DoubleLE, 1.0, 1.0);  // val1 == val2,
+  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Floating_point_comparator::double_less_or_near_equal, 1.0, 2.0);  // When val1 < val2,
+  ASSERT_PRED_FORMAT2( ::jmsd::cutf::Floating_point_comparator::double_less_or_near_equal, 1.0, 1.0);  // val1 == val2,
 
   // or when val1 is greater than, but almost equals to, val2.
-  EXPECT_PRED_FORMAT2(DoubleLE, values_.close_to_positive_zero, 0.0);
+  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Floating_point_comparator::double_less_or_near_equal, values_.close_to_positive_zero, 0.0);
 }
 
 // Tests the cases where DoubleLE() should fail.
 TEST_F(DoubleTest, DoubleLEFails) {
   // When val1 is greater than val2 by a large margin,
-  EXPECT_NONFATAL_FAILURE(EXPECT_PRED_FORMAT2(DoubleLE, 2.0, 1.0),
+  EXPECT_NONFATAL_FAILURE(EXPECT_PRED_FORMAT2( ::jmsd::cutf::Floating_point_comparator::double_less_or_near_equal, 2.0, 1.0),
 						  "(2.0) <= (1.0)");
 
   // or by a small yet non-negligible margin,
   EXPECT_NONFATAL_FAILURE({  // NOLINT
-	EXPECT_PRED_FORMAT2(DoubleLE, values_.further_from_one, 1.0);
+	EXPECT_PRED_FORMAT2( ::jmsd::cutf::Floating_point_comparator::double_less_or_near_equal, values_.further_from_one, 1.0);
   }, "(values_.further_from_one) <= (1.0)");
 
   EXPECT_NONFATAL_FAILURE({  // NOLINT
-	EXPECT_PRED_FORMAT2(DoubleLE, values_.nan1, values_.infinity);
+	EXPECT_PRED_FORMAT2( ::jmsd::cutf::Floating_point_comparator::double_less_or_near_equal, values_.nan1, values_.infinity);
   }, "(values_.nan1) <= (values_.infinity)");
   EXPECT_NONFATAL_FAILURE({  // NOLINT
-	EXPECT_PRED_FORMAT2(DoubleLE, -values_.infinity, values_.nan1);
+	EXPECT_PRED_FORMAT2( ::jmsd::cutf::Floating_point_comparator::double_less_or_near_equal, -values_.infinity, values_.nan1);
   }, " (-values_.infinity) <= (values_.nan1)");
   EXPECT_FATAL_FAILURE({  // NOLINT
-	ASSERT_PRED_FORMAT2(DoubleLE, values_.nan1, values_.nan1);
+	ASSERT_PRED_FORMAT2( ::jmsd::cutf::Floating_point_comparator::double_less_or_near_equal, values_.nan1, values_.nan1);
   }, "(values_.nan1) <= (values_.nan1)");
 }
 

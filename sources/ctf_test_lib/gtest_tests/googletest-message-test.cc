@@ -6,6 +6,9 @@
 
 #include "gtest/Substring_utilities.h"
 
+#include "gtest/internal/String_stream_to_string.h"
+
+
 namespace {
 
 using ::testing::Message;
@@ -119,7 +122,7 @@ TEST(MessageTest, StreamsToOStream) {
   Message msg("Hello");
   ::std::stringstream ss;
   ss << msg;
-  EXPECT_EQ("Hello", testing::internal::StringStreamToString(&ss));
+  EXPECT_EQ("Hello", ::jmsd::cutf::internal::StringStreamToString(&ss));
 }
 
 // Tests that a Message object doesn't take up too much stack space.
