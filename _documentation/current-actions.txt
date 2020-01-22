@@ -1,7 +1,14 @@
 ===============================================================================================
 -----------------------------------------------------------------------------------------------
+Turn cmof library and its tests on.
+Fix cmof build issues.
+Fix cmof test issues.
+Fix cmof test failure issues.
+Create separate test library for cmof to be able to turn it off and on easy way.
+Create temporary separate test launcher for cmof to be able to turn it off and on easiest way.
+
 Separating cutf (ex google test)
-	Separating gtest.h and gtest.cpp:
+	Separating gtest.h, gtest.cpp, gtest-internal-inl.h, internal/gtest-internal.h, etc.:
 		+ Separate UnitTest class
 		+ Separate UnitTestImpl class
 		+ Remove forward declarations from gtest.h
@@ -11,6 +18,7 @@ Separating cutf (ex google test)
 		+ change pointer to constant reference in parameter StringStreamToString
 		+ test removal of FloatingPointLE and FloatLE and DoubleLE
 		+ Removing of FloatingPointLE and FloatLE and DoubleLE
-		+ Separate CmpHelperFloatingPointEQ
-		- Separate EqFailure
-		- Separate FloatingPoint
+		+ Separating of CmpHelperFloatingPointEQ
+		- Separating of EqFailure
+		- Separating of FloatingPoint
+		

@@ -895,8 +895,7 @@ std::string GetBoolAssertionFailureMessage(
 }
 
 
-// The helper function for {ASSERT|EXPECT}_EQ with int or enum
-// arguments.
+// The helper function for {ASSERT|EXPECT}_EQ with int or enum arguments.
 ::jmsd::cutf::AssertionResult CmpHelperEQ(const char* lhs_expression,
 							const char* rhs_expression,
 							BiggestInt lhs,
