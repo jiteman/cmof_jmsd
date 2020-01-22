@@ -62,6 +62,7 @@ TEST(CommandLineFlagsTest, CanBeAccessedInCodeOnceGTestHIsIncluded) {
 #include "gtest/Static_assert_type_sameness.hin"
 
 #include "gtest/internal/Stl_utilities.hin"
+#include "gtest/internal/Floating_point_comparator.hin"
 
 
 namespace testing {

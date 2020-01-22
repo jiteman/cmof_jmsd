@@ -1,0 +1,52 @@
+#pragma once
+
+#include "Floating_point_comparator.hpp"
+
+
+#include "gtest/Assertion_result.h"
+
+#include "gtest/internal/String_stream_to_string.h"
+
+#include "gtest/internal/gtest-internal.h"
+
+
+#include <sstream>
+#include <iomanip>
+#include <limits>
+
+
+namespace jmsd {
+namespace cutf {
+namespace internal {
+
+
+// Comparing floating-points.
+// RawType: the raw floating-point type (either float or double)
+template< typename A_type >
+// static
+AssertionResult Floating_point_comparator< A_type >::are_equals_or_almost_equals(
+	char const *const lhs_expression,
+	char const *const rhs_expression,
+	A_type lhs_value,
+	A_type rhs_value )
+{
+	::testing::internal::FloatingPoint< A_type > const lhs( lhs_value );
+	::testing::internal::FloatingPoint< A_type > rhs( rhs_value );
+
+	if ( lhs.AlmostEquals( rhs ) ) {
+		return AssertionResult::AssertionSuccess();
+	}
+
+	::std::stringstream lhs_ss;
+	lhs_ss << ::std::setprecision( ::std::numeric_limits< A_type >::digits10 + 2 ) << lhs_value;
+
+	::std::stringstream rhs_ss;
+	rhs_ss << ::std::setprecision( ::std::numeric_limits< A_type >::digits10 + 2 ) << rhs_value;
+
+	return EqFailure( lhs_expression, rhs_expression, StringStreamToString( lhs_ss ), StringStreamToString( rhs_ss ), false );
+}
+
+
+} // namespace internal
+} // namespace cutf
+} // namespace jmsd

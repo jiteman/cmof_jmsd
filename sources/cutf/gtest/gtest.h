@@ -318,39 +318,6 @@ JMSD_DEPRECATED_GTEST_API_ ::jmsd::cutf::AssertionResult CmpHelperSTRNE(const ch
 
 namespace internal {
 
-// Helper template function for comparing floating-points.
-//
-// Template parameter:
-//
-//   RawType: the raw floating-point type (either float or double)
-//
-// INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
-template <typename RawType>
-::jmsd::cutf::AssertionResult CmpHelperFloatingPointEQ(const char* lhs_expression,
-										 const char* rhs_expression,
-										 RawType lhs_value,
-										 RawType rhs_value) {
-  const FloatingPoint<RawType> lhs(lhs_value), rhs(rhs_value);
-
-  if (lhs.AlmostEquals(rhs)) {
-	return ::jmsd::cutf::AssertionResult::AssertionSuccess();
-  }
-
-  ::std::stringstream lhs_ss;
-  lhs_ss << std::setprecision(std::numeric_limits<RawType>::digits10 + 2)
-		 << lhs_value;
-
-  ::std::stringstream rhs_ss;
-  rhs_ss << std::setprecision(std::numeric_limits<RawType>::digits10 + 2)
-		 << rhs_value;
-
-  return EqFailure(lhs_expression,
-				   rhs_expression,
-				   ::jmsd::cutf::internal::StringStreamToString( lhs_ss ),
-				   ::jmsd::cutf::internal::StringStreamToString( rhs_ss ),
-				   false);
-}
-
 // Helper function for implementing ASSERT_NEAR.
 //
 // INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
@@ -720,20 +687,16 @@ class TestWithParam : public ::jmsd::cutf::Test, public WithParamInterface<T> {
 // interested in the implementation details.
 
 #define EXPECT_FLOAT_EQ(val1, val2)\
-  EXPECT_PRED_FORMAT2(::testing::internal::CmpHelperFloatingPointEQ<float>, \
-					  val1, val2)
+	EXPECT_PRED_FORMAT2( ::jmsd::cutf::internal::Floating_point_comparator< float >::are_equals_or_almost_equals, val1, val2 )
 
 #define EXPECT_DOUBLE_EQ(val1, val2)\
-  EXPECT_PRED_FORMAT2(::testing::internal::CmpHelperFloatingPointEQ<double>, \
-					  val1, val2)
+	EXPECT_PRED_FORMAT2( ::jmsd::cutf::internal::Floating_point_comparator< double >::are_equals_or_almost_equals, val1, val2 )
 
 #define ASSERT_FLOAT_EQ(val1, val2)\
-  ASSERT_PRED_FORMAT2(::testing::internal::CmpHelperFloatingPointEQ<float>, \
-					  val1, val2)
+	ASSERT_PRED_FORMAT2( ::jmsd::cutf::internal::Floating_point_comparator< float >::are_equals_or_almost_equals, val1, val2 )
 
 #define ASSERT_DOUBLE_EQ(val1, val2)\
-  ASSERT_PRED_FORMAT2(::testing::internal::CmpHelperFloatingPointEQ<double>, \
-					  val1, val2)
+	ASSERT_PRED_FORMAT2( ::jmsd::cutf::internal::Floating_point_comparator< double >::are_equals_or_almost_equals, val1, val2 )
 
 #define EXPECT_NEAR(val1, val2, abs_error)\
   EXPECT_PRED_FORMAT3(::testing::internal::DoubleNearPredFormat, \

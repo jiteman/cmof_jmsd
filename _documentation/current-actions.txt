@@ -11,5 +11,6 @@ Separating cutf (ex google test)
 		+ change pointer to constant reference in parameter StringStreamToString
 		+ test removal of FloatingPointLE and FloatLE and DoubleLE
 		+ Removing of FloatingPointLE and FloatLE and DoubleLE
-		- Separate CmpHelperFloatingPointEQ
+		+ Separate CmpHelperFloatingPointEQ
+		- Separate EqFailure
 		- Separate FloatingPoint
