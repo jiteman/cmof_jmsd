@@ -5,9 +5,11 @@
 
 #include "gtest/Assertion_result.h"
 
-#include "gtest/internal/String_stream_to_string.h"
+#include "String_stream_to_string.h"
 
-#include "gtest/internal/gtest-internal.h"
+#include "Assertion_message_constructor.h"
+
+#include "gtest-internal.h"
 
 
 #include <sstream>
@@ -43,7 +45,7 @@ AssertionResult Floating_point_comparator< A_type >::are_equals_or_almost_equals
 	::std::stringstream rhs_ss;
 	rhs_ss << ::std::setprecision( ::std::numeric_limits< A_type >::digits10 + 2 ) << rhs_value;
 
-	return EqFailure( lhs_expression, rhs_expression, StringStreamToString( lhs_ss ), StringStreamToString( rhs_ss ), false );
+	return Assertion_message_constructor::construct_equality_assertion_message( lhs_expression, rhs_expression, StringStreamToString( lhs_ss ), StringStreamToString( rhs_ss ), false );
 }
 
 

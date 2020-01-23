@@ -93,28 +93,6 @@ class IgnoredValue {
 JMSD_DEPRECATED_GTEST_API_ std::string AppendUserMessage(
 	const std::string& gtest_msg, const Message& user_msg);
 
-namespace edit_distance {
-// Returns the optimal edits to go from 'left' to 'right'.
-// All edits cost the same, with replace having lower priority than
-// add/remove.
-// Simple implementation of the Wagner-Fischer algorithm.
-// See http://en.wikipedia.org/wiki/Wagner-Fischer_algorithm
-enum EditType { kMatch, kAdd, kRemove, kReplace };
-JMSD_DEPRECATED_GTEST_API_ std::vector<EditType> CalculateOptimalEdits(
-	const std::vector<size_t>& left, const std::vector<size_t>& right);
-
-// Same as above, but the input is represented as strings.
-JMSD_DEPRECATED_GTEST_API_ std::vector<EditType> CalculateOptimalEdits(
-	const std::vector<std::string>& left,
-	const std::vector<std::string>& right);
-
-// Create a diff of the input strings in Unified diff format.
-JMSD_DEPRECATED_GTEST_API_ std::string CreateUnifiedDiff(const std::vector<std::string>& left,
-										 const std::vector<std::string>& right,
-										 size_t context = 2);
-
-}  // namespace edit_distance
-
 // Calculate the diff between 'left' and 'right' and return it in unified diff
 // format.
 // If not null, stores in 'total_line_count' the total number of lines found

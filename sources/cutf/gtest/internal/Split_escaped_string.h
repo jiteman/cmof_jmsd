@@ -1,11 +1,10 @@
 #pragma once
 
-#include "Assertion_message_constructor.hxx"
+#include "Split_escaped_string.hxx"
 
-
-#include "gtest/Assertion_result.hxx"
 
 #include <string>
+#include <vector>
 
 
 namespace jmsd {
@@ -13,36 +12,31 @@ namespace cutf {
 namespace internal {
 
 
-class Assertion_message_constructor {
+class Split_escaped_string {
 
 public:
-	static AssertionResult construct_equality_assertion_message(
-		char const *lhs_expression,
-		char const *rhs_expression,
-		::std::string const &lhs_value,
-		::std::string const &rhs_value,
-		bool ignoring_case );
+	static ::std::vector< ::std::string > SplitEscapedString( ::std::string const &str );
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 public:
 
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 private:
-	virtual ~Assertion_message_constructor() noexcept = delete;
+	virtual ~Split_escaped_string() noexcept = delete;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 private:
-	Assertion_message_constructor() noexcept = delete;
+	Split_escaped_string() noexcept = delete;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 private:
-	Assertion_message_constructor( Assertion_message_constructor const &another ) noexcept = delete;
-	Assertion_message_constructor &operator =( Assertion_message_constructor const &another ) noexcept = delete;
+	Split_escaped_string( Split_escaped_string const &another ) noexcept = delete;
+	Split_escaped_string &operator =( Split_escaped_string const &another ) noexcept = delete;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 private:
-	Assertion_message_constructor( Assertion_message_constructor &&another ) noexcept = delete;
-	Assertion_message_constructor &operator =( Assertion_message_constructor &&another ) noexcept = delete;
+	Split_escaped_string( Split_escaped_string &&another ) noexcept = delete;
+	Split_escaped_string &operator =( Split_escaped_string &&another ) noexcept = delete;
 
 // # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 private:

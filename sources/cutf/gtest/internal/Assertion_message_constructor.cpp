@@ -1,6 +1,13 @@
 #include "Assertion_message_constructor.h"
 
 
+#include "gtest/Assertion_result.h"
+#include "gtest/gtest-message.h"
+
+#include "Split_escaped_string.h"
+#include "Distance_editor.h"
+
+
 namespace jmsd {
 namespace cutf {
 namespace internal {
@@ -21,11 +28,41 @@ namespace internal {
 // The ignoring_case parameter is true if and only if the assertion is a
 // *_STRCASEEQ*.  When it's true, the string " (ignoring case)" will
 // be inserted into the message.
-::jmsd::cutf::AssertionResult EqFailure(const char* expected_expression,
-									 const char* actual_expression,
-									 const std::string& expected_value,
-									 const std::string& actual_value,
-									 bool ignoring_case);
+AssertionResult Assertion_message_constructor::construct_equality_assertion_message(
+	char const *const lhs_expression,
+	char const *const rhs_expression,
+	::std::string const &lhs_value,
+	::std::string const &rhs_value,
+	bool const ignoring_case )
+{
+	::testing::Message msg;
+	msg << "Expected equality of these values:" << "\n  " << lhs_expression;
+
+	if ( lhs_value != lhs_expression ) {
+		msg << "\n    Which is: " << lhs_value;
+	}
+
+	msg << "\n  " << rhs_expression;
+
+	if ( rhs_value != rhs_expression ) {
+		msg << "\n    Which is: " << rhs_value;
+	}
+
+	if ( ignoring_case ) {
+		msg << "\nIgnoring case";
+	}
+
+	if ( !lhs_value.empty() && !rhs_value.empty() ) {
+		::std::vector< ::std::string > const lhs_lines = Split_escaped_string::SplitEscapedString( lhs_value );
+		::std::vector< ::std::string > const rhs_lines = Split_escaped_string::SplitEscapedString( rhs_value );
+
+		if ( lhs_lines.size() > 1 || rhs_lines.size() > 1 ) {
+			msg << "\nWith diff:\n" << Distance_editor::CreateUnifiedDiff( lhs_lines, rhs_lines );
+		}
+	}
+
+	return AssertionResult::AssertionFailure() << msg;
+}
 
 
 } // namespace internal
