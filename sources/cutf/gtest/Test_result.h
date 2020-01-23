@@ -17,6 +17,18 @@
 #include "internal/Windows_death_test.hxx"
 
 
+namespace testing {
+namespace internal {
+
+
+class ExecDeathTest;
+
+
+} // namespace internal
+} // namespace testing
+
+
+
 namespace jmsd {
 namespace cutf {
 
@@ -78,10 +90,11 @@ class JMSD_DEPRECATED_GTEST_API_ TestResult {
   friend TestSuite;
   friend UnitTest;
   friend internal::DefaultGlobalTestPartResultReporter;
-  // friend internal::ExecDeathTest;
   friend internal::TestResultAccessor;
   friend internal::UnitTestImpl;
+
   friend internal::WindowsDeathTest;
+  friend ::testing::internal::ExecDeathTest;
   //friend class internal::FuchsiaDeathTest;
 
   // Gets the vector of TestPartResults.

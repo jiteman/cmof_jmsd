@@ -16,6 +16,10 @@
 #include "internal/String_stream_to_string.h"
 #include "internal/gtest-flags-internal.h"
 
+#if GTEST_CAN_STREAM_RESULTS_
+#include "internal/Streaming_listener.h"
+#endif // #if GTEST_CAN_STREAM_RESULTS_
+
 #include "internal/Assertion_message_constructor.h"
 
 #include "Assertion_result.hin"

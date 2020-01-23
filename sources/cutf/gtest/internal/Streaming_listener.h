@@ -5,6 +5,10 @@
 
 #include "gtest/Empty_test_event_listener.h"
 
+#include "Socket_writer.h"
+#include "Abstract_socket_writer.h"
+
+
 #include "gtest-port.h"
 
 
@@ -97,7 +101,7 @@ public:
 		   StreamableToString((test_info.result())->elapsed_time()) + "ms");
   }
 
-  void OnTestPartResult(const TestPartResult& test_part_result) override {
+  void OnTestPartResult(const ::testing::TestPartResult& test_part_result) override {
 	const char* file_name = test_part_result.file_name();
 	if (file_name == nullptr) file_name = "";
 	SendLn("event=TestPartResult&file=" + UrlEncode(file_name) +

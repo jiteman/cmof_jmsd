@@ -863,7 +863,7 @@ DeathTest::TestRole ExecDeathTest::AssumeRole() {
   const ::jmsd::cutf::internal::UnitTestImpl* const impl = ::jmsd::cutf::internal::GetUnitTestImpl();
   const InternalRunDeathTestFlag* const flag =
 	  impl->internal_run_death_test_flag();
-  const TestInfo* const info = impl->current_test_info();
+  const ::jmsd::cutf::TestInfo* const info = impl->current_test_info();
   const int death_test_index = info->result()->death_test_count();
 
   if (flag != nullptr) {
@@ -1086,7 +1086,7 @@ InternalRunDeathTestFlag* ParseInternalRunDeathTestFlag() {
 	  || !ParseNaturalNumber(fields[1], &line)
 	  || !ParseNaturalNumber(fields[2], &index)
 	  || !ParseNaturalNumber(fields[3], &write_fd)) {
-	DeathTestAbort("Bad --gtest_internal_run_death_test flag: "
+	::jmsd::cutf::internal::DeathTestAbort("Bad --gtest_internal_run_death_test flag: "
 		+ GTEST_FLAG(internal_run_death_test));
   }
 

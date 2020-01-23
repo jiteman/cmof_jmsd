@@ -2,6 +2,7 @@
 
 
 #include <cstring>
+#include <cwchar>
 
 
 namespace jmsd {
@@ -15,7 +16,7 @@ bool Is_substring::IsSubstringPred( char const *needle, char const *haystack ) {
 		return needle == haystack;
 	}
 
-	return ::strstr( haystack, needle ) != nullptr;
+	return ::std::strstr( haystack, needle ) != nullptr;
 }
 
 // static
@@ -24,7 +25,7 @@ bool Is_substring::IsSubstringPred( wchar_t const *needle, wchar_t const *haysta
 		return needle == haystack;
 	}
 
-	return ::wcsstr(haystack, needle) != nullptr;
+	return ::std::wcsstr(haystack, needle) != nullptr;
 }
 
 

@@ -1,6 +1,15 @@
 #include "Socket_writer.h"
 
 
+#if GTEST_CAN_STREAM_RESULTS_
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#endif
+
+
+
 namespace jmsd {
 namespace cutf {
 namespace internal {
