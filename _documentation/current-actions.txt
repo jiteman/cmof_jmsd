@@ -4,7 +4,7 @@
 + Fixing cmof build issues.
 	+ Separating of EqFailure	
 + Fix cmof test issues.
-+ Fix cmof test failure issues.
+* Fix cmof test failure issues.
 Move all free functions to static members of separate classes.
 Then join those classes basing on common use.
 Create separate test library for cmof to be able to turn it off and on easy way.
