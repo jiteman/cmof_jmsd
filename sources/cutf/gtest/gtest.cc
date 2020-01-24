@@ -23,6 +23,7 @@
 #include "internal/Assertion_message_constructor.h"
 
 #include "Assertion_result.hin"
+#include "internal/Streamable_to_string.hin"
 
 #include "Text_output_utilities.hxx"
 
@@ -1461,7 +1462,7 @@ static void LoadFlagsFromFile(const std::string& path) {
 template <typename CharType>
 void ParseGoogleTestFlagsOnlyImpl(int* argc, CharType** argv) {
   for (int i = 1; i < *argc; i++) {
-	const std::string arg_string = StreamableToString(argv[i]);
+	const std::string arg_string = ::jmsd::cutf::internal::StreamableToString( argv[ i ] );
 	const char* const arg = arg_string.c_str();
 
 	using internal::ParseBoolFlag;
@@ -1543,7 +1544,7 @@ void InitGoogleTestImpl(int* argc, CharType** argv) {
 
   g_argvs.clear();
   for (int i = 0; i != *argc; i++) {
-	g_argvs.push_back(StreamableToString(argv[i]));
+	g_argvs.push_back( ::jmsd::cutf::internal::StreamableToString( argv[ i ] ) );
   }
 
 #if GTEST_HAS_ABSL

@@ -2,7 +2,7 @@
 
 
 #include "gtest-string.h"
-#include "gtest/gtest-message.h" // for StreamableToString only !!!!!
+#include "Streamable_to_string.hin"
 
 #include <sstream>
 
@@ -42,7 +42,7 @@ bool Format_time::PortableLocaltime( time_t seconds, struct tm *out ) {
   if (!THIS_STATIC::PortableLocaltime(static_cast<time_t>(ms / 1000), &time_struct))
 	return "";
   // YYYY-MM-DDThh:mm:ss
-  return ::testing::internal::StreamableToString(time_struct.tm_year + 1900) + "-" +
+  return internal::StreamableToString(time_struct.tm_year + 1900) + "-" +
 	  ::testing::internal::String::FormatIntWidth2(time_struct.tm_mon + 1) + "-" +
 	  ::testing::internal::String::FormatIntWidth2(time_struct.tm_mday) + "T" +
 	  ::testing::internal::String::FormatIntWidth2(time_struct.tm_hour) + ":" +
@@ -65,7 +65,7 @@ bool Format_time::PortableLocaltime( time_t seconds, struct tm *out ) {
   if (!THIS_STATIC::PortableLocaltime(static_cast<time_t>(ms / 1000), &time_struct))
 	return "";
   // YYYY-MM-DDThh:mm:ss
-  return ::testing::internal::StreamableToString(time_struct.tm_year + 1900) + "-" +
+  return internal::StreamableToString(time_struct.tm_year + 1900) + "-" +
 	  ::testing::internal::String::FormatIntWidth2(time_struct.tm_mon + 1) + "-" +
 	  ::testing::internal::String::FormatIntWidth2(time_struct.tm_mday) + "T" +
 	  ::testing::internal::String::FormatIntWidth2(time_struct.tm_hour) + ":" +

@@ -11,6 +11,8 @@
 
 #include "gtest-string.h"
 
+#include "Streamable_to_string.hin"
+
 
 namespace jmsd {
 namespace cutf {
@@ -30,7 +32,7 @@ void JsonUnitTestResultPrinter::OnTestIterationEnd(const ::jmsd::cutf::UnitTest&
   FILE* jsonout = OpenFileForWriting(output_file_);
   std::stringstream stream;
   PrintJsonUnitTest(&stream, unit_test);
-  fprintf(jsonout, "%s", ::jmsd::cutf::internal::StringStreamToString( stream ).c_str());
+  fprintf(jsonout, "%s", StringStreamToString( stream ).c_str());
   fclose(jsonout);
 }
 
@@ -112,7 +114,7 @@ void JsonUnitTestResultPrinter::OutputJsonKey(
 	  << "Key \"" << name << "\" is not allowed for value \"" << element_name
 	  << "\".";
 
-  *stream << indent << "\"" << name << "\": " << ::testing::internal::StreamableToString(value);
+  *stream << indent << "\"" << name << "\": " << StreamableToString(value);
   if (comma)
 	*stream << ",\n";
 }

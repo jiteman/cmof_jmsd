@@ -55,6 +55,7 @@ TEST(CommandLineFlagsTest, CanBeAccessedInCodeOnceGTestHIsIncluded) {
 #include "gtest/internal/Should_run_test_on_shard.h"
 #include "gtest/internal/Format_time.h"
 #include "gtest/internal/Colored_print.h"
+#include "gtest/internal/Distance_editor.h"
 //#include "gtest/Floating_point_comparator.h"
 #include "gtest/internal/gtest-flags-internal.h"
 
@@ -224,7 +225,6 @@ using ::testing::internal::ArrayEq;
 using ::testing::internal::CodePointToUtf8;
 using ::testing::internal::CopyArray;
 
-using ::testing::internal::EqFailure;
 using ::testing::internal::FloatingPoint;
 
 using ::testing::internal::GTestFlagSaver;
@@ -250,15 +250,13 @@ using ::testing::internal::RelationToSourceReference;
 using ::jmsd::cutf::internal::ShouldShard;
 
 using ::testing::internal::SkipPrefix;
-using ::testing::internal::StreamableToString;
+
 using ::testing::internal::String;
 using ::testing::internal::TestEventListenersAccessor;
 //using testing::internal::TestResultAccessor;
 
 using ::testing::internal::WideStringToUtf8;
-using ::testing::internal::edit_distance::CalculateOptimalEdits;
-using ::testing::internal::edit_distance::CreateUnifiedDiff;
-using ::testing::internal::edit_distance::EditType;
+
 using ::testing::internal::kMaxRandomSeed;
 using ::testing::internal::kTestTypeIdInGoogleTest;
 
@@ -3457,7 +3455,7 @@ TEST_F(NoFatalFailureTest, MessageIsStreamable) {
 
 // Tests non-string assertions.
 
-std::string EditsToString(const std::vector<EditType>& edits) {
+::std::string EditsToString( ::std::vector< ::jmsd::cutf::internal::Distance_editor::EditType > const &edits ) {
   std::string out;
   for (size_t i = 0; i < edits.size(); ++i) {
 	static const char kEdits[] = " +-/";
@@ -3517,15 +3515,15 @@ TEST(EditDistance, TestSuites) {
 	  {}};
   for (const Case* c = kCases; c->left; ++c) {
 	EXPECT_TRUE(c->expected_edits ==
-				EditsToString(CalculateOptimalEdits(CharsToIndices(c->left),
+				EditsToString( ::jmsd::cutf::internal::Distance_editor::CalculateOptimalEdits(CharsToIndices(c->left),
 													CharsToIndices(c->right))))
 		<< "Left <" << c->left << "> Right <" << c->right << "> Edits <"
-		<< EditsToString(CalculateOptimalEdits(
+		<< EditsToString(::jmsd::cutf::internal::Distance_editor::CalculateOptimalEdits(
 			   CharsToIndices(c->left), CharsToIndices(c->right))) << ">";
-	EXPECT_TRUE(c->expected_diff == CreateUnifiedDiff(CharsToLines(c->left),
+	EXPECT_TRUE(c->expected_diff == ::jmsd::cutf::internal::Distance_editor::CreateUnifiedDiff(CharsToLines(c->left),
 													  CharsToLines(c->right)))
 		<< "Left <" << c->left << "> Right <" << c->right << "> Diff <"
-		<< CreateUnifiedDiff(CharsToLines(c->left), CharsToLines(c->right))
+		<< ::jmsd::cutf::internal::Distance_editor::CreateUnifiedDiff(CharsToLines(c->left), CharsToLines(c->right))
 		<< ">";
   }
 }
@@ -3534,7 +3532,7 @@ TEST(EditDistance, TestSuites) {
 TEST(AssertionTest, EqFailure) {
   const std::string foo_val("5"), bar_val("6");
   const std::string msg1(
-	  EqFailure("foo", "bar", foo_val, bar_val, false)
+	  ::jmsd::cutf::internal::Assertion_message_constructor::construct_equality_assertion_message( "foo", "bar", foo_val, bar_val, false )
 	  .failure_message());
   EXPECT_STREQ(
 	  "Expected equality of these values:\n"
@@ -3545,7 +3543,7 @@ TEST(AssertionTest, EqFailure) {
 	  msg1.c_str());
 
   const std::string msg2(
-	  EqFailure("foo", "6", foo_val, bar_val, false)
+	  ::jmsd::cutf::internal::Assertion_message_constructor::construct_equality_assertion_message("foo", "6", foo_val, bar_val, false)
 	  .failure_message());
   EXPECT_STREQ(
 	  "Expected equality of these values:\n"
@@ -3555,7 +3553,7 @@ TEST(AssertionTest, EqFailure) {
 	  msg2.c_str());
 
   const std::string msg3(
-	  EqFailure("5", "bar", foo_val, bar_val, false)
+	  ::jmsd::cutf::internal::Assertion_message_constructor::construct_equality_assertion_message("5", "bar", foo_val, bar_val, false)
 	  .failure_message());
   EXPECT_STREQ(
 	  "Expected equality of these values:\n"
@@ -3565,7 +3563,7 @@ TEST(AssertionTest, EqFailure) {
 	  msg3.c_str());
 
   const std::string msg4(
-	  EqFailure("5", "6", foo_val, bar_val, false).failure_message());
+	  ::jmsd::cutf::internal::Assertion_message_constructor::construct_equality_assertion_message("5", "6", foo_val, bar_val, false).failure_message());
   EXPECT_STREQ(
 	  "Expected equality of these values:\n"
 	  "  5\n"
@@ -3573,7 +3571,7 @@ TEST(AssertionTest, EqFailure) {
 	  msg4.c_str());
 
   const std::string msg5(
-	  EqFailure("foo", "bar",
+	  ::jmsd::cutf::internal::Assertion_message_constructor::construct_equality_assertion_message("foo", "bar",
 				std::string("\"x\""), std::string("\"y\""),
 				true).failure_message());
   EXPECT_STREQ(
@@ -3592,7 +3590,7 @@ TEST(AssertionTest, EqFailureWithDiff) {
   const std::string right(
 	  "1\\n2\\n3\\n4\\n5\\n6\\n7\\n8\\n9\\n11\\n12\\n13\\n14");
   const std::string msg1(
-	  EqFailure("left", "right", left, right, false).failure_message());
+	  ::jmsd::cutf::internal::Assertion_message_constructor::construct_equality_assertion_message("left", "right", left, right, false).failure_message());
   EXPECT_STREQ(
 	  "Expected equality of these values:\n"
 	  "  left\n"
@@ -4559,31 +4557,31 @@ TEST(ExpectTest, ExpectPrecedence) {
 
 // Tests using StreamableToString() on a scalar.
 TEST(StreamableToStringTest, Scalar) {
-  EXPECT_STREQ("5", StreamableToString(5).c_str());
+  EXPECT_STREQ("5", ::jmsd::cutf::internal::StreamableToString(5).c_str());
 }
 
 // Tests using StreamableToString() on a non-char pointer.
 TEST(StreamableToStringTest, Pointer) {
   int n = 0;
   int* p = &n;
-  EXPECT_STRNE("(null)", StreamableToString(p).c_str());
+  EXPECT_STRNE("(null)", ::jmsd::cutf::internal::StreamableToString(p).c_str());
 }
 
 // Tests using StreamableToString() on a NULL non-char pointer.
 TEST(StreamableToStringTest, NullPointer) {
   int* p = nullptr;
-  EXPECT_STREQ("(null)", StreamableToString(p).c_str());
+  EXPECT_STREQ("(null)", ::jmsd::cutf::internal::StreamableToString(p).c_str());
 }
 
 // Tests using StreamableToString() on a C string.
 TEST(StreamableToStringTest, CString) {
-  EXPECT_STREQ("Foo", StreamableToString("Foo").c_str());
+  EXPECT_STREQ("Foo", ::jmsd::cutf::internal::StreamableToString("Foo").c_str());
 }
 
 // Tests using StreamableToString() on a NULL C string.
 TEST(StreamableToStringTest, NullCString) {
   char* p = nullptr;
-  EXPECT_STREQ("(null)", StreamableToString(p).c_str());
+  EXPECT_STREQ("(null)", ::jmsd::cutf::internal::StreamableToString(p).c_str());
 }
 
 // Tests using streamable values as assertion messages.

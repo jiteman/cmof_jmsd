@@ -14,12 +14,14 @@ namespace internal {
 
 class Distance_editor {
 
+public:
 	enum EditType {
 		kMatch,
 		kAdd,
 		kRemove,
 		kReplace };
 
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 public:
 	// Returns the optimal edits to go from 'left' to 'right'.
 	// All edits cost the same, with replace having lower priority than add/remove.
@@ -39,14 +41,6 @@ public:
 		::std::vector< ::std::string > const &left,
 		::std::vector< ::std::string > const &right,
 		size_t context = 2 );
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-public:
-//	enum EditType {
-//		kMatch,
-//		kAdd,
-//		kRemove,
-//		kReplace };
 
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 private:

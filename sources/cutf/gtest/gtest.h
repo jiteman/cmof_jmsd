@@ -46,6 +46,8 @@
 #include "Test_property.h"
 #include "Assertion_result.h"
 #include "Test.h"
+#include "Scoped_trace.h"
+
 #include "internal/Exception_handling.h"
 #include "internal/Make_and_register_test_info.h"
 #include "internal/String_stream_to_string.h"
@@ -747,55 +749,11 @@ class TestWithParam : public ::jmsd::cutf::Test, public WithParamInterface<T> {
 //   EXPECT_NO_FATAL_FAILURE(Process());
 //   ASSERT_NO_FATAL_FAILURE(Process()) << "Process() failed";
 //
+
 #define ASSERT_NO_FATAL_FAILURE(statement) \
-	GTEST_TEST_NO_FATAL_FAILURE_(statement, GTEST_FATAL_FAILURE_)
+    GTEST_TEST_NO_FATAL_FAILURE_(statement, GTEST_FATAL_FAILURE_)
 #define EXPECT_NO_FATAL_FAILURE(statement) \
-	GTEST_TEST_NO_FATAL_FAILURE_(statement, GTEST_NONFATAL_FAILURE_)
-
-//// Causes a trace (including the given source file path and line number,
-//// and the given message) to be included in every test failure message generated
-//// by code in the scope of the lifetime of an instance of this class. The effect
-//// is undone with the destruction of the instance.
-////
-//// The message argument can be anything streamable to std::ostream.
-////
-//// Example:
-////   testing::ScopedTrace trace("file.cc", 123, "message");
-////
-//class JMSD_DEPRECATED_GTEST_API_ ScopedTrace {
-// public:
-//  // The c'tor pushes the given source file location and message onto
-//  // a trace stack maintained by Google Test.
-
-//  // Template version. Uses Message() to convert the values into strings.
-//  // Slow, but flexible.
-//  template <typename T>
-//  ScopedTrace(const char* file, int line, const T& message) {
-//	PushTrace(file, line, (Message() << message).GetString());
-//  }
-
-//  // Optimize for some known types.
-//  ScopedTrace(const char* file, int line, const char* message) {
-//	PushTrace(file, line, message ? message : "(null)");
-//  }
-
-//  ScopedTrace(const char* file, int line, const std::string& message) {
-//	PushTrace(file, line, message);
-//  }
-
-//  // The d'tor pops the info pushed by the c'tor.
-//  //
-//  // Note that the d'tor is not virtual in order to be efficient.
-//  // Don't inherit from ScopedTrace!
-//  ~ScopedTrace();
-
-// private:
-//  void PushTrace(const char* file, int line, std::string message);
-
-//  GTEST_DISALLOW_COPY_AND_ASSIGN_(ScopedTrace);
-//} GTEST_ATTRIBUTE_UNUSED_;  // A ScopedTrace object does its job in its
-//							// c'tor and d'tor.  Therefore it doesn't
-//							// need to be used otherwise.
+    GTEST_TEST_NO_FATAL_FAILURE_(statement, GTEST_NONFATAL_FAILURE_)
 
 // Causes a trace (including the source file path, the current line
 // number, and the given message) to be included in every test failure
@@ -813,7 +771,7 @@ class TestWithParam : public ::jmsd::cutf::Test, public WithParamInterface<T> {
 // Therefore, a SCOPED_TRACE() would (correctly) only affect the
 // assertions in its own thread.
 #define SCOPED_TRACE(message) \
-  ::testing::ScopedTrace GTEST_CONCAT_TOKEN_(gtest_trace_, __LINE__)(\
+  ::jmsd::cutf::ScopedTrace GTEST_CONCAT_TOKEN_(gtest_trace_, __LINE__)(\
 	__FILE__, __LINE__, (message))
 
 // Defines a test.

@@ -10,6 +10,7 @@
 #include "Open_file_for_writing.h"
 #include "Format_time.h"
 #include "String_stream_to_string.h"
+#include "Streamable_to_string.hin"
 
 
 namespace jmsd {
@@ -170,7 +171,7 @@ void XmlUnitTestResultPrinter::OutputXmlTestInfo(::std::ostream* stream,
   if ( ::testing:: GTEST_FLAG(list_tests)) {
 	OutputXmlAttribute(stream, kTestsuite, "file", test_info.file());
 	OutputXmlAttribute(stream, kTestsuite, "line",
-					   ::testing::internal::StreamableToString(test_info.line()));
+					   StreamableToString(test_info.line()));
 	*stream << " />\n";
 	return;
   }
@@ -225,13 +226,13 @@ void XmlUnitTestResultPrinter::PrintXmlTestSuite(std::ostream* stream, const Tes
   *stream << "  <" << kTestsuite;
   OutputXmlAttribute(stream, kTestsuite, "name", test_suite.name());
   OutputXmlAttribute(stream, kTestsuite, "tests",
-					 ::testing::internal::StreamableToString(test_suite.reportable_test_count()));
+					 StreamableToString(test_suite.reportable_test_count()));
   if (!::testing::GTEST_FLAG(list_tests)) {
 	OutputXmlAttribute(stream, kTestsuite, "failures",
-					   ::testing::internal::StreamableToString(test_suite.failed_test_count()));
+					   StreamableToString(test_suite.failed_test_count()));
 	OutputXmlAttribute(
 		stream, kTestsuite, "disabled",
-		::testing::internal::StreamableToString(test_suite.reportable_disabled_test_count()));
+		StreamableToString(test_suite.reportable_disabled_test_count()));
 	OutputXmlAttribute(stream, kTestsuite, "errors", "0");
 	OutputXmlAttribute(stream, kTestsuite, "time",
 					   Format_time::FormatTimeInMillisAsSeconds(test_suite.elapsed_time()));
@@ -257,12 +258,12 @@ void XmlUnitTestResultPrinter::PrintXmlUnitTest(std::ostream* stream,
   *stream << "<" << kTestsuites;
 
   OutputXmlAttribute(stream, kTestsuites, "tests",
-					 ::testing::internal::StreamableToString(unit_test.reportable_test_count()));
+					 StreamableToString(unit_test.reportable_test_count()));
   OutputXmlAttribute(stream, kTestsuites, "failures",
-					 ::testing::internal::StreamableToString(unit_test.failed_test_count()));
+					 StreamableToString(unit_test.failed_test_count()));
   OutputXmlAttribute(
 	  stream, kTestsuites, "disabled",
-	  ::testing::internal::StreamableToString(unit_test.reportable_disabled_test_count()));
+	  StreamableToString(unit_test.reportable_disabled_test_count()));
   OutputXmlAttribute(stream, kTestsuites, "errors", "0");
   OutputXmlAttribute(stream, kTestsuites, "time",
 					 Format_time::FormatTimeInMillisAsSeconds(unit_test.elapsed_time()));
@@ -272,7 +273,7 @@ void XmlUnitTestResultPrinter::PrintXmlUnitTest(std::ostream* stream,
 
   if ( ::testing:: GTEST_FLAG(shuffle)) {
 	OutputXmlAttribute(stream, kTestsuites, "random_seed",
-					   ::testing::internal::StreamableToString(unit_test.random_seed()));
+					   StreamableToString(unit_test.random_seed()));
   }
   *stream << TestPropertiesAsXmlAttributes(unit_test.ad_hoc_test_result());
 
@@ -298,7 +299,7 @@ void XmlUnitTestResultPrinter::PrintXmlTestsList(
 	total_tests += test_suite->total_test_count();
   }
   OutputXmlAttribute(stream, kTestsuites, "tests",
-					 ::testing::internal::StreamableToString(total_tests));
+					 StreamableToString(total_tests));
   OutputXmlAttribute(stream, kTestsuites, "name", "AllTests");
   *stream << ">\n";
 

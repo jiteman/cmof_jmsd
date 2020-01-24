@@ -4,6 +4,9 @@
 
 
 #include "gtest/gtest-message.h"
+
+#include "gtest/internal/Streamable_to_string.hin"
+
 #include "gtest-internal.h"
 
 
@@ -19,7 +22,7 @@ namespace internal {
 	if (!::testing::internal::IsTrue(expression)) { \
 	  ::jmsd::cutf::internal::DeathTestAbort( \
 		  ::std::string("CHECK failed: File ") + __FILE__ +  ", line " \
-		  + ::testing::internal::StreamableToString(__LINE__) + ": " \
+		  + StreamableToString(__LINE__) + ": " \
 		  + #expression); \
 	} \
   } while (::testing::internal::AlwaysFalse())
@@ -40,7 +43,7 @@ namespace internal {
 	if (gtest_retval == -1) { \
 	  ::jmsd::cutf::internal::DeathTestAbort( \
 		  ::std::string("CHECK failed: File ") + __FILE__ + ", line " \
-		  + ::testing::internal::StreamableToString(__LINE__) + ": " \
+		  + StreamableToString(__LINE__) + ": " \
 		  + #expression + " != -1"); \
 	} \
   } while (::testing::internal::AlwaysFalse())

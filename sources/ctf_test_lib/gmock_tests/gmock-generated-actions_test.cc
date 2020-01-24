@@ -9,6 +9,8 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
+#include "gtest/Static_assert_type_sameness.hin"
+
 #include "gtest/internal/Floating_point_comparator.hin"
 
 
@@ -432,7 +434,7 @@ TEST(ActionMacroTest, WorksWhenReturningVoid) {
 // Tests that the body of ACTION() can reference the type of the
 // argument.
 ACTION(IncrementArg2) {
-  StaticAssertTypeEq<int*, arg2_type>();
+  ::jmsd::cutf::Static_assert_type_sameness<int*, arg2_type>();
   arg2_type temp = arg2;
   (*temp)++;
 }
@@ -447,7 +449,7 @@ TEST(ActionMacroTest, CanReferenceArgumentType) {
 // Tests that the body of ACTION() can reference the argument tuple
 // via args_type and args.
 ACTION(Sum2) {
-  StaticAssertTypeEq<std::tuple<int, char, int*>, args_type>();
+  ::jmsd::cutf::Static_assert_type_sameness<std::tuple<int, char, int*>, args_type>();
   args_type args_copy = args;
   return std::get<0>(args_copy) + std::get<1>(args_copy);
 }
@@ -463,7 +465,7 @@ TEST(ActionMacroTest, CanReferenceArgumentTuple) {
 int Dummy(bool flag) { return flag? 1 : 0; }
 
 ACTION(InvokeDummy) {
-  StaticAssertTypeEq<int(bool), function_type>();
+  ::jmsd::cutf::Static_assert_type_sameness<int(bool), function_type>();
   function_type* fp = &Dummy;
   return (*fp)(true);
 }
@@ -477,9 +479,9 @@ TEST(ActionMacroTest, CanReferenceMockFunctionType) {
 // Tests that the body of ACTION() can reference the mock function's
 // return type.
 ACTION(InvokeDummy2) {
-  StaticAssertTypeEq<int, return_type>();
-  return_type result = Dummy(true);
-  return result;
+	::jmsd::cutf::Static_assert_type_sameness<int, return_type>();
+	return_type result = Dummy(true);
+	return result;
 }
 
 TEST(ActionMacroTest, CanReferenceMockFunctionReturnType) {
@@ -490,7 +492,7 @@ TEST(ActionMacroTest, CanReferenceMockFunctionReturnType) {
 
 // Tests that ACTION() works for arguments passed by const reference.
 ACTION(ReturnAddrOfConstBoolReferenceArg) {
-  StaticAssertTypeEq<const bool&, arg1_type>();
+  ::jmsd::cutf::Static_assert_type_sameness<const bool&, arg1_type>();
   return &arg1;
 }
 
@@ -502,8 +504,8 @@ TEST(ActionMacroTest, WorksForConstReferenceArg) {
 
 // Tests that ACTION() works for arguments passed by non-const reference.
 ACTION(ReturnAddrOfIntReferenceArg) {
-  StaticAssertTypeEq<int&, arg0_type>();
-  return &arg0;
+	::jmsd::cutf::Static_assert_type_sameness<int&, arg0_type>();
+	return &arg0;
 }
 
 TEST(ActionMacroTest, WorksForNonConstReferenceArg) {

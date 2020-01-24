@@ -3040,7 +3040,7 @@ TEST(MatcherAssertionTest, WorksForMonomorphicMatcher) {
 
 // Tests floating-point matchers.
 template <typename RawType>
-class FloatingPointTest : public testing::Test {
+class FloatingPointTest : public ::jmsd::cutf::Test {
  protected:
   typedef testing::internal::FloatingPoint<RawType> Floating;
   typedef typename Floating::Bits Bits;
@@ -4720,7 +4720,7 @@ TEST(SizeIsTest, ExplainsResult) {
 // different element types.
 
 template <typename T>
-class ContainerEqTest : public testing::Test {};
+class ContainerEqTest : public ::jmsd::cutf::Test {};
 
 typedef testing::Types<
     set<int>,
@@ -5621,7 +5621,7 @@ TEST(UnorderedElementsAreArrayTest, WorksWithMoveOnly) {
   helper.Call(MakeUniquePtrs({2, 1}));
 }
 
-class UnorderedElementsAreTest : public testing::Test {
+class UnorderedElementsAreTest : public ::jmsd::cutf::Test {
  protected:
   typedef std::vector<int> IntVec;
 };
@@ -5929,7 +5929,7 @@ FindBacktrackingMaxBPM(const Graph& g) {
   return BacktrackingMaxBPMState<Graph>(&g).Compute();
 }
 
-class BacktrackingBPMTest : public ::testing::Test { };
+class BacktrackingBPMTest : public ::jmsd::cutf::Test { };
 
 // Tests the MaxBipartiteMatching algorithm with square matrices.
 // The single int param is the # of nodes on each of the left and right sides.
@@ -6826,7 +6826,7 @@ TEST(ArgsTest, ExplainsMatchResultWithInnerExplanation) {
             Explain(m, std::make_tuple('\0', 42, 43)));
 }
 
-class PredicateFormatterFromMatcherTest : public ::testing::Test {
+class PredicateFormatterFromMatcherTest : public ::jmsd::cutf::Test {
  protected:
   enum Behavior { kInitialSuccess, kAlwaysFail, kFlaky };
 
@@ -6867,7 +6867,7 @@ class PredicateFormatterFromMatcherTest : public ::testing::Test {
     }
   };
 
-  AssertionResult RunPredicateFormatter(Behavior behavior) {
+  ::jmsd::cutf::AssertionResult RunPredicateFormatter(Behavior behavior) {
     auto matcher = MakeMatcher(new MockMatcher);
     PredicateFormatterFromMatcher<Matcher<Behavior>> predicate_formatter(
         matcher);
@@ -6876,7 +6876,7 @@ class PredicateFormatterFromMatcherTest : public ::testing::Test {
 };
 
 TEST_F(PredicateFormatterFromMatcherTest, ShortCircuitOnSuccess) {
-  AssertionResult result = RunPredicateFormatter(kInitialSuccess);
+  ::jmsd::cutf::AssertionResult result = RunPredicateFormatter(kInitialSuccess);
   EXPECT_TRUE(result);  // Implicit cast to bool.
   std::string expect;
   EXPECT_EQ(expect, result.message());
@@ -6902,7 +6902,7 @@ template< typename A_type >
 }
 
 TEST_F(PredicateFormatterFromMatcherTest, NoShortCircuitOnFailure) {
-  AssertionResult result = RunPredicateFormatter(kAlwaysFail);
+  ::jmsd::cutf::AssertionResult result = RunPredicateFormatter(kAlwaysFail);
   EXPECT_FALSE(result);  // Implicit cast to bool.
   std::string expect =
       "Value of: dummy-name\nExpected: [DescribeTo]\n"
@@ -6911,7 +6911,7 @@ TEST_F(PredicateFormatterFromMatcherTest, NoShortCircuitOnFailure) {
 }
 
 TEST_F(PredicateFormatterFromMatcherTest, DetectsFlakyShortCircuit) {
-  AssertionResult result = RunPredicateFormatter(kFlaky);
+  ::jmsd::cutf::AssertionResult result = RunPredicateFormatter(kFlaky);
   EXPECT_FALSE(result);  // Implicit cast to bool.
   std::string expect =
       "Value of: dummy-name\nExpected: [DescribeTo]\n"

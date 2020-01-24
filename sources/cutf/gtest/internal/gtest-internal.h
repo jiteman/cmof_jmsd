@@ -33,12 +33,15 @@
 #include <type_traits>
 #include <vector>
 
-#include "gtest/gtest-message.h"
-#include "gtest/internal/gtest-filepath.h"
-#include "gtest/internal/gtest-string.h"
-#include "gtest/internal/gtest-type-util.h"
+#include "gtest-filepath.h"
+#include "gtest-string.h"
+#include "gtest-type-util.h"
 
-#include "gtest/internal/Make_and_register_test_info.h"
+#include "Make_and_register_test_info.h"
+
+#include "gtest/gtest-message.h"
+
+#include "Streamable_to_string.hin"
 
 #include "gtest/Test_info.hxx"
 #include "gtest/Unit_test.hxx"
@@ -527,7 +530,7 @@ void SplitString(const ::std::string& str, char delimiter,
 struct DefaultNameGenerator {
   template <typename T>
   static std::string GetName(int i) {
-	return StreamableToString(i);
+	return ::jmsd::cutf::internal::StreamableToString( i );
   }
 };
 

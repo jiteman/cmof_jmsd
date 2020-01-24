@@ -101,14 +101,14 @@ int WindowsDeathTest::Wait() {
 								  "." + info->name();
   const std::string internal_flag =
 	  std::string("--") + GTEST_FLAG_PREFIX_ + ::testing::internal::kInternalRunDeathTestFlag +
-	  "=" + file_ + "|" + ::testing::internal::StreamableToString(line_) + "|" +
-	  ::testing::internal::StreamableToString(death_test_index) + "|" +
-	  ::testing::internal::StreamableToString(static_cast<unsigned int>(::GetCurrentProcessId())) +
+	  "=" + file_ + "|" + StreamableToString(line_) + "|" +
+	  StreamableToString(death_test_index) + "|" +
+	  StreamableToString(static_cast<unsigned int>(::GetCurrentProcessId())) +
 	  // size_t has the same width as pointers on both 32-bit and 64-bit
 	  // Windows platforms.
 	  // See http://msdn.microsoft.com/en-us/library/tcxf1dw6.aspx.
-	  "|" + ::testing::internal::StreamableToString(reinterpret_cast<size_t>(write_handle)) +
-	  "|" + ::testing::internal::StreamableToString(reinterpret_cast<size_t>(event_handle_.Get()));
+	  "|" + StreamableToString(reinterpret_cast<size_t>(write_handle)) +
+	  "|" + StreamableToString(reinterpret_cast<size_t>(event_handle_.Get()));
 
   char executable_path[_MAX_PATH + 1];  // NOLINT
   GTEST_DEATH_TEST_CHECK_(_MAX_PATH + 1 != ::GetModuleFileNameA(nullptr,

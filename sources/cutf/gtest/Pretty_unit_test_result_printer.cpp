@@ -14,6 +14,8 @@
 #include "internal/Should_shard.h"
 #include "internal/Int32_from_environment_or_die.h"
 
+#include "internal/Streamable_to_string.hin"
+
 #include "gtest-internal-inl.h"
 
 
@@ -141,7 +143,7 @@ void PrettyUnitTestResultPrinter::OnTestEnd(const ::jmsd::cutf::TestInfo& test_i
 	internal::PrintFullTestCommentIfPresent(test_info);
 
   if ( ::testing:: GTEST_FLAG( print_time ) ) {
-	printf(" (%s ms)\n", ::testing::internal::StreamableToString( test_info.result()->elapsed_time()).c_str() );
+	printf(" (%s ms)\n", internal::StreamableToString( test_info.result()->elapsed_time()).c_str() );
   } else {
 	printf("\n");
   }
@@ -153,7 +155,7 @@ void PrettyUnitTestResultPrinter::OnTestSuiteEnd(const ::jmsd::cutf::TestSuite& 
 
   const std::string counts = Format_countable::FormatCountableNoun(test_suite.test_to_run_count(), "test", "tests");
   ColoredPrintf(internal::GTestColor::COLOR_GREEN, "[----------] ");
-  printf("%s from %s (%s ms total)\n\n", counts.c_str(), test_suite.name(), ::testing::internal::StreamableToString(test_suite.elapsed_time()).c_str());
+  printf("%s from %s (%s ms total)\n\n", counts.c_str(), test_suite.name(), internal::StreamableToString(test_suite.elapsed_time()).c_str());
   fflush(stdout);
 }
 
@@ -244,7 +246,7 @@ void PrettyUnitTestResultPrinter::OnTestIterationEnd(const ::jmsd::cutf::UnitTes
 		 Format_countable::FormatTestSuiteCount(unit_test.test_suite_to_run_count()).c_str());
   if ( ::testing:: GTEST_FLAG( print_time ) ) {
 	printf(" (%s ms total)",
-		   ::testing::internal::StreamableToString(unit_test.elapsed_time()).c_str());
+		   internal::StreamableToString(unit_test.elapsed_time()).c_str());
   }
   printf("\n");
   ColoredPrintf(internal::GTestColor::COLOR_GREEN,  "[  PASSED  ] ");
@@ -275,8 +277,6 @@ void PrettyUnitTestResultPrinter::OnTestIterationEnd(const ::jmsd::cutf::UnitTes
   // Ensure that Google Test output is printed before, e.g., heapchecker output.
   fflush(stdout);
 }
-
-// End PrettyUnitTestResultPrinter
 
 
 } // namespace cutf

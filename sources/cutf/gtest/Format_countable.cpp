@@ -3,6 +3,8 @@
 
 #include "gtest-message.h"
 
+#include "internal/Streamable_to_string.hin"
+
 
 namespace jmsd {
 namespace cutf {
@@ -14,7 +16,7 @@ namespace cutf {
 // FormatCountableNoun(5, "book", "books") returns "5 books".
 // static
 ::std::string Format_countable::FormatCountableNoun( int count, char const *singular_form, char const *plural_form) {
-	return ::testing::internal::StreamableToString( count ) + " " + ( count == 1 ? singular_form : plural_form );
+	return internal::StreamableToString( count ) + " " + ( count == 1 ? singular_form : plural_form );
 }
 
 // Formats the count of tests.
