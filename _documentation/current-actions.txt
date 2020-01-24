@@ -1,11 +1,10 @@
 ===============================================================================================
 -----------------------------------------------------------------------------------------------
 + Turn cmof library and its tests on.
-* Fixing cmof build issues.
-	+ Separating of EqFailure (Assertion_message_constructor => Assertion_result_constructor)
-	@ Separating of FloatingPoint
-Fix cmof test issues.
-Fix cmof test failure issues.
++ Fixing cmof build issues.
+	+ Separating of EqFailure	
++ Fix cmof test issues.
++ Fix cmof test failure issues.
 Move all free functions to static members of separate classes.
 Then join those classes basing on common use.
 Create separate test library for cmof to be able to turn it off and on easy way.
@@ -23,6 +22,6 @@ Separating cutf (ex google test)
 		+ test removal of FloatingPointLE and FloatLE and DoubleLE
 		+ Removing of FloatingPointLE and FloatLE and DoubleLE
 		+ Separating of CmpHelperFloatingPointEQ
-		* Separating of EqFailure
-		* Separating of FloatingPoint
+		+ Separating of EqFailure (Assertion_message_constructor => Assertion_result_constructor)
+		@ Separating of FloatingPoint
 		

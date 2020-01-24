@@ -20,7 +20,7 @@
 #include "internal/Streaming_listener.h"
 #endif // #if GTEST_CAN_STREAM_RESULTS_
 
-#include "internal/Assertion_message_constructor.h"
+#include "internal/Assertion_result_constructor.h"
 
 #include "Assertion_result.hin"
 #include "internal/Streamable_to_string.hin"
@@ -587,7 +587,7 @@ std::string GetBoolAssertionFailureMessage(
 	return ::jmsd::cutf::AssertionResult::AssertionSuccess();
   }
 
-  return ::jmsd::cutf::internal::Assertion_message_constructor::construct_equality_assertion_message(lhs_expression,
+  return ::jmsd::cutf::internal::Assertion_result_constructor::construct_expected_equality(lhs_expression,
 				   rhs_expression,
 				   FormatForComparisonFailureMessage(lhs, rhs),
 				   FormatForComparisonFailureMessage(rhs, lhs),
@@ -637,7 +637,7 @@ GTEST_IMPL_CMP_HELPER_(GT, > )
 	return ::jmsd::cutf::AssertionResult::AssertionSuccess();
   }
 
-  return ::jmsd::cutf::internal::Assertion_message_constructor::construct_equality_assertion_message(lhs_expression,
+  return ::jmsd::cutf::internal::Assertion_result_constructor::construct_expected_equality(lhs_expression,
 				   rhs_expression,
 				   PrintToString(lhs),
 				   PrintToString(rhs),
@@ -653,7 +653,7 @@ GTEST_IMPL_CMP_HELPER_(GT, > )
 	return ::jmsd::cutf::AssertionResult::AssertionSuccess();
   }
 
-  return ::jmsd::cutf::internal::Assertion_message_constructor::construct_equality_assertion_message(lhs_expression,
+  return ::jmsd::cutf::internal::Assertion_result_constructor::construct_expected_equality(lhs_expression,
 				   rhs_expression,
 				   PrintToString(lhs),
 				   PrintToString(rhs),
@@ -966,7 +966,7 @@ bool String::WideCStringEquals(const wchar_t * lhs, const wchar_t * rhs) {
 	return ::jmsd::cutf::AssertionResult::AssertionSuccess();
   }
 
-  return ::jmsd::cutf::internal::Assertion_message_constructor::construct_equality_assertion_message(lhs_expression,
+  return ::jmsd::cutf::internal::Assertion_result_constructor::construct_expected_equality(lhs_expression,
 				   rhs_expression,
 				   PrintToString(lhs),
 				   PrintToString(rhs),

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Assertion_message_constructor.hxx"
+#include "Assertion_result_constructor.hxx"
 
 
 #include "gtest/Assertion_result.hxx"
@@ -16,10 +16,10 @@ namespace cutf {
 namespace internal {
 
 
-class JMSD_CUTF_SHARED_INTERFACE Assertion_message_constructor {
+class JMSD_CUTF_SHARED_INTERFACE Assertion_result_constructor {
 
 public:
-	static AssertionResult construct_equality_assertion_message(
+	static AssertionResult construct_expected_equality(
 		char const *lhs_expression,
 		char const *rhs_expression,
 		::std::string const &lhs_value,
@@ -31,21 +31,21 @@ public:
 
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 private:
-	virtual ~Assertion_message_constructor() noexcept = delete;
+	virtual ~Assertion_result_constructor() noexcept = delete;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 private:
-	Assertion_message_constructor() noexcept = delete;
+	Assertion_result_constructor() noexcept = delete;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 private:
-	Assertion_message_constructor( Assertion_message_constructor const &another ) noexcept = delete;
-	Assertion_message_constructor &operator =( Assertion_message_constructor const &another ) noexcept = delete;
+	Assertion_result_constructor( Assertion_result_constructor const &another ) noexcept = delete;
+	Assertion_result_constructor &operator =( Assertion_result_constructor const &another ) noexcept = delete;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 private:
-	Assertion_message_constructor( Assertion_message_constructor &&another ) noexcept = delete;
-	Assertion_message_constructor &operator =( Assertion_message_constructor &&another ) noexcept = delete;
+	Assertion_result_constructor( Assertion_result_constructor &&another ) noexcept = delete;
+	Assertion_result_constructor &operator =( Assertion_result_constructor &&another ) noexcept = delete;
 
 // # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 private:

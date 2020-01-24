@@ -51,7 +51,7 @@
 #include "internal/Exception_handling.h"
 #include "internal/Make_and_register_test_info.h"
 #include "internal/String_stream_to_string.h"
-#include "internal/Assertion_message_constructor.h"
+#include "internal/Assertion_result_constructor.h"
 
 #include "Unit_test.hxx"
 #include "internal/Unit_test_impl.hxx"
@@ -142,7 +142,7 @@ template <typename T1, typename T2>
 ::jmsd::cutf::AssertionResult CmpHelperEQFailure(const char* lhs_expression,
 								   const char* rhs_expression,
 								   const T1& lhs, const T2& rhs) {
-  return ::jmsd::cutf::internal::Assertion_message_constructor::construct_equality_assertion_message(lhs_expression,
+  return ::jmsd::cutf::internal::Assertion_result_constructor::construct_expected_equality(lhs_expression,
 				   rhs_expression,
 				   FormatForComparisonFailureMessage(lhs, rhs),
 				   FormatForComparisonFailureMessage(rhs, lhs),

@@ -56,7 +56,7 @@ TEST(CommandLineFlagsTest, CanBeAccessedInCodeOnceGTestHIsIncluded) {
 #include "gtest/internal/Format_time.h"
 #include "gtest/internal/Colored_print.h"
 #include "gtest/internal/Distance_editor.h"
-#include "gtest/internal/Assertion_message_constructor.h"
+#include "gtest/internal/Assertion_result_constructor.h"
 //#include "gtest/Floating_point_comparator.h"
 #include "gtest/internal/gtest-flags-internal.h"
 
@@ -3533,7 +3533,7 @@ TEST(EditDistance, TestSuites) {
 TEST(AssertionTest, EqFailure) {
   const std::string foo_val("5"), bar_val("6");
   const std::string msg1(
-	  ::jmsd::cutf::internal::Assertion_message_constructor::construct_equality_assertion_message( "foo", "bar", foo_val, bar_val, false )
+	  ::jmsd::cutf::internal::Assertion_result_constructor::construct_expected_equality( "foo", "bar", foo_val, bar_val, false )
 	  .failure_message());
   EXPECT_STREQ(
 	  "Expected equality of these values:\n"
@@ -3544,7 +3544,7 @@ TEST(AssertionTest, EqFailure) {
 	  msg1.c_str());
 
   const std::string msg2(
-	  ::jmsd::cutf::internal::Assertion_message_constructor::construct_equality_assertion_message("foo", "6", foo_val, bar_val, false)
+	  ::jmsd::cutf::internal::Assertion_result_constructor::construct_expected_equality("foo", "6", foo_val, bar_val, false)
 	  .failure_message());
   EXPECT_STREQ(
 	  "Expected equality of these values:\n"
@@ -3554,7 +3554,7 @@ TEST(AssertionTest, EqFailure) {
 	  msg2.c_str());
 
   const std::string msg3(
-	  ::jmsd::cutf::internal::Assertion_message_constructor::construct_equality_assertion_message("5", "bar", foo_val, bar_val, false)
+	  ::jmsd::cutf::internal::Assertion_result_constructor::construct_expected_equality("5", "bar", foo_val, bar_val, false)
 	  .failure_message());
   EXPECT_STREQ(
 	  "Expected equality of these values:\n"
@@ -3564,7 +3564,7 @@ TEST(AssertionTest, EqFailure) {
 	  msg3.c_str());
 
   const std::string msg4(
-	  ::jmsd::cutf::internal::Assertion_message_constructor::construct_equality_assertion_message("5", "6", foo_val, bar_val, false).failure_message());
+	  ::jmsd::cutf::internal::Assertion_result_constructor::construct_expected_equality("5", "6", foo_val, bar_val, false).failure_message());
   EXPECT_STREQ(
 	  "Expected equality of these values:\n"
 	  "  5\n"
@@ -3572,7 +3572,7 @@ TEST(AssertionTest, EqFailure) {
 	  msg4.c_str());
 
   const std::string msg5(
-	  ::jmsd::cutf::internal::Assertion_message_constructor::construct_equality_assertion_message("foo", "bar",
+	  ::jmsd::cutf::internal::Assertion_result_constructor::construct_expected_equality("foo", "bar",
 				std::string("\"x\""), std::string("\"y\""),
 				true).failure_message());
   EXPECT_STREQ(
@@ -3591,7 +3591,7 @@ TEST(AssertionTest, EqFailureWithDiff) {
   const std::string right(
 	  "1\\n2\\n3\\n4\\n5\\n6\\n7\\n8\\n9\\n11\\n12\\n13\\n14");
   const std::string msg1(
-	  ::jmsd::cutf::internal::Assertion_message_constructor::construct_equality_assertion_message("left", "right", left, right, false).failure_message());
+	  ::jmsd::cutf::internal::Assertion_result_constructor::construct_expected_equality("left", "right", left, right, false).failure_message());
   EXPECT_STREQ(
 	  "Expected equality of these values:\n"
 	  "  left\n"
