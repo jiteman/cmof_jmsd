@@ -8,12 +8,15 @@
 #include <string>
 
 
+#include "cutf.h"
+
+
 namespace jmsd {
 namespace cutf {
 namespace internal {
 
 
-class Assertion_message_constructor {
+class JMSD_CUTF_SHARED_INTERFACE Assertion_message_constructor {
 
 public:
 	static AssertionResult construct_equality_assertion_message(

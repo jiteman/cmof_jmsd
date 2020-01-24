@@ -56,6 +56,7 @@ TEST(CommandLineFlagsTest, CanBeAccessedInCodeOnceGTestHIsIncluded) {
 #include "gtest/internal/Format_time.h"
 #include "gtest/internal/Colored_print.h"
 #include "gtest/internal/Distance_editor.h"
+#include "gtest/internal/Assertion_message_constructor.h"
 //#include "gtest/Floating_point_comparator.h"
 #include "gtest/internal/gtest-flags-internal.h"
 

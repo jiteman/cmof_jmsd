@@ -7,12 +7,15 @@
 #include <vector>
 
 
+#include "cutf.h"
+
+
 namespace jmsd {
 namespace cutf {
 namespace internal {
 
 
-class Distance_editor {
+class JMSD_CUTF_SHARED_INTERFACE Distance_editor {
 
 public:
 	enum EditType {
