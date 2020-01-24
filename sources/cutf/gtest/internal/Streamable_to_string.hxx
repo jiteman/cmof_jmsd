@@ -1,6 +1,9 @@
 #pragma once
 
 
+#include <string>
+
+
 namespace jmsd {
 namespace cutf {
 namespace internal {
@@ -11,7 +14,7 @@ namespace internal {
 // When the input value is a ::string, ::std::string, ::wstring, or ::std::wstring object, each NUL
 // character in it is replaced with "\\0".
 template < typename A_type >
-::std::string StreamableToString( T const &streamable );
+::std::string StreamableToString( A_type const &streamable );
 
 
 } // namespace internal

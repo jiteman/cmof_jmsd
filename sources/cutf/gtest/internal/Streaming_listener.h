@@ -25,7 +25,7 @@ class StreamingListener :
 {
 public:
   // Escapes '=', '&', '%', and '\n' characters in str as "%xx".
-  static std::string UrlEncode(const char* str);
+  static ::std::string UrlEncode(const char* str);
 
   StreamingListener(const std::string& host, const std::string& port)
 	  : socket_writer_(new SocketWriter(host, port)) {
@@ -117,22 +117,16 @@ public:
   // protocol we are using.
   void Start() { SendLn("gtest_streaming_protocol_version=1.0"); }
 
-  std::string FormatBool(bool value) { return value ? "1" : "0"; }
+  static ::std::string REFACTOR_ME_FormatBool(bool value) { return value ? "1" : "0"; }
 
   const std::unique_ptr<AbstractSocketWriter> socket_writer_;
 
   GTEST_DISALLOW_COPY_AND_ASSIGN_(StreamingListener);
-};  // class StreamingListener
+};
 
-#endif  // GTEST_CAN_STREAM_RESULTS_
+#endif // #if GTEST_CAN_STREAM_RESULTS_
 
 
 } // namespace internal
 } // namespace cutf
 } // namespace jmsd
-
-
-namespace testing {
-
-
-} // namespace testing
