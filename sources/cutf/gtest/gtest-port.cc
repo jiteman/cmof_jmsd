@@ -1002,7 +1002,7 @@ JMSD_DEPRECATED_GTEST_API_ ::std::string FormatFileLocation(const char* file, in
 #ifdef _MSC_VER
   return file_name + "(" + ::jmsd::cutf::internal::StreamableToString(line) + "):";
 #else
-  return file_name + ":" + StreamableToString(line) + ":";
+  return file_name + ":" + ::jmsd::cutf::internal::StreamableToString(line) + ":";
 #endif  // _MSC_VER
 }
 

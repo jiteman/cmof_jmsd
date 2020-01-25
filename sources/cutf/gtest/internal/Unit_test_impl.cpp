@@ -16,6 +16,7 @@
 #include "Write_to_shard_status_file_if_needed.h"
 #include "Should_run_test_on_shard.h"
 #include "String_stream_to_string.h"
+#include "Streaming_listener.h"
 
 #include "gtest-flags-internal.h"
 #include "gtest-constants-internal.h"
@@ -352,11 +353,11 @@ void UnitTestImpl::ConfigureXmlOutput() {
 // Initializes event listeners for streaming test results in string form.
 // Must not be called before InitGoogleTest.
 void UnitTestImpl::ConfigureStreamingOutput() {
-  const std::string& target = GTEST_FLAG(stream_result_to);
+  const std::string& target = ::testing:: GTEST_FLAG(stream_result_to);
   if (!target.empty()) {
 	const size_t pos = target.find(':');
 	if (pos != std::string::npos) {
-	  listeners()->Append(new StreamingListener(target.substr(0, pos),
+	  listeners()->Append(new ::jmsd::cutf::internal::StreamingListener(target.substr(0, pos),
 												target.substr(pos+1)));
 	} else {
 	  GTEST_LOG_(WARNING) << "unrecognized streaming target \"" << target

@@ -315,10 +315,6 @@ JMSD_DEPRECATED_GTEST_API_ void ParseGoogleTestFlagsOnly(int* argc, wchar_t** ar
 
 #if GTEST_HAS_DEATH_TEST
 
-// Returns the message describing the last system error, regardless of the
-// platform.
-JMSD_DEPRECATED_GTEST_API_ std::string GetLastErrnoDescription();
-
 // Attempts to parse a string into a positive integer pointed to by the
 // number parameter.  Returns true if that is possible.
 // GTEST_HAS_DEATH_TEST implies that we have ::std::string, so we can use

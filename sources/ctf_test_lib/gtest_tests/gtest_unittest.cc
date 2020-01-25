@@ -72,7 +72,7 @@ namespace internal {
 
 #if GTEST_CAN_STREAM_RESULTS_
 
-class StreamingListenerTest : public Test {
+class StreamingListenerTest : public ::jmsd::cutf::Test {
  public:
   class FakeSocketWriter : public StreamingListener::AbstractSocketWriter {
    public:

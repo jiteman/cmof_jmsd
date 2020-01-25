@@ -11,11 +11,6 @@ namespace cutf {
 namespace internal {
 
 
-// Returns the message describing the last system error in errno.
-::std::string GetLastErrnoDescription() {
-	return errno == 0 ? "" : ::testing::internal::posix::StrError( errno );
-}
-
 // This is called from a death test parent process to read a failure
 // message from the death test child process and log it with the FATAL
 // severity. On Windows, the message is read from a pipe handle. On other

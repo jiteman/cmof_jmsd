@@ -1096,35 +1096,6 @@ void ReportFailureInUnknownLocation(TestPartResult::Type result_type,
 	  "");  // No stack trace, either.
 }
 
-#if GTEST_CAN_STREAM_RESULTS_
-
-// Checks if str contains '=', '&', '%' or '\n' characters. If yes,
-// replaces them by "%xx" where xx is their hexadecimal value. For
-// example, replaces "=" with "%3D".  This algorithm is O(strlen(str))
-// in both time and space -- important as the input str may contain an
-// arbitrarily long test failure message and stack trace.
-std::string StreamingListener::UrlEncode(const char* str) {
-  std::string result;
-  result.reserve(strlen(str) + 1);
-  for (char ch = *str; ch != '\0'; ch = *++str) {
-	switch (ch) {
-	  case '%':
-	  case '=':
-	  case '&':
-	  case '\n':
-		result.append("%" + String::FormatByte(static_cast<unsigned char>(ch)));
-		break;
-	  default:
-		result.push_back(ch);
-		break;
-	}
-  }
-  return result;
-}
-
-// End of class Streaming Listener
-#endif  // GTEST_CAN_STREAM_RESULTS__
-
 // class OsStackTraceGetter
 
 const char* const OsStackTraceGetterInterface::kElidedFramesMarker =

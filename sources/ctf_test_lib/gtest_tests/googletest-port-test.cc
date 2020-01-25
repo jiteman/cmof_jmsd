@@ -343,7 +343,7 @@ TEST(RegexEngineSelectionTest, SelectsCorrectRegexEngine) {
 # if GTEST_HAS_TYPED_TEST
 
 template <typename Str>
-class RETest : public ::testing::Test {};
+class RETest : public ::jmsd::cutf::Test {};
 
 // Defines StringTypes as the list of all string types that class RE
 // supports.

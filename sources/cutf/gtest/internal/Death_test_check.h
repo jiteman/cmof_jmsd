@@ -22,7 +22,7 @@ namespace internal {
 	if (!::testing::internal::IsTrue(expression)) { \
 	  ::jmsd::cutf::internal::DeathTestAbort( \
 		  ::std::string("CHECK failed: File ") + __FILE__ +  ", line " \
-		  + StreamableToString(__LINE__) + ": " \
+		  + ::jmsd::cutf::internal::StreamableToString(__LINE__) + ": " \
 		  + #expression); \
 	} \
   } while (::testing::internal::AlwaysFalse())
@@ -43,7 +43,7 @@ namespace internal {
 	if (gtest_retval == -1) { \
 	  ::jmsd::cutf::internal::DeathTestAbort( \
 		  ::std::string("CHECK failed: File ") + __FILE__ + ", line " \
-		  + StreamableToString(__LINE__) + ": " \
+		  + ::jmsd::cutf::internal::StreamableToString(__LINE__) + ": " \
 		  + #expression + " != -1"); \
 	} \
   } while (::testing::internal::AlwaysFalse())
