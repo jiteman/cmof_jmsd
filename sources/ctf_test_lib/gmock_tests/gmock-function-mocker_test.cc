@@ -155,12 +155,20 @@ class MockFoo : public FooInterface {
 # pragma warning(pop)
 #endif
 
-class MockMethodFunctionMockerTest : public ::jmsd::cutf::Test {
- protected:
-  MockMethodFunctionMockerTest() : foo_(&mock_foo_) {}
+class MockMethodFunctionMockerTest :
+	public ::jmsd::cutf::Test
+{
+protected:
+	MockMethodFunctionMockerTest()
+		:
+			foo_( &mock_foo_ )
+	{
+		foo_ = &mock_foo_;
+	}
 
-  FooInterface* const foo_;
-  MockFoo mock_foo_;
+	MockFoo mock_foo_;
+	FooInterface *foo_;
+
 };
 
 // Tests mocking a void-returning function.
@@ -181,12 +189,11 @@ TEST_F(MockMethodFunctionMockerTest, MocksNullaryFunction) {
 
 // Tests mocking a unary function.
 TEST_F(MockMethodFunctionMockerTest, MocksUnaryFunction) {
-  EXPECT_CALL(mock_foo_, Unary(Eq(2)))
-      .Times(2)
-      .WillOnce(Return(true));
+	EXPECT_CALL( mock_foo_, Unary( Eq( 2 ) ) ).Times( 2 ).WillOnce( Return( true ) );
+//	EXPECT_CALL( mock_foo_, Unary( Eq( 2 ) ) ).Times( 2 ).WillOnce( Return( true ) ).WillOnce( Return( false ) );
 
-  EXPECT_TRUE(foo_->Unary(2));
-  EXPECT_FALSE(foo_->Unary(2));
+	EXPECT_TRUE( foo_->Unary( 2 ) );
+	EXPECT_FALSE( foo_->Unary( 2 ) );
 }
 
 // Tests mocking a binary function.

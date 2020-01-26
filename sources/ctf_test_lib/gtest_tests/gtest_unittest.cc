@@ -42,6 +42,7 @@ TEST(CommandLineFlagsTest, CanBeAccessedInCodeOnceGTestHIsIncluded) {
 #include "gtest/Test_event_listener.h"
 #include "gtest/Environment.h"
 #include "gtest/Substring_utilities.h"
+#include "gtest/Add_global_test_environment.h"
 
 #include "gtest/gtest-constants.h"
 
@@ -58,6 +59,8 @@ TEST(CommandLineFlagsTest, CanBeAccessedInCodeOnceGTestHIsIncluded) {
 #include "gtest/internal/Distance_editor.h"
 #include "gtest/internal/Assertion_result_constructor.h"
 //#include "gtest/Floating_point_comparator.h"
+#include "gtest/internal/Abstract_socket_writer.h"
+#include "gtest/internal/Streaming_listener.h"
 #include "gtest/internal/gtest-flags-internal.h"
 
 #include "gtest/Assertion_result.hin"
@@ -74,7 +77,7 @@ namespace internal {
 
 class StreamingListenerTest : public ::jmsd::cutf::Test {
  public:
-  class FakeSocketWriter : public StreamingListener::AbstractSocketWriter {
+  class FakeSocketWriter : public ::jmsd::cutf::internal::AbstractSocketWriter {
    public:
 	// Sends a string to the socket.
 	void Send(const std::string& message) override { output_ += message; }
@@ -92,9 +95,9 @@ class StreamingListenerTest : public ::jmsd::cutf::Test {
   std::string* output() { return &(fake_sock_writer_->output_); }
 
   FakeSocketWriter* const fake_sock_writer_;
-  StreamingListener streamer_;
-  UnitTest unit_test_;
-  TestInfo test_info_obj_;  // The name test_info_ was taken by testing::Test.
+  ::jmsd::cutf::internal::StreamingListener streamer_;
+  ::jmsd::cutf::UnitTest unit_test_;
+  ::jmsd::cutf::TestInfo test_info_obj_;  // The name test_info_ was taken by testing::Test.
 };
 
 TEST_F(StreamingListenerTest, OnTestProgramEnd) {
@@ -111,13 +114,13 @@ TEST_F(StreamingListenerTest, OnTestIterationEnd) {
 
 TEST_F(StreamingListenerTest, OnTestSuiteStart) {
   *output() = "";
-  streamer_.OnTestSuiteStart(TestSuite("FooTest", "Bar", nullptr, nullptr));
+  streamer_.OnTestSuiteStart( ::jmsd::cutf::TestSuite( "FooTest", "Bar", nullptr, nullptr ) );
   EXPECT_EQ("event=TestSuiteStart&name=FooTest\n", *output());
 }
 
 TEST_F(StreamingListenerTest, OnTestSuiteEnd) {
   *output() = "";
-  streamer_.OnTestSuiteEnd(TestSuite("FooTest", "Bar", nullptr, nullptr));
+  streamer_.OnTestSuiteEnd( ::jmsd::cutf::TestSuite( "FooTest", "Bar", nullptr, nullptr ) );
   EXPECT_EQ("event=TestSuiteEnd&passed=1&elapsed_time=0ms\n", *output());
 }
 
@@ -2133,7 +2136,7 @@ class UnitTestRecordPropertyTestEnvironment : public Environment {
 
 // This will test property recording outside of any test or test case.
 static Environment* record_property_env GTEST_ATTRIBUTE_UNUSED_ =
-	AddGlobalTestEnvironment(new UnitTestRecordPropertyTestEnvironment);
+	::jmsd::cutf::AddGlobalTestEnvironment(new UnitTestRecordPropertyTestEnvironment);
 
 // This group of tests is for predicate assertions (ASSERT_PRED*, etc)
 // of various arities.  They do not attempt to be exhaustive.  Rather,
