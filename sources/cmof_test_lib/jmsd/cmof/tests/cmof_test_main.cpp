@@ -4,8 +4,8 @@
 
 
 namespace jmsd {
-namespace tpa {
-namespace gtm {
+namespace cmof {
+namespace tests {
 
 
 int run_all_cmof_tests( int argc, char const *const argv[] ) {
@@ -13,6 +13,6 @@ int run_all_cmof_tests( int argc, char const *const argv[] ) {
 }
 
 
-} // namespace gtm
-} // namespace tpa
+} // namespace tests
+} // namespace cmof
 } // namespace jmsd
