@@ -218,7 +218,7 @@ class JMSD_DEPRECATED_GTEST_API_ UnitTest {
   friend ::testing::internal::AssertHelper;
   friend ::testing::internal::StreamingListenerTest;
   friend ::testing::internal::UnitTestRecordPropertyTestHelper;
-  friend Environment *AddGlobalTestEnvironment( Environment *env );
+  friend JMSD_CUTF_SHARED_INTERFACE Environment *AddGlobalTestEnvironment( Environment *env );
   friend internal::UnitTestImpl *internal::GetUnitTestImpl();
   friend void ::testing::internal::ReportFailureInUnknownLocation( TestPartResult::Type result_type, const std::string& message);
 
