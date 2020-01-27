@@ -161,7 +161,8 @@ class MockMethodFunctionMockerTest :
 protected:
 	MockMethodFunctionMockerTest()
 		:
-			foo_( &mock_foo_ )
+			foo_( nullptr )
+//			foo_( &mock_foo_ )
 	{
 		foo_ = &mock_foo_;
 	}

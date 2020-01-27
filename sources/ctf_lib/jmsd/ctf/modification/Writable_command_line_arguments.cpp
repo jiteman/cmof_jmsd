@@ -6,8 +6,7 @@
 
 
 namespace jmsd {
-namespace tpa {
-namespace gtm {
+namespace ctf {
 namespace modification {
 
 
@@ -85,7 +84,6 @@ Writable_command_line_arguments::Writable_command_line_arguments( int const p_ar
 
 
 } // namespace modification
-} // namespace gtm
-} // namespace tpa
+} // namespace ctf
 } // namespace jmsd
 

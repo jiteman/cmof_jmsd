@@ -5,8 +5,7 @@
 
 
 namespace jmsd {
-namespace tpa {
-namespace gtm {
+namespace ctf {
 namespace modification {
 
 
@@ -123,6 +122,5 @@ void Configurable_event_listener::OnTestProgramEnd( ::jmsd::cutf::UnitTest const
 
 
 } // namespace modification
-} // namespace gtm
-} // namespace tpa
+} // namespace ctf
 } // namespace jmsd

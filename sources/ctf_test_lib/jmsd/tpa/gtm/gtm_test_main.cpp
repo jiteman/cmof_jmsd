@@ -1,6 +1,6 @@
 #include "gtm_test_main.h"
 
-#include "jmsd/tpa/gtm/gtm_library_main.h"
+#include "jmsd/ctf/ctf_library_main.h"
 
 
 namespace jmsd {
@@ -9,7 +9,7 @@ namespace gtm {
 
 
 int run_all_gtm_tests( int argc, char const *const argv[] ) {
-	return ctf_main( argc, argv, false );
+	return ctf::ctf_main( argc, argv, false );
 }
 
 

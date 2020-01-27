@@ -3,16 +3,12 @@
 #include "Configurable_event_listener.hxx"
 
 
-
-// #include "gtest/gtest.h"
-
 #include "gtest/Test_event_listener.h"
 
 
 
 namespace jmsd {
-namespace tpa {
-namespace gtm {
+namespace ctf {
 namespace modification {
 
 
@@ -61,6 +57,5 @@ public:
 
 
 } // namespace modification
-} // namespace gtm
-} // namespace tpa
+} // namespace ctf
 } // namespace jmsd

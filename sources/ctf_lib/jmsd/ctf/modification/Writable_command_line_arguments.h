@@ -4,8 +4,7 @@
 
 
 namespace jmsd {
-namespace tpa {
-namespace gtm {
+namespace ctf {
 namespace modification {
 
 
@@ -53,6 +52,5 @@ private:
 
 
 } // namespace modification
-} // namespace gtm
-} // namespace tpa
+} // namespace ctf
 } // namespace jmsd

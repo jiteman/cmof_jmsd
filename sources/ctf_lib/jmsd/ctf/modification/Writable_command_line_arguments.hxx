@@ -2,8 +2,7 @@
 
 
 namespace jmsd {
-namespace tpa {
-namespace gtm {
+namespace ctf {
 namespace modification {
 
 
@@ -11,7 +10,6 @@ class Writable_command_line_arguments;
 
 
 } // namespace modification
-} // namespace gtm
-} // namespace tpa
+} // namespace ctf
 } // namespace jmsd
 
