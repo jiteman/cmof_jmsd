@@ -1,14 +1,13 @@
 cmake_minimum_required( VERSION 3.7.1 )
 
-project( ctf_test_lib C CXX )
+project( cutf_test_lib C CXX )
 
 
 JMSD_SHOW_PROJECT_HEADER()
 
 
-include( ${JMSD_COMPONENT_CMAKE_SETTINGS_PATH}/jmsd-testing-ctf-test-lib-set-compiler-settings.cmake )
-set( JMSD_THIS_PROJECT_SOURCE_ROOT ${JMSD_COMPONENT_SOURCE_ROOT_PATH}/ctf_test_lib )
-
+include( ${JMSD_COMPONENT_CMAKE_SETTINGS_PATH}/jmsd-testing-cutf-test-lib-set-compiler-settings.cmake )
+set( JMSD_THIS_PROJECT_SOURCE_ROOT ${JMSD_COMPONENT_SOURCE_ROOT_PATH}/cutf_test_lib )
 
 ## include dependencies
 set( ${PROJECT_NAME}_DEPENDENCY_DIRS_VAR
@@ -74,7 +73,7 @@ add_library( ${PROJECT_NAME} SHARED ${header_and_source_files} )
 ## definition section
 set( ${PROJECT_NAME}_BUILD_DEFINITIONS_VAR
 	${ctf_lib_LINK_DEFINITIONS}
-	-DJMSD_TPA_GTM_TEST_SHARED_INTERFACE_INTERNAL )
+	-DJMSD_CUTF_TEST_SHARED_INTERFACE_INTERNAL )
 JMSD_LIST_TO_STRING( ${PROJECT_NAME}_BUILD_DEFINITIONS_VAR )
 JMSD_STRING_REMOVE_DUPLICATES( ${PROJECT_NAME}_BUILD_DEFINITIONS_VAR )
 set( ${PROJECT_NAME}_LINK_DEFINITIONS_VAR
