@@ -338,7 +338,7 @@ class ValuesInIteratorRangeGenerator : public ParamGeneratorInterface<T> {
 // integer test parameter index.
 template <class ParamType>
 std::string DefaultParamName(const TestParamInfo<ParamType>& info) {
-  Message name_stream;
+  ::jmsd::cutf::Message name_stream;
   name_stream << info.index;
   return name_stream.GetString();
 }
@@ -522,7 +522,7 @@ class ParameterizedTestSuiteInfo : public ParameterizedTestSuiteInfoBase {
              param_it != generator.end(); ++param_it, ++i) {
           generated_instantiations = true;
 
-          Message test_name_stream;
+          ::jmsd::cutf::Message test_name_stream;
 
           std::string param_name = name_func(
               TestParamInfo<ParamType>(*param_it, i));

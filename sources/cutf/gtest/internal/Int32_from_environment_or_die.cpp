@@ -1,7 +1,6 @@
 #include "Int32_from_environment_or_die.h"
 
-
-#include "gtest/gtest-message.h"
+#include "gtest/Message.h"
 
 
 namespace jmsd {
@@ -19,7 +18,7 @@ int32_t Int32FromEnvOrDie(const char* var, int32_t default_val) {
   }
 
   int32_t result;
-  if (!::testing::internal::ParseInt32( ::testing::Message() << "The value of environment variable " << var, str_val, &result)) {
+  if (!::testing::internal::ParseInt32( Message() << "The value of environment variable " << var, str_val, &result)) {
 	exit(EXIT_FAILURE);
   }
   return result;

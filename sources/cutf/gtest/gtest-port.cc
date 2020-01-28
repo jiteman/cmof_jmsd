@@ -51,7 +51,6 @@
 #endif  // GTEST_OS_FUCHSIA
 
 #include "gtest/gtest-spi.h"
-#include "gtest/gtest-message.h"
 #include "gtest/internal/gtest-internal.h"
 #include "gtest/internal/gtest-string.h"
 
@@ -792,7 +791,7 @@ bool AtomMatchesChar(bool escaped, char pattern_char, char ch) {
 
 // Helper function used by ValidateRegex() to format error messages.
 static std::string FormatRegexSyntaxError(const char* regex, int index) {
-  return (Message() << "Syntax error at index " << index
+  return ( ::jmsd::cutf::Message() << "Syntax error at index " << index
 		  << " in simple regular expression \"" << regex << "\": ").GetString();
 }
 
@@ -1250,10 +1249,9 @@ void Abort() {
 // given flag.  For example, FlagToEnvVar("foo") will return
 // "GTEST_FOO" in the open-source version.
 static std::string FlagToEnvVar(const char* flag) {
-  const std::string full_flag =
-	  (Message() << GTEST_FLAG_PREFIX_ << flag).GetString();
+  const std::string full_flag = ( ::jmsd::cutf::Message() << GTEST_FLAG_PREFIX_ << flag).GetString();
 
-  Message env_var;
+  ::jmsd::cutf::Message env_var;
   for (size_t i = 0; i != full_flag.length(); i++) {
 	env_var << ToUpper(full_flag.c_str()[i]);
   }
@@ -1264,7 +1262,7 @@ static std::string FlagToEnvVar(const char* flag) {
 // Parses 'str' for a 32-bit signed integer.  If successful, writes
 // the result to *value and returns true; otherwise leaves *value
 // unchanged and returns false.
-bool ParseInt32(const Message& src_text, const char* str, int32_t* value) {
+bool ParseInt32(const ::jmsd::cutf::Message& src_text, const char* str, int32_t* value) {
   // Parses the environment variable as a decimal integer.
   char* end = nullptr;
   const long long_value = strtol(str, &end, 10);  // NOLINT
@@ -1272,7 +1270,7 @@ bool ParseInt32(const Message& src_text, const char* str, int32_t* value) {
   // Has strtol() consumed all characters in the string?
   if (*end != '\0') {
 	// No - an invalid character was encountered.
-	Message msg;
+	::jmsd::cutf::Message msg;
 	msg << "WARNING: " << src_text
 		<< " is expected to be a 32-bit integer, but actually"
 		<< " has value \"" << str << "\".\n";
@@ -1289,7 +1287,7 @@ bool ParseInt32(const Message& src_text, const char* str, int32_t* value) {
 	  result != long_value
 	  // The parsed value overflows as an int32_t.
 	  ) {
-	Message msg;
+	::jmsd::cutf::Message msg;
 	msg << "WARNING: " << src_text
 		<< " is expected to be a 32-bit integer, but actually"
 		<< " has value " << str << ", which overflows.\n";
@@ -1332,8 +1330,7 @@ int32_t Int32FromGTestEnv(const char* flag, int32_t default_value) {
   }
 
   int32_t result = default_value;
-  if (!ParseInt32(Message() << "Environment variable " << env_var,
-				  string_value, &result)) {
+  if ( !ParseInt32( ::jmsd::cutf::Message() << "Environment variable " << env_var, string_value, &result ) ) {
 //    printf("The default value %s is used.\n",
 //           (Message() << default_value).GetString().c_str());
 	fflush(stdout);

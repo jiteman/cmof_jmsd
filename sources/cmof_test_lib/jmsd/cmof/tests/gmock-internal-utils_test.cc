@@ -408,8 +408,7 @@ TEST(LogTest, NoStackTraceWhenStackFramesToSkipIsNegative) {
 
 struct MockStackTraceGetter : testing::internal::OsStackTraceGetterInterface {
   std::string CurrentStackTrace(int max_depth, int skip_count) override {
-    return (testing::Message() << max_depth << "::" << skip_count << "\n")
-        .GetString();
+    return ( ::jmsd::cutf::Message() << max_depth << "::" << skip_count << "\n" ).GetString();
   }
   void UponLeavingGTest() override {}
 };
@@ -425,7 +424,7 @@ TEST(LogTest, DISABLED_NoSkippingStackFrameInOptMode) {
   const std::string log = GetCapturedStdout();
 
   std::string expected_trace =
-      (testing::Message() << GTEST_FLAG(stack_trace_depth) << "::").GetString();
+      ( ::jmsd::cutf::Message() << GTEST_FLAG(stack_trace_depth) << "::").GetString();
   std::string expected_message =
       "\nGMOCK WARNING:\n"
       "Test log.\n"

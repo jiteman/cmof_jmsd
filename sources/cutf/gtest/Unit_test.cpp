@@ -2,8 +2,6 @@
 
 
 #include "gtest-test-part.h"
-#include "gtest-message.h"
-
 
 #include "internal/Unit_test_impl.h"
 #include "internal/Scoped_premature_exit_file.h"
@@ -197,8 +195,9 @@ void UnitTest::AddTestPartResult(
 	const char* file_name,
 	int line_number,
 	const std::string& message,
-	const std::string& os_stack_trace) GTEST_LOCK_EXCLUDED_(mutex_) {
-  ::testing::Message msg;
+	const std::string& os_stack_trace) GTEST_LOCK_EXCLUDED_(mutex_)
+{
+  Message msg;
   msg << message;
 
   ::testing::internal::MutexLock lock(&mutex_);

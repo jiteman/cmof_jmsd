@@ -2,7 +2,7 @@
 
 
 #include "gtest/Assertion_result.h"
-#include "gtest/gtest-message.h"
+#include "gtest/Message.h"
 
 #include "Split_escaped_string.h"
 #include "Distance_editor.h"
@@ -35,7 +35,7 @@ AssertionResult Assertion_result_constructor::construct_expected_equality(
 	::std::string const &rhs_value,
 	bool const ignoring_case )
 {
-	::testing::Message msg;
+	Message msg;
 	msg << "Expected equality of these values:" << "\n  " << lhs_expression;
 
 	if ( lhs_value != lhs_expression ) {

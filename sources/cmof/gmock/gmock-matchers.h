@@ -2828,8 +2828,8 @@ class ElementsAreMatcherImpl : public MatcherInterface<Container> {
   }
 
  private:
-  static Message Elements(size_t count) {
-    return Message() << count << (count == 1 ? " element" : " elements");
+  static ::jmsd::cutf::Message Elements(size_t count) {
+    return ::jmsd::cutf::Message() << count << (count == 1 ? " element" : " elements");
   }
 
   size_t count() const { return matchers_.size(); }
@@ -2930,8 +2930,8 @@ class JMSD_DEPRECATED_GMOCK_API_ UnorderedElementsAreMatcherImplBase {
     return matcher_describers_;
   }
 
-  static Message Elements(size_t n) {
-    return Message() << n << " element" << (n == 1 ? "" : "s");
+  static ::jmsd::cutf::Message Elements(size_t n) {
+    return ::jmsd::cutf::Message() << n << " element" << (n == 1 ? "" : "s");
   }
 
   UnorderedMatcherRequire::Flags match_flags() const { return match_flags_; }

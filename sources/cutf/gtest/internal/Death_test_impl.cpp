@@ -192,7 +192,7 @@ bool DeathTestImpl::Passed(bool status_ok) {
   const std::string error_message = GetErrorLogs();
 
   bool success = false;
-  ::testing::Message buffer;
+  Message buffer;
 
   buffer << "Death test: " << statement() << "\n";
   switch (outcome()) {

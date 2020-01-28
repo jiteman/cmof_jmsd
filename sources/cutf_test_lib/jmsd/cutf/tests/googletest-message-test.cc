@@ -1,17 +1,17 @@
 // Tests for the Message class.
 
-#include "gtest/gtest-message.h"
+#include "gtest/Substring_utilities.h"
+#include "gtest/Message.h"
+#include "gtest/internal/String_stream_to_string.h"
 
 #include "gtest/gtest.h"
 
-#include "gtest/Substring_utilities.h"
 
-#include "gtest/internal/String_stream_to_string.h"
 
 
 namespace {
 
-using ::testing::Message;
+using ::jmsd::cutf::Message;
 
 // Tests the testing::Message class
 

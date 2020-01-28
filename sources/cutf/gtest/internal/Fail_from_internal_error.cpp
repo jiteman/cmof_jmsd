@@ -1,7 +1,7 @@
 #include "Fail_from_internal_error.h"
 
 
-#include "gtest/gtest-message.h"
+#include "gtest/Message.h"
 
 #include "gtest-port.h"
 
@@ -16,7 +16,7 @@ namespace internal {
 // severity. On Windows, the message is read from a pipe handle. On other
 // platforms, it is read from a file descriptor.
 void FailFromInternalError( int const fd ) {
-	::testing::Message error;
+	Message error;
 	char buffer[ 256 ];
 	int num_read;
 

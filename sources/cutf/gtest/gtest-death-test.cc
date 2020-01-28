@@ -69,7 +69,6 @@
 
 #endif  // GTEST_HAS_DEATH_TEST
 
-#include "gtest/gtest-message.h"
 #include "gtest/internal/gtest-string.h"
 #include "gtest/gtest-internal-inl.h"
 

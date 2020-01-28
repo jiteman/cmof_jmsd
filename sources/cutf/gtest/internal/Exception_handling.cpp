@@ -2,7 +2,6 @@
 
 
 #include "gtest/gtest-test-part.h"
-#include "gtest/gtest-message.h"
 
 #include "gtest/Test_part_result_to_string.h"
 
@@ -22,7 +21,7 @@ namespace cutf {
 // prohibits creation of objects with destructors on stack in functions
 // using __try (see error C2712).
 ::std::string *FormatSehExceptionMessage( DWORD exception_code, const char *location ) {
-	::testing::Message message;
+	Message message;
 	message << "SEH exception with code 0x" << ::std::setbase(16) <<
 	exception_code << ::std::setbase(10) << " thrown in " << location << ".";
 
@@ -39,7 +38,7 @@ namespace internal {
 
 // Adds an "exception thrown" fatal failure to the current test.
 ::std::string FormatCxxExceptionMessage( char const *description, char const *location ) {
-	::testing::Message message;
+	Message message;
 
 	if ( description != nullptr ) {
 		message << "C++ exception with description \"" << description << "\"";

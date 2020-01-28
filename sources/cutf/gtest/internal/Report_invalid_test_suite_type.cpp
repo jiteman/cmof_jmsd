@@ -3,8 +3,6 @@
 
 #include "gtest/internal/gtest-internal.h"
 
-#include "gtest/gtest-message.h"
-
 
 namespace jmsd {
 namespace cutf {
@@ -12,7 +10,7 @@ namespace internal {
 
 
 void ReportInvalidTestSuiteType( char const *const test_suite_name, ::testing::internal::CodeLocation const &code_location ) {
-	::testing::Message errors;
+	Message errors;
 	errors <<
 		"Attempted redefinition of test suite " << test_suite_name << ".\n" <<
 		"All tests in the same test suite must use the same test fixture\n" <<

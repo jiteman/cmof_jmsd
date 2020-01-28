@@ -3,7 +3,7 @@
 #include "Scoped_trace.hxx"
 
 
-#include "gtest-message.h"
+#include "Message.h"
 
 #include "gtest/internal/gtest-port.h"
 
@@ -31,7 +31,7 @@ class JMSD_DEPRECATED_GTEST_API_ ScopedTrace {
   // Slow, but flexible.
   template <typename T>
   ScopedTrace(const char* file, int line, const T& message) {
-	PushTrace(file, line, (::testing::Message() << message).GetString());
+	PushTrace(file, line, (::jmsd::cutf::Message() << message).GetString());
   }
 
   // Optimize for some known types.

@@ -2,9 +2,6 @@
 
 #include "Death_test_check.hxx"
 
-
-#include "gtest/gtest-message.h"
-
 #include "gtest/internal/Streamable_to_string.hin"
 
 #include "gtest-internal.h"

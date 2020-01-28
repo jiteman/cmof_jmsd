@@ -4,8 +4,6 @@
 #include "Text_output_attributes.h"
 
 
-#include "gtest-message.h"
-
 #include "gtest.h"
 
 #include "internal/gtest-port.h"
@@ -50,7 +48,7 @@ static ::std::vector< ::std::string > const empty_vector_of_strings;
 }
 
 ::std::string FormatWordList( ::std::vector< ::std::string > const &words ) {
-	::testing::Message word_list;
+	Message word_list;
 
 	for ( size_t i = 0; i < words.size(); ++i ) {
 		if ( i > 0 && words.size() > 2 ) {

@@ -1,7 +1,7 @@
 #include "Exit_summary.h"
 
 
-#include "gtest/gtest-message.h"
+#include "gtest/Message.h"
 
 
 namespace jmsd {
@@ -11,7 +11,7 @@ namespace internal {
 
 // Generates a textual description of a given exit code, in the format specified by wait(2).
 ::std::string ExitSummary( int const exit_code ) {
-	::testing::Message m;
+	Message m;
 
 # if GTEST_OS_WINDOWS || GTEST_OS_FUCHSIA
 	m << "Exited with exit status " << exit_code;

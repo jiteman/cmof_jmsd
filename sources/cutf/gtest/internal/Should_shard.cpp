@@ -1,7 +1,7 @@
 #include "Should_shard.h"
 
 
-#include "gtest/gtest-message.h"
+#include "gtest/Message.h"
 #include "gtest/gtest-constants.h"
 
 #include "Colored_print.h"
@@ -31,7 +31,7 @@ bool ShouldShard( char const *const total_shards_env, char const *const shard_in
   if (total_shards == -1 && shard_index == -1) {
 	return false;
   } else if (total_shards == -1 && shard_index != -1) {
-	const ::testing::Message msg = ::testing::Message()
+	const Message msg = Message()
 	  << "Invalid environment variables: you have "
 	  << constants::kTestShardIndex << " = " << shard_index
 	  << ", but have left " << constants::kTestTotalShards << " unset.\n";
@@ -39,7 +39,7 @@ bool ShouldShard( char const *const total_shards_env, char const *const shard_in
 	fflush(stdout);
 	exit(EXIT_FAILURE);
   } else if (total_shards != -1 && shard_index == -1) {
-	const ::testing::Message msg = ::testing::Message()
+	const Message msg = Message()
 	  << "Invalid environment variables: you have "
 	  << constants::kTestTotalShards << " = " << total_shards
 	  << ", but have left " << constants::kTestShardIndex << " unset.\n";
@@ -47,7 +47,7 @@ bool ShouldShard( char const *const total_shards_env, char const *const shard_in
 	fflush(stdout);
 	exit(EXIT_FAILURE);
   } else if (shard_index < 0 || shard_index >= total_shards) {
-	const ::testing::Message msg = ::testing::Message()
+	const Message msg = Message()
 	  << "Invalid environment variables: we require 0 <= "
 	  << constants::kTestShardIndex << " < " << constants::kTestTotalShards
 	  << ", but you have " << constants::kTestShardIndex << "=" << shard_index

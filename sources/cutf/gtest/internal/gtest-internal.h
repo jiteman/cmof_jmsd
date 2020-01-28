@@ -7,18 +7,20 @@
 // GOOGLETEST_CM0001 DO NOT DELETE
 
 
-#include "gtest/internal/gtest-port.h"
+#include "gtest-filepath.h"
+#include "gtest-string.h"
+#include "gtest-type-util.h"
 
-#if GTEST_OS_LINUX
-# include <stdlib.h>
-# include <sys/types.h>
-# include <sys/wait.h>
-# include <unistd.h>
-#endif  // GTEST_OS_LINUX
+#include "Make_and_register_test_info.h"
 
-#if GTEST_HAS_EXCEPTIONS
-# include <stdexcept>
-#endif
+//#include "gtest/gtest-message.h"
+
+#include "Streamable_to_string.hin"
+
+#include "gtest/Test_info.hxx"
+#include "gtest/Unit_test.hxx"
+#include "gtest/Assertion_result.hxx"
+#include "gtest/Test.hxx"
 
 
 #include <ctype.h>
@@ -33,20 +35,21 @@
 #include <type_traits>
 #include <vector>
 
-#include "gtest-filepath.h"
-#include "gtest-string.h"
-#include "gtest-type-util.h"
 
-#include "Make_and_register_test_info.h"
+#include "gtest/internal/gtest-port.h"
 
-#include "gtest/gtest-message.h"
 
-#include "Streamable_to_string.hin"
+#if GTEST_OS_LINUX
+# include <stdlib.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <unistd.h>
+#endif  // GTEST_OS_LINUX
 
-#include "gtest/Test_info.hxx"
-#include "gtest/Unit_test.hxx"
-#include "gtest/Assertion_result.hxx"
-#include "gtest/Test.hxx"
+#if GTEST_HAS_EXCEPTIONS
+# include <stdexcept>
+#endif
+
 
 // Due to C++ preprocessor weirdness, we need double indirection to
 // concatenate two tokens when one of them is __LINE__.  Writing
@@ -94,7 +97,7 @@ class IgnoredValue {
 
 // Appends the user-supplied message to the Google-Test-generated message.
 JMSD_DEPRECATED_GTEST_API_ std::string AppendUserMessage(
-	const std::string& gtest_msg, const Message& user_msg);
+	const std::string& gtest_msg, const ::jmsd::cutf::Message& user_msg);
 
 // Calculate the diff between 'left' and 'right' and return it in unified diff
 // format.
@@ -910,7 +913,7 @@ constexpr bool InstantiateTypedTestCase_P_IsDeprecated() { return true; }
 
 #define GTEST_MESSAGE_AT_(file, line, message, result_type) \
   ::testing::internal::AssertHelper(result_type, file, line, message) \
-	= ::testing::Message()
+	= ::jmsd::cutf::Message()
 
 #define GTEST_MESSAGE_(message, result_type) \
   GTEST_MESSAGE_AT_(__FILE__, __LINE__, message, result_type)

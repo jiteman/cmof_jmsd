@@ -52,7 +52,7 @@ class TestPartResultTest : public ::jmsd::cutf::Test {
 
 
 TEST_F(TestPartResultTest, ConstructorWorks) {
-  ::testing::Message message;
+  ::jmsd::cutf::Message message;
   message << "something is terribly wrong";
   message << static_cast<const char*>( ::jmsd::cutf::constants::internal::kStackTraceMarker);
   message << "some unimportant stack trace";

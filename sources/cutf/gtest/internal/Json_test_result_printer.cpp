@@ -1,7 +1,6 @@
 #include "Json_test_result_printer.h"
 
 
-#include "gtest/gtest-message.h"
 #include "gtest/Text_output_utilities.h"
 #include "gtest/Test_info.h"
 
@@ -43,7 +42,7 @@ void JsonUnitTestResultPrinter::OnTestIterationEnd(const ::jmsd::cutf::UnitTest&
 
 // Returns an JSON-escaped copy of the input string str.
 std::string JsonUnitTestResultPrinter::EscapeJson(const std::string& str) {
-  ::testing::Message m;
+  Message m;
 
   for (size_t i = 0; i < str.size(); ++i) {
 	const char ch = str[i];
@@ -292,9 +291,8 @@ void JsonUnitTestResultPrinter::PrintJsonTestList(
 }
 // Produces a string representing the test properties in a result as
 // a JSON dictionary.
-std::string JsonUnitTestResultPrinter::TestPropertiesAsJson(
-	const TestResult& result, const std::string& indent) {
-  ::testing::Message attributes;
+std::string JsonUnitTestResultPrinter::TestPropertiesAsJson( const TestResult& result, const std::string& indent) {
+  Message attributes;
   for (int i = 0; i < result.test_property_count(); ++i) {
 	const TestProperty& property = result.GetTestProperty(i);
 	attributes << ",\n" << indent << "\"" << property.key() << "\": "

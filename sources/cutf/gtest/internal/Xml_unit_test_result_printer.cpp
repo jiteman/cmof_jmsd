@@ -1,7 +1,6 @@
 #include "Xml_unit_test_result_printer.h"
 
 
-#include "gtest/gtest-message.h"
 #include "gtest/Text_output_utilities.h"
 #include "gtest/Test_info.h"
 
@@ -55,7 +54,7 @@ void XmlUnitTestResultPrinter::ListTestsMatchingFilter(
 // If this module is ever modified to produce version 1.1 XML output,
 // most invalid characters can be retained using character references.
 std::string XmlUnitTestResultPrinter::EscapeXml( ::std::string const &str, bool const is_attribute ) {
-  ::testing::Message m;
+  Message m;
 
   for (size_t i = 0; i < str.size(); ++i) {
 	const char ch = str[i];
@@ -311,9 +310,8 @@ void XmlUnitTestResultPrinter::PrintXmlTestsList(
 
 // Produces a string representing the test properties in a result as space
 // delimited XML attributes based on the property key="value" pairs.
-std::string XmlUnitTestResultPrinter::TestPropertiesAsXmlAttributes(
-	const ::jmsd::cutf::TestResult& result) {
-  ::testing::Message attributes;
+std::string XmlUnitTestResultPrinter::TestPropertiesAsXmlAttributes( const ::jmsd::cutf::TestResult& result) {
+  Message attributes;
   for (int i = 0; i < result.test_property_count(); ++i) {
 	const ::jmsd::cutf::TestProperty& property = result.GetTestProperty(i);
 	attributes << " " << property.key() << "="

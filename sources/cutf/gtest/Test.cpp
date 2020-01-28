@@ -67,7 +67,7 @@ void Test::RecordProperty(const std::string& key, const std::string& value) {
 
 // Allows user supplied key value pairs to be recorded for later output.
 void Test::RecordProperty(const std::string& key, int value) {
-  ::testing::Message value_message;
+  Message value_message;
   value_message << value;
   RecordProperty(key, value_message.GetString().c_str());
 }

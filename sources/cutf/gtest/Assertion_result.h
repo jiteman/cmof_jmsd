@@ -3,6 +3,8 @@
 #include "Assertion_result.hxx"
 
 
+#include "Message.hxx"
+
 #include "internal/gtest-port.h"
 
 
@@ -23,7 +25,7 @@ public:
 
 	// Makes a failed assertion result with the given failure message.
 	// Deprecated; use AssertionFailure() << msg.
-	static AssertionResult AssertionFailure(const ::testing::Message& msg);
+	static AssertionResult AssertionFailure(const Message& msg);
 
 public:
 	// Copy constructor.
@@ -72,7 +74,7 @@ public:
 
  private:
   // Appends the contents of message to message_.
-  void AppendMessage( ::testing::Message const &a_message );
+  void AppendMessage( Message const &a_message );
 
   // Swap the contents of this AssertionResult with other.
   void swap(AssertionResult& other);
@@ -89,9 +91,3 @@ public:
 
 } // namespace cutf
 } // namespace jmsd
-
-
-namespace testing {
-
-
-} // namespace testing

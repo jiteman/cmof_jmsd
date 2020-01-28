@@ -61,6 +61,7 @@ TEST(CommandLineFlagsTest, CanBeAccessedInCodeOnceGTestHIsIncluded) {
 //#include "gtest/Floating_point_comparator.h"
 #include "gtest/internal/Abstract_socket_writer.h"
 #include "gtest/internal/Streaming_listener.h"
+#include "gtest/internal/utf8_utilities.h"
 #include "gtest/internal/gtest-flags-internal.h"
 
 #include "gtest/Assertion_result.hin"
@@ -212,7 +213,7 @@ using ::testing::GTEST_FLAG(stack_trace_depth);
 using ::testing::GTEST_FLAG(stream_result_to);
 using ::testing::GTEST_FLAG(throw_on_failure);
 
-using ::testing::Message;
+using ::jmsd::cutf::Message;
 using ::testing::ScopedFakeTestPartResultReporter;
 
 using ::jmsd::cutf::Test;
@@ -227,7 +228,6 @@ using ::testing::internal::AlwaysTrue;
 using ::testing::internal::AppendUserMessage;
 using ::testing::internal::ArrayAwareFind;
 using ::testing::internal::ArrayEq;
-using ::testing::internal::CodePointToUtf8;
 using ::testing::internal::CopyArray;
 
 using ::jmsd::cutf::internal::FloatingPoint;
@@ -259,8 +259,6 @@ using ::testing::internal::SkipPrefix;
 using ::testing::internal::String;
 using ::testing::internal::TestEventListenersAccessor;
 //using testing::internal::TestResultAccessor;
-
-using ::testing::internal::WideStringToUtf8;
 
 using ::testing::internal::kMaxRandomSeed;
 using ::testing::internal::kTestTypeIdInGoogleTest;
@@ -574,41 +572,38 @@ TEST(NullLiteralTest, NoConversionNoWarning) {
 
 // Tests that the NUL character L'\0' is encoded correctly.
 TEST(CodePointToUtf8Test, CanEncodeNul) {
-  EXPECT_EQ("", CodePointToUtf8(L'\0'));
+  EXPECT_EQ("", ::jmsd::cutf::internal::utf8_utilities::CodePointToUtf8(L'\0'));
 }
 
 // Tests that ASCII characters are encoded correctly.
 TEST(CodePointToUtf8Test, CanEncodeAscii) {
-  EXPECT_EQ("a", CodePointToUtf8(L'a'));
-  EXPECT_EQ("Z", CodePointToUtf8(L'Z'));
-  EXPECT_EQ("&", CodePointToUtf8(L'&'));
-  EXPECT_EQ("\x7F", CodePointToUtf8(L'\x7F'));
+  EXPECT_EQ("a", ::jmsd::cutf::internal::utf8_utilities::CodePointToUtf8(L'a'));
+  EXPECT_EQ("Z", ::jmsd::cutf::internal::utf8_utilities::CodePointToUtf8(L'Z'));
+  EXPECT_EQ("&", ::jmsd::cutf::internal::utf8_utilities::CodePointToUtf8(L'&'));
+  EXPECT_EQ("\x7F", ::jmsd::cutf::internal::utf8_utilities::CodePointToUtf8(L'\x7F'));
 }
 
 // Tests that Unicode code-points that have 8 to 11 bits are encoded
 // as 110xxxxx 10xxxxxx.
 TEST(CodePointToUtf8Test, CanEncode8To11Bits) {
   // 000 1101 0011 => 110-00011 10-010011
-  EXPECT_EQ("\xC3\x93", CodePointToUtf8(L'\xD3'));
+  EXPECT_EQ("\xC3\x93", ::jmsd::cutf::internal::utf8_utilities::CodePointToUtf8(L'\xD3'));
 
   // 101 0111 0110 => 110-10101 10-110110
   // Some compilers (e.g., GCC on MinGW) cannot handle non-ASCII codepoints
   // in wide strings and wide chars. In order to accommodate them, we have to
   // introduce such character constants as integers.
-  EXPECT_EQ("\xD5\xB6",
-			CodePointToUtf8(static_cast<wchar_t>(0x576)));
+  EXPECT_EQ("\xD5\xB6", ::jmsd::cutf::internal::utf8_utilities::CodePointToUtf8(static_cast<wchar_t>(0x576)));
 }
 
 // Tests that Unicode code-points that have 12 to 16 bits are encoded
 // as 1110xxxx 10xxxxxx 10xxxxxx.
 TEST(CodePointToUtf8Test, CanEncode12To16Bits) {
   // 0000 1000 1101 0011 => 1110-0000 10-100011 10-010011
-  EXPECT_EQ("\xE0\xA3\x93",
-			CodePointToUtf8(static_cast<wchar_t>(0x8D3)));
+  EXPECT_EQ("\xE0\xA3\x93", ::jmsd::cutf::internal::utf8_utilities::CodePointToUtf8(static_cast<wchar_t>(0x8D3)));
 
   // 1100 0111 0100 1101 => 1110-1100 10-011101 10-001101
-  EXPECT_EQ("\xEC\x9D\x8D",
-			CodePointToUtf8(static_cast<wchar_t>(0xC74D)));
+  EXPECT_EQ("\xEC\x9D\x8D", ::jmsd::cutf::internal::utf8_utilities::CodePointToUtf8(static_cast<wchar_t>(0xC74D)));
 }
 
 #if !GTEST_WIDE_STRING_USES_UTF16_
@@ -620,18 +615,18 @@ TEST(CodePointToUtf8Test, CanEncode12To16Bits) {
 // as 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx.
 TEST(CodePointToUtf8Test, CanEncode17To21Bits) {
   // 0 0001 0000 1000 1101 0011 => 11110-000 10-010000 10-100011 10-010011
-  EXPECT_EQ("\xF0\x90\xA3\x93", CodePointToUtf8(L'\x108D3'));
+  EXPECT_EQ("\xF0\x90\xA3\x93", ::jmsd::cutf::internal::utf8_utilities::CodePointToUtf8(L'\x108D3'));
 
   // 0 0001 0000 0100 0000 0000 => 11110-000 10-010000 10-010000 10-000000
-  EXPECT_EQ("\xF0\x90\x90\x80", CodePointToUtf8(L'\x10400'));
+  EXPECT_EQ("\xF0\x90\x90\x80", ::jmsd::cutf::internal::utf8_utilities::CodePointToUtf8(L'\x10400'));
 
   // 1 0000 1000 0110 0011 0100 => 11110-100 10-001000 10-011000 10-110100
-  EXPECT_EQ("\xF4\x88\x98\xB4", CodePointToUtf8(L'\x108634'));
+  EXPECT_EQ("\xF4\x88\x98\xB4", ::jmsd::cutf::internal::utf8_utilities::CodePointToUtf8(L'\x108634'));
 }
 
 // Tests that encoding an invalid code-point generates the expected result.
 TEST(CodePointToUtf8Test, CanEncodeInvalidCodePoint) {
-  EXPECT_EQ("(Invalid Unicode 0x1234ABCD)", CodePointToUtf8(L'\x1234ABCD'));
+  EXPECT_EQ("(Invalid Unicode 0x1234ABCD)", ::jmsd::cutf::internal::utf8_utilities::CodePointToUtf8(L'\x1234ABCD'));
 }
 
 #endif  // !GTEST_WIDE_STRING_USES_UTF16_
@@ -640,29 +635,29 @@ TEST(CodePointToUtf8Test, CanEncodeInvalidCodePoint) {
 
 // Tests that the NUL character L'\0' is encoded correctly.
 TEST(WideStringToUtf8Test, CanEncodeNul) {
-  EXPECT_STREQ("", WideStringToUtf8(L"", 0).c_str());
-  EXPECT_STREQ("", WideStringToUtf8(L"", -1).c_str());
+  EXPECT_STREQ("", ::jmsd::cutf::internal::utf8_utilities::WideStringToUtf8(L"", 0).c_str());
+  EXPECT_STREQ("", ::jmsd::cutf::internal::utf8_utilities::WideStringToUtf8(L"", -1).c_str());
 }
 
 // Tests that ASCII strings are encoded correctly.
 TEST(WideStringToUtf8Test, CanEncodeAscii) {
-  EXPECT_STREQ("a", WideStringToUtf8(L"a", 1).c_str());
-  EXPECT_STREQ("ab", WideStringToUtf8(L"ab", 2).c_str());
-  EXPECT_STREQ("a", WideStringToUtf8(L"a", -1).c_str());
-  EXPECT_STREQ("ab", WideStringToUtf8(L"ab", -1).c_str());
+  EXPECT_STREQ("a", ::jmsd::cutf::internal::utf8_utilities::WideStringToUtf8(L"a", 1).c_str());
+  EXPECT_STREQ("ab", ::jmsd::cutf::internal::utf8_utilities::WideStringToUtf8(L"ab", 2).c_str());
+  EXPECT_STREQ("a", ::jmsd::cutf::internal::utf8_utilities::WideStringToUtf8(L"a", -1).c_str());
+  EXPECT_STREQ("ab", ::jmsd::cutf::internal::utf8_utilities::WideStringToUtf8(L"ab", -1).c_str());
 }
 
 // Tests that Unicode code-points that have 8 to 11 bits are encoded
 // as 110xxxxx 10xxxxxx.
 TEST(WideStringToUtf8Test, CanEncode8To11Bits) {
   // 000 1101 0011 => 110-00011 10-010011
-  EXPECT_STREQ("\xC3\x93", WideStringToUtf8(L"\xD3", 1).c_str());
-  EXPECT_STREQ("\xC3\x93", WideStringToUtf8(L"\xD3", -1).c_str());
+  EXPECT_STREQ("\xC3\x93", ::jmsd::cutf::internal::utf8_utilities::WideStringToUtf8(L"\xD3", 1).c_str());
+  EXPECT_STREQ("\xC3\x93", ::jmsd::cutf::internal::utf8_utilities::WideStringToUtf8(L"\xD3", -1).c_str());
 
   // 101 0111 0110 => 110-10101 10-110110
   const wchar_t s[] = { 0x576, '\0' };
-  EXPECT_STREQ("\xD5\xB6", WideStringToUtf8(s, 1).c_str());
-  EXPECT_STREQ("\xD5\xB6", WideStringToUtf8(s, -1).c_str());
+  EXPECT_STREQ("\xD5\xB6", ::jmsd::cutf::internal::utf8_utilities::WideStringToUtf8(s, 1).c_str());
+  EXPECT_STREQ("\xD5\xB6", ::jmsd::cutf::internal::utf8_utilities::WideStringToUtf8(s, -1).c_str());
 }
 
 // Tests that Unicode code-points that have 12 to 16 bits are encoded
@@ -670,24 +665,24 @@ TEST(WideStringToUtf8Test, CanEncode8To11Bits) {
 TEST(WideStringToUtf8Test, CanEncode12To16Bits) {
   // 0000 1000 1101 0011 => 1110-0000 10-100011 10-010011
   const wchar_t s1[] = { 0x8D3, '\0' };
-  EXPECT_STREQ("\xE0\xA3\x93", WideStringToUtf8(s1, 1).c_str());
-  EXPECT_STREQ("\xE0\xA3\x93", WideStringToUtf8(s1, -1).c_str());
+  EXPECT_STREQ("\xE0\xA3\x93", ::jmsd::cutf::internal::utf8_utilities::WideStringToUtf8(s1, 1).c_str());
+  EXPECT_STREQ("\xE0\xA3\x93", ::jmsd::cutf::internal::utf8_utilities::WideStringToUtf8(s1, -1).c_str());
 
   // 1100 0111 0100 1101 => 1110-1100 10-011101 10-001101
   const wchar_t s2[] = { 0xC74D, '\0' };
-  EXPECT_STREQ("\xEC\x9D\x8D", WideStringToUtf8(s2, 1).c_str());
-  EXPECT_STREQ("\xEC\x9D\x8D", WideStringToUtf8(s2, -1).c_str());
+  EXPECT_STREQ("\xEC\x9D\x8D", ::jmsd::cutf::internal::utf8_utilities::WideStringToUtf8(s2, 1).c_str());
+  EXPECT_STREQ("\xEC\x9D\x8D", ::jmsd::cutf::internal::utf8_utilities::WideStringToUtf8(s2, -1).c_str());
 }
 
 // Tests that the conversion stops when the function encounters \0 character.
 TEST(WideStringToUtf8Test, StopsOnNulCharacter) {
-  EXPECT_STREQ("ABC", WideStringToUtf8(L"ABC\0XYZ", 100).c_str());
+  EXPECT_STREQ("ABC", ::jmsd::cutf::internal::utf8_utilities::WideStringToUtf8(L"ABC\0XYZ", 100).c_str());
 }
 
 // Tests that the conversion stops when the function reaches the limit
 // specified by the 'length' parameter.
 TEST(WideStringToUtf8Test, StopsWhenLengthLimitReached) {
-  EXPECT_STREQ("ABC", WideStringToUtf8(L"ABCDEF", 3).c_str());
+  EXPECT_STREQ("ABC", ::jmsd::cutf::internal::utf8_utilities::WideStringToUtf8(L"ABCDEF", 3).c_str());
 }
 
 #if !GTEST_WIDE_STRING_USES_UTF16_
@@ -696,25 +691,24 @@ TEST(WideStringToUtf8Test, StopsWhenLengthLimitReached) {
 // on the systems using UTF-16 encoding.
 TEST(WideStringToUtf8Test, CanEncode17To21Bits) {
   // 0 0001 0000 1000 1101 0011 => 11110-000 10-010000 10-100011 10-010011
-  EXPECT_STREQ("\xF0\x90\xA3\x93", WideStringToUtf8(L"\x108D3", 1).c_str());
-  EXPECT_STREQ("\xF0\x90\xA3\x93", WideStringToUtf8(L"\x108D3", -1).c_str());
+  EXPECT_STREQ("\xF0\x90\xA3\x93", ::jmsd::cutf::internal::utf8_utilities::WideStringToUtf8(L"\x108D3", 1).c_str());
+  EXPECT_STREQ("\xF0\x90\xA3\x93", ::jmsd::cutf::internal::utf8_utilities::WideStringToUtf8(L"\x108D3", -1).c_str());
 
   // 1 0000 1000 0110 0011 0100 => 11110-100 10-001000 10-011000 10-110100
-  EXPECT_STREQ("\xF4\x88\x98\xB4", WideStringToUtf8(L"\x108634", 1).c_str());
-  EXPECT_STREQ("\xF4\x88\x98\xB4", WideStringToUtf8(L"\x108634", -1).c_str());
+  EXPECT_STREQ("\xF4\x88\x98\xB4", ::jmsd::cutf::internal::utf8_utilities::WideStringToUtf8(L"\x108634", 1).c_str());
+  EXPECT_STREQ("\xF4\x88\x98\xB4", ::jmsd::cutf::internal::utf8_utilities::WideStringToUtf8(L"\x108634", -1).c_str());
 }
 
 // Tests that encoding an invalid code-point generates the expected result.
 TEST(WideStringToUtf8Test, CanEncodeInvalidCodePoint) {
-  EXPECT_STREQ("(Invalid Unicode 0xABCDFF)",
-			   WideStringToUtf8(L"\xABCDFF", -1).c_str());
+  EXPECT_STREQ("(Invalid Unicode 0xABCDFF)", ::jmsd::cutf::internal::utf8_utilities::WideStringToUtf8(L"\xABCDFF", -1).c_str());
 }
 #else  // !GTEST_WIDE_STRING_USES_UTF16_
 // Tests that surrogate pairs are encoded correctly on the systems using
 // UTF-16 encoding in the wide strings.
 TEST(WideStringToUtf8Test, CanEncodeValidUtf16SUrrogatePairs) {
   const wchar_t s[] = { 0xD801, 0xDC00, '\0' };
-  EXPECT_STREQ("\xF0\x90\x90\x80", WideStringToUtf8(s, -1).c_str());
+  EXPECT_STREQ("\xF0\x90\x90\x80", ::jmsd::cutf::internal::utf8_utilities::WideStringToUtf8(s, -1).c_str());
 }
 
 // Tests that encoding an invalid UTF-16 surrogate pair
@@ -722,13 +716,13 @@ TEST(WideStringToUtf8Test, CanEncodeValidUtf16SUrrogatePairs) {
 TEST(WideStringToUtf8Test, CanEncodeInvalidUtf16SurrogatePair) {
   // Leading surrogate is at the end of the string.
   const wchar_t s1[] = { 0xD800, '\0' };
-  EXPECT_STREQ("\xED\xA0\x80", WideStringToUtf8(s1, -1).c_str());
+  EXPECT_STREQ("\xED\xA0\x80", ::jmsd::cutf::internal::utf8_utilities::WideStringToUtf8(s1, -1).c_str());
   // Leading surrogate is not followed by the trailing surrogate.
   const wchar_t s2[] = { 0xD800, 'M', '\0' };
-  EXPECT_STREQ("\xED\xA0\x80M", WideStringToUtf8(s2, -1).c_str());
+  EXPECT_STREQ("\xED\xA0\x80M", ::jmsd::cutf::internal::utf8_utilities::WideStringToUtf8(s2, -1).c_str());
   // Trailing surrogate appearas without a leading surrogate.
   const wchar_t s3[] = { 0xDC00, 'P', 'Q', 'R', '\0' };
-  EXPECT_STREQ("\xED\xB0\x80PQR", WideStringToUtf8(s3, -1).c_str());
+  EXPECT_STREQ("\xED\xB0\x80PQR", ::jmsd::cutf::internal::utf8_utilities::WideStringToUtf8(s3, -1).c_str());
 }
 #endif  // !GTEST_WIDE_STRING_USES_UTF16_
 
@@ -748,9 +742,7 @@ TEST(WideStringToUtf8Test, ConcatenatesCodepointsCorrectly) {
 #else
 TEST(WideStringToUtf8Test, ConcatenatesCodepointsCorrectly) {
   const wchar_t s[] = { 0xC74D, '\n', 0x576, 0x8D3, '\0'};
-  EXPECT_STREQ(
-	  "\xEC\x9D\x8D" "\n" "\xD5\xB6" "\xE0\xA3\x93",
-	  WideStringToUtf8(s, -1).c_str());
+  EXPECT_STREQ( "\xEC\x9D\x8D" "\n" "\xD5\xB6" "\xE0\xA3\x93", ::jmsd::cutf::internal::utf8_utilities::WideStringToUtf8( s, -1 ).c_str() );
 }
 #endif  // !GTEST_WIDE_STRING_USES_UTF16_
 

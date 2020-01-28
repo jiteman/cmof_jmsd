@@ -2,7 +2,7 @@
 
 #include "Assertion_result.h"
 
-#include "gtest-message.h"
+#include "Message.h"
 
 #include <type_traits>
 
@@ -27,7 +27,7 @@ AssertionResult::AssertionResult(
 
 // Streams a custom failure message into this object.
 template< typename T > AssertionResult &AssertionResult::operator <<( T const &value ) {
-	this->AppendMessage( ::testing::Message() << value );
+	this->AppendMessage( ::jmsd::cutf::Message() << value );
 	return *this;
 }
 
@@ -35,9 +35,3 @@ template< typename T > AssertionResult &AssertionResult::operator <<( T const &v
 
 } // namespace cutf
 } // namespace jmsd
-
-
-namespace testing {
-
-
-} // namespace testing

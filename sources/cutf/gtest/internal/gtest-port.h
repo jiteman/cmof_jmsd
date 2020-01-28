@@ -213,6 +213,8 @@
 //                                        deprecated; calling a marked function
 //                                        should generate a compiler warning
 
+#include "gtest/Message.hxx"
+
 #include <ctype.h>   // for isspace, etc
 #include <stddef.h>  // for ptrdiff_t
 #include <stdio.h>
@@ -801,8 +803,6 @@ typedef struct _RTL_CRITICAL_SECTION GTEST_CRITICAL_SECTION;
 #endif  // __clang__
 
 namespace testing {
-
-class Message;
 
 // Legacy imports for backwards compatibility.
 // New code should use std:: names directly.
@@ -2162,7 +2162,7 @@ class GTestFlagSaver; // eisha: REMOVE THIS SHIT
 // Parses 'str' for a 32-bit signed integer.  If successful, writes the result
 // to *value and returns true; otherwise leaves *value unchanged and returns
 // false.
-bool JMSD_DEPRECATED_GTEST_API_ ParseInt32(const Message& src_text, const char* str, int32_t* value);
+bool JMSD_DEPRECATED_GTEST_API_ ParseInt32(const ::jmsd::cutf::Message& src_text, const char* str, int32_t* value);
 
 // Parses a bool/int32_t/string from the environment variable
 // corresponding to the given Google Test flag.

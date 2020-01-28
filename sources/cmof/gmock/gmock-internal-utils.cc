@@ -100,7 +100,7 @@ class GoogleTestFailureReporter : public FailureReporterInterface {
                  TestPartResult::kNonFatalFailure,
                  file,
                  line,
-                 message.c_str()) = Message();
+                 message.c_str()) = ::jmsd::cutf::Message();
     if (type == kFatal) {
       posix::Abort();
     }

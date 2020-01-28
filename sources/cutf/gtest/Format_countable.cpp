@@ -1,8 +1,6 @@
 #include "Format_countable.h"
 
 
-#include "gtest-message.h"
-
 #include "internal/Streamable_to_string.hin"
 
 

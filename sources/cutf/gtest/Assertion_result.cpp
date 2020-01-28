@@ -3,7 +3,7 @@
 
 #include "Assertion_result.hin"
 
-#include "gtest-message.h"
+#include "Message.h"
 
 
 namespace jmsd {
@@ -22,7 +22,7 @@ AssertionResult AssertionResult::AssertionFailure() {
 
 // Makes a failed assertion result with the given failure message.
 // Deprecated; use AssertionFailure() << message.
-AssertionResult AssertionResult::AssertionFailure(const ::testing::Message& message) {
+AssertionResult AssertionResult::AssertionFailure(const Message& message) {
 	return THIS_STATIC::AssertionFailure() << message;
 }
 
@@ -73,12 +73,12 @@ const char *AssertionResult::failure_message() const {
 
 // Allows streaming basic output manipulators such as endl or flush into this object.
 AssertionResult &AssertionResult::operator <<( ::std::ostream &( *basic_manipulator )( ::std::ostream &stream ) ) {
-	this->AppendMessage( ::testing::Message() << basic_manipulator );
+	this->AppendMessage( Message() << basic_manipulator );
 	return *this;
 }
 
 // Appends the contents of message to message_.
-void AssertionResult::AppendMessage( ::testing::Message const &a_message ) {
+void AssertionResult::AppendMessage( Message const &a_message ) {
 	if ( message_.get() == nullptr ) {
 		message_.reset( new ::std::string );
 	}
@@ -88,9 +88,3 @@ void AssertionResult::AppendMessage( ::testing::Message const &a_message ) {
 
 } // namespace cutf
 } // namespace jmsd
-
-
-namespace testing {
-
-
-} // namespace testing

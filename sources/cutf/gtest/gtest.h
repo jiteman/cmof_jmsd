@@ -35,7 +35,6 @@
 #include "gtest/internal/gtest-string.h"
 #include "gtest/gtest-death-test.h"
 #include "gtest/gtest-matchers.h"
-#include "gtest/gtest-message.h"
 #include "gtest/gtest-param-test.h"
 #include "gtest/gtest-printers.h"
 #include "gtest/gtest_prod.h"
@@ -344,7 +343,7 @@ class JMSD_DEPRECATED_GTEST_API_ AssertHelper {
 
   // Message assignment is a semantic trick to enable assertion
   // streaming; see the GTEST_MESSAGE_ macro below.
-  void operator=(const Message& message) const;
+  void operator=(const ::jmsd::cutf::Message& message) const;
 
  private:
   // We put our data in a struct so that the size of the AssertHelper class can
