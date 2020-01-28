@@ -68,6 +68,7 @@ TEST(CommandLineFlagsTest, CanBeAccessedInCodeOnceGTestHIsIncluded) {
 
 #include "gtest/internal/Stl_utilities.hin"
 #include "gtest/internal/Floating_point_comparator.hin"
+#include "gtest/internal/Floating_point_type.hin"
 
 
 namespace testing {
@@ -229,7 +230,7 @@ using ::testing::internal::ArrayEq;
 using ::testing::internal::CodePointToUtf8;
 using ::testing::internal::CopyArray;
 
-using ::testing::internal::FloatingPoint;
+using ::jmsd::cutf::internal::FloatingPoint;
 
 using ::testing::internal::GTestFlagSaver;
 using ::testing::internal::GetCurrentOsStackTraceExceptTop;
@@ -2732,7 +2733,7 @@ class FloatingPointTest : public Test {
 	RawType nan2;
   };
 
-  typedef typename testing::internal::FloatingPoint<RawType> Floating;
+  typedef typename FloatingPoint< RawType > Floating;
   typedef typename Floating::Bits Bits;
 
   void SetUp() override {

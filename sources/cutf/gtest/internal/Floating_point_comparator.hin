@@ -11,6 +11,8 @@
 
 #include "gtest-internal.h"
 
+#include "Floating_point_type.hin"
+
 
 #include <sstream>
 #include <iomanip>
@@ -32,8 +34,8 @@ AssertionResult Floating_point_comparator< A_type >::are_equals_or_almost_equals
 	A_type lhs_value,
 	A_type rhs_value )
 {
-	::testing::internal::FloatingPoint< A_type > const lhs( lhs_value );
-	::testing::internal::FloatingPoint< A_type > rhs( rhs_value );
+	FloatingPoint< A_type > const lhs( lhs_value );
+	FloatingPoint< A_type > rhs( rhs_value );
 
 	if ( lhs.AlmostEquals( rhs ) ) {
 		return AssertionResult::AssertionSuccess();

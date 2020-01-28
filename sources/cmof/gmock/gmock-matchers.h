@@ -1392,7 +1392,7 @@ class FloatingEqMatcher {
 
     bool MatchAndExplain(T value,
                          MatchResultListener* listener) const override {
-      const FloatingPoint<FloatType> actual(value), expected(expected_);
+      const ::jmsd::cutf::internal::FloatingPoint<FloatType> actual(value), expected(expected_);
 
       // Compares NaNs first, if nan_eq_nan_ is true.
       if (actual.is_nan() || expected.is_nan()) {
@@ -1431,7 +1431,7 @@ class FloatingEqMatcher {
       // after outputting.
       const ::std::streamsize old_precision = os->precision(
           ::std::numeric_limits<FloatType>::digits10 + 2);
-      if (FloatingPoint<FloatType>(expected_).is_nan()) {
+      if ( ::jmsd::cutf::internal::FloatingPoint<FloatType>(expected_).is_nan()) {
         if (nan_eq_nan_) {
           *os << "is NaN";
         } else {
@@ -1450,7 +1450,7 @@ class FloatingEqMatcher {
       // As before, get original precision.
       const ::std::streamsize old_precision = os->precision(
           ::std::numeric_limits<FloatType>::digits10 + 2);
-      if (FloatingPoint<FloatType>(expected_).is_nan()) {
+      if ( ::jmsd::cutf::internal::FloatingPoint<FloatType>(expected_).is_nan()) {
         if (nan_eq_nan_) {
           *os << "isn't NaN";
         } else {

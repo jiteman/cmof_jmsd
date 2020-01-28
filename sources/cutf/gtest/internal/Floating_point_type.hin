@@ -1,0 +1,15 @@
+#pragma once
+
+#include "Floating_point_type.hpp"
+
+
+namespace jmsd {
+namespace cutf {
+namespace internal {
+
+
+
+
+} // namespace internal
+} // namespace cutf
+} // namespace jmsd

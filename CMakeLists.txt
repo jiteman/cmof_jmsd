@@ -23,6 +23,4 @@ add_subdirectory( ctf_test_lib ) # C++ testing framework tests
 add_subdirectory( ctf_tests ) # C++ testing framework test launcher
 
 
-
-
 JMSD_SHOW_PROJECT_GROUP_FOOTER()
