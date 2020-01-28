@@ -23,5 +23,5 @@ Separating cutf (ex google test)
 		+ Removing of FloatingPointLE and FloatLE and DoubleLE
 		+ Separating of CmpHelperFloatingPointEQ
 		+ Separating of EqFailure (Assertion_message_constructor => Assertion_result_constructor)
-		@ Separating of FloatingPoint
+		* Separating of FloatingPoint
 		
