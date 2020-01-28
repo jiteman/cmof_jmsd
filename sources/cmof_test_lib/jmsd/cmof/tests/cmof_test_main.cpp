@@ -12,6 +12,10 @@ int run_all_cmof_tests( int argc, char const *const argv[] ) {
 	return ctf::ctf_main( argc, argv, false );
 }
 
+int init_all_cmof_tests() {
+	return 0;
+}
+
 
 } // namespace tests
 } // namespace cmof
