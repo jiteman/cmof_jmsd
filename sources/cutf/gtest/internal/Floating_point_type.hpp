@@ -44,22 +44,22 @@ public:
 
 public:
 	// # of bits in a number.
-	static size_t const kBitCount = 8 * sizeof( RawType );
+	static size_t const kBitCount;
 
 	// # of fraction bits in a number.
-	static size_t const kFractionBitCount = ::std::numeric_limits< RawType >::digits - 1;
+	static size_t const kFractionBitCount;
 
 	// # of exponent bits in a number.
-	static size_t const kExponentBitCount = kBitCount - 1 - kFractionBitCount;
+	static size_t const kExponentBitCount;
 
 	// The mask for the sign bit.
-	static Bits const kSignBitMask = static_cast< Bits >( 1 ) << ( kBitCount - 1 );
+	static Bits const kSignBitMask;
 
 	// The mask for the fraction bits.
-	static Bits const kFractionBitMask = ~static_cast< Bits >( 0 ) >> ( kExponentBitCount + 1 );
+	static Bits const kFractionBitMask;
 
 	// The mask for the exponent bits.
-	static Bits const kExponentBitMask = ~( kSignBitMask | kFractionBitMask );
+	static Bits const kExponentBitMask;
 
 	// How many ULP's (Units in the Last Place) we want to tolerate when
 	// comparing two numbers.  The larger the value, the more error we
@@ -73,7 +73,7 @@ public:
 	//
 	// See the following article for more details on ULP:
 	// http://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/
-	static size_t const kMaxUlps = 4;
+	static size_t const kMaxUlps;
 
 	// Constructs a FloatingPoint from a raw floating-point number.
 	//

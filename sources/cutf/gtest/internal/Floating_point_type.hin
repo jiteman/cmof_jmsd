@@ -8,6 +8,54 @@ namespace cutf {
 namespace internal {
 
 
+// # of bits in a number.
+template< typename Raw_type >
+// static
+size_t const FloatingPoint< Raw_type >::kBitCount = 8 * sizeof( Raw_type );
+
+// # of fraction bits in a number.
+template< typename Raw_type >
+// static
+size_t const FloatingPoint< Raw_type >::kFractionBitCount = ::std::numeric_limits< Raw_type >::digits - 1;
+
+// # of exponent bits in a number.
+template< typename Raw_type >
+// static
+// size_t const FloatingPoint< Raw_type >::kExponentBitCount = FloatingPoint< Raw_type >::kBitCount - 1 - FloatingPoint< Raw_type >::kFractionBitCount;
+size_t const FloatingPoint< Raw_type >::kExponentBitCount = ( 8 * sizeof( Raw_type ) ) - 1 - ( ::std::numeric_limits< Raw_type >::digits - 1 );
+
+// The mask for the sign bit.
+template< typename Raw_type >
+// static
+// typename FloatingPoint< Raw_type >::Bits const FloatingPoint< Raw_type >::kSignBitMask = static_cast< typename FloatingPoint< Raw_type >::Bits >( 1 ) << ( FloatingPoint< Raw_type >::kBitCount - 1 );
+typename FloatingPoint< Raw_type >::Bits const FloatingPoint< Raw_type >::kSignBitMask = static_cast< typename FloatingPoint< Raw_type >::Bits >( 1 ) << ( ( 8 * sizeof( Raw_type ) ) - 1 );
+
+// The mask for the fraction bits.
+template< typename Raw_type >
+// static
+// typename FloatingPoint< Raw_type >::Bits const FloatingPoint< Raw_type >::kFractionBitMask = ~static_cast< typename FloatingPoint< Raw_type >::Bits >( 0 ) >> ( FloatingPoint< Raw_type >::kExponentBitCount + 1 );
+typename FloatingPoint< Raw_type >::Bits const FloatingPoint< Raw_type >::kFractionBitMask = ~static_cast< typename FloatingPoint< Raw_type >::Bits >( 0 ) >> ( ( ( 8 * sizeof( Raw_type ) ) - 1 - ( ::std::numeric_limits< Raw_type >::digits - 1 ) ) + 1 );
+
+// The mask for the exponent bits.
+template< typename Raw_type >
+// static
+// typename FloatingPoint< Raw_type >::Bits const FloatingPoint< Raw_type >::kExponentBitMask = ~( FloatingPoint< Raw_type >::kSignBitMask | FloatingPoint< Raw_type >::kFractionBitMask );
+typename FloatingPoint< Raw_type >::Bits const FloatingPoint< Raw_type >::kExponentBitMask = ~( ( static_cast< typename FloatingPoint< Raw_type >::Bits >( 1 ) << ( ( 8 * sizeof( Raw_type ) ) - 1 ) ) | ( ~static_cast< typename FloatingPoint< Raw_type >::Bits >( 0 ) >> ( ( ( 8 * sizeof( Raw_type ) ) - 1 - ( ::std::numeric_limits< Raw_type >::digits - 1 ) ) + 1 ) ) );
+
+// How many ULP's (Units in the Last Place) we want to tolerate when
+// comparing two numbers.  The larger the value, the more error we
+// allow.  A 0 value means that two numbers must be exactly the same
+// to be considered equal.
+//
+// The maximum error of a single floating-point operation is 0.5
+// units in the last place.  On Intel CPU's, all floating-point
+// calculations are done with 80-bit precision, while double has 64
+// bits.  Therefore, 4 should be enough for ordinary use.
+//
+// See the following article for more details on ULP:
+// http://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/
+// static
+template< typename Raw_type > size_t const FloatingPoint< Raw_type >::kMaxUlps = 4;
 
 
 } // namespace internal

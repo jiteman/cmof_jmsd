@@ -2737,7 +2737,7 @@ class FloatingPointTest : public Test {
   typedef typename Floating::Bits Bits;
 
   void SetUp() override {
-	const size_t max_ulps = Floating::kMaxUlps;
+	const Bits max_ulps = static_cast< Bits >( Floating::kMaxUlps );
 
 	// The bits that represent 0.0.
 	const Bits zero_bits = Floating(0).bits();

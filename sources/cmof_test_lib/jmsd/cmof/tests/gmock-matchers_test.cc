@@ -3017,7 +3017,7 @@ class FloatingPointTest : public ::jmsd::cutf::Test {
   typedef typename Floating::Bits Bits;
 
   FloatingPointTest()
-      : max_ulps_(Floating::kMaxUlps),
+      : max_ulps_( static_cast< Bits >( Floating::kMaxUlps ) ),
         zero_bits_(Floating(0).bits()),
         one_bits_(Floating(1).bits()),
         infinity_bits_(Floating(Floating::Infinity()).bits()),

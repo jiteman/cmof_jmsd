@@ -50,9 +50,8 @@ typename FloatingPoint_< Raw_type >::Bits const FloatingPoint_< Raw_type >::kExp
 //
 // See the following article for more details on ULP:
 // http://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/
-template< typename Raw_type >
 // static
-size_t const FloatingPoint_< Raw_type >::kMaxUlps = 4;
+template< typename Raw_type > size_t const FloatingPoint_< Raw_type >::kMaxUlps = 4;
 
 // Constructs a FloatingPoint from a raw floating-point number.
 //
