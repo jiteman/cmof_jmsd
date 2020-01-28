@@ -1,7 +1,7 @@
 #include "Fail_from_internal_error.h"
 
 
-#include "gtest/Message.h"
+#include "gtest/Message.hin"
 
 #include "gtest-port.h"
 

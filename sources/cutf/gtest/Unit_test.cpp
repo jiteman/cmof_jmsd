@@ -7,6 +7,8 @@
 #include "internal/Scoped_premature_exit_file.h"
 #include "internal/gtest-constants-internal.h"
 
+#include "Message.hin"
+
 #include "internal/Exception_handling.hin"
 
 
@@ -85,7 +87,9 @@ int UnitTest::skipped_test_count() const {
 }
 
 // Gets the number of failed tests.
-int UnitTest::failed_test_count() const { return impl()->failed_test_count(); }
+int UnitTest::failed_test_count() const {
+	return impl()->failed_test_count();
+}
 
 // Gets the number of disabled tests that will be reported in the XML report.
 int UnitTest::reportable_disabled_test_count() const {
@@ -103,10 +107,14 @@ int UnitTest::reportable_test_count() const {
 }
 
 // Gets the number of all tests.
-int UnitTest::total_test_count() const { return impl()->total_test_count(); }
+int UnitTest::total_test_count() const {
+	return impl()->total_test_count();
+}
 
 // Gets the number of tests that should run.
-int UnitTest::test_to_run_count() const { return impl()->test_to_run_count(); }
+int UnitTest::test_to_run_count() const {
+	return impl()->test_to_run_count();
+}
 
 // Gets the time of the test program start, in ms from the start of the
 // UNIX epoch.
@@ -121,11 +129,15 @@ int UnitTest::test_to_run_count() const { return impl()->test_to_run_count(); }
 
 // Returns true if and only if the unit test passed (i.e. all test suites
 // passed).
-bool UnitTest::Passed() const { return impl()->Passed(); }
+bool UnitTest::Passed() const {
+	return impl()->Passed();
+}
 
 // Returns true if and only if the unit test failed (i.e. some test suite
 // failed or something outside of all tests failed).
-bool UnitTest::Failed() const { return impl()->Failed(); }
+bool UnitTest::Failed() const {
+	return impl()->Failed();
+}
 
 // Gets the i-th test suite among all the test suites. i can range from 0 to
 // total_test_suite_count() - 1. If i is not in that range, returns NULL.
@@ -382,7 +394,9 @@ const TestInfo* UnitTest::current_test_info() const
 }
 
 // Returns the random seed used at the start of the current test run.
-int UnitTest::random_seed() const { return impl_->random_seed(); }
+int UnitTest::random_seed() const {
+	return impl_->random_seed();
+}
 
 // Returns ParameterizedTestSuiteRegistry object used to keep track of
 // value-parameterized tests and instantiate and register them.

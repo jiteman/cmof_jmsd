@@ -17,10 +17,12 @@
 
 
 #include "gtest/Assertion_result.hin"
+#include "gtest/Message.hin"
 
 #include "gtest/internal/Unit_test_options.h"
 
 #include "gtest/gtest-internal-inl.h"
+
 
 
 namespace testing {

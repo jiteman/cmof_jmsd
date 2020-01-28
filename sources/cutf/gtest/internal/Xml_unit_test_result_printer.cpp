@@ -11,6 +11,8 @@
 #include "String_stream_to_string.h"
 #include "Streamable_to_string.hin"
 
+#include "gtest/Message.hin"
+
 
 namespace jmsd {
 namespace cutf {

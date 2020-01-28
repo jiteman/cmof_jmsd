@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include "gmock/internal/gmock-port.h"
 
+#include "gtest/Message.hin"
 #include "gtest/internal/Streamable_to_string.hin"
 
 namespace testing {

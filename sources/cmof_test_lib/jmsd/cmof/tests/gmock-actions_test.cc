@@ -14,7 +14,7 @@
 #include "gtest/gtest.h"
 #include "gtest/gtest-spi.h"
 
-
+#include "gtest/Message.hin"
 #include "gtest/internal/Floating_point_comparator.hin"
 
 

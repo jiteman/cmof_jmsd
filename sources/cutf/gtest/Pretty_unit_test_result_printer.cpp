@@ -14,6 +14,9 @@
 #include "internal/Should_shard.h"
 #include "internal/Int32_from_environment_or_die.h"
 
+
+#include "Message.hin"
+
 #include "internal/Streamable_to_string.hin"
 
 #include "gtest-internal-inl.h"
@@ -170,7 +173,7 @@ void PrettyUnitTestResultPrinter::OnEnvironmentsTearDownStart(
 void PrettyUnitTestResultPrinter::PrintFailedTests(const ::jmsd::cutf::UnitTest& unit_test) {
   const int failed_test_count = unit_test.failed_test_count();
   ColoredPrintf(internal::GTestColor::COLOR_RED,  "[  FAILED  ] ");
-  printf("%s, listed below:\n", Format_countable::FormatTestCount(failed_test_count).c_str());
+  printf("%s, listed below:\n", Format_countable::FormatTestCount( failed_test_count ).c_str());
 
   for (int i = 0; i < unit_test.total_test_suite_count(); ++i) {
 	const ::jmsd::cutf::TestSuite& test_suite = *unit_test.GetTestSuite(i);
@@ -259,7 +262,7 @@ void PrettyUnitTestResultPrinter::OnTestIterationEnd(const ::jmsd::cutf::UnitTes
 	PrintSkippedTests(unit_test);
   }
 
-  if (!unit_test.Passed()) {
+  if ( !unit_test.Passed() ) {
 	PrintFailedTests(unit_test);
 	PrintFailedTestSuites(unit_test);
   }

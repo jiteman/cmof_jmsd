@@ -17,7 +17,9 @@
 #include "gtest/gtest-internal-inl.h"
 
 #include "gtest/Substring_utilities.h"
+
 #include "gtest/Assertion_result.hin"
+#include "gtest/Message.hin"
 #include "gtest/Static_assert_type_sameness.hin"
 
 #include "gtest/internal/Random_number_generator.h"

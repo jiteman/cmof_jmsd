@@ -3,6 +3,7 @@
 
 #include "Assertion_result.hin"
 
+#include "Message.hin"
 
 #include "internal/Is_substring.hin"
 

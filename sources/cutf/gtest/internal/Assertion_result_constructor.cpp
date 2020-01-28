@@ -2,10 +2,11 @@
 
 
 #include "gtest/Assertion_result.h"
-#include "gtest/Message.h"
 
 #include "Split_escaped_string.h"
 #include "Distance_editor.h"
+
+#include "gtest/Message.hin"
 
 
 namespace jmsd {

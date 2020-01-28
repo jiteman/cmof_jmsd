@@ -3,7 +3,7 @@
 
 #include "Assertion_result.hin"
 
-#include "Message.h"
+#include "Message.hin"
 
 
 namespace jmsd {

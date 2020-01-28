@@ -54,6 +54,8 @@
 #include "gtest/internal/gtest-internal.h"
 #include "gtest/internal/gtest-string.h"
 
+#include "Message.hin"
+
 #include "gtest/internal/Streamable_to_string.hin"
 
 #include "gtest/gtest-internal-inl.h"

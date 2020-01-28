@@ -1,12 +1,11 @@
 // Tests for the Message class.
 
 #include "gtest/Substring_utilities.h"
-#include "gtest/Message.h"
 #include "gtest/internal/String_stream_to_string.h"
 
+#include "gtest/Message.hin"
+
 #include "gtest/gtest.h"
-
-
 
 
 namespace {

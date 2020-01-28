@@ -24,6 +24,7 @@
 #include "gtest/gtest-spi.h"
 
 #include "gtest/Assertion_result.hin"
+#include "gtest/Message.hin"
 
 
 // A user-defined data type.

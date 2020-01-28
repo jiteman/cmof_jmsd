@@ -21,6 +21,7 @@
 #include "gtest/gtest.h"
 
 #include "gtest/Assertion_result.hin"
+#include "gtest/Message.hin"
 
 
 // Some user-defined types for testing the universal value printer.

@@ -8,6 +8,8 @@
 #include "gtest-color.h"
 #include "Int32_from_environment_or_die.h"
 
+#include "gtest/Message.hin"
+
 
 namespace jmsd {
 namespace cutf {

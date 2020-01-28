@@ -1,6 +1,8 @@
 // Tests for Google Test itself.  This verifies that the basic constructs of
 // Google Test work.
 
+#include "gtest/Message.hin"
+
 #include "gtest/gtest.h"
 
 // Verifies that the command line flag variables can be accessed in

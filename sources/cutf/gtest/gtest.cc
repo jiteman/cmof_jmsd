@@ -24,6 +24,8 @@
 #include "internal/Assertion_result_constructor.h"
 
 #include "Assertion_result.hin"
+#include "Message.hin"
+
 #include "internal/Streamable_to_string.hin"
 
 #include "Text_output_utilities.hxx"

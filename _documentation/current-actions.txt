@@ -4,7 +4,7 @@ Separating cutf (ex google test)
 	@ Separating gtest.h, gtest.cpp, gtest-internal-inl.h, internal/gtest-internal.h, etc.:
 	@ Restructing the order of includes
 	+ Separating Message
-	
+	+ Refactoring Message
 
 - Move all free functions to static members of separate classes.
 - Then join those classes basing on common use.

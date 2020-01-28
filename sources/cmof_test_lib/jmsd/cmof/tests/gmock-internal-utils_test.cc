@@ -16,9 +16,10 @@
 #include "gtest/gtest-spi.h"
 #include "gtest/gtest.h"
 
-#include "gtest/Static_assert_type_sameness.hin"
-
 #include "gtest/internal/Unit_test_impl.h"
+
+#include "gtest/Static_assert_type_sameness.hin"
+#include "gtest/Message.hin"
 
 // Indicates that this translation unit is part of Google Test's
 // implementation.  It must come before gtest-internal-inl.h is

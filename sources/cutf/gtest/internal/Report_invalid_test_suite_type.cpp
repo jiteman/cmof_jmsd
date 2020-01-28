@@ -1,7 +1,9 @@
 #include "Report_invalid_test_suite_type.h"
 
 
-#include "gtest/internal/gtest-internal.h"
+#include "gtest/Message.hin"
+
+#include "gtest-internal.h"
 
 
 namespace jmsd {

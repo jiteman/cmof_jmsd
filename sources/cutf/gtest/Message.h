@@ -56,36 +56,14 @@ private:
 	Message();
 
 	// Copy constructor.
-	Message(const Message& msg) : ss_(new ::std::stringstream) {
-		*ss_ << msg.GetString();
-	}
+	Message(const Message& msg);
 
 	// Constructs a Message from a C-string.
-	explicit Message(const char* str) : ss_(new ::std::stringstream) {
-		*ss_ << str;
-	}
+	explicit Message(const char* str);
 
 	// Streams a non-pointer value to this object.
-	template <typename T>
-	inline Message& operator <<(const T& val) {
-	// Some libraries overload << for STL containers.  These
-	// overloads are defined in the global namespace instead of ::std.
-	//
-	// C++'s symbol lookup rule (i.e. Koenig lookup) says that these
-	// overloads are visible in either the std namespace or the global
-	// namespace, but not other namespaces, including the testing
-	// namespace which Google Test's Message class is in.
-	//
-	// To allow STL containers (and other types that has a << operator
-	// defined in the global namespace) to be used in Google Test
-	// assertions, testing::Message must access the custom << operator
-	// from the global namespace.  With this using declaration,
-	// overloads of << defined in the global namespace and those
-	// visible via Koenig lookup are both exposed in this function.
-		using ::operator <<;
-		*ss_ << val;
-		return *this;
-	}
+	template< typename A_type >
+	Message& operator <<( A_type const &val );
 
 	// Streams a pointer value to this object.
 	//
@@ -100,16 +78,8 @@ private:
 	// may get "0", "(nil)", "(null)", or an access violation.  To
 	// ensure consistent result across compilers, we always treat NULL
 	// as "(null)".
-	template <typename T>
-	inline Message& operator <<(T* const& pointer) {
-		if (pointer == nullptr) {
-			*ss_ << "(null)";
-		} else {
-			*ss_ << pointer;
-		}
-
-		return *this;
-	}
+	template< typename A_type >
+	Message &operator <<( A_type *const &pointer );
 
 	// Since the basic IO manipulators are overloaded for both narrow
 	// and wide streams, we have to provide this specialized definition
@@ -117,15 +87,10 @@ private:
 	// templatized version above.  Without this definition, streaming
 	// endl or other basic IO manipulators to Message will confuse the
 	// compiler.
-	Message& operator <<(BasicNarrowIoManip val) {
-		*ss_ << val;
-		return *this;
-	}
+	Message& operator <<(BasicNarrowIoManip val);
 
 	// Instead of 1/0, we want to see true/false for bool values.
-	Message& operator <<(bool b) {
-		return *this << (b ? "true" : "false");
-	}
+	Message& operator <<(bool b);
 
 	// These two overloads allow streaming a wide C string to a Message using the UTF-8 encoding.
 	Message& operator <<(const wchar_t* wide_c_str);
@@ -154,9 +119,7 @@ private:
 };
 
 // Streams a Message to an ostream.
-inline std::ostream& operator <<(std::ostream& os, const Message& sb) {
-  return os << sb.GetString();
-}
+JMSD_CUTF_SHARED_INTERFACE ::std::ostream &operator <<( ::std::ostream &os, Message const &sb );
 
 
 } // namespace cutf

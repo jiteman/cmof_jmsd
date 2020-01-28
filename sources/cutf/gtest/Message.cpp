@@ -28,6 +28,36 @@ Message::Message()
 	*ss_ << ::std::setprecision( ::std::numeric_limits< double >::digits10 + 2 );
 }
 
+Message::Message(const Message& msg)
+	:
+		ss_(new ::std::stringstream)
+{
+	*ss_ << msg.GetString();
+}
+
+Message::Message(const char* str)
+	:
+		ss_(new ::std::stringstream)
+{
+	*ss_ << str;
+}
+
+// Since the basic IO manipulators are overloaded for both narrow
+// and wide streams, we have to provide this specialized definition
+// of operator <<, even though its body is the same as the
+// templatized version above.  Without this definition, streaming
+// endl or other basic IO manipulators to Message will confuse the
+// compiler.
+Message &Message::operator <<(BasicNarrowIoManip val) {
+	*ss_ << val;
+	return *this;
+}
+
+// Instead of 1/0, we want to see true/false for bool values.
+Message &Message::operator <<(bool b) {
+	return *this << (b ? "true" : "false");
+}
+
 // These two overloads allow streaming a wide C string to a Message using the UTF-8 encoding.
 Message &Message::operator <<( wchar_t const *wide_c_str ) {
 	return *this << ::testing::internal::String::ShowWideCString( wide_c_str );
@@ -49,6 +79,11 @@ Message & Message::operator <<( ::std::wstring const &wstr ) {
 // Each '\0' character in the buffer is replaced with "\\0".
 ::std::string Message::GetString() const {
   return ::jmsd::cutf::internal::StringStreamToString( *ss_.get() );
+}
+
+// Streams a Message to an ostream.
+::std::ostream &operator <<( ::std::ostream &os, Message const &sb ) {
+	return os << sb.GetString();
 }
 
 

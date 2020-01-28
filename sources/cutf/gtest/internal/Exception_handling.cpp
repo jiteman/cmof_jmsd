@@ -7,6 +7,8 @@
 
 #include "Print_test_part_result_to_string.h"
 
+#include "gtest/Message.hin"
+
 #include <iomanip>
 
 

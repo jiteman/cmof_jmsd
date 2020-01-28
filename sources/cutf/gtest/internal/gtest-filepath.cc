@@ -1,7 +1,8 @@
 #include "gtest/internal/gtest-filepath.h"
 
-#include <stdlib.h>
 #include "gtest/internal/gtest-port.h"
+
+#include <stdlib.h>
 
 #if GTEST_OS_WINDOWS
 	#include "custom/temporary_windows_include.h"
@@ -13,6 +14,8 @@
 #endif  // GTEST_OS_WINDOWS_MOBILE
 
 #include "gtest-string.h"
+
+#include "gtest/Message.hin"
 
 #include "Streamable_to_string.hin"
 

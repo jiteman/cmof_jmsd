@@ -6,6 +6,8 @@
 #include "Unit_test_impl.h"
 #include "Death_test_check.h"
 
+#include "gtest/Message.hin"
+
 #include "custom/temporary_windows_include.h"
 #include <fcntl.h>
 //#include <stdio.h>

@@ -5,7 +5,51 @@ namespace jmsd {
 namespace cutf {
 
 
+// Streams a non-pointer value to this object.
+template< typename A_type >
+Message &Message::operator <<( A_type const &val ) {
+// Some libraries overload << for STL containers.  These
+// overloads are defined in the global namespace instead of ::std.
+//
+// C++'s symbol lookup rule (i.e. Koenig lookup) says that these
+// overloads are visible in either the std namespace or the global
+// namespace, but not other namespaces, including the testing
+// namespace which Google Test's Message class is in.
+//
+// To allow STL containers (and other types that has a << operator
+// defined in the global namespace) to be used in Google Test
+// assertions, testing::Message must access the custom << operator
+// from the global namespace.  With this using declaration,
+// overloads of << defined in the global namespace and those
+// visible via Koenig lookup are both exposed in this function.
+	using ::operator <<;
+	*ss_ << val;
+	return *this;
+}
 
+// Streams a pointer value to this object.
+//
+// This function is an overload of the previous one.  When you
+// stream a pointer to a Message, this definition will be used as it
+// is more specialized.  (The C++ Standard, section
+// [temp.func.order].)  If you stream a non-pointer, then the
+// previous definition will be used.
+//
+// The reason for this overload is that streaming a NULL pointer to
+// ostream is undefined behavior.  Depending on the compiler, you
+// may get "0", "(nil)", "(null)", or an access violation.  To
+// ensure consistent result across compilers, we always treat NULL
+// as "(null)".
+template< typename A_type >
+Message &Message::operator <<( A_type *const &pointer ) {
+	if (pointer == nullptr) {
+		*ss_ << "(null)";
+	} else {
+		*ss_ << pointer;
+	}
+
+	return *this;
+}
 
 
 } // namespace cutf

@@ -4,6 +4,9 @@
 #include "Unit_test.h"
 
 #include "internal/Unit_test_impl.h"
+
+#include "Message.hin"
+
 #include "internal/Exception_handling.hin"
 
 #include "internal/gtest-internal.h"

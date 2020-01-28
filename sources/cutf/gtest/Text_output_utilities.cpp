@@ -3,6 +3,7 @@
 
 #include "Text_output_attributes.h"
 
+#include "Message.hin"
 
 #include "gtest.h"
 

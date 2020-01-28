@@ -7,6 +7,8 @@
 
 #include "Exit_summary.h"
 
+#include "gtest/Message.hin"
+
 
 namespace jmsd {
 namespace cutf {
