@@ -57,6 +57,119 @@ typename FloatingPoint< Raw_type >::Bits const FloatingPoint< Raw_type >::kExpon
 // static
 template< typename Raw_type > size_t const FloatingPoint< Raw_type >::kMaxUlps = 4;
 
+// Constructs a FloatingPoint from a raw floating-point number.
+//
+// On an Intel CPU, passing a non-normalized NAN (Not a Number)
+// around may change its bits, although the new value is guaranteed
+// to be also a NAN.  Therefore, don't expect this constructor to
+// preserve the bits in x when x is a NAN.
+template< typename Raw_type >
+FloatingPoint< Raw_type >::FloatingPoint( Raw_type const &x ) {
+	u_.value_ = x;
+}
+
+// Reinterprets a bit pattern as a floating-point number.
+//
+// This function is needed to test the AlmostEquals() method.
+template< typename Raw_type >
+// static
+Raw_type FloatingPoint< Raw_type >::ReinterpretBits( Bits const bits) {
+	FloatingPoint fp( 0 );
+	fp.u_.bits_ = bits;
+	return fp.u_.value_;
+}
+
+// Returns the floating-point number that represent positive infinity.
+template< typename Raw_type >
+// static
+Raw_type FloatingPoint< Raw_type >::Infinity() {
+	return ReinterpretBits( kExponentBitMask );
+}
+
+// Returns the maximum representable finite floating-point number.
+template< typename Raw_type >
+// static
+Raw_type FloatingPoint< Raw_type >::Max() {
+	return ::std::numeric_limits< Raw_type >::max();
+}
+
+// Returns the bits that represents this number.
+template< typename Raw_type >
+typename FloatingPoint< Raw_type >::Bits const &FloatingPoint< Raw_type >::bits() const {
+	return u_.bits_;
+}
+
+// Returns the exponent bits of this number.
+template< typename Raw_type >
+typename FloatingPoint< Raw_type >::Bits FloatingPoint< Raw_type >::exponent_bits() const {
+	return kExponentBitMask & u_.bits_;
+}
+
+// Returns the fraction bits of this number.
+template< typename Raw_type >
+typename FloatingPoint< Raw_type >::Bits FloatingPoint< Raw_type >::fraction_bits() const {
+	return kFractionBitMask & u_.bits_;
+}
+
+// Returns the sign bit of this number.
+template< typename Raw_type >
+typename FloatingPoint< Raw_type >::Bits FloatingPoint< Raw_type >::sign_bit() const {
+	return kSignBitMask & u_.bits_;
+}
+
+// Returns true if and only if this is NAN (not a number).
+template< typename Raw_type >
+bool FloatingPoint< Raw_type >::is_nan() const {
+	// It's a NAN if the exponent bits are all ones and the fraction
+	// bits are not entirely zeros.
+	return ( exponent_bits() == kExponentBitMask ) && ( fraction_bits() != 0 );
+}
+
+// Returns true if and only if this number is at most kMaxUlps ULP's away
+// from rhs.  In particular, this function:
+//
+//   - returns false if either number is (or both are) NAN.
+//   - treats really large numbers as almost equal to infinity.
+//   - thinks +0.0 and -0.0 are 0 DLP's apart.
+template< typename Raw_type >
+bool FloatingPoint< Raw_type >::AlmostEquals( FloatingPoint const &rhs ) const {
+	// The IEEE standard says that any comparison operation involving
+	// a NAN must return false.
+	if ( is_nan() || rhs.is_nan() ) return false;
+
+	return DistanceBetweenSignAndMagnitudeNumbers( u_.bits_, rhs.u_.bits_ ) <= kMaxUlps;
+}
+
+// Converts an integer from the sign-and-magnitude representation to the biased representation.
+// More precisely, let N be 2 to the power of (kBitCount - 1), an integer x is represented by the unsigned number x + N.
+//
+// For instance,
+//
+//   -N + 1 (the most negative number representable using sign-and-magnitude) is represented by 1;
+//   0      is represented by N; and
+//   N - 1  (the biggest number representable using sign-and-magnitude) is represented by 2N - 1.
+//
+// Read http://en.wikipedia.org/wiki/Signed_number_representations for more details on signed number representations.
+template< typename Raw_type >
+// static
+typename FloatingPoint< Raw_type >::Bits FloatingPoint< Raw_type >::SignAndMagnitudeToBiased(Bits const &sam) {
+	if ( kSignBitMask & sam ) {
+		return ~sam + 1; // sam represents a negative number.
+	} else {
+		return kSignBitMask | sam; // sam represents a positive number.
+	}
+}
+
+// Given two numbers in the sign-and-magnitude representation, returns the distance between them as an unsigned number.
+template< typename Raw_type >
+// static
+typename FloatingPoint< Raw_type >::Bits FloatingPoint< Raw_type >::DistanceBetweenSignAndMagnitudeNumbers( Bits const &sam1, Bits const &sam2 ) {
+	Bits const biased1 = SignAndMagnitudeToBiased( sam1 );
+	Bits const biased2 = SignAndMagnitudeToBiased( sam2 );
+	return ( biased1 >= biased2 ) ? ( biased1 - biased2 ) : ( biased2 - biased1 );
+}
+
+
 
 } // namespace internal
 } // namespace cutf

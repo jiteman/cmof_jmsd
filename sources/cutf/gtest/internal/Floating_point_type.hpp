@@ -81,60 +81,35 @@ public:
 	// around may change its bits, although the new value is guaranteed
 	// to be also a NAN.  Therefore, don't expect this constructor to
 	// preserve the bits in x when x is a NAN.
-	explicit FloatingPoint( RawType const &x ) {
-		u_.value_ = x;
-	}
+	explicit FloatingPoint( RawType const &x );
 
-	// Static methods
-
+public:
 	// Reinterprets a bit pattern as a floating-point number.
 	//
 	// This function is needed to test the AlmostEquals() method.
-	static RawType ReinterpretBits( Bits const bits ) {
-		FloatingPoint fp( 0 );
-		fp.u_.bits_ = bits;
-		return fp.u_.value_;
-	}
+	static RawType ReinterpretBits( Bits const bits);
 
 	// Returns the floating-point number that represent positive infinity.
-	static RawType Infinity() {
-		return ReinterpretBits( kExponentBitMask );
-	}
+	static RawType Infinity();
 
 	// Returns the maximum representable finite floating-point number.
-//	static RawType Max();
-	static RawType Max() {
-		return ::std::numeric_limits< RawType >::max();
-	}
+	static RawType Max();
 
-	// Non-static methods
-
+public:
 	// Returns the bits that represents this number.
-	Bits const &bits() const {
-		return u_.bits_;
-	}
+	Bits const &bits() const;
 
 	// Returns the exponent bits of this number.
-	Bits exponent_bits() const {
-		return kExponentBitMask & u_.bits_;
-	}
+	Bits exponent_bits() const;
 
 	// Returns the fraction bits of this number.
-	Bits fraction_bits() const {
-		return kFractionBitMask & u_.bits_;
-	}
+	Bits fraction_bits() const;
 
 	// Returns the sign bit of this number.
-	Bits sign_bit() const {
-		return kSignBitMask & u_.bits_;
-	}
+	Bits sign_bit() const;
 
 	// Returns true if and only if this is NAN (not a number).
-	bool is_nan() const {
-		// It's a NAN if the exponent bits are all ones and the fraction
-		// bits are not entirely zeros.
-		return ( exponent_bits() == kExponentBitMask ) && ( fraction_bits() != 0 );
-	}
+	bool is_nan() const;
 
 	// Returns true if and only if this number is at most kMaxUlps ULP's away
 	// from rhs.  In particular, this function:
@@ -142,19 +117,13 @@ public:
 	//   - returns false if either number is (or both are) NAN.
 	//   - treats really large numbers as almost equal to infinity.
 	//   - thinks +0.0 and -0.0 are 0 DLP's apart.
-	bool AlmostEquals( FloatingPoint const &rhs ) const {
-		// The IEEE standard says that any comparison operation involving
-		// a NAN must return false.
-		if ( is_nan() || rhs.is_nan() ) return false;
-
-		return DistanceBetweenSignAndMagnitudeNumbers( u_.bits_, rhs.u_.bits_ ) <= kMaxUlps;
-	}
+	bool AlmostEquals( FloatingPoint const &rhs ) const;
 
 private:
 	// The data type used to store the actual floating-point number.
 	union FloatingPointUnion {
-		RawType value_;  // The raw floating-point number.
-		Bits bits_;      // The bits that represent the number.
+		RawType value_; // The raw floating-point number.
+		Bits bits_; // The bits that represent the number.
 	};
 
 	// Converts an integer from the sign-and-magnitude representation to
@@ -172,39 +141,15 @@ private:
 	//
 	// Read http://en.wikipedia.org/wiki/Signed_number_representations
 	// for more details on signed number representations.
-	static Bits SignAndMagnitudeToBiased( Bits const &sam ) {
-	if ( kSignBitMask & sam ) {
-		// sam represents a negative number.
-			return ~sam + 1;
-		} else {
-		// sam represents a positive number.
-			return kSignBitMask | sam;
-		}
-	}
+	static Bits SignAndMagnitudeToBiased( Bits const &sam );
 
-	// Given two numbers in the sign-and-magnitude representation,
-	// returns the distance between them as an unsigned number.
-	static Bits DistanceBetweenSignAndMagnitudeNumbers( Bits const &sam1, Bits const &sam2 ) {
-		const Bits biased1 = SignAndMagnitudeToBiased( sam1 );
-		const Bits biased2 = SignAndMagnitudeToBiased( sam2 );
-		return ( biased1 >= biased2 ) ? ( biased1 - biased2 ) : ( biased2 - biased1 );
-	}
+	// Given two numbers in the sign-and-magnitude representation, returns the distance between them as an unsigned number.
+	static Bits DistanceBetweenSignAndMagnitudeNumbers( Bits const &sam1, Bits const &sam2 );
 
 private:
 	FloatingPointUnion u_;
 
 };
-
-//// We cannot use std::numeric_limits<T>::max() as it clashes with the max() macro defined by <windows.h>.
-//template<>
-//inline float FloatingPoint< float >::Max() {
-//	return FLT_MAX;
-//}
-
-//template<>
-//inline double FloatingPoint< double >::Max() {
-//	return DBL_MAX;
-//}
 
 // Typedefs the instances of the FloatingPoint template class that we care to use.
 typedef FloatingPoint< float > Float;
