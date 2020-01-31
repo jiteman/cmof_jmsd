@@ -9,6 +9,7 @@
 #include "internal/Death_test_check.h"
 #include "internal/Get_last_errno_description.h"
 
+#include "Message.hin"
 
 #include "internal/gtest-port.h"
 
@@ -200,7 +201,7 @@ bool ExitedUnsuccessfully(int exit_status) {
 // to executing the given statement.  It is the responsibility of the
 // caller not to pass a thread_count of 1.
 static std::string DeathTestThreadWarning(size_t thread_count) {
-  Message msg;
+  ::jmsd::cutf::Message msg;
   msg << "Death tests use fork(), which is unsafe particularly"
 	  << " in a threaded context. For this test, " << GTEST_NAME_ << " ";
   if (thread_count == 0) {

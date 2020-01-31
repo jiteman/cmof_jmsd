@@ -92,7 +92,7 @@ T ReadProcFileField(const std::string& filename, int field) {
 // Returns the number of active threads, or 0 when there is an error.
 size_t GetThreadCount() {
   const std::string filename =
-	  (Message() << "/proc/" << getpid() << "/stat").GetString();
+	  ( ::jmsd::cutf::Message() << "/proc/" << getpid() << "/stat").GetString();
   return ReadProcFileField<size_t>(filename, 19);
 }
 

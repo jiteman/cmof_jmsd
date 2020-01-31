@@ -739,7 +739,7 @@ TEST(WideStringToUtf8Test, ConcatenatesCodepointsCorrectly) {
 		  "\xD5\xB6"
 		  "\xE0\xA3\x93"
 		  "\xF4\x88\x98\xB4",
-	  WideStringToUtf8(s, -1).c_str());
+	  ::jmsd::cutf::internal::utf8_utilities::WideStringToUtf8(s, -1).c_str());
 }
 #else
 TEST(WideStringToUtf8Test, ConcatenatesCodepointsCorrectly) {
@@ -2727,7 +2727,8 @@ class FloatingPointTest : public Test {
 	RawType nan2;
   };
 
-  typedef typename FloatingPoint< RawType > Floating;
+//  typedef typename ::jmsd::cutf::internal::FloatingPoint< RawType > Floating;
+  typedef FloatingPoint< RawType > Floating;
   typedef typename Floating::Bits Bits;
 
   void SetUp() override {
