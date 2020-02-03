@@ -24,13 +24,6 @@
 #include "Unit_test.h"
 
 
-#include <cstddef>
-#include <limits>
-#include <memory>
-#include <ostream>
-#include <type_traits>
-#include <vector>
-
 #include "gtest/internal/gtest-internal.h"
 #include "gtest/internal/gtest-string.h"
 #include "gtest/gtest-death-test.h"
@@ -56,11 +49,21 @@
 #include "internal/Unit_test_impl.hxx"
 #include "internal/Default_global_test_part_result_reporter.hxx"
 
+// Includes the auto-generated header that implements a family of generic
+// predicate assertion macros. This include comes late because it relies on
+// APIs declared above.
+#include "gtest/gtest_pred_impl.h"
+
+#include <cstddef>
+#include <limits>
+#include <memory>
+#include <ostream>
+#include <type_traits>
+#include <vector>
+
 
 GTEST_DISABLE_MSC_WARNINGS_PUSH_(4251 \
 /* class A needs to have dll-interface to be used by clients of class B */)
-
-namespace testing {
 
 // Silence C4100 (unreferenced formal parameter) and 4805
 // unsafe mix of type 'const int' and type 'const bool'
@@ -70,33 +73,6 @@ namespace testing {
 # pragma warning(disable:4100)
 #endif
 
-
-namespace internal {
-
-////class AssertHelper;
-////class DefaultGlobalTestPartResultReporter;
-//class ExecDeathTest;
-//class NoExecDeathTest;
-//class FinalSuccessChecker;
-//class GTestFlagSaver;
-//class StreamingListenerTest;
-////class TestResultAccessor;
-//class TestEventListenersAccessor;
-//class TestEventRepeater;
-//class UnitTestRecordPropertyTestHelper;
-////class WindowsDeathTest;
-////class FuchsiaDeathTest;
-
-//void ReportFailureInUnknownLocation(TestPartResult::Type result_type,
-//									const std::string& message);
-
-}  // namespace internal
-}  // namespace testing
-
-// Includes the auto-generated header that implements a family of generic
-// predicate assertion macros. This include comes late because it relies on
-// APIs declared above.
-#include "gtest/gtest_pred_impl.h"
 
 namespace testing {
 

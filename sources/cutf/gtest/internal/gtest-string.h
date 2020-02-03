@@ -1,8 +1,8 @@
-// Copyright 2005, Google Inc.
-// All rights reserved.
 #pragma once
 // This header file declares the String class and functions used internally by Google Test.
 
+
+#include "gtest/internal/gtest-port.h"
 
 #ifdef __BORLANDC__
 // string.h is not guaranteed to provide strcpy on C++ Builder.
@@ -13,7 +13,6 @@
 #include <cstdint>
 #include <string>
 
-#include "gtest/internal/gtest-port.h"
 
 namespace testing {
 namespace internal {

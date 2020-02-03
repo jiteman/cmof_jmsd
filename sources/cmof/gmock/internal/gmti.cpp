@@ -1,0 +1,14 @@
+#include "gmti.h"
+
+
+namespace jmsd {
+namespace cmof {
+namespace internal {
+
+
+
+
+
+} // namespace internal
+} // namespace cmof
+} // namespace jmsd

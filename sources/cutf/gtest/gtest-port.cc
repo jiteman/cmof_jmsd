@@ -1,5 +1,15 @@
 #include "gtest/internal/gtest-port.h"
 
+#include "gtest/gtest-spi.h"
+#include "gtest/internal/gtest-internal.h"
+#include "gtest/internal/gtest-string.h"
+
+#include "Message.hin"
+
+#include "gtest/internal/Streamable_to_string.hin"
+
+#include "gtest/gtest-internal-inl.h"
+
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -49,16 +59,6 @@
 # include <zircon/process.h>
 # include <zircon/syscalls.h>
 #endif  // GTEST_OS_FUCHSIA
-
-#include "gtest/gtest-spi.h"
-#include "gtest/internal/gtest-internal.h"
-#include "gtest/internal/gtest-string.h"
-
-#include "Message.hin"
-
-#include "gtest/internal/Streamable_to_string.hin"
-
-#include "gtest/gtest-internal-inl.h"
 
 
 namespace testing {

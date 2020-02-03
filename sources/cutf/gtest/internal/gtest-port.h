@@ -234,11 +234,11 @@
 # include <TargetConditionals.h>
 #endif
 
-#include <iostream>  // NOLINT
+#include <iostream>
 #include <memory>
-#include <string>  // NOLINT
+#include <string>
 #include <tuple>
-#include <vector>  // NOLINT
+#include <vector>
 
 #include "gtest/internal/custom/gtest-port.h"
 #include "gtest/internal/gtest-port-arch.h"

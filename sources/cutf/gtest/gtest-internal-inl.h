@@ -5,6 +5,18 @@
 // DO NOT #INCLUDE IT IN A USER PROGRAM.
 
 
+#include "Test_property.h"
+#include "Test_suite.h"
+
+#include "gtest-test-part.h"
+#include "gtest-death-test.h"
+#include "gtest-flags.h"
+
+#include "gtest/gtest.h"
+#include "gtest/gtest-spi.h"
+
+#include "internal/gtest-port.h"
+
 #ifndef _WIN32_WCE
 # include <errno.h>
 #endif  // !_WIN32_WCE
@@ -19,15 +31,6 @@
 #include <vector>
 
 
-#include "Test_property.h"
-#include "Test_suite.h"
-
-#include "gtest-test-part.h"
-#include "gtest-death-test.h"
-#include "gtest-flags.h"
-
-#include "internal/gtest-port.h"
-
 #if GTEST_CAN_STREAM_RESULTS_
 # include <arpa/inet.h>  // NOLINT
 # include <netdb.h>  // NOLINT
@@ -36,9 +39,6 @@
 #if GTEST_OS_WINDOWS
 # include "internal/custom/temporary_windows_include.h"
 #endif  // GTEST_OS_WINDOWS
-
-#include "gtest/gtest.h"
-#include "gtest/gtest-spi.h"
 
 GTEST_DISABLE_MSC_WARNINGS_PUSH_(4251 \
 /* class A needs to have dll-interface to be used by clients of class B */)

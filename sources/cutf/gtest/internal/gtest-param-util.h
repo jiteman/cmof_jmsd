@@ -2,6 +2,15 @@
 
 // Type and function utilities for implementing parameterized tests.
 
+
+#include "gtest/gtest-printers.h"
+#include "gtest/gtest-test-part.h"
+
+#include "gtest/internal/gtest-internal.h"
+#include "gtest/internal/gtest-port.h"
+
+#include "gtest/internal/Report_invalid_test_suite_type.h"
+
 #include <ctype.h>
 
 #include <cassert>
@@ -12,14 +21,6 @@
 #include <type_traits>
 #include <utility>
 #include <vector>
-
-#include "gtest/gtest-printers.h"
-#include "gtest/gtest-test-part.h"
-
-#include "gtest/internal/gtest-internal.h"
-#include "gtest/internal/gtest-port.h"
-
-#include "gtest/internal/Report_invalid_test_suite_type.h"
 
 
 namespace testing {
