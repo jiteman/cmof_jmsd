@@ -1,7 +1,14 @@
 // This file tests the function mocker classes.
 #include "gmock/gmock-generated-function-mockers.h"
 
+#include "gmock/gmock.h"
+#include "gtest/gtest.h"
+
 #include "gtest/Assertion_result.hin"
+
+#include <map>
+#include <string>
+#include <type_traits>
 
 #if GTEST_OS_WINDOWS
 // MSDN says the header file to be included for STDMETHOD is BaseTyps.h but
@@ -10,12 +17,6 @@
 # include <objbase.h>
 #endif  // GTEST_OS_WINDOWS
 
-#include <map>
-#include <string>
-#include <type_traits>
-
-#include "gmock/gmock.h"
-#include "gtest/gtest.h"
 
 namespace testing {
 namespace gmock_function_mocker_test {

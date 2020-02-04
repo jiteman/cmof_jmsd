@@ -1,9 +1,9 @@
 // Tests Google Mock's functionality that depends on exceptions.
 
-#include "gtest/Message.hin"
-
 #include "gmock/gmock.h"
 //#include "gtest/gtest.h"
+
+#include "gtest/Message.hin"
 
 #if GTEST_HAS_EXCEPTIONS
 namespace {

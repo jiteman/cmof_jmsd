@@ -1,13 +1,9 @@
 // This file tests code in gmock.cc.
 
+#include "gmock/gmock.h"
 
 #include "gtest/Message.hin"
 
-#include "gmock/gmock.h"
-
-//#include <string>
-//#include "gtest/gtest.h"
-//#include "gtest/internal/custom/gtest.h"
 
 #if !defined(GTEST_CUSTOM_INIT_GOOGLE_TEST_FUNCTION_)
 

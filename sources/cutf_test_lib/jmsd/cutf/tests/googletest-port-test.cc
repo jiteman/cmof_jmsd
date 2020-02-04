@@ -1,17 +1,4 @@
 // This file tests the internal cross-platform support utilities.
-#include <stdio.h>
-
-#include "gtest/internal/gtest-port.h"
-
-#if GTEST_OS_MAC
-# include <time.h>
-#endif  // GTEST_OS_MAC
-
-#include <list>
-#include <memory>
-#include <utility>  // For std::pair and std::make_pair.
-#include <vector>
-
 #include "gtest/gtest.h"
 #include "gtest/gtest-spi.h"
 #include "gtest/gtest-internal-inl.h"
@@ -23,6 +10,20 @@
 #include "gtest/Static_assert_type_sameness.hin"
 
 #include "gtest/internal/Random_number_generator.h"
+
+#include "gtest/internal/gtest-port.h"
+
+#include <stdio.h>
+
+#if GTEST_OS_MAC
+# include <time.h>
+#endif  // GTEST_OS_MAC
+
+#include <list>
+#include <memory>
+#include <utility>  // For std::pair and std::make_pair.
+#include <vector>
+
 
 using std::make_pair;
 using std::pair;

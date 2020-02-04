@@ -4,18 +4,18 @@
 
 #include "gtest/Assertion_result.hin"
 
+#include "gmock/gmock.h"
+#include "gmock/internal/gmock-port.h"
+#include "gtest/gtest-spi.h"
+
+#include "gtest/Message.hin"
+#include "gtest/internal/Floating_point_comparator.hin"
+
 #include <algorithm>
 #include <iterator>
 #include <memory>
 #include <string>
 #include <type_traits>
-#include "gmock/gmock.h"
-#include "gmock/internal/gmock-port.h"
-#include "gtest/gtest.h"
-#include "gtest/gtest-spi.h"
-
-#include "gtest/Message.hin"
-#include "gtest/internal/Floating_point_comparator.hin"
 
 
 namespace {

@@ -1,27 +1,27 @@
 // This file tests the universal value printer.
 
-#include <ctype.h>
-#include <string.h>
-#include <algorithm>
-#include <cstdint>
-#include <deque>
-#include <forward_list>
-#include <limits>
-#include <list>
-#include <map>
-#include <set>
-#include <sstream>
-#include <string>
-#include <unordered_map>
-#include <unordered_set>
-#include <utility>
-#include <vector>
-
 #include "gtest/gtest-printers.h"
 #include "gtest/gtest.h"
 
 #include "gtest/Assertion_result.hin"
 #include "gtest/Message.hin"
+
+//#include <ctype.h>
+//#include <string.h>
+//#include <algorithm>
+//#include <cstdint>
+#include <deque>
+#include <forward_list>
+//#include <limits>
+//#include <list>
+//#include <map>
+//#include <set>
+#include <sstream>
+//#include <string>
+//#include <unordered_map>
+#include <unordered_set>
+//#include <utility>
+//#include <vector>
 
 
 // Some user-defined types for testing the universal value printer.

@@ -2,6 +2,21 @@
 
 #include "gmock/internal/gmock-internal-utils.h"
 
+#include "gmock/gmock.h"
+#include "gmock/internal/gmock-port.h"
+#include "gtest/gtest-spi.h"
+
+#include "gtest/internal/Unit_test_impl.h"
+
+#include "gtest/Static_assert_type_sameness.hin"
+#include "gtest/Message.hin"
+
+// Indicates that this translation unit is part of Google Test's implementation.
+// It must come before gtest-internal-inl.h is included, or there will be a compiler error.
+// This trick is to prevent a user from accidentally including gtest-internal-inl.h in their code.
+#include "gtest/gtest-internal-inl.h"
+
+
 #include <stdlib.h>
 
 #include <cstdint>
@@ -11,27 +26,10 @@
 #include <string>
 #include <vector>
 
-#include "gmock/gmock.h"
-#include "gmock/internal/gmock-port.h"
-#include "gtest/gtest-spi.h"
-#include "gtest/gtest.h"
-
-#include "gtest/internal/Unit_test_impl.h"
-
-#include "gtest/Static_assert_type_sameness.hin"
-#include "gtest/Message.hin"
-
-// Indicates that this translation unit is part of Google Test's
-// implementation.  It must come before gtest-internal-inl.h is
-// included, or there will be a compiler error.  This trick is to
-// prevent a user from accidentally including gtest-internal-inl.h in
-// their code.
-#include "gtest/gtest-internal-inl.h"
-
-
 #if GTEST_OS_CYGWIN
 # include <sys/types.h>  // For ssize_t. NOLINT
 #endif
+
 
 namespace proto2 {
 class Message;

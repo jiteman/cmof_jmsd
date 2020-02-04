@@ -2,14 +2,15 @@
 
 #include "gmock/gmock-more-actions.h"
 
+#include "gmock/gmock.h"
+
 #include "gtest/Assertion_result.hin"
 
 #include <functional>
 #include <memory>
 #include <sstream>
 #include <string>
-#include "gmock/gmock.h"
-#include "gtest/gtest.h"
+
 
 namespace testing {
 namespace gmock_more_actions_test {

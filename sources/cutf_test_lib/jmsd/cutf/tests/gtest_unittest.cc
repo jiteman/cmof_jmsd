@@ -27,18 +27,6 @@ TEST(CommandLineFlagsTest, CanBeAccessedInCodeOnceGTestHIsIncluded) {
   EXPECT_TRUE(dummy || !dummy);  // Suppresses warning that dummy is unused.
 }
 
-#include <limits.h>  // For INT_MAX.
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-
-#include <cstdint>
-#include <map>
-#include <ostream>
-#include <type_traits>
-#include <unordered_set>
-#include <vector>
-
 #include "gtest/Test_event_listeners.h"
 #include "gtest/Empty_test_event_listener.h"
 #include "gtest/Test_event_listener.h"
@@ -72,6 +60,18 @@ TEST(CommandLineFlagsTest, CanBeAccessedInCodeOnceGTestHIsIncluded) {
 #include "gtest/internal/Stl_utilities.hin"
 #include "gtest/internal/Floating_point_comparator.hin"
 #include "gtest/internal/Floating_point_type.hin"
+
+#include <limits.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+
+#include <cstdint>
+#include <map>
+#include <ostream>
+#include <type_traits>
+#include <unordered_set>
+#include <vector>
 
 
 namespace testing {

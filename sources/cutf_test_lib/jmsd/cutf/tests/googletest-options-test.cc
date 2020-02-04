@@ -9,12 +9,6 @@
 
 #include "gtest/gtest.h"
 
-#if GTEST_OS_WINDOWS_MOBILE
-# include "internal/custom/temporary_windows_include.h"
-#elif GTEST_OS_WINDOWS
-# include <direct.h>
-#endif  // GTEST_OS_WINDOWS_MOBILE
-
 
 #include "gtest/Assertion_result.hin"
 #include "gtest/Message.hin"
@@ -23,6 +17,12 @@
 
 #include "gtest/gtest-internal-inl.h"
 
+
+#if GTEST_OS_WINDOWS_MOBILE
+# include "internal/custom/temporary_windows_include.h"
+#elif GTEST_OS_WINDOWS
+# include <direct.h>
+#endif  // GTEST_OS_WINDOWS_MOBILE
 
 
 namespace testing {

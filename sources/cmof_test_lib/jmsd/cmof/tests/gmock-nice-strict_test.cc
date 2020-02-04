@@ -1,15 +1,14 @@
 #include "gmock/gmock-nice-strict.h"
 
+#include "gmock/gmock.h"
+#include "gtest/gtest-spi.h"
+
 #include "gtest/Assertion_result.hin"
 
 #include <string>
 #include <utility>
-#include "gmock/gmock.h"
-#include "gtest/gtest-spi.h"
-#include "gtest/gtest.h"
 
-// This must not be defined inside the ::testing namespace, or it will
-// clash with ::testing::Mock.
+// This must not be defined inside the ::testing namespace, or it will clash with ::testing::Mock.
 class Mock {
  public:
   Mock() {}

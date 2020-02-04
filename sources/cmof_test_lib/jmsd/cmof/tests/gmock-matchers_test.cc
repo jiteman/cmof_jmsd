@@ -1,14 +1,16 @@
 // This file tests some commonly used argument matchers.
 
-// Silence warning C4244: 'initializing': conversion from 'int' to 'short',
-// possible loss of data and C4100, unreferenced local parameter
-#ifdef _MSC_VER
-# pragma warning(push)
-# pragma warning(disable:4244)
-# pragma warning(disable:4100)
-#endif
 
 #include "gmock/gmock-matchers.h"
+
+#include "gmock/gmock-more-matchers.h"
+#include "gmock/gmock.h"
+#include "gtest/gtest-spi.h"
+
+#include "gtest/internal/gtest-internal.h"
+
+#include "gtest/Message.hin"
+#include "gtest/internal/Floating_point_type.hin"
 
 #include <string.h>
 #include <time.h>
@@ -30,16 +32,6 @@
 #include <type_traits>
 #include <utility>
 #include <vector>
-
-#include "gmock/gmock-more-matchers.h"
-#include "gmock/gmock.h"
-#include "gtest/gtest-spi.h"
-#include "gtest/gtest.h"
-
-#include "gtest/internal/gtest-internal.h"
-
-#include "gtest/Message.hin"
-#include "gtest/internal/Floating_point_type.hin"
 
 
 namespace testing {
@@ -6896,7 +6888,3 @@ TEST_F(PredicateFormatterFromMatcherTest, DetectsFlakyShortCircuit) {
 }  // namespace
 }  // namespace gmock_matchers_test
 }  // namespace testing
-
-#ifdef _MSC_VER
-# pragma warning(pop)
-#endif
