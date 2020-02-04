@@ -1,5 +1,4 @@
-#ifndef THIRD_PARTY_GOOGLETEST_GOOGLEMOCK_INCLUDE_GMOCK_PP_H_
-#define THIRD_PARTY_GOOGLETEST_GOOGLEMOCK_INCLUDE_GMOCK_PP_H_
+#pragma once
 
 // Expands and concatenates the arguments. Constructed macros reevaluate.
 #define GMOCK_PP_CAT(_1, _2) GMOCK_PP_INTERNAL_CAT(_1, _2)
@@ -267,5 +266,3 @@
   GMOCK_PP_INTERNAL_CALL_MACRO(_Macro, _i, _Data, GMOCK_PP_HEAD _Tuple) \
   GMOCK_PP_INTERNAL_FOR_EACH_IMPL_14(GMOCK_PP_INC(_i), _Macro, _Data,   \
                                      (GMOCK_PP_TAIL _Tuple))
-
-#endif  // THIRD_PARTY_GOOGLETEST_GOOGLEMOCK_INCLUDE_GMOCK_INTERNAL_GMOCK_PP_H_

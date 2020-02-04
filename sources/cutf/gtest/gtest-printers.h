@@ -65,6 +65,7 @@
 // being defined as many user-defined container types don't have
 // value_type.
 
+#include "internal/Vector_of_strings.h"
 
 
 #if GTEST_HAS_ABSL
@@ -834,8 +835,6 @@ void UniversalPrint(const T& value, ::std::ostream* os) {
   typedef T T1;
   UniversalPrinter<T1>::Print(value, os);
 }
-
-typedef ::std::vector< ::std::string> Strings;
 
   // Tersely prints the first N fields of a tuple to a string vector,
   // one element for each field.

@@ -7,11 +7,6 @@
 // end with _ are part of Google Mock's public API and can be used by
 // code outside Google Mock.
 
-#include <assert.h>
-#include <stdlib.h>
-#include <cstdint>
-#include <iostream>
-
 // Most of the utilities needed for porting Google Mock are also
 // required for Google Test and are defined in gtest-port.h.
 //
@@ -22,6 +17,12 @@
 
 #include "gtest/internal/gtest-port.h"
 #include "gmock/internal/custom/gmock-port.h"
+
+//#include <assert.h>
+//#include <stdlib.h>
+//#include <cstdint>
+//#include <iostream>
+
 
 // For MS Visual C++, check the compiler version. At least VS 2015 is
 // required to compile Google Mock.

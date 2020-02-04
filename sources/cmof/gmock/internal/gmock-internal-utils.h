@@ -1,50 +1,16 @@
-// Copyright 2007, Google Inc.
-// All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are
-// met:
-//
-//     * Redistributions of source code must retain the above copyright
-// notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above
-// copyright notice, this list of conditions and the following disclaimer
-// in the documentation and/or other materials provided with the
-// distribution.
-//     * Neither the name of Google Inc. nor the names of its
-// contributors may be used to endorse or promote products derived from
-// this software without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-
-// Google Mock - a framework for writing C++ mock classes.
-//
+#pragma once
 // This file defines some utilities useful for implementing Google
 // Mock.  They are subject to change without notice, so please DO NOT
 // USE THEM IN USER CODE.
 
-// GOOGLETEST_CM0002 DO NOT DELETE
-
-#ifndef GMOCK_INCLUDE_GMOCK_INTERNAL_GMOCK_INTERNAL_UTILS_H_
-#define GMOCK_INCLUDE_GMOCK_INTERNAL_GMOCK_INTERNAL_UTILS_H_
-
-#include <stdio.h>
-#include <ostream>  // NOLINT
-#include <string>
-#include <type_traits>
 #include "gmock/internal/gmock-port.h"
 #include "gtest/gtest.h"
+
+#include <cstdio>
+#include <ostream>
+#include <string>
+#include <type_traits>
+
 
 namespace testing {
 
@@ -61,14 +27,12 @@ namespace internal {
 # pragma warning(disable:4805)
 #endif
 
-// Joins a vector of strings as if they are fields of a tuple; returns
-// the joined string.
+// Joins a vector of strings as if they are fields of a tuple; returns the joined string.
 JMSD_DEPRECATED_GMOCK_API_ std::string JoinAsTuple(const Strings& fields);
 
-// Converts an identifier name to a space-separated list of lower-case
-// words.  Each maximum substring of the form [A-Za-z][a-z]*|\d+ is
-// treated as one word.  For example, both "FooBar123" and
-// "foo_bar_123" are converted to "foo bar 123".
+// Converts an identifier name to a space-separated list of lower-case words.
+// Each maximum substring of the form [A-Za-z][a-z]*|\d+ is treated as one word.
+// For example, both "FooBar123" and "foo_bar_123" are converted to "foo bar 123".
 JMSD_DEPRECATED_GMOCK_API_ std::string ConvertIdentifierNameToWords(const char* id_name);
 
 // PointeeOf<Pointer>::type is the type of a value pointed to by a
@@ -466,5 +430,3 @@ constexpr size_t Function<R(Args...)>::ArgumentCount;
 
 }  // namespace internal
 }  // namespace testing
-
-#endif  // GMOCK_INCLUDE_GMOCK_INTERNAL_GMOCK_INTERNAL_UTILS_H_
