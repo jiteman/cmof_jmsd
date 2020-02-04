@@ -59,7 +59,7 @@ void Colored_print::ColoredPrintf( GTestColor const color, char const *const fmt
 	::SetConsoleTextAttribute( stdout_handle, old_color_attrs ); // Restores the text color.
 
 #else
-	printf( "\033[0;3%sm", GetAnsiColorCode( color ) );
+	printf( "\033[0;3%sm", Colored_print_realization::GetAnsiColorCode( color ) );
 	vprintf( fmt, args );
 	printf( "\033[m" ); // Resets the terminal to default.
 

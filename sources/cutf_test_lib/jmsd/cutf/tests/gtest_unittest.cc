@@ -6521,49 +6521,49 @@ TEST(ColoredOutputTest, UsesColorsWhenTermSupportsColors) {
   // terminal supports colors.
 
   SetEnv("TERM", "dumb");  // TERM doesn't support colors.
-  EXPECT_FALSE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_FALSE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(true));  // Stdout is a TTY.
 
   SetEnv("TERM", "emacs");  // TERM doesn't support colors.
-  EXPECT_FALSE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_FALSE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(true));  // Stdout is a TTY.
 
   SetEnv("TERM", "vt100");  // TERM doesn't support colors.
-  EXPECT_FALSE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_FALSE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(true));  // Stdout is a TTY.
 
   SetEnv("TERM", "xterm-mono");  // TERM doesn't support colors.
-  EXPECT_FALSE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_FALSE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(true));  // Stdout is a TTY.
 
   SetEnv("TERM", "xterm");  // TERM supports colors.
-  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(true));  // Stdout is a TTY.
 
   SetEnv("TERM", "xterm-color");  // TERM supports colors.
-  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(true));  // Stdout is a TTY.
 
   SetEnv("TERM", "xterm-256color");  // TERM supports colors.
-  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(true));  // Stdout is a TTY.
 
   SetEnv("TERM", "screen");  // TERM supports colors.
-  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(true));  // Stdout is a TTY.
 
   SetEnv("TERM", "screen-256color");  // TERM supports colors.
-  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(true));  // Stdout is a TTY.
 
   SetEnv("TERM", "tmux");  // TERM supports colors.
-  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(true));  // Stdout is a TTY.
 
   SetEnv("TERM", "tmux-256color");  // TERM supports colors.
-  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(true));  // Stdout is a TTY.
 
   SetEnv("TERM", "rxvt-unicode");  // TERM supports colors.
-  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(true));  // Stdout is a TTY.
 
   SetEnv("TERM", "rxvt-unicode-256color");  // TERM supports colors.
-  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(true));  // Stdout is a TTY.
 
   SetEnv("TERM", "linux");  // TERM supports colors.
-  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(true));  // Stdout is a TTY.
 
   SetEnv("TERM", "cygwin");  // TERM supports colors.
-  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(true));  // Stdout is a TTY.
 #endif  // GTEST_OS_WINDOWS
 }
 
