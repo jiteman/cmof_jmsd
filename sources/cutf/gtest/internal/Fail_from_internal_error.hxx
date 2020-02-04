@@ -22,9 +22,3 @@ void FailFromInternalError( int fd );
 } // namespace internal
 } // namespace cutf
 } // namespace jmsd
-
-
-namespace testing {
-
-
-} // namespace testing

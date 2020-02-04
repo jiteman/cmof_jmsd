@@ -24,9 +24,3 @@ void DefaultGlobalTestPartResultReporter::ReportTestPartResult( ::testing::TestP
 } // namespace internal
 } // namespace cutf
 } // namespace jmsd
-
-
-namespace testing {
-
-
-} // namespace testing

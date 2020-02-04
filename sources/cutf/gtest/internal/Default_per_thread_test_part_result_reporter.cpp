@@ -23,9 +23,3 @@ void DefaultPerThreadTestPartResultReporter::ReportTestPartResult( ::testing::Te
 } // namespace internal
 } // namespace cutf
 } // namespace jmsd
-
-
-namespace testing {
-
-
-} // namespace testing
