@@ -3191,7 +3191,7 @@ BoundSecondMatcher<Tuple2Matcher, Second> MatcherBindSecond(
 // that are the print-out of the matcher's parameters.
 JMSD_DEPRECATED_GMOCK_API_ std::string FormatMatcherDescription(bool negation,
                                                 const char* matcher_name,
-                                                const Strings& param_values);
+                                                const ::jmsd::cutf::internal::Strings& param_values);
 
 // Implements a matcher that checks the value of a optional<> type variable.
 template <typename ValueMatcher>

@@ -40,6 +40,10 @@ namespace internal {
 
 namespace {
 
+
+using ::jmsd::cutf::internal::Strings;
+
+
 TEST(JoinAsTupleTest, JoinsEmptyTuple) {
   EXPECT_EQ("", JoinAsTuple(Strings()));
 }

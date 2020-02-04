@@ -161,7 +161,7 @@ $var anything_matchers = [[$for j, \
     return GMOCK_MOCKER_($i, constness, Method).With($matcher_as); \
   } \
   ::testing::MockSpec<__VA_ARGS__> gmock_##Method( \
-      const ::testing::internal::WithoutMatchers&, \
+      const ::jmsd::cmof::internal::WithoutMatchers&, \
       constness ::testing::internal::Function<__VA_ARGS__>* ) const { \
         return ::testing::internal::AdjustConstness_##constness(this)-> \
             gmock_##Method($anything_matchers); \

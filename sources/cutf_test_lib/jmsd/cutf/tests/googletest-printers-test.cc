@@ -193,7 +193,6 @@ using ::testing::internal::FormatForComparisonFailureMessage;
 using ::testing::internal::ImplicitCast_;
 using ::testing::internal::NativeArray;
 using ::testing::internal::RelationToSourceReference;
-using ::testing::internal::Strings;
 using ::testing::internal::UniversalPrint;
 using ::testing::internal::UniversalPrinter;
 using ::testing::internal::UniversalTersePrint;
@@ -1473,6 +1472,10 @@ TEST(UniversalPrintTest, WorksForCharArray) {
   UniversalPrint(mutable_str, &ss2);
   EXPECT_EQ("\"\\\"Line\\0 1\\\"\\nLine 2\"", ss2.str());
 }
+
+
+using ::jmsd::cutf::internal::Strings;
+
 
 TEST(UniversalTersePrintTupleFieldsToStringsTestWithStd, PrintsEmptyTuple) {
   Strings result = UniversalTersePrintTupleFieldsToStrings(::std::make_tuple());

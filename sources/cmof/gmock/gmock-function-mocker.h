@@ -94,7 +94,7 @@ using identity_t = T;
         .With(GMOCK_PP_REPEAT(GMOCK_INTERNAL_MATCHER_ARGUMENT, , _N));         \
   }                                                                            \
   ::testing::MockSpec<GMOCK_PP_REMOVE_PARENS(_Signature)> gmock_##_MethodName( \
-      const ::testing::internal::WithoutMatchers&,                             \
+      const ::jmsd::cmof::internal::WithoutMatchers&,                             \
       GMOCK_PP_IF(_Constness, const, )::testing::internal::Function<           \
           GMOCK_PP_REMOVE_PARENS(_Signature)>*) const _NoexceptSpec {          \
     return GMOCK_PP_CAT(::testing::internal::AdjustConstness_,                 \

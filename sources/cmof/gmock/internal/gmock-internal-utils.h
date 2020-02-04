@@ -19,16 +19,9 @@ class Matcher;
 
 namespace internal {
 
-// Silence MSVC C4100 (unreferenced formal parameter) and
-// C4805('==': unsafe mix of type 'const int' and type 'const bool')
-#ifdef _MSC_VER
-# pragma warning(push)
-# pragma warning(disable:4100)
-# pragma warning(disable:4805)
-#endif
 
 // Joins a vector of strings as if they are fields of a tuple; returns the joined string.
-JMSD_DEPRECATED_GMOCK_API_ std::string JoinAsTuple(const Strings& fields);
+JMSD_DEPRECATED_GMOCK_API_ std::string JoinAsTuple(const ::jmsd::cutf::internal::Strings& fields);
 
 // Converts an identifier name to a space-separated list of lower-case words.
 // Each maximum substring of the form [A-Za-z][a-z]*|\d+ is treated as one word.
@@ -243,20 +236,7 @@ JMSD_DEPRECATED_GMOCK_API_ bool LogIsVisible(LogSeverity severity);
 JMSD_DEPRECATED_GMOCK_API_ void Log(LogSeverity severity, const std::string& message,
                     int stack_frames_to_skip);
 
-// A marker class that is used to resolve parameterless expectations to the
-// correct overload. This must not be instantiable, to prevent client code from
-// accidentally resolving to the overload; for example:
-//
-//    ON_CALL(mock, Method({}, nullptr))...
-//
-class WithoutMatchers {
- private:
-  WithoutMatchers() {}
-  friend JMSD_DEPRECATED_GMOCK_API_ WithoutMatchers GetWithoutMatchers();
-};
 
-// Internal use only: access the singleton instance of WithoutMatchers.
-JMSD_DEPRECATED_GMOCK_API_ WithoutMatchers GetWithoutMatchers();
 
 // Disable MSVC warnings for infinite recursion, since in this case the
 // the recursion is unreachable.
@@ -424,9 +404,6 @@ struct Function<R(Args...)> {
 template <typename R, typename... Args>
 constexpr size_t Function<R(Args...)>::ArgumentCount;
 
-#ifdef _MSC_VER
-# pragma warning(pop)
-#endif
 
 }  // namespace internal
 }  // namespace testing

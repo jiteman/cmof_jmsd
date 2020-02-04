@@ -10,20 +10,9 @@ namespace cutf {
 namespace internal {
 
 
-
+typedef ::std::vector< ::std::string > Strings;
 
 
 } // namespace internal
 } // namespace cutf
 } // namespace jmsd
-
-
-namespace testing {
-namespace internal {
-
-
-typedef ::std::vector< ::std::string > Strings;
-
-
-} // namespace internal
-} // namespace testing

@@ -60,7 +60,6 @@ using testing::internal::MatchMatrix;
 using testing::internal::PredicateFormatterFromMatcher;
 using testing::internal::RE;
 using testing::internal::StreamMatchResultListener;
-using testing::internal::Strings;
 
 // Helper for testing container-valued matchers in mock method context. It is
 // important to test matchers in this context, since it requires additional type
@@ -6041,6 +6040,10 @@ TEST(IsReadableTypeNameTest, ReturnsFalseForLongFunctionTypeNames) {
 
 // Tests FormatMatcherDescription().
 
+namespace {
+
+using ::jmsd::cutf::internal::Strings;
+
 TEST(FormatMatcherDescriptionTest, WorksForEmptyDescription) {
   EXPECT_EQ("is even",
             FormatMatcherDescription(false, "IsEven", Strings()));
@@ -6057,6 +6060,8 @@ TEST(FormatMatcherDescriptionTest, WorksForEmptyDescription) {
             FormatMatcherDescription(false, "IsInRange",
                                      Strings(params2, params2 + 2)));
 }
+
+} // namespace
 
 // Tests PolymorphicMatcher::mutable_impl().
 TEST(PolymorphicMatcherTest, CanAccessMutableImpl) {

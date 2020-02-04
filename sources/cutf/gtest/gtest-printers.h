@@ -840,11 +840,11 @@ void UniversalPrint(const T& value, ::std::ostream* os) {
   // one element for each field.
 template <typename Tuple>
 void TersePrintPrefixToStrings(const Tuple&, std::integral_constant<size_t, 0>,
-                               Strings*) {}
+                               ::jmsd::cutf::internal::Strings*) {}
 template <typename Tuple, size_t I>
 void TersePrintPrefixToStrings(const Tuple& t,
                                std::integral_constant<size_t, I>,
-                               Strings* strings) {
+                               ::jmsd::cutf::internal::Strings* strings) {
   TersePrintPrefixToStrings(t, std::integral_constant<size_t, I - 1>(),
                             strings);
   ::std::stringstream ss;
@@ -856,8 +856,8 @@ void TersePrintPrefixToStrings(const Tuple& t,
 // element for each field.  See the comment before
 // UniversalTersePrint() for how we define "tersely".
 template <typename Tuple>
-Strings UniversalTersePrintTupleFieldsToStrings(const Tuple& value) {
-  Strings result;
+::jmsd::cutf::internal::Strings UniversalTersePrintTupleFieldsToStrings(const Tuple& value) {
+  ::jmsd::cutf::internal::Strings result;
   TersePrintPrefixToStrings(
       value, std::integral_constant<size_t, std::tuple_size<Tuple>::value>(),
       &result);

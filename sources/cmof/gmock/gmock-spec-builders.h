@@ -26,11 +26,14 @@
 // .WillOnce() can appear any number of times.
 
 
-#include "gmock/gmock-actions.h"
-#include "gmock/gmock-cardinalities.h"
-#include "gmock/gmock-matchers.h"
-#include "gmock/internal/gmock-internal-utils.h"
-#include "gmock/internal/gmock-port.h"
+#include "gmock-actions.h"
+#include "gmock-cardinalities.h"
+#include "gmock-matchers.h"
+
+#include "internal/gmock-internal-utils.h"
+#include "internal/gmock-port.h"
+#include "internal/Without_machers.h"
+
 #include "gtest/gtest.h"
 
 #include <functional>
@@ -1247,7 +1250,7 @@ class MockSpec {
   // This operator overload is used to swallow the superfluous parameter list
   // introduced by the ON/EXPECT_CALL macros. See the macro comments for more
   // explanation.
-  MockSpec<F>& operator()(const internal::WithoutMatchers&, void* const) {
+  MockSpec<F>& operator()(const ::jmsd::cmof::internal::WithoutMatchers&, void* const) {
     return *this;
   }
 
@@ -1823,7 +1826,7 @@ class MockFunction<R(Args...)> {
     return mock_.With(std::move(m)...);
   }
 
-  internal::MockSpec<R(Args...)> gmock_Call(const internal::WithoutMatchers&,
+  internal::MockSpec<R(Args...)> gmock_Call(const ::jmsd::cmof::internal::WithoutMatchers&,
                                             R (*)(Args...)) {
     return this->gmock_Call(::testing::A<Args>()...);
   }
@@ -1927,7 +1930,7 @@ inline Expectation::Expectation(internal::ExpectationBase& exp)  // NOLINT
 // failure to disambiguate two overloads of this method in the ON_CALL statement
 // is how we block callers from setting expectations on overloaded methods.
 #define GMOCK_ON_CALL_IMPL_(mock_expr, Setter, call)                    \
-  ((mock_expr).gmock_##call)(::testing::internal::GetWithoutMatchers(), \
+  ((mock_expr).gmock_##call)(::jmsd::cmof::internal::WithoutMatchers::Get(), \
                              nullptr)                                   \
       .Setter(__FILE__, __LINE__, #mock_expr, #call)
 

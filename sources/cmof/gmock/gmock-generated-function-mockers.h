@@ -111,7 +111,7 @@ using internal::FunctionMocker;
     return GMOCK_MOCKER_(0, constness, Method).With(); \
   } \
   ::testing::MockSpec<__VA_ARGS__> gmock_##Method( \
-      const ::testing::internal::WithoutMatchers&, \
+      const ::jmsd::cmof::internal::WithoutMatchers&, \
       constness ::testing::internal::Function<__VA_ARGS__>* ) const { \
         return ::testing::internal::AdjustConstness_##constness(this)-> \
             gmock_##Method(); \
@@ -137,7 +137,7 @@ using internal::FunctionMocker;
     return GMOCK_MOCKER_(1, constness, Method).With(gmock_a1); \
   } \
   ::testing::MockSpec<__VA_ARGS__> gmock_##Method( \
-      const ::testing::internal::WithoutMatchers&, \
+      const ::jmsd::cmof::internal::WithoutMatchers&, \
       constness ::testing::internal::Function<__VA_ARGS__>* ) const { \
         return ::testing::internal::AdjustConstness_##constness(this)-> \
             gmock_##Method(::testing::A<GMOCK_ARG_(tn, 1, __VA_ARGS__)>()); \
@@ -166,7 +166,7 @@ using internal::FunctionMocker;
     return GMOCK_MOCKER_(2, constness, Method).With(gmock_a1, gmock_a2); \
   } \
   ::testing::MockSpec<__VA_ARGS__> gmock_##Method( \
-      const ::testing::internal::WithoutMatchers&, \
+      const ::jmsd::cmof::internal::WithoutMatchers&, \
       constness ::testing::internal::Function<__VA_ARGS__>* ) const { \
         return ::testing::internal::AdjustConstness_##constness(this)-> \
             gmock_##Method(::testing::A<GMOCK_ARG_(tn, 1, __VA_ARGS__)>(), \
@@ -200,7 +200,7 @@ using internal::FunctionMocker;
         gmock_a3); \
   } \
   ::testing::MockSpec<__VA_ARGS__> gmock_##Method( \
-      const ::testing::internal::WithoutMatchers&, \
+      const ::jmsd::cmof::internal::WithoutMatchers&, \
       constness ::testing::internal::Function<__VA_ARGS__>* ) const { \
         return ::testing::internal::AdjustConstness_##constness(this)-> \
             gmock_##Method(::testing::A<GMOCK_ARG_(tn, 1, __VA_ARGS__)>(), \
@@ -237,7 +237,7 @@ using internal::FunctionMocker;
         gmock_a3, gmock_a4); \
   } \
   ::testing::MockSpec<__VA_ARGS__> gmock_##Method( \
-      const ::testing::internal::WithoutMatchers&, \
+      const ::jmsd::cmof::internal::WithoutMatchers&, \
       constness ::testing::internal::Function<__VA_ARGS__>* ) const { \
         return ::testing::internal::AdjustConstness_##constness(this)-> \
             gmock_##Method(::testing::A<GMOCK_ARG_(tn, 1, __VA_ARGS__)>(), \
@@ -278,7 +278,7 @@ using internal::FunctionMocker;
         gmock_a3, gmock_a4, gmock_a5); \
   } \
   ::testing::MockSpec<__VA_ARGS__> gmock_##Method( \
-      const ::testing::internal::WithoutMatchers&, \
+      const ::jmsd::cmof::internal::WithoutMatchers&, \
       constness ::testing::internal::Function<__VA_ARGS__>* ) const { \
         return ::testing::internal::AdjustConstness_##constness(this)-> \
             gmock_##Method(::testing::A<GMOCK_ARG_(tn, 1, __VA_ARGS__)>(), \
@@ -323,7 +323,7 @@ using internal::FunctionMocker;
         gmock_a3, gmock_a4, gmock_a5, gmock_a6); \
   } \
   ::testing::MockSpec<__VA_ARGS__> gmock_##Method( \
-      const ::testing::internal::WithoutMatchers&, \
+      const ::jmsd::cmof::internal::WithoutMatchers&, \
       constness ::testing::internal::Function<__VA_ARGS__>* ) const { \
         return ::testing::internal::AdjustConstness_##constness(this)-> \
             gmock_##Method(::testing::A<GMOCK_ARG_(tn, 1, __VA_ARGS__)>(), \
@@ -371,7 +371,7 @@ using internal::FunctionMocker;
         gmock_a3, gmock_a4, gmock_a5, gmock_a6, gmock_a7); \
   } \
   ::testing::MockSpec<__VA_ARGS__> gmock_##Method( \
-      const ::testing::internal::WithoutMatchers&, \
+      const ::jmsd::cmof::internal::WithoutMatchers&, \
       constness ::testing::internal::Function<__VA_ARGS__>* ) const { \
         return ::testing::internal::AdjustConstness_##constness(this)-> \
             gmock_##Method(::testing::A<GMOCK_ARG_(tn, 1, __VA_ARGS__)>(), \
@@ -423,7 +423,7 @@ using internal::FunctionMocker;
         gmock_a3, gmock_a4, gmock_a5, gmock_a6, gmock_a7, gmock_a8); \
   } \
   ::testing::MockSpec<__VA_ARGS__> gmock_##Method( \
-      const ::testing::internal::WithoutMatchers&, \
+      const ::jmsd::cmof::internal::WithoutMatchers&, \
       constness ::testing::internal::Function<__VA_ARGS__>* ) const { \
         return ::testing::internal::AdjustConstness_##constness(this)-> \
             gmock_##Method(::testing::A<GMOCK_ARG_(tn, 1, __VA_ARGS__)>(), \
@@ -480,7 +480,7 @@ using internal::FunctionMocker;
         gmock_a9); \
   } \
   ::testing::MockSpec<__VA_ARGS__> gmock_##Method( \
-      const ::testing::internal::WithoutMatchers&, \
+      const ::jmsd::cmof::internal::WithoutMatchers&, \
       constness ::testing::internal::Function<__VA_ARGS__>* ) const { \
         return ::testing::internal::AdjustConstness_##constness(this)-> \
             gmock_##Method(::testing::A<GMOCK_ARG_(tn, 1, __VA_ARGS__)>(), \
@@ -541,7 +541,7 @@ using internal::FunctionMocker;
         gmock_a10); \
   } \
   ::testing::MockSpec<__VA_ARGS__> gmock_##Method( \
-      const ::testing::internal::WithoutMatchers&, \
+      const ::jmsd::cmof::internal::WithoutMatchers&, \
       constness ::testing::internal::Function<__VA_ARGS__>* ) const { \
         return ::testing::internal::AdjustConstness_##constness(this)-> \
             gmock_##Method(::testing::A<GMOCK_ARG_(tn, 1, __VA_ARGS__)>(), \

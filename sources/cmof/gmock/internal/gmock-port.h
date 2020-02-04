@@ -18,11 +18,6 @@
 #include "gtest/internal/gtest-port.h"
 #include "gmock/internal/custom/gmock-port.h"
 
-//#include <assert.h>
-//#include <stdlib.h>
-//#include <cstdint>
-//#include <iostream>
-
 
 // For MS Visual C++, check the compiler version. At least VS 2015 is
 // required to compile Google Mock.
