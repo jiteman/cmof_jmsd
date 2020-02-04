@@ -37,7 +37,7 @@ bool ShouldShard( char const *const total_shards_env, char const *const shard_in
 	  << "Invalid environment variables: you have "
 	  << constants::kTestShardIndex << " = " << shard_index
 	  << ", but have left " << constants::kTestTotalShards << " unset.\n";
-	ColoredPrintf( GTestColor::COLOR_RED, "%s", msg.GetString().c_str());
+	Colored_print::ColoredPrintf( GTestColor::COLOR_RED, "%s", msg.GetString().c_str());
 	fflush(stdout);
 	exit(EXIT_FAILURE);
   } else if (total_shards != -1 && shard_index == -1) {
@@ -45,7 +45,7 @@ bool ShouldShard( char const *const total_shards_env, char const *const shard_in
 	  << "Invalid environment variables: you have "
 	  << constants::kTestTotalShards << " = " << total_shards
 	  << ", but have left " << constants::kTestShardIndex << " unset.\n";
-	ColoredPrintf( GTestColor::COLOR_RED, "%s", msg.GetString().c_str());
+	Colored_print::ColoredPrintf( GTestColor::COLOR_RED, "%s", msg.GetString().c_str());
 	fflush(stdout);
 	exit(EXIT_FAILURE);
   } else if (shard_index < 0 || shard_index >= total_shards) {
@@ -54,7 +54,7 @@ bool ShouldShard( char const *const total_shards_env, char const *const shard_in
 	  << constants::kTestShardIndex << " < " << constants::kTestTotalShards
 	  << ", but you have " << constants::kTestShardIndex << "=" << shard_index
 	  << ", " << constants::kTestTotalShards << "=" << total_shards << ".\n";
-	ColoredPrintf( GTestColor::COLOR_RED, "%s", msg.GetString().c_str());
+	Colored_print::ColoredPrintf( GTestColor::COLOR_RED, "%s", msg.GetString().c_str());
 	fflush(stdout);
 	exit(EXIT_FAILURE);
   }

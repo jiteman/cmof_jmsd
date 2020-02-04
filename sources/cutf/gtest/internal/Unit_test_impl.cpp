@@ -653,7 +653,7 @@ bool UnitTestImpl::RunAllTests() {
   repeater->OnTestProgramEnd(*parent_);
 
   if (!gtest_is_initialized_before_run_all_tests) {
-	ColoredPrintf(
+	Colored_print::ColoredPrintf(
 		COLOR_RED,
 		"\nIMPORTANT NOTICE - DO NOT IGNORE:\n"
 		"This test program did NOT call " GTEST_INIT_GOOGLE_TEST_NAME_
@@ -661,7 +661,7 @@ bool UnitTestImpl::RunAllTests() {
 		" will start to enforce the valid usage. "
 		"Please fix it ASAP, or IT WILL START TO FAIL.\n");  // NOLINT
 #if GTEST_FOR_GOOGLE_
-	ColoredPrintf(COLOR_RED,
+	Colored_print::ColoredPrintf(COLOR_RED,
 				  "For more details, see http://wiki/Main/ValidGUnitMain.\n");
 #endif  // GTEST_FOR_GOOGLE_
   }

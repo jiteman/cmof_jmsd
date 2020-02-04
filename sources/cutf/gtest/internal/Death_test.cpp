@@ -1,4 +1,4 @@
-#include "gtti.h"
+#include "Death_test.h"
 
 
 namespace jmsd {
@@ -12,9 +12,3 @@ namespace internal {
 } // namespace internal
 } // namespace cutf
 } // namespace jmsd
-
-
-namespace testing {
-
-
-} // namespace testing

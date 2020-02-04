@@ -4,6 +4,9 @@
 #include "Colored_print.h"
 #include "gtest-color.h"
 
+#include <string>
+#include <cstring>
+
 
 namespace jmsd {
 namespace cutf {
@@ -28,17 +31,17 @@ void PrintColorEncoded( char const *str ) {
 		char const *p = strchr(str, '@');
 
 		if (p == nullptr) {
-			ColoredPrintf(color, "%s", str);
+			Colored_print::ColoredPrintf(color, "%s", str);
 			return;
 		}
 
-		ColoredPrintf(color, "%s", std::string(str, p).c_str());
+		Colored_print::ColoredPrintf(color, "%s", std::string(str, p).c_str());
 
 		const char ch = p[1];
 		str = p + 2;
 
 		if (ch == '@') {
-			ColoredPrintf(color, "@");
+			Colored_print::ColoredPrintf(color, "@");
 		} else if (ch == 'D') {
 			color = GTestColor::COLOR_DEFAULT;
 		} else if (ch == 'R') {

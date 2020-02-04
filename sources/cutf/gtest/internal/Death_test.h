@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gtti.hxx"
+#include "Death_test.hxx"
 
 
 namespace jmsd {
@@ -14,9 +14,3 @@ namespace internal {
 } // namespace internal
 } // namespace cutf
 } // namespace jmsd
-
-
-namespace testing {
-
-
-} // namespace testing

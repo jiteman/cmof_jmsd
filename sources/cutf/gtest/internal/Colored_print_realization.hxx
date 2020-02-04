@@ -6,7 +6,7 @@ namespace cutf {
 namespace internal {
 
 
-class Colored_print;
+class Colored_print_realization;
 
 
 } // namespace internal

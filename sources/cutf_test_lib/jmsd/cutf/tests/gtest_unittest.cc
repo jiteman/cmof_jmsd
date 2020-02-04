@@ -6448,58 +6448,58 @@ TEST(ColoredOutputTest, UsesColorsWhenGTestColorFlagIsYes) {
   GTEST_FLAG(color) = "yes";
 
   SetEnv("TERM", "xterm");  // TERM supports colors.
-  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
-  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(false));  // Stdout is not a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(false));  // Stdout is not a TTY.
 
   SetEnv("TERM", "dumb");  // TERM doesn't support colors.
-  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
-  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(false));  // Stdout is not a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(false));  // Stdout is not a TTY.
 }
 
 TEST(ColoredOutputTest, UsesColorsWhenGTestColorFlagIsAliasOfYes) {
   SetEnv("TERM", "dumb");  // TERM doesn't support colors.
 
   GTEST_FLAG(color) = "True";
-  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(false));  // Stdout is not a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(false));  // Stdout is not a TTY.
 
   GTEST_FLAG(color) = "t";
-  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(false));  // Stdout is not a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(false));  // Stdout is not a TTY.
 
   GTEST_FLAG(color) = "1";
-  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(false));  // Stdout is not a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(false));  // Stdout is not a TTY.
 }
 
 TEST(ColoredOutputTest, UsesNoColorWhenGTestColorFlagIsNo) {
   GTEST_FLAG(color) = "no";
 
   SetEnv("TERM", "xterm");  // TERM supports colors.
-  EXPECT_FALSE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
-  EXPECT_FALSE(::jmsd::cutf::internal::ShouldUseColor(false));  // Stdout is not a TTY.
+  EXPECT_FALSE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_FALSE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(false));  // Stdout is not a TTY.
 
   SetEnv("TERM", "dumb");  // TERM doesn't support colors.
-  EXPECT_FALSE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
-  EXPECT_FALSE(::jmsd::cutf::internal::ShouldUseColor(false));  // Stdout is not a TTY.
+  EXPECT_FALSE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_FALSE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(false));  // Stdout is not a TTY.
 }
 
 TEST(ColoredOutputTest, UsesNoColorWhenGTestColorFlagIsInvalid) {
   SetEnv("TERM", "xterm");  // TERM supports colors.
 
   GTEST_FLAG(color) = "F";
-  EXPECT_FALSE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_FALSE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(true));  // Stdout is a TTY.
 
   GTEST_FLAG(color) = "0";
-  EXPECT_FALSE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_FALSE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(true));  // Stdout is a TTY.
 
   GTEST_FLAG(color) = "unknown";
-  EXPECT_FALSE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_FALSE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(true));  // Stdout is a TTY.
 }
 
 TEST(ColoredOutputTest, UsesColorsWhenStdoutIsTty) {
   GTEST_FLAG(color) = "auto";
 
   SetEnv("TERM", "xterm");  // TERM supports colors.
-  EXPECT_FALSE(::jmsd::cutf::internal::ShouldUseColor(false));  // Stdout is not a TTY.
-  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));    // Stdout is a TTY.
+  EXPECT_FALSE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(false));  // Stdout is not a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(true));    // Stdout is a TTY.
 }
 
 TEST(ColoredOutputTest, UsesColorsWhenTermSupportsColors) {
@@ -6509,13 +6509,13 @@ TEST(ColoredOutputTest, UsesColorsWhenTermSupportsColors) {
   // On Windows, we ignore the TERM variable as it's usually not set.
 
   SetEnv("TERM", "dumb");
-  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(true));  // Stdout is a TTY.
 
   SetEnv("TERM", "");
-  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(true));  // Stdout is a TTY.
 
   SetEnv("TERM", "xterm");
-  EXPECT_TRUE(::jmsd::cutf::internal::ShouldUseColor(true));  // Stdout is a TTY.
+  EXPECT_TRUE(::jmsd::cutf::internal::Colored_print::ShouldUseColor(true));  // Stdout is a TTY.
 #else
   // On non-Windows platforms, we rely on TERM to determine if the
   // terminal supports colors.

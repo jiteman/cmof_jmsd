@@ -39,9 +39,3 @@ void DeathTestAbort(const std::string& message) {
 } // namespace internal
 } // namespace cutf
 } // namespace jmsd
-
-
-namespace testing {
-
-
-} // namespace testing

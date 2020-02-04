@@ -23,7 +23,7 @@ void WriteToShardStatusFileIfNeeded() {
   if (test_shard_file != nullptr) {
 	FILE* const file = ::testing::internal::posix::FOpen(test_shard_file, "w");
 	if (file == nullptr) {
-	  ColoredPrintf( GTestColor::COLOR_RED,
+	  Colored_print::ColoredPrintf( GTestColor::COLOR_RED,
 					"Could not write to the test shard status file \"%s\" "
 					"specified by the %s environment variable.\n",
 					test_shard_file, constants::kTestShardStatusFile );
