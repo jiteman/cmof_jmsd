@@ -1,17 +1,18 @@
-// This file defines some utilities useful for implementing Google
-// Mock.  They are subject to change without notice, so please DO NOT
-// USE THEM IN USER CODE.
+// This file defines some utilities useful for implementing Google Mock.
+// They are subject to change without notice, so please DO NOT USE THEM IN USER CODE.
 
 #include "gmock/internal/gmock-internal-utils.h"
 
-#include <ctype.h>
-#include <ostream>
-#include <string>
 #include "gmock/gmock.h"
 #include "gmock/internal/gmock-port.h"
 #include "gtest/gtest.h"
 
 #include "gtest/Message.hin"
+
+#include <ctype.h>
+#include <ostream>
+#include <string>
+
 
 namespace testing {
 namespace internal {

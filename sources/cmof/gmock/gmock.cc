@@ -4,6 +4,7 @@
 #include "gtest/Message.hin"
 #include "gtest/internal/Streamable_to_string.hin"
 
+
 namespace testing {
 
 GMOCK_DEFINE_bool_(catch_leaked_mocks, true,

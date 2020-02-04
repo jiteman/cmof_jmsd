@@ -3,7 +3,6 @@
 #include "gmock/gmock-generated-function-mockers.h"
 
 #include "gmock/gmock.h"
-// #include "gtest/gtest.h"
 
 #include <map>
 #include <string>

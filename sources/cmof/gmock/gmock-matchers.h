@@ -1,15 +1,16 @@
 #pragma once
 
-// This file implements some commonly used argument matchers.  More
-// matchers can be defined by the user implementing the
-// MatcherInterface<T> interface if necessary.
-//
-// See googletest/include/gtest/gtest-matchers.h for the definition of class
-// Matcher, class MatcherInterface, and others.
+// This file implements some commonly used argument matchers.
+// More matchers can be defined by the user implementing the MatcherInterface<T> interface if necessary.
 
-// GOOGLETEST_CM0002 DO NOT DELETE
+// See googletest/include/gtest/gtest-matchers.h for the definition of class Matcher, class MatcherInterface, and others.
+
 
 #include "gtest/internal/Floating_point_type.hin"
+
+#include "gmock/internal/gmock-internal-utils.h"
+#include "gmock/internal/gmock-port.h"
+#include "gtest/gtest.h"
 
 #include <algorithm>
 #include <cmath>
@@ -17,28 +18,13 @@
 #include <iterator>
 #include <limits>
 #include <memory>
-#include <ostream>  // NOLINT
+#include <ostream>
 #include <sstream>
 #include <string>
 #include <type_traits>
 #include <utility>
 #include <vector>
 
-#include "gmock/internal/gmock-internal-utils.h"
-#include "gmock/internal/gmock-port.h"
-#include "gtest/gtest.h"
-
-// MSVC warning C5046 is new as of VS2017 version 15.8.
-#if defined(_MSC_VER) && _MSC_VER >= 1915
-#define GMOCK_MAYBE_5046_ 5046
-#else
-#define GMOCK_MAYBE_5046_
-#endif
-
-GTEST_DISABLE_MSC_WARNINGS_PUSH_(
-    4251 GMOCK_MAYBE_5046_ /* class A needs to have dll-interface to be used by
-                              clients of class B */
-    /* Symbol involving type with internal linkage not defined */)
 
 namespace testing {
 
@@ -4524,9 +4510,7 @@ PolymorphicMatcher<internal::variant_matcher::VariantMatcher<T> > VariantWith(
 
 }  // namespace testing
 
-GTEST_DISABLE_MSC_WARNINGS_POP_()  //  4251 5046
 
 // Include any custom callback matchers added by the local installation.
-// We must include this header at the end to make sure it can use the
-// declarations from this file.
+// We must include this header at the end to make sure it can use the declarations from this file.
 #include "gmock/internal/custom/gmock-matchers.h"

@@ -4,7 +4,6 @@
 
 #include "gmock/gmock.h"
 #include "gtest/gtest-spi.h"
-#include "gtest/gtest.h"
 
 #include "gtest/Static_assert_type_sameness.hin"
 

@@ -1,46 +1,12 @@
-// Copyright 2007, Google Inc.
-// All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are
-// met:
-//
-//     * Redistributions of source code must retain the above copyright
-// notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above
-// copyright notice, this list of conditions and the following disclaimer
-// in the documentation and/or other materials provided with the
-// distribution.
-//     * Neither the name of Google Inc. nor the names of its
-// contributors may be used to endorse or promote products derived from
-// this software without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#pragma once
 
-
-// Google Mock - a framework for writing C++ mock classes.
-//
 // This file implements some actions that depend on gmock-generated-actions.h.
 
-// GOOGLETEST_CM0002 DO NOT DELETE
-
-#ifndef GMOCK_INCLUDE_GMOCK_GMOCK_MORE_ACTIONS_H_
-#define GMOCK_INCLUDE_GMOCK_GMOCK_MORE_ACTIONS_H_
+#include "gmock/gmock-generated-actions.h"
 
 #include <algorithm>
 #include <type_traits>
 
-#include "gmock/gmock-generated-actions.h"
 
 namespace testing {
 namespace internal {
@@ -62,16 +28,6 @@ inline OutputIterator CopyElements(InputIterator first,
 }  // namespace internal
 
 // Various overloads for Invoke().
-
-// The ACTION*() macros trigger warning C4100 (unreferenced formal
-// parameter) in MSVC with -W4.  Unfortunately they cannot be fixed in
-// the macro definition, as the warnings are generated when the macro
-// is expanded and macro expansion cannot contain #pragma.  Therefore
-// we suppress them here.
-#ifdef _MSC_VER
-# pragma warning(push)
-# pragma warning(disable:4100)
-#endif
 
 // Action ReturnArg<k>() returns the k-th argument of the mock function.
 ACTION_TEMPLATE(ReturnArg,
@@ -141,22 +97,9 @@ ACTION_P(ReturnPointee, pointer) { return *pointer; }
 // to throw the given exception.  Any copyable value can be thrown.
 #if GTEST_HAS_EXCEPTIONS
 
-// Suppresses the 'unreachable code' warning that VC generates in opt modes.
-# ifdef _MSC_VER
-#  pragma warning(push)          // Saves the current warning state.
-#  pragma warning(disable:4702)  // Temporarily disables warning 4702.
-# endif
 ACTION_P(Throw, exception) { throw exception; }
-# ifdef _MSC_VER
-#  pragma warning(pop)           // Restores the warning state.
-# endif
 
 #endif  // GTEST_HAS_EXCEPTIONS
 
-#ifdef _MSC_VER
-# pragma warning(pop)
-#endif
 
 }  // namespace testing
-
-#endif  // GMOCK_INCLUDE_GMOCK_GMOCK_MORE_ACTIONS_H_
