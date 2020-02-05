@@ -13,7 +13,7 @@ class function_Delete {
 public:
 	// A function for deleting an object. Handy for being used as a functor.
 	template< typename A_type >
-	static void Delete( A_type *x );
+	static void Delete( A_type const *x );
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 public:

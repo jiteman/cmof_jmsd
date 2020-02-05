@@ -11,7 +11,7 @@ namespace internal {
 // A function for deleting an object.  Handy for being used as a functor.
 template< typename A_type >
 // static
-void function_Delete::Delete( A_type *x ) {
+void function_Delete::Delete( A_type const *const x ) {
 	delete x;
 }
 
