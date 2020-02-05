@@ -6,7 +6,7 @@
 
 #include "Message.hin"
 
-#include "gtest/internal/Streamable_to_string.hin"
+#include "gtest/internal/function_Streamable_to_string.hin"
 
 #include "gtest/gtest-internal-inl.h"
 
@@ -1001,9 +1001,9 @@ JMSD_DEPRECATED_GTEST_API_ ::std::string FormatFileLocation(const char* file, in
 	return file_name + ":";
   }
 #ifdef _MSC_VER
-  return file_name + "(" + ::jmsd::cutf::internal::StreamableToString(line) + "):";
+  return file_name + "(" + ::jmsd::cutf::internal::function_Streamable_to_string::StreamableToString(line) + "):";
 #else
-  return file_name + ":" + ::jmsd::cutf::internal::StreamableToString(line) + ":";
+  return file_name + ":" + ::jmsd::cutf::internal::function_Streamable_to_string::StreamableToString(line) + ":";
 #endif  // _MSC_VER
 }
 
@@ -1019,7 +1019,7 @@ JMSD_DEPRECATED_GTEST_API_ ::std::string FormatCompilerIndependentFileLocation(
   if (line < 0)
 	return file_name;
   else
-	return file_name + ":" + ::jmsd::cutf::internal::StreamableToString(line);
+	return file_name + ":" + ::jmsd::cutf::internal::function_Streamable_to_string::StreamableToString(line);
 }
 
 GTestLog::GTestLog(GTestLogSeverity severity, const char* file, int line)

@@ -9,7 +9,7 @@
 #include "gtest/internal/gtest-internal.h"
 #include "gtest/internal/gtest-port.h"
 
-#include "gtest/internal/Report_invalid_test_suite_type.h"
+#include "gtest/internal/function_Report_invalid_test_suite_type.h"
 
 #include <ctype.h>
 
@@ -540,7 +540,7 @@ class ParameterizedTestSuiteInfo : public ParameterizedTestSuiteInfoBase {
           test_param_names.insert(param_name);
 
           test_name_stream << test_info->test_base_name << "/" << param_name;
-          ::jmsd::cutf::internal::MakeAndRegisterTestInfo(
+          ::jmsd::cutf::internal::function_Make_and_register_test_info::MakeAndRegisterTestInfo(
               test_suite_name.c_str(), test_name_stream.GetString().c_str(),
               nullptr,  // No type parameter.
               PrintToString(*param_it).c_str(), code_location_,
@@ -651,7 +651,7 @@ class ParameterizedTestSuiteRegistry {
           // Complain about incorrect usage of Google Test facilities
           // and terminate the program since we cannot guaranty correct
           // test suite setup and tear-down in this case.
-          ::jmsd::cutf::internal::ReportInvalidTestSuiteType(test_suite_name, code_location);
+          ::jmsd::cutf::internal::function_Report_invalid_test_suite_type::ReportInvalidTestSuiteType(test_suite_name, code_location);
           posix::Abort();
         } else {
           // At this point we are sure that the object we found is of the same

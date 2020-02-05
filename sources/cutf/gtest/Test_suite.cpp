@@ -6,7 +6,8 @@
 #include "Test_event_listener.h"
 #include "internal/Unit_test_impl.h"
 #include "internal/Exception_handling.hin"
-#include "internal/Stl_utilities.hin"
+#include "internal/function_Stl_utilities.hin"
+#include "internal/function_Delete.hin"
 
 
 namespace jmsd {
@@ -15,37 +16,37 @@ namespace cutf {
 
 // Gets the number of successful tests in this test suite.
 int TestSuite::successful_test_count() const {
-  return internal::CountIf(test_info_list_, TestPassed);
+  return internal::function_Stl_utilities::CountIf(test_info_list_, TestPassed);
 }
 
 // Gets the number of successful tests in this test suite.
 int TestSuite::skipped_test_count() const {
-  return internal::CountIf(test_info_list_, TestSkipped);
+  return internal::function_Stl_utilities::CountIf(test_info_list_, TestSkipped);
 }
 
 // Gets the number of failed tests in this test suite.
 int TestSuite::failed_test_count() const {
-  return internal::CountIf(test_info_list_, TestFailed);
+  return internal::function_Stl_utilities::CountIf(test_info_list_, TestFailed);
 }
 
 // Gets the number of disabled tests that will be reported in the XML report.
 int TestSuite::reportable_disabled_test_count() const {
-  return internal::CountIf(test_info_list_, TestReportableDisabled);
+  return internal::function_Stl_utilities::CountIf(test_info_list_, TestReportableDisabled);
 }
 
 // Gets the number of disabled tests in this test suite.
 int TestSuite::disabled_test_count() const {
-  return internal::CountIf(test_info_list_, TestDisabled);
+  return internal::function_Stl_utilities::CountIf(test_info_list_, TestDisabled);
 }
 
 // Gets the number of tests to be printed in the XML report.
 int TestSuite::reportable_test_count() const {
-  return internal::CountIf(test_info_list_, TestReportable);
+  return internal::function_Stl_utilities::CountIf(test_info_list_, TestReportable);
 }
 
 // Get the number of tests in this test suite that should run.
 int TestSuite::test_to_run_count() const {
-  return internal::CountIf(test_info_list_, ShouldRunTest);
+  return internal::function_Stl_utilities::CountIf(test_info_list_, ShouldRunTest);
 }
 
 // Gets the number of all tests.
@@ -184,7 +185,7 @@ TestSuite::TestSuite(const char* a_name, const char* a_type_param,
 // Destructor of TestSuite.
 TestSuite::~TestSuite() {
   // Deletes every Test in the collection.
-  internal::ForEach(test_info_list_, internal::Delete<TestInfo>);
+  internal::function_Stl_utilities::ForEach(test_info_list_, internal::function_Delete::Delete<TestInfo>);
 }
 
 // Gets the name of the TestSuite.
@@ -208,14 +209,14 @@ bool TestSuite::should_run() const {
 // Returns the i-th test among all the tests. i can range from 0 to
 // total_test_count() - 1. If i is not in that range, returns NULL.
 const TestInfo* TestSuite::GetTestInfo(int i) const {
-  const int index = internal::GetElementOr(test_indices_, i, -1);
+  const int index = internal::function_Stl_utilities::GetElementOr(test_indices_, i, -1);
   return index < 0 ? nullptr : test_info_list_[static_cast<size_t>(index)];
 }
 
 // Returns the i-th test among all the tests. i can range from 0 to
 // total_test_count() - 1. If i is not in that range, returns NULL.
 TestInfo* TestSuite::GetMutableTestInfo(int i) {
-  const int index = internal::GetElementOr(test_indices_, i, -1);
+  const int index = internal::function_Stl_utilities::GetElementOr(test_indices_, i, -1);
   return index < 0 ? nullptr : test_info_list_[static_cast<size_t>(index)];
 }
 
@@ -271,12 +272,12 @@ void TestSuite::Run() {
 // Clears the results of all tests in this test suite.
 void TestSuite::ClearResult() {
 	ad_hoc_test_result_->Clear();
-	internal::ForEach(test_info_list_, TestInfo::ClearTestResult);
+	internal::function_Stl_utilities::ForEach(test_info_list_, TestInfo::ClearTestResult);
 }
 
 // Shuffles the tests in this test suite.
 void TestSuite::ShuffleTests( ::jmsd::cutf::internal::Random* random) {
-	internal::Shuffle(random, &test_indices_);
+	internal::function_Stl_utilities::Shuffle(random, &test_indices_);
 }
 
 // Restores the test order to before the first shuffle.

@@ -2,7 +2,7 @@
 
 
 #include "internal/gtest-string.h"
-#include "internal/String_stream_to_string.h"
+#include "internal/function_String_stream_to_string.h"
 #include "internal/utf8_utilities.h"
 
 #include <iomanip>
@@ -78,7 +78,7 @@ Message & Message::operator <<( ::std::wstring const &wstr ) {
 // Gets the text streamed to this object so far as an std::string.
 // Each '\0' character in the buffer is replaced with "\\0".
 ::std::string Message::GetString() const {
-  return ::jmsd::cutf::internal::StringStreamToString( *ss_.get() );
+  return ::jmsd::cutf::internal::function_String_stream_to_string::StringStreamToString( *ss_.get() );
 }
 
 // Streams a Message to an ostream.

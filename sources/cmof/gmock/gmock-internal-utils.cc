@@ -19,7 +19,7 @@ namespace internal {
 
 // Joins a vector of strings as if they are fields of a tuple; returns
 // the joined string.
-JMSD_DEPRECATED_GMOCK_API_ std::string JoinAsTuple(const ::jmsd::cutf::internal::Strings& fields) {
+JMSD_DEPRECATED_GMOCK_API_ std::string JoinAsTuple(const ::jmsd::cutf::internal::typedef_Strings& fields) {
   switch (fields.size()) {
     case 0:
       return "";

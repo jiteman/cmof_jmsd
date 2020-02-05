@@ -6042,23 +6042,23 @@ TEST(IsReadableTypeNameTest, ReturnsFalseForLongFunctionTypeNames) {
 
 namespace {
 
-using ::jmsd::cutf::internal::Strings;
+using ::jmsd::cutf::internal::typedef_Strings;
 
 TEST(FormatMatcherDescriptionTest, WorksForEmptyDescription) {
   EXPECT_EQ("is even",
-            FormatMatcherDescription(false, "IsEven", Strings()));
+            FormatMatcherDescription(false, "IsEven", typedef_Strings()));
   EXPECT_EQ("not (is even)",
-            FormatMatcherDescription(true, "IsEven", Strings()));
+            FormatMatcherDescription(true, "IsEven", typedef_Strings()));
 
   const char* params[] = {"5"};
   EXPECT_EQ("equals 5",
             FormatMatcherDescription(false, "Equals",
-                                     Strings(params, params + 1)));
+                                     typedef_Strings(params, params + 1)));
 
   const char* params2[] = {"5", "8"};
   EXPECT_EQ("is in range (5, 8)",
             FormatMatcherDescription(false, "IsInRange",
-                                     Strings(params2, params2 + 2)));
+                                     typedef_Strings(params2, params2 + 2)));
 }
 
 } // namespace

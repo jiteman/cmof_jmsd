@@ -2,6 +2,12 @@
 
 #include "gtest/internal/gtest-port.h"
 
+#include "gtest-string.h"
+
+#include "gtest/Message.hin"
+
+#include "function_Streamable_to_string.hin"
+
 #include <stdlib.h>
 
 #if GTEST_OS_WINDOWS
@@ -12,12 +18,6 @@
 	#include <limits.h>
 	#include <climits>  // Some Linux distributions define PATH_MAX here.
 #endif  // GTEST_OS_WINDOWS_MOBILE
-
-#include "gtest-string.h"
-
-#include "gtest/Message.hin"
-
-#include "Streamable_to_string.hin"
 
 #if GTEST_OS_WINDOWS
 	#define GTEST_PATH_MAX_		_MAX_PATH
@@ -150,7 +150,7 @@ FilePath FilePath::MakeFileName(const FilePath& directory,
   if (number == 0) {
     file = base_name.string() + "." + extension;
   } else {
-    file = base_name.string() + "_" + ::jmsd::cutf::internal::StreamableToString(number)
+    file = base_name.string() + "_" + ::jmsd::cutf::internal::function_Streamable_to_string::StreamableToString(number)
         + "." + extension;
   }
   return ConcatPaths(directory, FilePath(file));

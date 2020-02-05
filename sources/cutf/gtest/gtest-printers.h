@@ -65,7 +65,7 @@
 // being defined as many user-defined container types don't have
 // value_type.
 
-#include "internal/Vector_of_strings.h"
+#include "internal/typedef_Vector_of_strings.h"
 
 
 #if GTEST_HAS_ABSL
@@ -840,11 +840,11 @@ void UniversalPrint(const T& value, ::std::ostream* os) {
   // one element for each field.
 template <typename Tuple>
 void TersePrintPrefixToStrings(const Tuple&, std::integral_constant<size_t, 0>,
-                               ::jmsd::cutf::internal::Strings*) {}
+                               ::jmsd::cutf::internal::typedef_Strings*) {}
 template <typename Tuple, size_t I>
 void TersePrintPrefixToStrings(const Tuple& t,
                                std::integral_constant<size_t, I>,
-                               ::jmsd::cutf::internal::Strings* strings) {
+                               ::jmsd::cutf::internal::typedef_Strings* strings) {
   TersePrintPrefixToStrings(t, std::integral_constant<size_t, I - 1>(),
                             strings);
   ::std::stringstream ss;
@@ -856,8 +856,8 @@ void TersePrintPrefixToStrings(const Tuple& t,
 // element for each field.  See the comment before
 // UniversalTersePrint() for how we define "tersely".
 template <typename Tuple>
-::jmsd::cutf::internal::Strings UniversalTersePrintTupleFieldsToStrings(const Tuple& value) {
-  ::jmsd::cutf::internal::Strings result;
+::jmsd::cutf::internal::typedef_Strings UniversalTersePrintTupleFieldsToStrings(const Tuple& value) {
+  ::jmsd::cutf::internal::typedef_Strings result;
   TersePrintPrefixToStrings(
       value, std::integral_constant<size_t, std::tuple_size<Tuple>::value>(),
       &result);

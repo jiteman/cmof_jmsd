@@ -41,8 +41,8 @@
 #include "Scoped_trace.h"
 
 #include "internal/Exception_handling.h"
-#include "internal/Make_and_register_test_info.h"
-#include "internal/String_stream_to_string.h"
+#include "internal/function_Make_and_register_test_info.h"
+#include "internal/function_String_stream_to_string.h"
 #include "internal/Assertion_result_constructor.h"
 
 #include "Unit_test.hxx"
@@ -901,12 +901,16 @@ template< int &... ExplicitParameterBarrier, typename Factory >
 	Factory factory_;
   };
 
-  return ::jmsd::cutf::internal::MakeAndRegisterTestInfo(
-	  test_suite_name, test_name, type_param, value_param,
-	  internal::CodeLocation(file, line), internal::GetTypeId<TestT>(),
-	  internal::SuiteApiResolver<TestT>::GetSetUpCaseOrSuite(file, line),
-	  internal::SuiteApiResolver<TestT>::GetTearDownCaseOrSuite(file, line),
-	  new FactoryImpl{std::move(factory)});
+  return ::jmsd::cutf::internal::function_Make_and_register_test_info::MakeAndRegisterTestInfo(
+	  test_suite_name,
+	  test_name,
+	  type_param,
+	  value_param,
+	  internal::CodeLocation( file, line ),
+	  internal::GetTypeId< TestT >(),
+	  internal::SuiteApiResolver< TestT >::GetSetUpCaseOrSuite( file, line ),
+	  internal::SuiteApiResolver< TestT >::GetTearDownCaseOrSuite( file, line ),
+	  new FactoryImpl{ ::std::move( factory ) } );
 }
 
 }  // namespace testing

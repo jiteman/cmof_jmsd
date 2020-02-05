@@ -4,13 +4,13 @@
 #include "gtest/Text_output_utilities.h"
 #include "gtest/Test_info.h"
 
-#include "Open_file_for_writing.h"
+#include "function_Open_file_for_writing.h"
 #include "Format_time.h"
-#include "String_stream_to_string.h"
+#include "function_String_stream_to_string.h"
 
 #include "gtest-string.h"
 
-#include "Streamable_to_string.hin"
+#include "function_Streamable_to_string.hin"
 
 
 namespace jmsd {
@@ -28,10 +28,10 @@ JsonUnitTestResultPrinter::JsonUnitTestResultPrinter(const char* output_file)
 
 void JsonUnitTestResultPrinter::OnTestIterationEnd(const ::jmsd::cutf::UnitTest& unit_test,
 												  int /*iteration*/) {
-  FILE* jsonout = OpenFileForWriting(output_file_);
+  FILE* jsonout = function_Open_file_for_writing::OpenFileForWriting(output_file_);
   std::stringstream stream;
   PrintJsonUnitTest(&stream, unit_test);
-  fprintf(jsonout, "%s", StringStreamToString( stream ).c_str());
+  fprintf(jsonout, "%s", function_String_stream_to_string::StringStreamToString( stream ).c_str());
   fclose(jsonout);
 }
 
@@ -113,7 +113,7 @@ void JsonUnitTestResultPrinter::OutputJsonKey(
 	  << "Key \"" << name << "\" is not allowed for value \"" << element_name
 	  << "\".";
 
-  *stream << indent << "\"" << name << "\": " << StreamableToString(value);
+  *stream << indent << "\"" << name << "\": " << function_Streamable_to_string::StreamableToString(value);
   if (comma)
 	*stream << ",\n";
 }

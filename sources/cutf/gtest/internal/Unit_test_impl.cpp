@@ -10,18 +10,19 @@
 #include "Json_test_result_printer.h"
 #include "Unit_test_options.h"
 #include "Colored_print.h"
-#include "Open_file_for_writing.h"
-#include "Is_initialized.h"
-#include "Int32_from_environment_or_die.h"
-#include "Write_to_shard_status_file_if_needed.h"
-#include "Should_run_test_on_shard.h"
-#include "String_stream_to_string.h"
+#include "function_Open_file_for_writing.h"
+#include "function_Is_initialized.h"
+#include "function_Int32_from_environment_or_die.h"
+#include "function_Write_to_shard_status_file_if_needed.h"
+#include "function_Should_run_test_on_shard.h"
+#include "function_String_stream_to_string.h"
 #include "Streaming_listener.h"
 
 #include "gtest-flags-internal.h"
 #include "gtest-constants-internal.h"
 
-#include "Stl_utilities.hin"
+#include "function_Stl_utilities.hin"
+#include "function_Delete.hin"
 
 #include "gtest-death-test-internal.h"
 
@@ -65,12 +66,12 @@ void UnitTestImpl::SetTestPartResultReporterForCurrentThread(
 
 // Gets the number of successful test suites.
 int UnitTestImpl::successful_test_suite_count() const {
-  return CountIf(test_suites_, TestSuite::TestSuitePassed);
+  return function_Stl_utilities::CountIf(test_suites_, TestSuite::TestSuitePassed);
 }
 
 // Gets the number of failed test suites.
 int UnitTestImpl::failed_test_suite_count() const {
-  return CountIf(test_suites_, TestSuite::TestSuiteFailed);
+  return function_Stl_utilities::CountIf(test_suites_, TestSuite::TestSuiteFailed);
 }
 
 // Gets the number of all test suites.
@@ -81,7 +82,7 @@ int UnitTestImpl::total_test_suite_count() const {
 // Gets the number of all test suites that contain at least one test
 // that should run.
 int UnitTestImpl::test_suite_to_run_count() const {
-  return CountIf(test_suites_, TestSuite::ShouldRunTestSuite);
+  return function_Stl_utilities::CountIf(test_suites_, TestSuite::ShouldRunTestSuite);
 }
 
 // Gets the number of successful tests.
@@ -149,7 +150,7 @@ bool UnitTestImpl::Failed() const {
 // Gets the i-th test suite among all the test suites. i can range from 0 to
 // total_test_suite_count() - 1. If i is not in that range, returns NULL.
 const TestSuite* UnitTestImpl::GetTestSuite(int i) const {
-	const int index = GetElementOr(test_suite_indices_, i, -1);
+	const int index = function_Stl_utilities::GetElementOr(test_suite_indices_, i, -1);
 
 	return index < 0 ? nullptr : test_suites_[static_cast<size_t>(i)];
 }
@@ -200,7 +201,7 @@ void UnitTestImpl::AddTestInfo(
 // Gets the i-th test suite among all the test suites. i can range from 0 to
 // total_test_suite_count() - 1. If i is not in that range, returns NULL.
 TestSuite *UnitTestImpl::GetMutableSuiteCase(int i) {
-	const int index = GetElementOr(test_suite_indices_, i, -1);
+	const int index = function_Stl_utilities::GetElementOr(test_suite_indices_, i, -1);
 
 	return index < 0 ? nullptr : test_suites_[static_cast<size_t>(index)];
 }
@@ -278,13 +279,10 @@ UnitTestImpl::UnitTestImpl(UnitTest* parent)
 }
 
 UnitTestImpl::~UnitTestImpl() {
-  // Deletes every TestSuite.
-  ForEach(test_suites_, internal::Delete<TestSuite>);
+	function_Stl_utilities::ForEach( test_suites_, internal::function_Delete::Delete< TestSuite > ); // Deletes every TestSuite.
+	function_Stl_utilities::ForEach( environments_, internal::function_Delete::Delete< Environment > ); // Deletes every Environment.
 
-  // Deletes every Environment.
-  ForEach(environments_, internal::Delete<Environment>);
-
-  delete os_stack_trace_getter_;
+	delete os_stack_trace_getter_;
 }
 
 // Adds a TestProperty to the current TestResult object when invoked in a
@@ -506,7 +504,7 @@ static void TearDownEnvironment(Environment* env) { env->TearDown(); }
 bool UnitTestImpl::RunAllTests() {
   // True if and only if Google Test is initialized before RUN_ALL_TESTS() is
   // called.
-  const bool gtest_is_initialized_before_run_all_tests = GTestIsInitialized();
+  const bool gtest_is_initialized_before_run_all_tests = function_Is_initialized::GTestIsInitialized();
 
   // Do not run any test if the --help flag was specified.
   if (g_help_flag)
@@ -519,7 +517,7 @@ bool UnitTestImpl::RunAllTests() {
   // Even if sharding is not on, test runners may want to use the
   // GTEST_SHARD_STATUS_FILE to query whether the test supports the sharding
   // protocol.
-  WriteToShardStatusFileIfNeeded();
+  function_Write_to_shard_status_file_if_needed::WriteToShardStatusFileIfNeeded();
 
   // True if and only if we are in a subprocess for running a thread-safe-style
   // death test.
@@ -593,7 +591,7 @@ bool UnitTestImpl::RunAllTests() {
 	if (has_tests_to_run) {
 	  // Sets up all environments beforehand.
 	  repeater->OnEnvironmentsSetUpStart(*parent_);
-	  ForEach(environments_, SetUpEnvironment);
+	  function_Stl_utilities::ForEach(environments_, SetUpEnvironment);
 	  repeater->OnEnvironmentsSetUpEnd(*parent_);
 
 	  // Runs the tests only if there was no fatal failure or skip triggered
@@ -671,7 +669,7 @@ bool UnitTestImpl::RunAllTests() {
 
 // Clears the results of all tests, except the ad hoc tests.
 void UnitTestImpl::ClearNonAdHocTestResult() {
-	ForEach(test_suites_, TestSuite::ClearTestSuiteResult);
+	function_Stl_utilities::ForEach(test_suites_, TestSuite::ClearTestSuiteResult);
 }
 
 // Clears the results of ad-hoc test assertions.
@@ -687,8 +685,8 @@ void UnitTestImpl::ClearAdHocTestResult() {
 // https://github.com/google/googletest/blob/master/googletest/docs/advanced.md
 // . Returns the number of tests that should run.
 int UnitTestImpl::FilterTests(ReactionToSharding shard_tests) {
-  const int32_t total_shards = shard_tests == HONOR_SHARDING_PROTOCOL ? Int32FromEnvOrDie( constants::kTestTotalShards, -1) : -1;
-  const int32_t shard_index = shard_tests == HONOR_SHARDING_PROTOCOL ? Int32FromEnvOrDie( constants::kTestShardIndex, -1) : -1;
+  const int32_t total_shards = shard_tests == HONOR_SHARDING_PROTOCOL ? function_Int32_from_environment_or_die::Int32FromEnvOrDie( constants::kTestTotalShards, -1) : -1;
+  const int32_t shard_index = shard_tests == HONOR_SHARDING_PROTOCOL ? function_Int32_from_environment_or_die::Int32FromEnvOrDie( constants::kTestShardIndex, -1) : -1;
 
   // num_runnable_tests are the number of tests that will
   // run across all shards (i.e., match filter and are not disabled).
@@ -721,7 +719,7 @@ int UnitTestImpl::FilterTests(ReactionToSharding shard_tests) {
 
 	  const bool is_in_another_shard =
 		  shard_tests != IGNORE_SHARDING_PROTOCOL &&
-		  !ShouldRunTestOnShard(total_shards, shard_index, num_runnable_tests);
+		  !function_Should_run_test_on_shard::ShouldRunTestOnShard(total_shards, shard_index, num_runnable_tests);
 	  test_info->is_in_another_shard_ = is_in_another_shard;
 	  const bool is_selected = is_runnable && !is_in_another_shard;
 
@@ -793,7 +791,7 @@ void UnitTestImpl::ListTestsMatchingFilter() {
   fflush(stdout);
   const std::string& output_format = UnitTestOptions::GetOutputFormat();
   if (output_format == "xml" || output_format == "json") {
-	FILE* fileout = OpenFileForWriting(
+	FILE* fileout = function_Open_file_for_writing::OpenFileForWriting(
 		UnitTestOptions::GetAbsolutePathToOutputFile().c_str());
 	std::stringstream stream;
 	if (output_format == "xml") {
@@ -805,7 +803,7 @@ void UnitTestImpl::ListTestsMatchingFilter() {
 		  UnitTestOptions::GetAbsolutePathToOutputFile().c_str())
 		  .PrintJsonTestList(&stream, test_suites_);
 	}
-	fprintf(fileout, "%s", ::jmsd::cutf::internal::StringStreamToString( stream ).c_str());
+	fprintf(fileout, "%s", ::jmsd::cutf::internal::function_String_stream_to_string::StringStreamToString( stream ).c_str());
 	fclose(fileout);
   }
 }
@@ -876,10 +874,10 @@ const TestResult *UnitTestImpl::ad_hoc_test_result() const {
 // making sure that death tests are still run first.
 void UnitTestImpl::ShuffleTests() {
   // Shuffles the death test suites.
-  ShuffleRange(random(), 0, last_death_test_suite_ + 1, &test_suite_indices_);
+  function_Stl_utilities::ShuffleRange(random(), 0, last_death_test_suite_ + 1, &test_suite_indices_);
 
   // Shuffles the non-death test suites.
-  ShuffleRange(random(), last_death_test_suite_ + 1,
+  function_Stl_utilities::ShuffleRange(random(), last_death_test_suite_ + 1,
 			   static_cast<int>(test_suites_.size()), &test_suite_indices_);
 
   // Shuffles the tests inside each test suite.

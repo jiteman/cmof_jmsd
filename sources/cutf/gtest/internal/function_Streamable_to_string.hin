@@ -1,0 +1,23 @@
+#pragma once
+
+#include "function_Streamable_to_string.h"
+
+
+#include "gtest/Message.h"
+
+
+namespace jmsd {
+namespace cutf {
+namespace internal {
+
+
+template< typename A_type >
+// static
+::std::string function_Streamable_to_string::StreamableToString( A_type const &streamable ) {
+	return ( Message() << streamable ).GetString();
+}
+
+
+} // namespace internal
+} // namespace cutf
+} // namespace jmsd

@@ -3,7 +3,7 @@
 
 #include "gtest/Message.h"
 
-#include "String_stream_to_string.h"
+#include "function_String_stream_to_string.h"
 
 #include "gtest-string.h"
 
@@ -146,7 +146,7 @@ uint32_t utf8_utilities::CreateCodePointFromUtf16SurrogatePair(wchar_t first,
 	stream << CodePointToUtf8(unicode_code_point);
   }
 
-  return StringStreamToString( stream );
+  return function_String_stream_to_string::StringStreamToString( stream );
 }
 
 #if GTEST_HAS_STD_WSTRING

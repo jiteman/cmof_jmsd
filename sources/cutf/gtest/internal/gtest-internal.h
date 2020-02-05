@@ -11,11 +11,11 @@
 #include "gtest-string.h"
 #include "gtest-type-util.h"
 
-#include "Make_and_register_test_info.h"
+#include "function_Make_and_register_test_info.h"
 
 //#include "gtest/gtest-message.h"
 
-#include "Streamable_to_string.hin"
+#include "function_Streamable_to_string.hin"
 
 #include "gtest/Test_info.hxx"
 #include "gtest/Unit_test.hxx"
@@ -342,7 +342,7 @@ void SplitString(const ::std::string& str, char delimiter,
 struct DefaultNameGenerator {
   template <typename T>
   static std::string GetName(int i) {
-	return ::jmsd::cutf::internal::StreamableToString( i );
+	return ::jmsd::cutf::internal::function_Streamable_to_string::StreamableToString( i );
   }
 };
 
@@ -391,7 +391,7 @@ class TypeParameterizedTest {
 	typedef typename GTEST_BIND_(TestSel, Type) TestClass;
 
 	// First, registers the first type-parameterized test in the type list.
-	::jmsd::cutf::internal::MakeAndRegisterTestInfo(
+	::jmsd::cutf::internal::function_Make_and_register_test_info::MakeAndRegisterTestInfo(
 		(std::string(prefix) + (prefix[0] == '\0' ? "" : "/") + case_name +
 		 "/" + type_names[static_cast<size_t>(index)])
 			.c_str(),
@@ -1065,7 +1065,7 @@ constexpr bool InstantiateTypedTestCase_P_IsDeprecated() { return true; }
 																			  \
   ::jmsd::cutf::TestInfo* const GTEST_TEST_CLASS_NAME_(test_suite_name,          \
 													test_name)::test_info_ =  \
-	  ::jmsd::cutf::internal::MakeAndRegisterTestInfo(                           \
+	  ::jmsd::cutf::internal::function_Make_and_register_test_info::MakeAndRegisterTestInfo( \
 		  #test_suite_name, #test_name, nullptr, nullptr,                     \
 		  ::testing::internal::CodeLocation(__FILE__, __LINE__), (parent_id), \
 		  ::testing::internal::SuiteApiResolver<                              \

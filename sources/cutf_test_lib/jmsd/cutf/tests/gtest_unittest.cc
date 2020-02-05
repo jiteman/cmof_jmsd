@@ -41,9 +41,9 @@ TEST(CommandLineFlagsTest, CanBeAccessedInCodeOnceGTestHIsIncluded) {
 
 #include "gtest/internal/Unit_test_impl.h"
 #include "gtest/internal/Test_result_accessor.h"
-#include "gtest/internal/Int32_from_environment_or_die.h"
-#include "gtest/internal/Should_shard.h"
-#include "gtest/internal/Should_run_test_on_shard.h"
+#include "gtest/internal/function_Int32_from_environment_or_die.h"
+#include "gtest/internal/function_Should_shard.h"
+#include "gtest/internal/function_Should_run_test_on_shard.h"
 #include "gtest/internal/Format_time.h"
 #include "gtest/internal/Colored_print.h"
 #include "gtest/internal/Distance_editor.h"
@@ -57,7 +57,7 @@ TEST(CommandLineFlagsTest, CanBeAccessedInCodeOnceGTestHIsIncluded) {
 #include "gtest/Assertion_result.hin"
 #include "gtest/Static_assert_type_sameness.hin"
 
-#include "gtest/internal/Stl_utilities.hin"
+#include "gtest/internal/function_Stl_utilities.hin"
 #include "gtest/internal/Floating_point_comparator.hin"
 #include "gtest/internal/Floating_point_type.hin"
 
@@ -243,7 +243,6 @@ using ::testing::internal::GetTestTypeId;
 using ::testing::internal::GetTimeInMillis;
 using ::testing::internal::GetTypeId;
 
-using ::jmsd::cutf::internal::Int32FromEnvOrDie;
 using ::testing::internal::IsAProtocolMessage;
 using ::testing::internal::IsContainer;
 using ::testing::internal::IsContainerTest;
@@ -254,7 +253,6 @@ using ::testing::internal::OsStackTraceGetterInterface;
 using ::testing::internal::ParseInt32Flag;
 using ::testing::internal::RelationToSourceCopy;
 using ::testing::internal::RelationToSourceReference;
-using ::jmsd::cutf::internal::ShouldShard;
 
 using ::testing::internal::SkipPrefix;
 
@@ -799,16 +797,16 @@ static bool IsPositive(int n) { return n > 0; }
 
 TEST(ContainerUtilityTest, CountIf) {
   std::vector<int> v;
-  EXPECT_EQ(0, ::jmsd::cutf::internal::CountIf(v, IsPositive));  // Works for an empty container.
+  EXPECT_EQ(0, ::jmsd::cutf::internal::function_Stl_utilities::CountIf(v, IsPositive));  // Works for an empty container.
 
   v.push_back(-1);
   v.push_back(0);
-  EXPECT_EQ(0, ::jmsd::cutf::internal::CountIf(v, IsPositive));  // Works when no value satisfies.
+  EXPECT_EQ(0, ::jmsd::cutf::internal::function_Stl_utilities::CountIf(v, IsPositive));  // Works when no value satisfies.
 
   v.push_back(2);
   v.push_back(-10);
   v.push_back(10);
-  EXPECT_EQ(2, ::jmsd::cutf::internal::CountIf(v, IsPositive));
+  EXPECT_EQ(2, ::jmsd::cutf::internal::function_Stl_utilities::CountIf(v, IsPositive));
 }
 
 // Tests ForEach().
@@ -819,32 +817,32 @@ static void Accumulate(int n) { g_sum += n; }
 TEST(ContainerUtilityTest, ForEach) {
   std::vector<int> v;
   g_sum = 0;
-  ::jmsd::cutf::internal::ForEach(v, Accumulate);
+  ::jmsd::cutf::internal::function_Stl_utilities::ForEach(v, Accumulate);
   EXPECT_EQ(0, g_sum);  // Works for an empty container;
 
   g_sum = 0;
   v.push_back(1);
-  ::jmsd::cutf::internal::ForEach(v, Accumulate);
+  ::jmsd::cutf::internal::function_Stl_utilities::ForEach(v, Accumulate);
   EXPECT_EQ(1, g_sum);  // Works for a container with one element.
 
   g_sum = 0;
   v.push_back(20);
   v.push_back(300);
-  ::jmsd::cutf::internal::ForEach(v, Accumulate);
+  ::jmsd::cutf::internal::function_Stl_utilities::ForEach(v, Accumulate);
   EXPECT_EQ(321, g_sum);
 }
 
 // Tests GetElementOr().
 TEST(ContainerUtilityTest, GetElementOr) {
   std::vector<char> a;
-  EXPECT_EQ('x', ::jmsd::cutf::internal::GetElementOr(a, 0, 'x'));
+  EXPECT_EQ('x', ::jmsd::cutf::internal::function_Stl_utilities::GetElementOr(a, 0, 'x'));
 
   a.push_back('a');
   a.push_back('b');
-  EXPECT_EQ('a', ::jmsd::cutf::internal::GetElementOr(a, 0, 'x'));
-  EXPECT_EQ('b', ::jmsd::cutf::internal::GetElementOr(a, 1, 'x'));
-  EXPECT_EQ('x', ::jmsd::cutf::internal::GetElementOr(a, -2, 'x'));
-  EXPECT_EQ('x', ::jmsd::cutf::internal::GetElementOr(a, 2, 'x'));
+  EXPECT_EQ('a', ::jmsd::cutf::internal::function_Stl_utilities::GetElementOr(a, 0, 'x'));
+  EXPECT_EQ('b', ::jmsd::cutf::internal::function_Stl_utilities::GetElementOr(a, 1, 'x'));
+  EXPECT_EQ('x', ::jmsd::cutf::internal::function_Stl_utilities::GetElementOr(a, -2, 'x'));
+  EXPECT_EQ('x', ::jmsd::cutf::internal::function_Stl_utilities::GetElementOr(a, 2, 'x'));
 }
 
 TEST(ContainerUtilityDeathTest, ShuffleRange) {
@@ -855,16 +853,16 @@ TEST(ContainerUtilityDeathTest, ShuffleRange) {
   ::jmsd::cutf::internal::Random random(1);
 
   EXPECT_DEATH_IF_SUPPORTED(
-	  ShuffleRange(&random, -1, 1, &a),
+	  ::jmsd::cutf::internal::function_Stl_utilities::ShuffleRange(&random, -1, 1, &a),
 	  "Invalid shuffle range start -1: must be in range \\[0, 3\\]");
   EXPECT_DEATH_IF_SUPPORTED(
-	  ShuffleRange(&random, 4, 4, &a),
+	  ::jmsd::cutf::internal::function_Stl_utilities::ShuffleRange(&random, 4, 4, &a),
 	  "Invalid shuffle range start 4: must be in range \\[0, 3\\]");
   EXPECT_DEATH_IF_SUPPORTED(
-	  ShuffleRange(&random, 3, 2, &a),
+	  ::jmsd::cutf::internal::function_Stl_utilities::ShuffleRange(&random, 3, 2, &a),
 	  "Invalid shuffle range finish 2: must be in range \\[3, 3\\]");
   EXPECT_DEATH_IF_SUPPORTED(
-	  ShuffleRange(&random, 3, 4, &a),
+	  ::jmsd::cutf::internal::function_Stl_utilities::ShuffleRange(&random, 3, 4, &a),
 	  "Invalid shuffle range finish 4: must be in range \\[3, 3\\]");
 }
 
@@ -931,39 +929,39 @@ const size_t VectorShuffleTest::kVectorSize;
 
 TEST_F(VectorShuffleTest, HandlesEmptyRange) {
   // Tests an empty range at the beginning...
-  ShuffleRange(&random_, 0, 0, &vector_);
+  ::jmsd::cutf::internal::function_Stl_utilities::ShuffleRange(&random_, 0, 0, &vector_);
   ASSERT_PRED1(VectorIsNotCorrupt, vector_);
   ASSERT_PRED1(VectorIsUnshuffled, vector_);
 
   // ...in the middle...
-  ShuffleRange(&random_, kVectorSize/2, kVectorSize/2, &vector_);
+  ::jmsd::cutf::internal::function_Stl_utilities::ShuffleRange(&random_, kVectorSize/2, kVectorSize/2, &vector_);
   ASSERT_PRED1(VectorIsNotCorrupt, vector_);
   ASSERT_PRED1(VectorIsUnshuffled, vector_);
 
   // ...at the end...
-  ShuffleRange(&random_, kVectorSize - 1, kVectorSize - 1, &vector_);
+  ::jmsd::cutf::internal::function_Stl_utilities::ShuffleRange(&random_, kVectorSize - 1, kVectorSize - 1, &vector_);
   ASSERT_PRED1(VectorIsNotCorrupt, vector_);
   ASSERT_PRED1(VectorIsUnshuffled, vector_);
 
   // ...and past the end.
-  ShuffleRange(&random_, kVectorSize, kVectorSize, &vector_);
+  ::jmsd::cutf::internal::function_Stl_utilities::ShuffleRange(&random_, kVectorSize, kVectorSize, &vector_);
   ASSERT_PRED1(VectorIsNotCorrupt, vector_);
   ASSERT_PRED1(VectorIsUnshuffled, vector_);
 }
 
 TEST_F(VectorShuffleTest, HandlesRangeOfSizeOne) {
   // Tests a size one range at the beginning...
-  ShuffleRange(&random_, 0, 1, &vector_);
+  ::jmsd::cutf::internal::function_Stl_utilities::ShuffleRange(&random_, 0, 1, &vector_);
   ASSERT_PRED1(VectorIsNotCorrupt, vector_);
   ASSERT_PRED1(VectorIsUnshuffled, vector_);
 
   // ...in the middle...
-  ShuffleRange(&random_, kVectorSize/2, kVectorSize/2 + 1, &vector_);
+  ::jmsd::cutf::internal::function_Stl_utilities::ShuffleRange(&random_, kVectorSize/2, kVectorSize/2 + 1, &vector_);
   ASSERT_PRED1(VectorIsNotCorrupt, vector_);
   ASSERT_PRED1(VectorIsUnshuffled, vector_);
 
   // ...and at the end.
-  ShuffleRange(&random_, kVectorSize - 1, kVectorSize, &vector_);
+  ::jmsd::cutf::internal::function_Stl_utilities::ShuffleRange(&random_, kVectorSize - 1, kVectorSize, &vector_);
   ASSERT_PRED1(VectorIsNotCorrupt, vector_);
   ASSERT_PRED1(VectorIsUnshuffled, vector_);
 }
@@ -972,7 +970,7 @@ TEST_F(VectorShuffleTest, HandlesRangeOfSizeOne) {
 // we can guarantee that the following "random" tests will succeed.
 
 TEST_F(VectorShuffleTest, ShufflesEntireVector) {
-  Shuffle(&random_, &vector_);
+  ::jmsd::cutf::internal::function_Stl_utilities::Shuffle(&random_, &vector_);
   ASSERT_PRED1(VectorIsNotCorrupt, vector_);
   EXPECT_FALSE(VectorIsUnshuffled(vector_)) << vector_;
 
@@ -985,7 +983,7 @@ TEST_F(VectorShuffleTest, ShufflesEntireVector) {
 TEST_F(VectorShuffleTest, ShufflesStartOfVector) {
   const int kRangeSize = kVectorSize/2;
 
-  ShuffleRange(&random_, 0, kRangeSize, &vector_);
+  ::jmsd::cutf::internal::function_Stl_utilities::ShuffleRange(&random_, 0, kRangeSize, &vector_);
 
   ASSERT_PRED1(VectorIsNotCorrupt, vector_);
   EXPECT_PRED3(RangeIsShuffled, vector_, 0, kRangeSize);
@@ -995,7 +993,7 @@ TEST_F(VectorShuffleTest, ShufflesStartOfVector) {
 
 TEST_F(VectorShuffleTest, ShufflesEndOfVector) {
   const int kRangeSize = kVectorSize / 2;
-  ShuffleRange(&random_, kRangeSize, kVectorSize, &vector_);
+  ::jmsd::cutf::internal::function_Stl_utilities::ShuffleRange(&random_, kRangeSize, kVectorSize, &vector_);
 
   ASSERT_PRED1(VectorIsNotCorrupt, vector_);
   EXPECT_PRED3(RangeIsUnshuffled, vector_, 0, kRangeSize);
@@ -1005,7 +1003,7 @@ TEST_F(VectorShuffleTest, ShufflesEndOfVector) {
 
 TEST_F(VectorShuffleTest, ShufflesMiddleOfVector) {
   const int kRangeSize = static_cast<int>(kVectorSize) / 3;
-  ShuffleRange(&random_, kRangeSize, 2*kRangeSize, &vector_);
+  ::jmsd::cutf::internal::function_Stl_utilities::ShuffleRange(&random_, kRangeSize, 2*kRangeSize, &vector_);
 
   ASSERT_PRED1(VectorIsNotCorrupt, vector_);
   EXPECT_PRED3(RangeIsUnshuffled, vector_, 0, kRangeSize);
@@ -1021,9 +1019,9 @@ TEST_F(VectorShuffleTest, ShufflesRepeatably) {
   }
 
   random_.Reseed(1234);
-  Shuffle(&random_, &vector_);
+  ::jmsd::cutf::internal::function_Stl_utilities::Shuffle(&random_, &vector_);
   random_.Reseed(1234);
-  Shuffle(&random_, &vector2);
+  ::jmsd::cutf::internal::function_Stl_utilities::Shuffle(&random_, &vector2);
 
   ASSERT_PRED1(VectorIsNotCorrupt, vector_);
   ASSERT_PRED1(VectorIsNotCorrupt, vector2);
@@ -1799,11 +1797,11 @@ TEST(ParseInt32FlagTest, ParsesAndReturnsValidValue) {
 // Environment variables are not supported on Windows CE.
 #if !GTEST_OS_WINDOWS_MOBILE
 TEST(Int32FromEnvOrDieTest, ParsesAndReturnsValidValue) {
-  EXPECT_EQ(333, Int32FromEnvOrDie(GTEST_FLAG_PREFIX_UPPER_ "UnsetVar", 333));
+  EXPECT_EQ(333, ::jmsd::cutf::internal::function_Int32_from_environment_or_die::Int32FromEnvOrDie(GTEST_FLAG_PREFIX_UPPER_ "UnsetVar", 333));
   SetEnv(GTEST_FLAG_PREFIX_UPPER_ "UnsetVar", "123");
-  EXPECT_EQ(123, Int32FromEnvOrDie(GTEST_FLAG_PREFIX_UPPER_ "UnsetVar", 333));
+  EXPECT_EQ(123, ::jmsd::cutf::internal::function_Int32_from_environment_or_die::Int32FromEnvOrDie(GTEST_FLAG_PREFIX_UPPER_ "UnsetVar", 333));
   SetEnv(GTEST_FLAG_PREFIX_UPPER_ "UnsetVar", "-123");
-  EXPECT_EQ(-123, Int32FromEnvOrDie(GTEST_FLAG_PREFIX_UPPER_ "UnsetVar", 333));
+  EXPECT_EQ(-123, ::jmsd::cutf::internal::function_Int32_from_environment_or_die::Int32FromEnvOrDie(GTEST_FLAG_PREFIX_UPPER_ "UnsetVar", 333));
 }
 #endif  // !GTEST_OS_WINDOWS_MOBILE
 
@@ -1812,7 +1810,7 @@ TEST(Int32FromEnvOrDieTest, ParsesAndReturnsValidValue) {
 TEST(Int32FromEnvOrDieDeathTest, DISABLED_AbortsOnFailure) {
   SetEnv(GTEST_FLAG_PREFIX_UPPER_ "VAR", "xxx");
   EXPECT_DEATH_IF_SUPPORTED(
-	  Int32FromEnvOrDie(GTEST_FLAG_PREFIX_UPPER_ "VAR", 123),
+	  ::jmsd::cutf::internal::function_Int32_from_environment_or_die::Int32FromEnvOrDie(GTEST_FLAG_PREFIX_UPPER_ "VAR", 123),
 	  ".*");
 }
 
@@ -1821,18 +1819,18 @@ TEST(Int32FromEnvOrDieDeathTest, DISABLED_AbortsOnFailure) {
 TEST(Int32FromEnvOrDieDeathTest, DISABLED_AbortsOnInt32Overflow) {
   SetEnv(GTEST_FLAG_PREFIX_UPPER_ "VAR", "1234567891234567891234");
   EXPECT_DEATH_IF_SUPPORTED(
-	  Int32FromEnvOrDie(GTEST_FLAG_PREFIX_UPPER_ "VAR", 123),
+	  ::jmsd::cutf::internal::function_Int32_from_environment_or_die::Int32FromEnvOrDie(GTEST_FLAG_PREFIX_UPPER_ "VAR", 123),
 	  ".*");
 }
 
 // Tests that ShouldRunTestOnShard() selects all tests
 // where there is 1 shard.
 TEST(ShouldRunTestOnShardTest, IsPartitionWhenThereIsOneShard) {
-  EXPECT_TRUE(::jmsd::cutf::internal::ShouldRunTestOnShard(1, 0, 0));
-  EXPECT_TRUE(::jmsd::cutf::internal::ShouldRunTestOnShard(1, 0, 1));
-  EXPECT_TRUE(::jmsd::cutf::internal::ShouldRunTestOnShard(1, 0, 2));
-  EXPECT_TRUE(::jmsd::cutf::internal::ShouldRunTestOnShard(1, 0, 3));
-  EXPECT_TRUE(::jmsd::cutf::internal::ShouldRunTestOnShard(1, 0, 4));
+  EXPECT_TRUE(::jmsd::cutf::internal::function_Should_run_test_on_shard::ShouldRunTestOnShard(1, 0, 0));
+  EXPECT_TRUE(::jmsd::cutf::internal::function_Should_run_test_on_shard::ShouldRunTestOnShard(1, 0, 1));
+  EXPECT_TRUE(::jmsd::cutf::internal::function_Should_run_test_on_shard::ShouldRunTestOnShard(1, 0, 2));
+  EXPECT_TRUE(::jmsd::cutf::internal::function_Should_run_test_on_shard::ShouldRunTestOnShard(1, 0, 3));
+  EXPECT_TRUE(::jmsd::cutf::internal::function_Should_run_test_on_shard::ShouldRunTestOnShard(1, 0, 4));
 }
 
 class ShouldShardTest : public Test {
@@ -1857,16 +1855,16 @@ TEST_F(ShouldShardTest, DISABLED_ReturnsFalseWhenNeitherEnvVarIsSet) {
   SetEnv(index_var_, "");
   SetEnv(total_var_, "");
 
-  EXPECT_FALSE(ShouldShard(total_var_, index_var_, false));
-  EXPECT_FALSE(ShouldShard(total_var_, index_var_, true));
+  EXPECT_FALSE( ::jmsd::cutf::internal::function_Should_shard::ShouldShard(total_var_, index_var_, false));
+  EXPECT_FALSE(::jmsd::cutf::internal::function_Should_shard::ShouldShard(total_var_, index_var_, true));
 }
 
 // Tests that sharding is not enabled if total_shards  == 1.
 TEST_F(ShouldShardTest, DISABLED_ReturnsFalseWhenTotalShardIsOne) {
   SetEnv(index_var_, "0");
   SetEnv(total_var_, "1");
-  EXPECT_FALSE(ShouldShard(total_var_, index_var_, false));
-  EXPECT_FALSE(ShouldShard(total_var_, index_var_, true));
+  EXPECT_FALSE(::jmsd::cutf::internal::function_Should_shard::ShouldShard(total_var_, index_var_, false));
+  EXPECT_FALSE(::jmsd::cutf::internal::function_Should_shard::ShouldShard(total_var_, index_var_, true));
 }
 
 // Tests that sharding is enabled if total_shards > 1 and
@@ -1876,18 +1874,18 @@ TEST_F(ShouldShardTest, DISABLED_ReturnsFalseWhenTotalShardIsOne) {
 TEST_F(ShouldShardTest, DISABLED_WorksWhenShardEnvVarsAreValid) {
   SetEnv(index_var_, "4");
   SetEnv(total_var_, "22");
-  EXPECT_TRUE(ShouldShard(total_var_, index_var_, false));
-  EXPECT_FALSE(ShouldShard(total_var_, index_var_, true));
+  EXPECT_TRUE(::jmsd::cutf::internal::function_Should_shard::ShouldShard(total_var_, index_var_, false));
+  EXPECT_FALSE(::jmsd::cutf::internal::function_Should_shard::ShouldShard(total_var_, index_var_, true));
 
   SetEnv(index_var_, "8");
   SetEnv(total_var_, "9");
-  EXPECT_TRUE(ShouldShard(total_var_, index_var_, false));
-  EXPECT_FALSE(ShouldShard(total_var_, index_var_, true));
+  EXPECT_TRUE(::jmsd::cutf::internal::function_Should_shard::ShouldShard(total_var_, index_var_, false));
+  EXPECT_FALSE(::jmsd::cutf::internal::function_Should_shard::ShouldShard(total_var_, index_var_, true));
 
   SetEnv(index_var_, "0");
   SetEnv(total_var_, "9");
-  EXPECT_TRUE(ShouldShard(total_var_, index_var_, false));
-  EXPECT_FALSE(ShouldShard(total_var_, index_var_, true));
+  EXPECT_TRUE(::jmsd::cutf::internal::function_Should_shard::ShouldShard(total_var_, index_var_, false));
+  EXPECT_FALSE(::jmsd::cutf::internal::function_Should_shard::ShouldShard(total_var_, index_var_, true));
 }
 #endif  // !GTEST_OS_WINDOWS_MOBILE
 
@@ -1898,19 +1896,19 @@ typedef ShouldShardTest ShouldShardDeathTest;
 TEST_F(ShouldShardDeathTest, DISABLED_AbortsWhenShardingEnvVarsAreInvalid) {
   SetEnv(index_var_, "4");
   SetEnv(total_var_, "4");
-  EXPECT_DEATH_IF_SUPPORTED(ShouldShard(total_var_, index_var_, false), ".*");
+  EXPECT_DEATH_IF_SUPPORTED(::jmsd::cutf::internal::function_Should_shard::ShouldShard(total_var_, index_var_, false), ".*");
 
   SetEnv(index_var_, "4");
   SetEnv(total_var_, "-2");
-  EXPECT_DEATH_IF_SUPPORTED(ShouldShard(total_var_, index_var_, false), ".*");
+  EXPECT_DEATH_IF_SUPPORTED(::jmsd::cutf::internal::function_Should_shard::ShouldShard(total_var_, index_var_, false), ".*");
 
   SetEnv(index_var_, "5");
   SetEnv(total_var_, "");
-  EXPECT_DEATH_IF_SUPPORTED(ShouldShard(total_var_, index_var_, false), ".*");
+  EXPECT_DEATH_IF_SUPPORTED(::jmsd::cutf::internal::function_Should_shard::ShouldShard(total_var_, index_var_, false), ".*");
 
   SetEnv(index_var_, "");
   SetEnv(total_var_, "5");
-  EXPECT_DEATH_IF_SUPPORTED(ShouldShard(total_var_, index_var_, false), ".*");
+  EXPECT_DEATH_IF_SUPPORTED(::jmsd::cutf::internal::function_Should_shard::ShouldShard(total_var_, index_var_, false), ".*");
 }
 
 // Tests that ShouldRunTestOnShard is a partition when 5
@@ -1924,7 +1922,7 @@ TEST(ShouldRunTestOnShardTest, DISABLED_IsPartitionWhenThereAreFiveShards) {
   for (int test_id = 0; test_id < num_tests; test_id++) {
 	int prev_selected_shard_index = -1;
 	for (int shard_index = 0; shard_index < num_shards; shard_index++) {
-	  if (::jmsd::cutf::internal::ShouldRunTestOnShard(num_shards, shard_index, test_id)) {
+	  if (::jmsd::cutf::internal::function_Should_run_test_on_shard::ShouldRunTestOnShard(num_shards, shard_index, test_id)) {
 		if (prev_selected_shard_index < 0) {
 		  prev_selected_shard_index = shard_index;
 		} else {
@@ -1941,7 +1939,7 @@ TEST(ShouldRunTestOnShardTest, DISABLED_IsPartitionWhenThereAreFiveShards) {
 	int num_tests_on_shard = 0;
 	for (int test_id = 0; test_id < num_tests; test_id++) {
 	  num_tests_on_shard +=
-		::jmsd::cutf::internal::ShouldRunTestOnShard(num_shards, shard_index, test_id);
+		::jmsd::cutf::internal::function_Should_run_test_on_shard::ShouldRunTestOnShard(num_shards, shard_index, test_id);
 	}
 	EXPECT_GE(num_tests_on_shard, num_tests / num_shards);
   }
@@ -4557,31 +4555,31 @@ TEST(ExpectTest, ExpectPrecedence) {
 
 // Tests using StreamableToString() on a scalar.
 TEST(StreamableToStringTest, Scalar) {
-  EXPECT_STREQ("5", ::jmsd::cutf::internal::StreamableToString(5).c_str());
+  EXPECT_STREQ("5", ::jmsd::cutf::internal::function_Streamable_to_string::StreamableToString(5).c_str());
 }
 
 // Tests using StreamableToString() on a non-char pointer.
 TEST(StreamableToStringTest, Pointer) {
   int n = 0;
   int* p = &n;
-  EXPECT_STRNE("(null)", ::jmsd::cutf::internal::StreamableToString(p).c_str());
+  EXPECT_STRNE("(null)", ::jmsd::cutf::internal::function_Streamable_to_string::StreamableToString(p).c_str());
 }
 
 // Tests using StreamableToString() on a NULL non-char pointer.
 TEST(StreamableToStringTest, NullPointer) {
   int* p = nullptr;
-  EXPECT_STREQ("(null)", ::jmsd::cutf::internal::StreamableToString(p).c_str());
+  EXPECT_STREQ("(null)", ::jmsd::cutf::internal::function_Streamable_to_string::StreamableToString(p).c_str());
 }
 
 // Tests using StreamableToString() on a C string.
 TEST(StreamableToStringTest, CString) {
-  EXPECT_STREQ("Foo", ::jmsd::cutf::internal::StreamableToString("Foo").c_str());
+  EXPECT_STREQ("Foo", ::jmsd::cutf::internal::function_Streamable_to_string::StreamableToString("Foo").c_str());
 }
 
 // Tests using StreamableToString() on a NULL C string.
 TEST(StreamableToStringTest, NullCString) {
   char* p = nullptr;
-  EXPECT_STREQ("(null)", ::jmsd::cutf::internal::StreamableToString(p).c_str());
+  EXPECT_STREQ("(null)", ::jmsd::cutf::internal::function_Streamable_to_string::StreamableToString(p).c_str());
 }
 
 // Tests using streamable values as assertion messages.

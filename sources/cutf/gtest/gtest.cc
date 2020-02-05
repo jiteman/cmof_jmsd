@@ -11,9 +11,9 @@
 #include "Test_suite.h"
 
 #include "internal/Unit_test_impl.h"
-#include "internal/Print_color_encoded.h"
-#include "internal/Is_initialized.h"
-#include "internal/String_stream_to_string.h"
+#include "internal/function_Print_color_encoded.h"
+#include "internal/function_Is_initialized.h"
+#include "internal/function_String_stream_to_string.h"
 #include "internal/utf8_utilities.h"
 #include "internal/gtest-flags-internal.h"
 
@@ -26,7 +26,7 @@
 #include "Assertion_result.hin"
 #include "Message.hin"
 
-#include "internal/Streamable_to_string.hin"
+#include "internal/function_Streamable_to_string.hin"
 
 #include "Text_output_utilities.hxx"
 
@@ -1248,7 +1248,7 @@ static void LoadFlagsFromFile(const std::string& path) {
 template <typename CharType>
 void ParseGoogleTestFlagsOnlyImpl(int* argc, CharType** argv) {
   for (int i = 1; i < *argc; i++) {
-	const std::string arg_string = ::jmsd::cutf::internal::StreamableToString( argv[ i ] );
+	const std::string arg_string = ::jmsd::cutf::internal::function_Streamable_to_string::StreamableToString( argv[ i ] );
 	const char* const arg = arg_string.c_str();
 
 	using internal::ParseBoolFlag;
@@ -1293,7 +1293,7 @@ void ParseGoogleTestFlagsOnlyImpl(int* argc, CharType** argv) {
 	// We print the help here instead of in RUN_ALL_TESTS(), as the
 	// latter may not be called at all if the user is using Google
 	// Test with another testing framework.
-	::jmsd::cutf::internal::PrintColorEncoded(kColorEncodedHelpMessage);
+	::jmsd::cutf::internal::function_Print_color_encoded::PrintColorEncoded(kColorEncodedHelpMessage);
   }
 }
 
@@ -1324,13 +1324,13 @@ void ParseGoogleTestFlagsOnly(int* argc, wchar_t** argv) {
 template <typename CharType>
 void InitGoogleTestImpl(int* argc, CharType** argv) {
   // We don't want to run the initialization code twice.
-  if ( ::jmsd::cutf::internal::GTestIsInitialized()) return;
+  if ( ::jmsd::cutf::internal::function_Is_initialized::GTestIsInitialized()) return;
 
   if (*argc <= 0) return;
 
   g_argvs.clear();
   for (int i = 0; i != *argc; i++) {
-	g_argvs.push_back( ::jmsd::cutf::internal::StreamableToString( argv[ i ] ) );
+	g_argvs.push_back( ::jmsd::cutf::internal::function_Streamable_to_string::StreamableToString( argv[ i ] ) );
   }
 
 #if GTEST_HAS_ABSL

@@ -21,7 +21,7 @@ namespace internal {
 
 
 // Joins a vector of strings as if they are fields of a tuple; returns the joined string.
-JMSD_DEPRECATED_GMOCK_API_ std::string JoinAsTuple(const ::jmsd::cutf::internal::Strings& fields);
+JMSD_DEPRECATED_GMOCK_API_ std::string JoinAsTuple(const ::jmsd::cutf::internal::typedef_Strings& fields);
 
 // Converts an identifier name to a space-separated list of lower-case words.
 // Each maximum substring of the form [A-Za-z][a-z]*|\d+ is treated as one word.

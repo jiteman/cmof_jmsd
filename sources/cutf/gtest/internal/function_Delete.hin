@@ -1,0 +1,21 @@
+#pragma once
+
+#include "function_Delete.h"
+
+
+namespace jmsd {
+namespace cutf {
+namespace internal {
+
+
+// A function for deleting an object.  Handy for being used as a functor.
+template< typename A_type >
+// static
+void function_Delete::Delete( A_type *x ) {
+	delete x;
+}
+
+
+} // namespace internal
+} // namespace cutf
+} // namespace jmsd

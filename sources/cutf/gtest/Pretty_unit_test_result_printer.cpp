@@ -9,15 +9,15 @@
 #include "internal/gtest-string.h"
 #include "internal/Colored_print.h"
 #include "internal/gtest-constants-internal.h"
-#include "internal/Print_test_part_result.h"
-#include "internal/Print_full_test_comment_if_present.h"
-#include "internal/Should_shard.h"
-#include "internal/Int32_from_environment_or_die.h"
+#include "internal/function_Print_test_part_result.h"
+#include "internal/function_Print_full_test_comment_if_present.h"
+#include "internal/function_Should_shard.h"
+#include "internal/function_Int32_from_environment_or_die.h"
 
 
 #include "Message.hin"
 
-#include "internal/Streamable_to_string.hin"
+#include "internal/function_Streamable_to_string.hin"
 
 #include "gtest-internal-inl.h"
 
@@ -40,8 +40,8 @@ void PrettyUnitTestResultPrinter::OnTestIterationStart( ::jmsd::cutf::UnitTest c
 		internal::Colored_print::ColoredPrintf( internal::GTestColor::COLOR_YELLOW, "Note: %s filter = %s\n", GTEST_NAME_, filter );
 	}
 
-	if ( internal::ShouldShard( constants::kTestTotalShards, constants::kTestShardIndex, false ) ) {
-		int32_t const shard_index = internal::Int32FromEnvOrDie( constants::kTestShardIndex, -1 );
+	if ( internal::function_Should_shard::ShouldShard( constants::kTestTotalShards, constants::kTestShardIndex, false ) ) {
+		int32_t const shard_index = internal::function_Int32_from_environment_or_die::Int32FromEnvOrDie( constants::kTestShardIndex, -1 );
 
 		internal::Colored_print::ColoredPrintf(
 			internal::GTestColor::COLOR_YELLOW,
@@ -128,7 +128,7 @@ void PrettyUnitTestResultPrinter::OnTestPartResult(
 	default:
 	  // Print failure message from the assertion
 	  // (e.g. expected this and got that).
-	  internal::PrintTestPartResult( result );
+	  internal::function_Print_test_part_result::PrintTestPartResult( result );
 	  fflush(stdout);
   }
 }
@@ -143,10 +143,10 @@ void PrettyUnitTestResultPrinter::OnTestEnd(const ::jmsd::cutf::TestInfo& test_i
   }
   PrintTestName(test_info.test_suite_name(), test_info.name());
   if (test_info.result()->Failed())
-	internal::PrintFullTestCommentIfPresent(test_info);
+	internal::function_Print_full_test_comment_if_present::PrintFullTestCommentIfPresent(test_info);
 
   if ( ::testing:: GTEST_FLAG( print_time ) ) {
-	printf(" (%s ms)\n", internal::StreamableToString( test_info.result()->elapsed_time()).c_str() );
+	printf(" (%s ms)\n", internal::function_Streamable_to_string::StreamableToString( test_info.result()->elapsed_time()).c_str() );
   } else {
 	printf("\n");
   }
@@ -158,7 +158,7 @@ void PrettyUnitTestResultPrinter::OnTestSuiteEnd(const ::jmsd::cutf::TestSuite& 
 
   const std::string counts = Format_countable::FormatCountableNoun(test_suite.test_to_run_count(), "test", "tests");
   internal::Colored_print::ColoredPrintf(internal::GTestColor::COLOR_GREEN, "[----------] ");
-  printf("%s from %s (%s ms total)\n\n", counts.c_str(), test_suite.name(), internal::StreamableToString(test_suite.elapsed_time()).c_str());
+  printf("%s from %s (%s ms total)\n\n", counts.c_str(), test_suite.name(), internal::function_Streamable_to_string::StreamableToString(test_suite.elapsed_time()).c_str());
   fflush(stdout);
 }
 
@@ -187,7 +187,7 @@ void PrettyUnitTestResultPrinter::PrintFailedTests(const ::jmsd::cutf::UnitTest&
 	  }
 	  internal::Colored_print::ColoredPrintf(internal::GTestColor::COLOR_RED, "[  FAILED  ] ");
 	  printf("%s.%s", test_suite.name(), test_info.name());
-	  internal::PrintFullTestCommentIfPresent(test_info);
+	  internal::function_Print_full_test_comment_if_present::PrintFullTestCommentIfPresent(test_info);
 	  printf("\n");
 	}
   }
@@ -248,8 +248,7 @@ void PrettyUnitTestResultPrinter::OnTestIterationEnd(const ::jmsd::cutf::UnitTes
 		 Format_countable::FormatTestCount(unit_test.test_to_run_count()).c_str(),
 		 Format_countable::FormatTestSuiteCount(unit_test.test_suite_to_run_count()).c_str());
   if ( ::testing:: GTEST_FLAG( print_time ) ) {
-	printf(" (%s ms total)",
-		   internal::StreamableToString(unit_test.elapsed_time()).c_str());
+	printf(" (%s ms total)", internal::function_Streamable_to_string::StreamableToString(unit_test.elapsed_time()).c_str());
   }
   printf("\n");
   internal::Colored_print::ColoredPrintf(internal::GTestColor::COLOR_GREEN,  "[  PASSED  ] ");

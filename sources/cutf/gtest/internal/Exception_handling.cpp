@@ -5,7 +5,7 @@
 
 #include "gtest/Test_part_result_to_string.h"
 
-#include "Print_test_part_result_to_string.h"
+#include "function_Print_test_part_result_to_string.h"
 
 #include "gtest/Message.hin"
 
@@ -54,7 +54,7 @@ namespace internal {
 
 GoogleTestFailureException::GoogleTestFailureException( ::testing::TestPartResult const &failure )
 	:
-		::std::runtime_error( PrintTestPartResultToString( failure ).c_str() )
+		::std::runtime_error( function_Print_test_part_result_to_string::PrintTestPartResultToString( failure ).c_str() )
 {}
 
 #endif  // GTEST_HAS_EXCEPTIONS

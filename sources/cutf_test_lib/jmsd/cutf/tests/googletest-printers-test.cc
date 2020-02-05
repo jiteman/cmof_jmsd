@@ -1474,23 +1474,23 @@ TEST(UniversalPrintTest, WorksForCharArray) {
 }
 
 
-using ::jmsd::cutf::internal::Strings;
+using ::jmsd::cutf::internal::typedef_Strings;
 
 
 TEST(UniversalTersePrintTupleFieldsToStringsTestWithStd, PrintsEmptyTuple) {
-  Strings result = UniversalTersePrintTupleFieldsToStrings(::std::make_tuple());
+  typedef_Strings result = UniversalTersePrintTupleFieldsToStrings(::std::make_tuple());
   EXPECT_EQ(0u, result.size());
 }
 
 TEST(UniversalTersePrintTupleFieldsToStringsTestWithStd, PrintsOneTuple) {
-  Strings result = UniversalTersePrintTupleFieldsToStrings(
+  typedef_Strings result = UniversalTersePrintTupleFieldsToStrings(
       ::std::make_tuple(1));
   ASSERT_EQ(1u, result.size());
   EXPECT_EQ("1", result[0]);
 }
 
 TEST(UniversalTersePrintTupleFieldsToStringsTestWithStd, PrintsTwoTuple) {
-  Strings result = UniversalTersePrintTupleFieldsToStrings(
+  typedef_Strings result = UniversalTersePrintTupleFieldsToStrings(
       ::std::make_tuple(1, 'a'));
   ASSERT_EQ(2u, result.size());
   EXPECT_EQ("1", result[0]);
@@ -1499,7 +1499,7 @@ TEST(UniversalTersePrintTupleFieldsToStringsTestWithStd, PrintsTwoTuple) {
 
 TEST(UniversalTersePrintTupleFieldsToStringsTestWithStd, PrintsTersely) {
   const int n = 1;
-  Strings result = UniversalTersePrintTupleFieldsToStrings(
+  typedef_Strings result = UniversalTersePrintTupleFieldsToStrings(
       ::std::tuple<const int&, const char*>(n, "a"));
   ASSERT_EQ(2u, result.size());
   EXPECT_EQ("1", result[0]);

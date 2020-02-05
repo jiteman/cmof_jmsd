@@ -7,7 +7,7 @@
 #include "internal/Unit_test_impl.h"
 #include "internal/Death_test_impl.h"
 #include "internal/Death_test_check.h"
-#include "internal/Get_last_errno_description.h"
+#include "internal/function_Get_last_errno_description.h"
 
 #include "Message.hin"
 
@@ -926,9 +926,9 @@ bool DefaultDeathTestFactory::Create(const char* statement,
   if (flag != nullptr) {
 	if (death_test_index > flag->index()) {
 	  DeathTest::set_last_death_test_message(
-		  "Death test count (" + ::jmsd::cutf::internal::StreamableToString(death_test_index)
+		  "Death test count (" + ::jmsd::cutf::internal::function_Streamable_to_string::StreamableToString(death_test_index)
 		  + ") somehow exceeded expected maximum ("
-		  + ::jmsd::cutf::internal::StreamableToString(flag->index()) + ")");
+		  + ::jmsd::cutf::internal::function_Streamable_to_string::StreamableToString(flag->index()) + ")");
 	  return false;
 	}
 
@@ -984,7 +984,7 @@ static int GetStatusFileDescriptor(unsigned int parent_process_id,
 												   FALSE,  // Non-inheritable.
 												   parent_process_id));
   if (parent_process_handle.Get() == INVALID_HANDLE_VALUE) {
-	::jmsd::cutf::internal::DeathTestAbort("Unable to open parent process " + ::jmsd::cutf::internal::StreamableToString(parent_process_id));
+	::jmsd::cutf::internal::DeathTestAbort("Unable to open parent process " + ::jmsd::cutf::internal::function_Streamable_to_string::StreamableToString(parent_process_id));
   }
 
   GTEST_CHECK_(sizeof(HANDLE) <= sizeof(size_t));
@@ -1003,9 +1003,9 @@ static int GetStatusFileDescriptor(unsigned int parent_process_id,
 						 FALSE,  // Request non-inheritable handler.
 						 DUPLICATE_SAME_ACCESS)) {
 	::jmsd::cutf::internal::DeathTestAbort("Unable to duplicate the pipe handle " +
-				   ::jmsd::cutf::internal::StreamableToString(write_handle_as_size_t) +
+				   ::jmsd::cutf::internal::function_Streamable_to_string::StreamableToString(write_handle_as_size_t) +
 				   " from the parent process " +
-				   ::jmsd::cutf::internal::StreamableToString(parent_process_id));
+				   ::jmsd::cutf::internal::function_Streamable_to_string::StreamableToString(parent_process_id));
   }
 
   const HANDLE event_handle = reinterpret_cast<HANDLE>(event_handle_as_size_t);
@@ -1017,16 +1017,16 @@ static int GetStatusFileDescriptor(unsigned int parent_process_id,
 						 FALSE,
 						 DUPLICATE_SAME_ACCESS)) {
 	::jmsd::cutf::internal::DeathTestAbort("Unable to duplicate the event handle " +
-				   ::jmsd::cutf::internal::StreamableToString(event_handle_as_size_t) +
+				   ::jmsd::cutf::internal::function_Streamable_to_string::StreamableToString(event_handle_as_size_t) +
 				   " from the parent process " +
-				   ::jmsd::cutf::internal::StreamableToString(parent_process_id));
+				   ::jmsd::cutf::internal::function_Streamable_to_string::StreamableToString(parent_process_id));
   }
 
   const int write_fd =
 	  ::_open_osfhandle(reinterpret_cast<intptr_t>(dup_write_handle), O_APPEND);
   if (write_fd == -1) {
 	::jmsd::cutf::internal::DeathTestAbort("Unable to convert pipe handle " +
-				   ::jmsd::cutf::internal::StreamableToString(write_handle_as_size_t) +
+				   ::jmsd::cutf::internal::function_Streamable_to_string::StreamableToString(write_handle_as_size_t) +
 				   " to a file descriptor");
   }
 

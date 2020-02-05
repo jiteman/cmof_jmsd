@@ -18,7 +18,7 @@ namespace internal {
 // that are the print-out of the matcher's parameters.
 JMSD_DEPRECATED_GMOCK_API_ std::string FormatMatcherDescription(bool negation,
                                                 const char* matcher_name,
-                                                const ::jmsd::cutf::internal::Strings& param_values) {
+                                                const ::jmsd::cutf::internal::typedef_Strings& param_values) {
   std::string result = ConvertIdentifierNameToWords(matcher_name);
   if (param_values.size() >= 1) result += " " + JoinAsTuple(param_values);
   return negation ? "not (" + result + ")" : result;

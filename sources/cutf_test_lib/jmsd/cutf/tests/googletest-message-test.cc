@@ -1,7 +1,7 @@
 // Tests for the Message class.
 
 #include "gtest/Substring_utilities.h"
-#include "gtest/internal/String_stream_to_string.h"
+#include "gtest/internal/function_String_stream_to_string.h"
 
 #include "gtest/Message.hin"
 
@@ -121,7 +121,7 @@ TEST(MessageTest, StreamsToOStream) {
   Message msg("Hello");
   ::std::stringstream ss;
   ss << msg;
-  EXPECT_EQ("Hello", ::jmsd::cutf::internal::StringStreamToString( ss ) );
+  EXPECT_EQ("Hello", ::jmsd::cutf::internal::function_String_stream_to_string::StringStreamToString( ss ) );
 }
 
 // Tests that a Message object doesn't take up too much stack space.

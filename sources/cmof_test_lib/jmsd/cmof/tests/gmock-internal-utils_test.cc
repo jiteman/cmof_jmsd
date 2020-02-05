@@ -41,27 +41,27 @@ namespace internal {
 namespace {
 
 
-using ::jmsd::cutf::internal::Strings;
+using ::jmsd::cutf::internal::typedef_Strings;
 
 
 TEST(JoinAsTupleTest, JoinsEmptyTuple) {
-  EXPECT_EQ("", JoinAsTuple(Strings()));
+  EXPECT_EQ("", JoinAsTuple(typedef_Strings()));
 }
 
 TEST(JoinAsTupleTest, JoinsOneTuple) {
   const char* fields[] = {"1"};
-  EXPECT_EQ("1", JoinAsTuple(Strings(fields, fields + 1)));
+  EXPECT_EQ("1", JoinAsTuple(typedef_Strings(fields, fields + 1)));
 }
 
 TEST(JoinAsTupleTest, JoinsTwoTuple) {
   const char* fields[] = {"1", "a"};
-  EXPECT_EQ("(1, a)", JoinAsTuple(Strings(fields, fields + 2)));
+  EXPECT_EQ("(1, a)", JoinAsTuple(typedef_Strings(fields, fields + 2)));
 }
 
 TEST(JoinAsTupleTest, JoinsTenTuple) {
   const char* fields[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
   EXPECT_EQ("(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)",
-            JoinAsTuple(Strings(fields, fields + 10)));
+            JoinAsTuple(typedef_Strings(fields, fields + 10)));
 }
 
 TEST(ConvertIdentifierNameToWordsTest, WorksWhenNameContainsNoWord) {

@@ -1,7 +1,8 @@
 #include "Test_event_repeater.h"
 
 
-#include "Stl_utilities.hin"
+#include "function_Stl_utilities.hin"
+#include "function_Delete.hin"
 
 
 namespace jmsd {
@@ -10,7 +11,7 @@ namespace internal {
 
 
 TestEventRepeater::~TestEventRepeater() {
-	ForEach(listeners_, Delete<TestEventListener>);
+	function_Stl_utilities::ForEach(listeners_, function_Delete::Delete< TestEventListener >);
 }
 
 void TestEventRepeater::Append(TestEventListener *listener) {

@@ -2,7 +2,7 @@
 #include "gmock/internal/gmock-port.h"
 
 #include "gtest/Message.hin"
-#include "gtest/internal/Streamable_to_string.hin"
+#include "gtest/internal/function_Streamable_to_string.hin"
 
 
 namespace testing {
@@ -121,7 +121,7 @@ void InitGoogleMockImpl(int* argc, CharType** argv) {
   if (*argc <= 0) return;
 
   for (int i = 1; i != *argc; i++) {
-    const std::string arg_string = ::jmsd::cutf::internal::StreamableToString(argv[i]);
+    const std::string arg_string = ::jmsd::cutf::internal::function_Streamable_to_string::StreamableToString(argv[i]);
     const char* const arg = arg_string.c_str();
 
     // Do we see a Google Mock flag?

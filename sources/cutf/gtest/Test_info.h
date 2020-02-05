@@ -108,7 +108,7 @@ class JMSD_DEPRECATED_GTEST_API_ TestInfo {
   friend internal::UnitTestImpl;
   friend ::testing::internal::StreamingListenerTest;
 
-  friend TestInfo* internal::MakeAndRegisterTestInfo(
+  friend TestInfo* internal::function_Make_and_register_test_info::MakeAndRegisterTestInfo(
 	  const char *test_suite_name,
 	  const char *name,
 	  const char *type_param,

@@ -3,7 +3,7 @@
 
 #include "gtest/Assertion_result.h"
 
-#include "Split_escaped_string.h"
+#include "function_Split_escaped_string.h"
 #include "Distance_editor.h"
 
 #include "gtest/Message.hin"
@@ -54,8 +54,8 @@ AssertionResult Assertion_result_constructor::construct_expected_equality(
 	}
 
 	if ( !lhs_value.empty() && !rhs_value.empty() ) {
-		::std::vector< ::std::string > const lhs_lines = Split_escaped_string::SplitEscapedString( lhs_value );
-		::std::vector< ::std::string > const rhs_lines = Split_escaped_string::SplitEscapedString( rhs_value );
+		::std::vector< ::std::string > const lhs_lines = function_Split_escaped_string::SplitEscapedString( lhs_value );
+		::std::vector< ::std::string > const rhs_lines = function_Split_escaped_string::SplitEscapedString( rhs_value );
 
 		if ( lhs_lines.size() > 1 || rhs_lines.size() > 1 ) {
 			msg << "\nWith diff:\n" << Distance_editor::CreateUnifiedDiff( lhs_lines, rhs_lines );

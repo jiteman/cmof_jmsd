@@ -3,9 +3,10 @@
 
 #include "Death_test_check.h"
 
-#include "Fail_from_internal_error.h"
+#include "function_Fail_from_internal_error.h"
 
-#include "Exit_summary.h"
+#include "function_Exit_summary.h"
+#include "function_Get_last_errno_description.h"
 
 #include "gtest/Message.hin"
 
@@ -105,7 +106,7 @@ void DeathTestImpl::ReadAndInterpretStatusByte() {
 		set_outcome(::testing::internal::DeathTestOutcome::LIVED);
 		break;
 	  case ::testing::internal::kDeathTestInternalError:
-		::jmsd::cutf::internal::FailFromInternalError(read_fd());  // Does not return.
+		::jmsd::cutf::internal::function_Fail_from_internal_error::FailFromInternalError(read_fd());  // Does not return.
 		break;
 	  default:
 		GTEST_LOG_(FATAL) << "Death test child process reported "
@@ -114,7 +115,7 @@ void DeathTestImpl::ReadAndInterpretStatusByte() {
 	}
   } else {
 	GTEST_LOG_(FATAL) << "Read from death test child process failed: "
-					  << GetLastErrnoDescription();
+					  << function_Get_last_errno_description::GetLastErrnoDescription();
   }
   GTEST_DEATH_TEST_CHECK_SYSCALL_( ::testing::internal::posix::Close(read_fd()));
   set_read_fd(-1);
@@ -224,7 +225,7 @@ bool DeathTestImpl::Passed(bool status_ok) {
 		}
 	  } else {
 		buffer << "    Result: died but not with expected exit code:\n"
-			   << "            " << ::jmsd::cutf::internal::ExitSummary(status()) << "\n"
+			   << "            " << ::jmsd::cutf::internal::function_Exit_summary::ExitSummary(status()) << "\n"
 			   << "Actual msg:\n" << FormatDeathTestOutput(error_message);
 	  }
 	  break;

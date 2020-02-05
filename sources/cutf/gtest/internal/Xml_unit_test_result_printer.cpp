@@ -6,10 +6,10 @@
 
 #include "gtest-string.h"
 
-#include "Open_file_for_writing.h"
+#include "function_Open_file_for_writing.h"
 #include "Format_time.h"
-#include "String_stream_to_string.h"
-#include "Streamable_to_string.hin"
+#include "function_String_stream_to_string.h"
+#include "function_Streamable_to_string.hin"
 
 #include "gtest/Message.hin"
 
@@ -29,19 +29,19 @@ XmlUnitTestResultPrinter::XmlUnitTestResultPrinter(const char* output_file)
 // Called after the unit test ends.
 void XmlUnitTestResultPrinter::OnTestIterationEnd(const ::jmsd::cutf::UnitTest& unit_test,
 												  int /*iteration*/) {
-  FILE* xmlout = OpenFileForWriting(output_file_);
+  FILE* xmlout = function_Open_file_for_writing::OpenFileForWriting(output_file_);
   std::stringstream stream;
   PrintXmlUnitTest(&stream, unit_test);
-  fprintf(xmlout, "%s", ::jmsd::cutf::internal::StringStreamToString( stream ).c_str());
+  fprintf(xmlout, "%s", function_String_stream_to_string::StringStreamToString( stream ).c_str());
   fclose(xmlout);
 }
 
 void XmlUnitTestResultPrinter::ListTestsMatchingFilter(
 	const std::vector<::jmsd::cutf::TestSuite*>& test_suites) {
-  FILE* xmlout = OpenFileForWriting(output_file_);
+  FILE* xmlout = function_Open_file_for_writing::OpenFileForWriting(output_file_);
   std::stringstream stream;
   PrintXmlTestsList(&stream, test_suites);
-  fprintf(xmlout, "%s", ::jmsd::cutf::internal::StringStreamToString( stream ).c_str());
+  fprintf(xmlout, "%s", function_String_stream_to_string::StringStreamToString( stream ).c_str());
   fclose(xmlout);
 }
 
@@ -172,7 +172,7 @@ void XmlUnitTestResultPrinter::OutputXmlTestInfo(::std::ostream* stream,
   if ( ::testing:: GTEST_FLAG(list_tests)) {
 	OutputXmlAttribute(stream, kTestsuite, "file", test_info.file());
 	OutputXmlAttribute(stream, kTestsuite, "line",
-					   StreamableToString(test_info.line()));
+					   function_Streamable_to_string::StreamableToString(test_info.line()));
 	*stream << " />\n";
 	return;
   }
@@ -227,13 +227,13 @@ void XmlUnitTestResultPrinter::PrintXmlTestSuite(std::ostream* stream, const Tes
   *stream << "  <" << kTestsuite;
   OutputXmlAttribute(stream, kTestsuite, "name", test_suite.name());
   OutputXmlAttribute(stream, kTestsuite, "tests",
-					 StreamableToString(test_suite.reportable_test_count()));
+					 function_Streamable_to_string::StreamableToString(test_suite.reportable_test_count()));
   if (!::testing::GTEST_FLAG(list_tests)) {
 	OutputXmlAttribute(stream, kTestsuite, "failures",
-					   StreamableToString(test_suite.failed_test_count()));
+					   function_Streamable_to_string::StreamableToString(test_suite.failed_test_count()));
 	OutputXmlAttribute(
 		stream, kTestsuite, "disabled",
-		StreamableToString(test_suite.reportable_disabled_test_count()));
+		function_Streamable_to_string::StreamableToString(test_suite.reportable_disabled_test_count()));
 	OutputXmlAttribute(stream, kTestsuite, "errors", "0");
 	OutputXmlAttribute(stream, kTestsuite, "time",
 					   Format_time::FormatTimeInMillisAsSeconds(test_suite.elapsed_time()));
@@ -259,12 +259,12 @@ void XmlUnitTestResultPrinter::PrintXmlUnitTest(std::ostream* stream,
   *stream << "<" << kTestsuites;
 
   OutputXmlAttribute(stream, kTestsuites, "tests",
-					 StreamableToString(unit_test.reportable_test_count()));
+					 function_Streamable_to_string::StreamableToString(unit_test.reportable_test_count()));
   OutputXmlAttribute(stream, kTestsuites, "failures",
-					 StreamableToString(unit_test.failed_test_count()));
+					 function_Streamable_to_string::StreamableToString(unit_test.failed_test_count()));
   OutputXmlAttribute(
 	  stream, kTestsuites, "disabled",
-	  StreamableToString(unit_test.reportable_disabled_test_count()));
+	  function_Streamable_to_string::StreamableToString(unit_test.reportable_disabled_test_count()));
   OutputXmlAttribute(stream, kTestsuites, "errors", "0");
   OutputXmlAttribute(stream, kTestsuites, "time",
 					 Format_time::FormatTimeInMillisAsSeconds(unit_test.elapsed_time()));
@@ -274,7 +274,7 @@ void XmlUnitTestResultPrinter::PrintXmlUnitTest(std::ostream* stream,
 
   if ( ::testing:: GTEST_FLAG(shuffle)) {
 	OutputXmlAttribute(stream, kTestsuites, "random_seed",
-					   StreamableToString(unit_test.random_seed()));
+					   function_Streamable_to_string::StreamableToString(unit_test.random_seed()));
   }
   *stream << TestPropertiesAsXmlAttributes(unit_test.ad_hoc_test_result());
 
@@ -300,7 +300,7 @@ void XmlUnitTestResultPrinter::PrintXmlTestsList(
 	total_tests += test_suite->total_test_count();
   }
   OutputXmlAttribute(stream, kTestsuites, "tests",
-					 StreamableToString(total_tests));
+					 function_Streamable_to_string::StreamableToString(total_tests));
   OutputXmlAttribute(stream, kTestsuites, "name", "AllTests");
   *stream << ">\n";
 

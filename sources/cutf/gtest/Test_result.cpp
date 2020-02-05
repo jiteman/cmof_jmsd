@@ -1,7 +1,7 @@
 #include "Test_result.h"
 
 
-#include "internal/Stl_utilities.hin"
+#include "internal/function_Stl_utilities.hin"
 
 #include "Text_output_utilities.hxx"
 
@@ -92,7 +92,7 @@ static bool TestPartSkipped(const ::testing::TestPartResult& result) {
 
 // Returns true if and only if the test was skipped.
 bool TestResult::Skipped() const {
-  return !Failed() && internal::CountIf(test_part_results_, TestPartSkipped) > 0;
+  return !Failed() && internal::function_Stl_utilities::CountIf(test_part_results_, TestPartSkipped) > 0;
 }
 
 // Returns true if and only if the test failed.
@@ -111,7 +111,7 @@ static bool TestPartFatallyFailed(const ::testing::TestPartResult& result) {
 
 // Returns true if and only if the test fatally failed.
 bool TestResult::HasFatalFailure() const {
-  return internal::CountIf(test_part_results_, TestPartFatallyFailed) > 0;
+  return internal::function_Stl_utilities::CountIf(test_part_results_, TestPartFatallyFailed) > 0;
 }
 
 // Returns true if and only if the test part non-fatally failed.
@@ -121,7 +121,7 @@ static bool TestPartNonfatallyFailed(const ::testing::TestPartResult& result) {
 
 // Returns true if and only if the test has a non-fatal failure.
 bool TestResult::HasNonfatalFailure() const {
-  return internal::CountIf(test_part_results_, TestPartNonfatallyFailed) > 0;
+  return internal::function_Stl_utilities::CountIf(test_part_results_, TestPartNonfatallyFailed) > 0;
 }
 
 // Gets the number of all test parts.  This is the sum of the number
