@@ -5,7 +5,7 @@ namespace jmsd {
 namespace cutf {
 
 
-class Substring_utilities;
+class Substring_assertions;
 
 
 } // namespace cutf

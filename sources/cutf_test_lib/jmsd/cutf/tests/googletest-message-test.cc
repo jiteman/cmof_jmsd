@@ -1,6 +1,6 @@
 // Tests for the Message class.
 
-#include "gtest/Substring_utilities.h"
+#include "gtest/Substring_assertions.h"
 #include "gtest/internal/function_String_stream_to_string.h"
 
 #include "gtest/Message.hin"
@@ -37,8 +37,8 @@ TEST(MessageTest, ConstructsFromCString) {
 TEST(MessageTest, StreamsFloat) {
   const std::string s = (Message() << 1.23456F << " " << 2.34567F).GetString();
   // Both numbers should be printed with enough precision.
-  EXPECT_PRED_FORMAT2(::jmsd::cutf::Substring_utilities::IsSubstring, "1.234560", s.c_str());
-  EXPECT_PRED_FORMAT2(::jmsd::cutf::Substring_utilities::IsSubstring, " 2.345669", s.c_str());
+  EXPECT_PRED_FORMAT2(::jmsd::cutf::Substring_assertions::IsSubstring, "1.234560", s.c_str());
+  EXPECT_PRED_FORMAT2(::jmsd::cutf::Substring_assertions::IsSubstring, " 2.345669", s.c_str());
 }
 
 // Tests streaming a double.
@@ -46,8 +46,8 @@ TEST(MessageTest, StreamsDouble) {
   const std::string s = (Message() << 1260570880.4555497 << " "
                                   << 1260572265.1954534).GetString();
   // Both numbers should be printed with enough precision.
-  EXPECT_PRED_FORMAT2(::jmsd::cutf::Substring_utilities::IsSubstring, "1260570880.45", s.c_str());
-  EXPECT_PRED_FORMAT2(::jmsd::cutf::Substring_utilities::IsSubstring, " 1260572265.19", s.c_str());
+  EXPECT_PRED_FORMAT2(::jmsd::cutf::Substring_assertions::IsSubstring, "1260570880.45", s.c_str());
+  EXPECT_PRED_FORMAT2(::jmsd::cutf::Substring_assertions::IsSubstring, " 1260572265.19", s.c_str());
 }
 
 // Tests streaming a non-char pointer.

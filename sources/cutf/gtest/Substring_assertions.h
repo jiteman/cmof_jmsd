@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Substring_utilities.hxx"
+#include "Substring_assertions.hxx"
 
 
 #include "Assertion_result.hxx"
@@ -16,10 +16,10 @@ namespace jmsd {
 namespace cutf {
 
 
-class JMSD_CUTF_SHARED_INTERFACE Substring_utilities {
+class JMSD_CUTF_SHARED_INTERFACE Substring_assertions {
 
 private:
-	typedef Substring_utilities THIS_STATIC;
+	typedef Substring_assertions THIS_STATIC;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 public:
@@ -43,21 +43,21 @@ public:
 
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 private:
-	virtual ~Substring_utilities() noexcept = delete;
+	virtual ~Substring_assertions() noexcept = delete;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 private:
-	Substring_utilities() noexcept = delete;
+	Substring_assertions() noexcept = delete;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 private:
-	Substring_utilities( Substring_utilities const &another ) noexcept = delete;
-	Substring_utilities &operator =( Substring_utilities const &another ) noexcept = delete;
+	Substring_assertions( Substring_assertions const &another ) noexcept = delete;
+	Substring_assertions &operator =( Substring_assertions const &another ) noexcept = delete;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 private:
-	Substring_utilities( Substring_utilities &&another ) noexcept = delete;
-	Substring_utilities &operator =( Substring_utilities &&another ) noexcept = delete;
+	Substring_assertions( Substring_assertions &&another ) noexcept = delete;
+	Substring_assertions &operator =( Substring_assertions &&another ) noexcept = delete;
 
 // # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 private:

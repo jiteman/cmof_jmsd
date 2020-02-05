@@ -3,7 +3,7 @@
 #include "gtest/gtest-spi.h"
 #include "gtest/gtest-internal-inl.h"
 
-#include "gtest/Substring_utilities.h"
+#include "gtest/Substring_assertions.h"
 
 #include "gtest/Assertion_result.hin"
 #include "gtest/Message.hin"
@@ -212,14 +212,14 @@ TEST(GtestCheckSyntaxTest, WorksWithSwitch) {
 
 // Verifies behavior of FormatFileLocation.
 TEST(FormatFileLocationTest, FormatsFileLocation) {
-  EXPECT_PRED_FORMAT2(::jmsd::cutf::Substring_utilities::IsSubstring, "foo.cc", FormatFileLocation("foo.cc", 42));
-  EXPECT_PRED_FORMAT2(::jmsd::cutf::Substring_utilities::IsSubstring, "42", FormatFileLocation("foo.cc", 42));
+  EXPECT_PRED_FORMAT2(::jmsd::cutf::Substring_assertions::IsSubstring, "foo.cc", FormatFileLocation("foo.cc", 42));
+  EXPECT_PRED_FORMAT2(::jmsd::cutf::Substring_assertions::IsSubstring, "42", FormatFileLocation("foo.cc", 42));
 }
 
 TEST(FormatFileLocationTest, FormatsUnknownFile) {
-  EXPECT_PRED_FORMAT2(::jmsd::cutf::Substring_utilities::IsSubstring, "unknown file",
+  EXPECT_PRED_FORMAT2(::jmsd::cutf::Substring_assertions::IsSubstring, "unknown file",
                       FormatFileLocation(nullptr, 42));
-  EXPECT_PRED_FORMAT2(::jmsd::cutf::Substring_utilities::IsSubstring, "42", FormatFileLocation(nullptr, 42));
+  EXPECT_PRED_FORMAT2(::jmsd::cutf::Substring_assertions::IsSubstring, "42", FormatFileLocation(nullptr, 42));
 }
 
 TEST(FormatFileLocationTest, FormatsUknownLine) {

@@ -5,7 +5,7 @@
 #include "gtest/gtest-spi.h"
 
 
-#include "gtest/Substring_utilities.h"
+#include "gtest/Substring_assertions.h"
 
 
 namespace {
@@ -24,7 +24,7 @@ using testing::MakeCardinality;
 class MockFoo {
  public:
   MockFoo() {}
-  MOCK_METHOD0(Bar, int());  // NOLINT
+  MOCK_METHOD0(Bar, int());
 
  private:
   GTEST_DISALLOW_COPY_AND_ASSIGN_(MockFoo);
@@ -91,7 +91,7 @@ TEST(AnyNumber, Works) {
 
   stringstream ss;
   c.DescribeTo(&ss);
-  EXPECT_PRED_FORMAT2(::jmsd::cutf::Substring_utilities::IsSubstring, "called any number of times",
+  EXPECT_PRED_FORMAT2(::jmsd::cutf::Substring_assertions::IsSubstring, "called any number of times",
                       ss.str());
 }
 
@@ -119,7 +119,7 @@ TEST(AtLeastTest, OnZero) {
 
   stringstream ss;
   c.DescribeTo(&ss);
-  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Substring_utilities::IsSubstring, "any number of times", ss.str());
+  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Substring_assertions::IsSubstring, "any number of times", ss.str());
 }
 
 TEST(AtLeastTest, OnPositiveNumber) {
@@ -135,15 +135,15 @@ TEST(AtLeastTest, OnPositiveNumber) {
 
   stringstream ss1;
   AtLeast(1).DescribeTo(&ss1);
-  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Substring_utilities::IsSubstring, "at least once", ss1.str() );
+  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Substring_assertions::IsSubstring, "at least once", ss1.str() );
 
   stringstream ss2;
   c.DescribeTo(&ss2);
-  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Substring_utilities::IsSubstring, "at least twice", ss2.str() );
+  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Substring_assertions::IsSubstring, "at least twice", ss2.str() );
 
   stringstream ss3;
   AtLeast(3).DescribeTo(&ss3);
-  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Substring_utilities::IsSubstring, "at least 3 times", ss3.str() );
+  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Substring_assertions::IsSubstring, "at least 3 times", ss3.str() );
 }
 
 TEST(AtLeastTest, HasCorrectBounds) {
@@ -170,7 +170,7 @@ TEST(AtMostTest, OnZero) {
 
   stringstream ss;
   c.DescribeTo(&ss);
-  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Substring_utilities::IsSubstring, "never called", ss.str() );
+  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Substring_assertions::IsSubstring, "never called", ss.str() );
 }
 
 TEST(AtMostTest, OnPositiveNumber) {
@@ -186,15 +186,15 @@ TEST(AtMostTest, OnPositiveNumber) {
 
   stringstream ss1;
   AtMost(1).DescribeTo(&ss1);
-  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Substring_utilities::IsSubstring, "called at most once", ss1.str() );
+  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Substring_assertions::IsSubstring, "called at most once", ss1.str() );
 
   stringstream ss2;
   c.DescribeTo(&ss2);
-  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Substring_utilities::IsSubstring, "called at most twice", ss2.str() );
+  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Substring_assertions::IsSubstring, "called at most twice", ss2.str() );
 
   stringstream ss3;
   AtMost(3).DescribeTo(&ss3);
-  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Substring_utilities::IsSubstring, "called at most 3 times", ss3.str() );
+  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Substring_assertions::IsSubstring, "called at most 3 times", ss3.str() );
 }
 
 TEST(AtMostTest, HasCorrectBounds) {
@@ -235,7 +235,7 @@ TEST(BetweenTest, OnZeroStartAndZeroEnd) {
 
   stringstream ss;
   c.DescribeTo(&ss);
-  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Substring_utilities::IsSubstring, "never called", ss.str() );
+  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Substring_assertions::IsSubstring, "never called", ss.str() );
 }
 
 TEST(BetweenTest, OnZeroStartAndNonZeroEnd) {
@@ -252,7 +252,7 @@ TEST(BetweenTest, OnZeroStartAndNonZeroEnd) {
 
   stringstream ss;
   c.DescribeTo(&ss);
-  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Substring_utilities::IsSubstring, "called at most twice", ss.str() );
+  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Substring_assertions::IsSubstring, "called at most twice", ss.str() );
 }
 
 TEST(BetweenTest, OnSameStartAndEnd) {
@@ -269,7 +269,7 @@ TEST(BetweenTest, OnSameStartAndEnd) {
 
   stringstream ss;
   c.DescribeTo(&ss);
-  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Substring_utilities::IsSubstring, "called 3 times", ss.str() );
+  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Substring_assertions::IsSubstring, "called 3 times", ss.str() );
 }
 
 TEST(BetweenTest, OnDifferentStartAndEnd) {
@@ -289,7 +289,7 @@ TEST(BetweenTest, OnDifferentStartAndEnd) {
 
   stringstream ss;
   c.DescribeTo(&ss);
-  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Substring_utilities::IsSubstring, "called between 3 and 5 times", ss.str() );
+  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Substring_assertions::IsSubstring, "called between 3 and 5 times", ss.str() );
 }
 
 TEST(BetweenTest, HasCorrectBounds) {
@@ -316,7 +316,7 @@ TEST(ExactlyTest, OnZero) {
 
   stringstream ss;
   c.DescribeTo(&ss);
-  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Substring_utilities::IsSubstring, "never called", ss.str() );
+  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Substring_assertions::IsSubstring, "never called", ss.str() );
 }
 
 TEST(ExactlyTest, OnPositiveNumber) {
@@ -329,15 +329,15 @@ TEST(ExactlyTest, OnPositiveNumber) {
 
   stringstream ss1;
   Exactly(1).DescribeTo(&ss1);
-  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Substring_utilities::IsSubstring, "called once", ss1.str() );
+  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Substring_assertions::IsSubstring, "called once", ss1.str() );
 
   stringstream ss2;
   c.DescribeTo(&ss2);
-  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Substring_utilities::IsSubstring, "called twice", ss2.str() );
+  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Substring_assertions::IsSubstring, "called twice", ss2.str() );
 
   stringstream ss3;
   Exactly(3).DescribeTo(&ss3);
-  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Substring_utilities::IsSubstring, "called 3 times", ss3.str() );
+  EXPECT_PRED_FORMAT2( ::jmsd::cutf::Substring_assertions::IsSubstring, "called 3 times", ss3.str() );
 }
 
 TEST(ExactlyTest, HasCorrectBounds) {
