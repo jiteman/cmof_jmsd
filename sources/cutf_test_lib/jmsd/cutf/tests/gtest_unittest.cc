@@ -32,7 +32,7 @@ TEST(CommandLineFlagsTest, CanBeAccessedInCodeOnceGTestHIsIncluded) {
 #include "gtest/Test_event_listener.h"
 #include "gtest/Environment.h"
 #include "gtest/Substring_utilities.h"
-#include "gtest/Add_global_test_environment.h"
+#include "gtest/function_Add_global_test_environment.h"
 
 #include "gtest/gtest-constants.h"
 
@@ -2129,7 +2129,7 @@ class UnitTestRecordPropertyTestEnvironment : public Environment {
 
 // This will test property recording outside of any test or test case.
 static Environment* record_property_env GTEST_ATTRIBUTE_UNUSED_ =
-	::jmsd::cutf::AddGlobalTestEnvironment(new UnitTestRecordPropertyTestEnvironment);
+	::jmsd::cutf::function_Add_global_test_environment::AddGlobalTestEnvironment(new UnitTestRecordPropertyTestEnvironment);
 
 // This group of tests is for predicate assertions (ASSERT_PRED*, etc)
 // of various arities.  They do not attempt to be exhaustive.  Rather,

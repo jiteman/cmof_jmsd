@@ -4,7 +4,7 @@
 #include "gtest-flags.h"
 #include "gtest-constants.h"
 
-#include "Format_countable.h"
+#include "function_Format_countable.h"
 
 #include "internal/gtest-string.h"
 #include "internal/Colored_print.h"
@@ -60,8 +60,8 @@ void PrettyUnitTestResultPrinter::OnTestIterationStart( ::jmsd::cutf::UnitTest c
 	internal::Colored_print::ColoredPrintf( internal::GTestColor::COLOR_GREEN, "[==========] " );
 
 	::printf( "Running %s from %s.\n",
-		 Format_countable::FormatTestCount( unit_test.test_to_run_count() ).c_str(),
-		 Format_countable::FormatTestSuiteCount( unit_test.test_suite_to_run_count() ).c_str());
+		 function_Format_countable::FormatTestCount( unit_test.test_to_run_count() ).c_str(),
+		 function_Format_countable::FormatTestSuiteCount( unit_test.test_suite_to_run_count() ).c_str());
 
 	::fflush( stdout );
 }
@@ -99,7 +99,7 @@ void PrettyUnitTestResultPrinter::OnTestCaseEnd(const TestCase& test_case) {
 #endif // #ifdef GTEST_KEEP_LEGACY_TEST_CASEAPI_
 
 void PrettyUnitTestResultPrinter::OnTestSuiteStart( ::jmsd::cutf::TestSuite const &test_suite ) {
-	::std::string const counts = Format_countable::FormatCountableNoun( test_suite.test_to_run_count(), "test", "tests" );
+	::std::string const counts = function_Format_countable::FormatCountableNoun( test_suite.test_to_run_count(), "test", "tests" );
   internal::Colored_print::ColoredPrintf( internal::GTestColor::COLOR_GREEN, "[----------] " );
   printf("%s from %s", counts.c_str(), test_suite.name());
   if (test_suite.type_param() == nullptr) {
@@ -156,7 +156,7 @@ void PrettyUnitTestResultPrinter::OnTestEnd(const ::jmsd::cutf::TestInfo& test_i
 void PrettyUnitTestResultPrinter::OnTestSuiteEnd(const ::jmsd::cutf::TestSuite& test_suite) {
   if (!::testing:: GTEST_FLAG( print_time ) ) return;
 
-  const std::string counts = Format_countable::FormatCountableNoun(test_suite.test_to_run_count(), "test", "tests");
+  const std::string counts = function_Format_countable::FormatCountableNoun(test_suite.test_to_run_count(), "test", "tests");
   internal::Colored_print::ColoredPrintf(internal::GTestColor::COLOR_GREEN, "[----------] ");
   printf("%s from %s (%s ms total)\n\n", counts.c_str(), test_suite.name(), internal::function_Streamable_to_string::StreamableToString(test_suite.elapsed_time()).c_str());
   fflush(stdout);
@@ -173,7 +173,7 @@ void PrettyUnitTestResultPrinter::OnEnvironmentsTearDownStart(
 void PrettyUnitTestResultPrinter::PrintFailedTests(const ::jmsd::cutf::UnitTest& unit_test) {
   const int failed_test_count = unit_test.failed_test_count();
   internal::Colored_print::ColoredPrintf(internal::GTestColor::COLOR_RED,  "[  FAILED  ] ");
-  printf("%s, listed below:\n", Format_countable::FormatTestCount( failed_test_count ).c_str());
+  printf("%s, listed below:\n", function_Format_countable::FormatTestCount( failed_test_count ).c_str());
 
   for (int i = 0; i < unit_test.total_test_suite_count(); ++i) {
 	const ::jmsd::cutf::TestSuite& test_suite = *unit_test.GetTestSuite(i);
@@ -245,19 +245,19 @@ void PrettyUnitTestResultPrinter::OnTestIterationEnd(const ::jmsd::cutf::UnitTes
 													 int /*iteration*/) {
   internal::Colored_print::ColoredPrintf(internal::GTestColor::COLOR_GREEN,  "[==========] ");
   printf("%s from %s ran.",
-		 Format_countable::FormatTestCount(unit_test.test_to_run_count()).c_str(),
-		 Format_countable::FormatTestSuiteCount(unit_test.test_suite_to_run_count()).c_str());
+		 function_Format_countable::FormatTestCount(unit_test.test_to_run_count()).c_str(),
+		 function_Format_countable::FormatTestSuiteCount(unit_test.test_suite_to_run_count()).c_str());
   if ( ::testing:: GTEST_FLAG( print_time ) ) {
 	printf(" (%s ms total)", internal::function_Streamable_to_string::StreamableToString(unit_test.elapsed_time()).c_str());
   }
   printf("\n");
   internal::Colored_print::ColoredPrintf(internal::GTestColor::COLOR_GREEN,  "[  PASSED  ] ");
-  printf("%s.\n", Format_countable::FormatTestCount(unit_test.successful_test_count()).c_str());
+  printf("%s.\n", function_Format_countable::FormatTestCount(unit_test.successful_test_count()).c_str());
 
   const int skipped_test_count = unit_test.skipped_test_count();
   if (skipped_test_count > 0) {
 	internal::Colored_print::ColoredPrintf(internal::GTestColor::COLOR_GREEN, "[  SKIPPED ] ");
-	printf("%s, listed below:\n", Format_countable::FormatTestCount(skipped_test_count).c_str());
+	printf("%s, listed below:\n", function_Format_countable::FormatTestCount(skipped_test_count).c_str());
 	PrintSkippedTests(unit_test);
   }
 

@@ -10,9 +10,3 @@ class EmptyTestEventListener;
 
 } // namespace cutf
 } // namespace jmsd
-
-
-namespace testing {
-
-
-} // namespace testing

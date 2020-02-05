@@ -1,4 +1,4 @@
-#include "Add_global_test_environment.h"
+#include "function_Add_global_test_environment.h"
 
 
 #include "Unit_test.h"
@@ -26,7 +26,8 @@ namespace cutf {
 // translation units and the environments have dependencies among them
 // (remember that the compiler doesn't guarantee the order in which
 // global variables from different translation units are initialized).
-Environment *AddGlobalTestEnvironment( Environment *const env ) {
+// static
+Environment *function_Add_global_test_environment::AddGlobalTestEnvironment( Environment *const env ) {
 	return UnitTest::GetInstance()->AddEnvironment( env );
 }
 

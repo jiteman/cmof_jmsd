@@ -56,9 +56,3 @@ void EmptyTestEventListener::OnTestProgramEnd(const ::jmsd::cutf::UnitTest& /*un
 
 } // namespace cutf
 } // namespace jmsd
-
-
-namespace testing {
-
-
-} // namespace testing

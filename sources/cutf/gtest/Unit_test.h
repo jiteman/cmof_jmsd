@@ -15,6 +15,7 @@
 #include "Scoped_trace.hxx"
 #include "Test_event_listeners.hxx"
 #include "Environment.hxx"
+#include "function_Add_global_test_environment.hxx"
 #include "internal/Unit_test_impl.hxx"
 
 
@@ -218,7 +219,7 @@ class JMSD_DEPRECATED_GTEST_API_ UnitTest {
   friend ::testing::internal::AssertHelper;
   friend ::testing::internal::StreamingListenerTest;
   friend ::testing::internal::UnitTestRecordPropertyTestHelper;
-  friend JMSD_CUTF_SHARED_INTERFACE Environment *AddGlobalTestEnvironment( Environment *env );
+  friend function_Add_global_test_environment;
   friend internal::UnitTestImpl *internal::GetUnitTestImpl();
   friend void ::testing::internal::ReportFailureInUnknownLocation( TestPartResult::Type result_type, const std::string& message);
 

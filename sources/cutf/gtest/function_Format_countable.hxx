@@ -5,7 +5,7 @@ namespace jmsd {
 namespace cutf {
 
 
-class Format_countable;
+class function_Format_countable;
 
 
 } // namespace cutf

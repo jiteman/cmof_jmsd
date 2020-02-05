@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Format_countable.hxx"
+#include "function_Format_countable.hxx"
 
 
 #include <string>
@@ -10,7 +10,7 @@ namespace jmsd {
 namespace cutf {
 
 
-class Format_countable {
+class function_Format_countable {
 
 public:
 	// Formats a countable noun.  Depending on its quantity, either the singular form or the plural form is used. e.g.
@@ -30,21 +30,21 @@ public:
 
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 private:
-	virtual ~Format_countable() noexcept = delete;
+	virtual ~function_Format_countable() noexcept = delete;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 private:
-	Format_countable() noexcept = delete;
+	function_Format_countable() noexcept = delete;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 private:
-	Format_countable( Format_countable const &another ) noexcept = delete;
-	Format_countable &operator =( Format_countable const &another ) noexcept = delete;
+	function_Format_countable( function_Format_countable const &another ) noexcept = delete;
+	function_Format_countable &operator =( function_Format_countable const &another ) noexcept = delete;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 private:
-	Format_countable( Format_countable &&another ) noexcept = delete;
-	Format_countable &operator =( Format_countable &&another ) noexcept = delete;
+	function_Format_countable( function_Format_countable &&another ) noexcept = delete;
+	function_Format_countable &operator =( function_Format_countable &&another ) noexcept = delete;
 
 // # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 private:
