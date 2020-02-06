@@ -584,51 +584,47 @@ void PrintTo(std::reference_wrapper<T> ref, ::std::ostream* os) {
   UniversalPrinter<T&>::Print(ref.get(), os);
 }
 
-// Helper function for printing a tuple.  T must be instantiated with
-// a tuple type.
-template <typename T>
-void PrintTupleTo(const T&, std::integral_constant<size_t, 0>,
-                  ::std::ostream*) {}
+// Helper function for printing a tuple. T must be instantiated with a tuple type.
+template< typename T >
+void PrintTupleTo( T const &, ::std::integral_constant< size_t, 0 >, ::std::ostream * )
+{}
 
-template <typename T, size_t I>
-void PrintTupleTo(const T& t, std::integral_constant<size_t, I>,
-                  ::std::ostream* os) {
-  PrintTupleTo(t, std::integral_constant<size_t, I - 1>(), os);
-  GTEST_INTENTIONAL_CONST_COND_PUSH_()
-  if (I > 1) {
-    GTEST_INTENTIONAL_CONST_COND_POP_()
-    *os << ", ";
-  }
-  UniversalPrinter<typename std::tuple_element<I - 1, T>::type>::Print(
-      std::get<I - 1>(t), os);
+template< typename T, size_t I >
+void PrintTupleTo( T const &t, ::std::integral_constant< size_t, I >, ::std::ostream *os ) {
+	PrintTupleTo(t, std::integral_constant<size_t, I - 1>(), os);
+	GTEST_INTENTIONAL_CONST_COND_PUSH_()
+	if (I > 1) {
+		GTEST_INTENTIONAL_CONST_COND_POP_()
+		*os << ", ";
+	}
+
+	UniversalPrinter<typename std::tuple_element<I - 1, T>::type>::Print( ::std::get<I - 1>(t), os);
 }
 
-template <typename... Types>
-void PrintTo(const ::std::tuple<Types...>& t, ::std::ostream* os) {
-  *os << "(";
-  PrintTupleTo(t, std::integral_constant<size_t, sizeof...(Types)>(), os);
-  *os << ")";
+template< typename... Types >
+void PrintTo( ::std::tuple< Types... > const &t, ::std::ostream *os ) {
+	*os << "(";
+	PrintTupleTo( t, ::std::integral_constant< size_t, sizeof...( Types ) >(), os );
+	*os << ")";
 }
 
 // Overload for std::pair.
-template <typename T1, typename T2>
-void PrintTo(const ::std::pair<T1, T2>& value, ::std::ostream* os) {
-  *os << '(';
-  // We cannot use UniversalPrint(value.first, os) here, as T1 may be
-  // a reference type.  The same for printing value.second.
-  UniversalPrinter<T1>::Print(value.first, os);
-  *os << ", ";
-  UniversalPrinter<T2>::Print(value.second, os);
-  *os << ')';
+template< typename T1, typename T2 >
+void PrintTo( ::std::pair< T1, T2 > const &value, ::std::ostream *os ) {
+	*os << '(';
+	  // We cannot use UniversalPrint( value.first, os ) here, as T1 may be a reference type.
+	  // The same for printing value.second.
+	UniversalPrinter< T1 >::Print( value.first, os );
+	*os << ", ";
+	UniversalPrinter< T2 >::Print( value.second, os );
+	*os << ')';
 }
 
-// Implements printing a non-reference type T by letting the compiler
-// pick the right overload of PrintTo() for T.
-template <typename T>
+// Implements printing a non-reference type T by letting the compiler pick the right overload of PrintTo() for T.
+template< typename T >
 class UniversalPrinter {
  public:
-  // MSVC warns about adding const to a function type, so we want to
-  // disable the warning.
+  // MSVC warns about adding const to a function type, so we want to disable the warning.
   GTEST_DISABLE_MSC_WARNINGS_PUSH_(4180)
 
   // Note: we deliberately don't call this PrintTo(), as that name
