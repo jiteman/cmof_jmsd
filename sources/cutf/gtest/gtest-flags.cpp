@@ -1,7 +1,7 @@
 #include "gtest-flags.h"
 
 
-#include "get_default_filter.h"
+#include "function_Get_default_filter.h"
 #include "gtest-constants.h"
 
 
@@ -44,7 +44,7 @@ GTEST_DEFINE_FLAG_string_(
 
 GTEST_DEFINE_FLAG_string_(
 	filter,
-	internal::StringFromGTestEnv("filter", ::jmsd::cutf::GetDefaultFilter()),
+	internal::StringFromGTestEnv("filter", ::jmsd::cutf::function_Get_default_filter::GetDefaultFilter()),
 	"A colon-separated list of glob (not regex) patterns "
 	"for filtering the tests to run, optionally followed by a "
 	"'-' and a : separated list of negative patterns (tests to "

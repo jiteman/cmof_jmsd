@@ -5,17 +5,8 @@ namespace jmsd {
 namespace cutf {
 
 
-char const *GetDefaultFilter();
+class function_Get_default_filter;
 
 
 } // namespace cutf
 } // namespace jmsd
-
-
-namespace testing {
-
-
-
-
-
-} // namespace testing
