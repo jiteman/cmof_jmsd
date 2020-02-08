@@ -59,13 +59,13 @@ void StreamingListener::OnTestProgramEnd(const ::jmsd::cutf::UnitTest& unit_test
 
 void StreamingListener::OnTestIterationStart(const ::jmsd::cutf::UnitTest& /* unit_test */, int iteration) {
   SendLn("event=TestIterationStart&iteration=" +
-		 StreamableToString(iteration));
+		 function_Streamable_to_string::StreamableToString(iteration));
 }
 
 void StreamingListener::OnTestIterationEnd(const ::jmsd::cutf::UnitTest& unit_test, int /* iteration */) {
   SendLn("event=TestIterationEnd&passed=" +
 		 REFACTOR_ME_FormatBool(unit_test.Passed()) + "&elapsed_time=" +
-		 StreamableToString(unit_test.elapsed_time()) + "ms");
+		 function_Streamable_to_string::StreamableToString(unit_test.elapsed_time()) + "ms");
 }
 
 void StreamingListener::OnTestSuiteStart(const ::jmsd::cutf::TestSuite& test_case) {
@@ -74,7 +74,7 @@ void StreamingListener::OnTestSuiteStart(const ::jmsd::cutf::TestSuite& test_cas
 
 void StreamingListener::OnTestSuiteEnd(const ::jmsd::cutf::TestSuite& test_case) {
   SendLn("event=TestSuiteEnd&passed=" + REFACTOR_ME_FormatBool(test_case.Passed()) +
-		 "&elapsed_time=" + StreamableToString(test_case.elapsed_time()) +
+		 "&elapsed_time=" + function_Streamable_to_string::StreamableToString(test_case.elapsed_time()) +
 		 "ms");
 }
 
@@ -102,7 +102,7 @@ void StreamingListener::OnTestEnd(const TestInfo& test_info) {
   SendLn("event=TestEnd&passed=" +
 		 REFACTOR_ME_FormatBool((test_info.result())->Passed()) +
 		 "&elapsed_time=" +
-		 StreamableToString((test_info.result())->elapsed_time()) + "ms");
+		 function_Streamable_to_string::StreamableToString((test_info.result())->elapsed_time()) + "ms");
 }
 
 void StreamingListener::OnTestPartResult(const ::testing::TestPartResult& test_part_result) {
@@ -111,7 +111,7 @@ void StreamingListener::OnTestPartResult(const ::testing::TestPartResult& test_p
   if (file_name == nullptr) file_name = "";
 
   SendLn("event=TestPartResult&file=" + UrlEncode(file_name) +
-		 "&line=" + StreamableToString(test_part_result.line_number()) +
+		 "&line=" + function_Streamable_to_string::StreamableToString(test_part_result.line_number()) +
 		 "&message=" + UrlEncode(test_part_result.message()));
 }
 

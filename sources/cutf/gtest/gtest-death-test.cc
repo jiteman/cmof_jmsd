@@ -1,8 +1,8 @@
 // This file implements death tests.
 
-#include "gtest/gtest-death-test.h"
+#include "gtest-death-test.h"
 
-#include "gtest/internal/custom/gtest.h"
+#include "internal/custom/gtest.h"
 
 #include "internal/Unit_test_impl.h"
 #include "internal/Death_test_impl.h"
@@ -10,6 +10,7 @@
 #include "internal/function_Get_last_errno_description.h"
 
 #include "Message.hin"
+#include "internal/function_Streamable_to_string.hin"
 
 #include "internal/gtest-port.h"
 
@@ -705,7 +706,7 @@ static int ExecDeathTestChildMain(void* child_arg) {
   // We can safely call chdir() as it's a direct system call.
   if (chdir(original_dir) != 0) {
 	::jmsd::cutf::internal::DeathTestAbort(std::string("chdir(\"") + original_dir + "\") failed: " +
-				   ::jmsd::cutf::internal::GetLastErrnoDescription());
+				   ::jmsd::cutf::internal::function_Get_last_errno_description::GetLastErrnoDescription());
 	return EXIT_FAILURE;
   }
 
@@ -717,7 +718,7 @@ static int ExecDeathTestChildMain(void* child_arg) {
   execve(args->argv[0], args->argv, GetEnviron());
   ::jmsd::cutf::internal::DeathTestAbort(std::string("execve(") + args->argv[0] + ", ...) in " +
 				 original_dir + " failed: " +
-				 ::jmsd::cutf::internal::GetLastErrnoDescription());
+				 ::jmsd::cutf::internal::function_Get_last_errno_description::GetLastErrnoDescription());
   return EXIT_FAILURE;
 }
 #  endif  // !GTEST_OS_QNX
@@ -883,9 +884,9 @@ DeathTest::TestRole ExecDeathTest::AssumeRole() {
 								  "." + info->name();
   const std::string internal_flag =
 	  std::string("--") + GTEST_FLAG_PREFIX_ + kInternalRunDeathTestFlag + "="
-	  + file_ + "|" + ::jmsd::cutf::internal::StreamableToString(line_) + "|"
-	  + ::jmsd::cutf::internal::StreamableToString(death_test_index) + "|"
-	  + ::jmsd::cutf::internal::StreamableToString(pipe_fd[1]);
+	  + file_ + "|" + ::jmsd::cutf::internal::function_Streamable_to_string::StreamableToString(line_) + "|"
+	  + ::jmsd::cutf::internal::function_Streamable_to_string::StreamableToString(death_test_index) + "|"
+	  + ::jmsd::cutf::internal::function_Streamable_to_string::StreamableToString(pipe_fd[1]);
   Arguments args;
   args.AddArguments(GetArgvsForDeathTestChildProcess());
   args.AddArgument(filter_flag.c_str());
