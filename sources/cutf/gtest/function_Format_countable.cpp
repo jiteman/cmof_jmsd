@@ -1,6 +1,7 @@
 #include "function_Format_countable.h"
 
 
+#include "Message.hin"
 #include "internal/function_Streamable_to_string.hin"
 
 

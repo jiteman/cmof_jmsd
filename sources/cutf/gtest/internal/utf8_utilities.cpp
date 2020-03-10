@@ -1,11 +1,11 @@
 #include "utf8_utilities.h"
 
 
-#include "gtest/Message.h"
-
 #include "function_String_stream_to_string.h"
 
 #include "gtest-string.h"
+
+#include "gtest/Message.hin"
 
 #include <sstream>
 

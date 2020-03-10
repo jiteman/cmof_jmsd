@@ -6,6 +6,7 @@
 #include "function_Split_escaped_string.h"
 #include "Distance_editor.h"
 
+#include "gtest/Assertion_result.hin"
 #include "gtest/Message.hin"
 
 

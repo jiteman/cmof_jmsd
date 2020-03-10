@@ -4,11 +4,13 @@
 
 #include "gmock/gmock.h"
 #include "gmock/internal/gmock-port.h"
+
 #include "gtest/gtest-spi.h"
 
 #include "gtest/internal/Unit_test_impl.h"
 
 #include "gtest/Static_assert_type_sameness.hin"
+#include "gtest/Assertion_result.hin"
 #include "gtest/Message.hin"
 
 // Indicates that this translation unit is part of Google Test's implementation.

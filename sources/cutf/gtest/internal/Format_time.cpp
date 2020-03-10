@@ -2,7 +2,10 @@
 
 
 #include "gtest-string.h"
+
 #include "function_Streamable_to_string.hin"
+
+#include "gtest/Message.hin"
 
 #include <sstream>
 

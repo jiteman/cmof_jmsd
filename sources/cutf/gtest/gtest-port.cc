@@ -6,9 +6,10 @@
 
 #include "Message.hin"
 
-#include "gtest/internal/function_Streamable_to_string.hin"
+#include "internal/function_Streamable_to_string.hin"
+#include "Assertion_result.hin"
 
-#include "gtest/gtest-internal-inl.h"
+#include "gtest-internal-inl.h"
 
 #include <limits.h>
 #include <stdio.h>

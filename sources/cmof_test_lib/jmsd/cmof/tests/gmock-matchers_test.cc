@@ -8,6 +8,7 @@
 
 #include "gtest/internal/gtest-internal.h"
 
+#include "gtest/Assertion_result.hin"
 #include "gtest/Message.hin"
 #include "gtest/internal/Floating_point_type.hin"
 

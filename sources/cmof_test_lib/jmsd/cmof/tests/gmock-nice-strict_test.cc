@@ -4,6 +4,7 @@
 #include "gtest/gtest-spi.h"
 
 #include "gtest/Assertion_result.hin"
+#include "gtest/Message.hin"
 
 #include <string>
 #include <utility>

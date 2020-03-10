@@ -5,8 +5,11 @@
 #include "gmock/gmock.h"
 
 #include "gtest/Static_assert_type_sameness.hin"
+#include "gtest/Assertion_result.hin"
 
 #include "gtest/internal/Floating_point_comparator.hin"
+
+
 
 #include <functional>
 #include <memory>

@@ -1,6 +1,6 @@
 #include "gtest-typed-test.h"
 
-#include "gtest/Message.h"
+#include "gtest/Message.hin"
 
 #include "gtest/gtest.h"
 

@@ -5,6 +5,7 @@
 #include "gmock/gmock.h"
 
 #include "gtest/Assertion_result.hin"
+#include "gtest/Message.hin"
 
 #include <functional>
 #include <memory>

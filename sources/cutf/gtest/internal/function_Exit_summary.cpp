@@ -3,6 +3,8 @@
 
 #include "gtest/Message.h"
 
+#include "gtest/Message.hin"
+
 #include "gtest-port.h"
 
 

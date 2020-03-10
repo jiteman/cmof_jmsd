@@ -12,6 +12,8 @@
 
 #include "function_Streamable_to_string.hin"
 
+#include "gtest/Message.hin"
+
 
 namespace jmsd {
 namespace cutf {

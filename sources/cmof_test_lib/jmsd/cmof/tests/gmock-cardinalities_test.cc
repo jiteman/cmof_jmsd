@@ -4,8 +4,10 @@
 #include "gtest/gtest.h"
 #include "gtest/gtest-spi.h"
 
-
 #include "gtest/Substring_assertions.h"
+
+#include "gtest/Assertion_result.hin"
+#include "gtest/Message.hin"
 
 
 namespace {

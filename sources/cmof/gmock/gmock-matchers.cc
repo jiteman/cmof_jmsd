@@ -3,6 +3,8 @@
 #include "gmock/gmock-matchers.h"
 #include "gmock/gmock-generated-matchers.h"
 
+#include "gtest/Message.hin"
+
 #include <string.h>
 #include <iostream>
 #include <sstream>

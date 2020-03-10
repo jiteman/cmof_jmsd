@@ -7,6 +7,7 @@
 #include "gtest/gtest.h"
 
 #include "gtest/Assertion_result.hin"
+#include "gtest/Message.hin"
 
 
 // Used for testing that SetUpTestSuite()/TearDownTestSuite(), fixture

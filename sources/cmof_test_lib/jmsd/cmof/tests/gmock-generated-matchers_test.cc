@@ -6,6 +6,8 @@
 #include "gtest/gtest-spi.h"
 
 #include "gtest/Static_assert_type_sameness.hin"
+#include "gtest/Assertion_result.hin"
+#include "gtest/Message.hin"
 
 #include <array>
 #include <iterator>

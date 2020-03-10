@@ -3,6 +3,7 @@
 #include "gmock/gmock.h"
 //#include "gtest/gtest.h"
 
+#include "gtest/Assertion_result.hin"
 #include "gtest/Message.hin"
 
 #if GTEST_HAS_EXCEPTIONS

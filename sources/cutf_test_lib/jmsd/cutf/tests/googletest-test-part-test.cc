@@ -4,6 +4,9 @@
 
 #include "gtest/internal/gtest-constants-internal.h"
 
+#include "gtest/Assertion_result.hin"
+#include "gtest/Message.hin"
+
 
 namespace {
 

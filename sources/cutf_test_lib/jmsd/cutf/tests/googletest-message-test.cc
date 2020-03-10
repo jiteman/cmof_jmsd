@@ -3,6 +3,7 @@
 #include "gtest/Substring_assertions.h"
 #include "gtest/internal/function_String_stream_to_string.h"
 
+#include "gtest/Assertion_result.hin"
 #include "gtest/Message.hin"
 
 #include "gtest/gtest.h"

@@ -3,6 +3,8 @@
 
 #include "gtest/Unit_test.h"
 
+#include "gtest/Message.hin"
+
 
 namespace jmsd {
 namespace cutf {

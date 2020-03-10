@@ -1,6 +1,6 @@
 #include "function_Int32_from_environment_or_die.h"
 
-#include "gtest/Message.h"
+#include "gtest/Message.hin"
 
 
 namespace jmsd {

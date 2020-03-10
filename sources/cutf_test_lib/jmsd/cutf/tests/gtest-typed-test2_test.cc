@@ -2,6 +2,8 @@
 
 #include "gtest/gtest.h"
 
+#include "gtest/Message.hin"
+
 #include <vector>
 
 #if GTEST_HAS_TYPED_TEST_P

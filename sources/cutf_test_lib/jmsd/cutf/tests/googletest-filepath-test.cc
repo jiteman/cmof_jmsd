@@ -10,6 +10,9 @@
 #include "gtest/gtest.h"
 #include "gtest/gtest-internal-inl.h"
 
+#include "gtest/Assertion_result.hin"
+#include "gtest/Message.hin"
+
 #if GTEST_OS_WINDOWS_MOBILE
 # include "internal/custom/temporary_windows_include.h"
 #elif GTEST_OS_WINDOWS

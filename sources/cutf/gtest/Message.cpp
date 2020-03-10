@@ -5,6 +5,8 @@
 #include "internal/function_String_stream_to_string.h"
 #include "internal/utf8_utilities.h"
 
+#include "Message.hin"
+
 #include <iomanip>
 #include <limits>
 

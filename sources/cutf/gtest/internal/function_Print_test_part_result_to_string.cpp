@@ -2,6 +2,7 @@
 
 
 #include "gtest/Test_part_result_to_string.h"
+#include "gtest/Message.hin"
 
 
 namespace jmsd {
