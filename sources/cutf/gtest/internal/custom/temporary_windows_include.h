@@ -14,6 +14,7 @@
 #pragma warning( disable : 4668 ) // is not defined as a preprocessor macro, replacing with '0' for '#if/#elif'
 
 
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 
